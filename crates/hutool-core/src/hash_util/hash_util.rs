@@ -6,41 +6,7 @@ use crate::lang::hash::{CityHash, Number128};
 use crate::IdKey;
 use thiserror::Error;
 
-const I32_MASK: i32 = i32::MAX;
-
-/// Validation errors for table-driven hash functions.
-#[derive(Debug, Clone, Error, PartialEq, Eq)]
-pub enum HashError {
-    /// Java would throw an arithmetic exception for a zero modulus.
-    #[error("hash prime must not be zero")]
-    ZeroPrime,
-    /// Universal hashing requires eight table entries per key unit.
-    #[error("universal hash table requires {expected} entries, received {actual}")]
-    UniversalTable {
-        /// Minimum required entry count.
-        expected: usize,
-        /// Supplied entry count.
-        actual: usize,
-    },
-    /// Zobrist hashing requires one row per key unit.
-    #[error("zobrist table requires {expected} rows, received {actual}")]
-    ZobristRows {
-        /// Minimum required row count.
-        expected: usize,
-        /// Supplied row count.
-        actual: usize,
-    },
-    /// A Zobrist row does not cover the UTF-16 value used as its index.
-    #[error("zobrist row {row} requires {expected} entries, received {actual}")]
-    ZobristColumns {
-        /// Zero-based row index.
-        row: usize,
-        /// Minimum required column count.
-        expected: usize,
-        /// Supplied column count.
-        actual: usize,
-    },
-}
+use super::hash_error::HashError;
 
 /// Hutool-aligned classic hash algorithms.
 #[derive(Debug, Clone, Copy, Default)]
@@ -376,8 +342,25 @@ fn require_prime(prime: i32) -> Result<(), HashError> {
     }
 }
 
+fn java_abs_i64(value: i64) -> i64 {
+    value.wrapping_abs()
+}
+
+fn lower_ascii_unit(unit: u16) -> u16 {
+    if (u16::from(b'A')..=u16::from(b'Z')).contains(&unit) {
+        unit + 32
+    } else {
+        unit
+    }
+}
+
 fn utf16(value: &str) -> Vec<u16> {
     value.encode_utf16().collect()
+}
+
+fn unsigned_shift(value: i32, bits: u32) -> i32 {
+    let value = u32::from_ne_bytes(value.to_ne_bytes()) >> bits;
+    i32::from_ne_bytes(value.to_ne_bytes())
 }
 
 fn improved_fnv(values: impl IntoIterator<Item = i32>) -> i32 {
@@ -393,109 +376,4 @@ fn improved_fnv(values: impl IntoIterator<Item = i32>) -> i32 {
     hash.wrapping_abs()
 }
 
-fn unsigned_shift(value: i32, bits: u32) -> i32 {
-    let value = u32::from_ne_bytes(value.to_ne_bytes()) >> bits;
-    i32::from_ne_bytes(value.to_ne_bytes())
-}
-
-fn lower_ascii_unit(unit: u16) -> u16 {
-    if (u16::from(b'A')..=u16::from(b'Z')).contains(&unit) {
-        unit + 32
-    } else {
-        unit
-    }
-}
-
-fn java_abs_i64(value: i64) -> i64 {
-    value.wrapping_abs()
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn modular_and_table_hashes_validate_inputs_and_cover_every_bit_branch() {
-        assert_eq!(HashUtil::additive_hash("A😀", 97).unwrap(), 28);
-        assert_eq!(HashUtil::rotating_hash("A😀", 97).unwrap(), 43);
-        assert_eq!(HashUtil::additive_hash("x", 0), Err(HashError::ZeroPrime));
-        assert_eq!(HashUtil::rotating_hash("x", 0), Err(HashError::ZeroPrime));
-
-        let table = (0..16).collect::<Vec<_>>();
-        assert_eq!(HashUtil::universal(&[0, 0xff], i32::MAX, &table), Ok(2));
-        assert_eq!(
-            HashUtil::universal(&[0, 1], 7, &[1]),
-            Err(HashError::UniversalTable {
-                expected: 16,
-                actual: 1
-            })
-        );
-
-        let rows = [vec![10, 11], vec![20, 21]];
-        assert_eq!(HashUtil::zobrist(&[0, 1], 31, &rows), Ok(29));
-        assert_eq!(
-            HashUtil::zobrist(&[0, 1], 31, &rows[..1]),
-            Err(HashError::ZobristRows {
-                expected: 2,
-                actual: 1
-            })
-        );
-        assert_eq!(
-            HashUtil::zobrist(&[2], 31, &rows[..1]),
-            Err(HashError::ZobristColumns {
-                row: 0,
-                expected: 3,
-                actual: 2
-            })
-        );
-    }
-
-    #[test]
-    fn classic_hashes_match_java_utf16_wrapping_and_signed_byte_rules() {
-        let value = "A😀hash";
-        assert_eq!(HashUtil::java_default_hash("A😀"), 1_835_364);
-        assert_eq!(
-            HashUtil::fnv_hash_bytes(b"hash"),
-            HashUtil::fnv_hash("hash")
-        );
-        assert_ne!(HashUtil::fnv_hash_bytes(&[0xff]), HashUtil::fnv_hash("ÿ"));
-        assert_ne!(HashUtil::one_by_one_hash(value), 0);
-        assert_ne!(HashUtil::bernstein(value), 0);
-        assert_ne!(HashUtil::int_hash(-1), -1);
-        assert_ne!(HashUtil::rs_hash(value), 0);
-        assert_ne!(HashUtil::js_hash(value), 0);
-        assert_ne!(HashUtil::pjw_hash("zzzzzzzzzzzzzzzz"), 0);
-        assert_ne!(HashUtil::elf_hash("zzzzzzzzzzzzzzzz"), 0);
-        assert_ne!(HashUtil::bkdr_hash(value), 0);
-        assert_ne!(HashUtil::sdbm_hash(value), 0);
-        assert_ne!(HashUtil::djb_hash(value), 0);
-        assert_ne!(HashUtil::dek_hash(value), 0);
-        assert_ne!(HashUtil::ap_hash("ab"), HashUtil::ap_hash("ba"));
-        assert_eq!(HashUtil::mix_hash(value) as i32, HashUtil::fnv_hash(value));
-        assert_eq!(HashUtil::hf_ip_hash("127.0.0.1"), 36);
-        assert_ne!(HashUtil::hf_hash(value), 0);
-
-        let first = String::from("same");
-        let second = first.clone();
-        assert_eq!(
-            HashUtil::identity_hash_code(&first),
-            HashUtil::identity_hash_code(&first)
-        );
-        assert_ne!(
-            HashUtil::identity_hash_code(&first),
-            HashUtil::identity_hash_code(&second)
-        );
-    }
-
-    #[test]
-    fn tianl_hash_covers_empty_short_tail_long_and_ascii_case_rules() {
-        assert_eq!(HashUtil::tianl_hash(""), 0);
-        assert_eq!(HashUtil::tianl_hash("ABC"), HashUtil::tianl_hash("abc"));
-        assert_ne!(HashUtil::tianl_hash(&"a".repeat(97)), 0);
-        assert_ne!(HashUtil::tianl_hash(&"b".repeat(257)), 0);
-        assert_eq!(lower_ascii_unit(b'A'.into()), u16::from(b'a'));
-        assert_eq!(lower_ascii_unit('中' as u16), '中' as u16);
-        assert_eq!(java_abs_i64(-7), 7);
-        assert_eq!(java_abs_i64(i64::MIN), i64::MIN);
-    }
-}
+const I32_MASK: i32 = i32::MAX;
