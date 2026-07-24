@@ -334,6 +334,12 @@ def split_file(file_path):
         print(f"Skip {file_path}: only {len(pub_items)} pub types")
         return
 
+    # Skip files where multiple types have the same snake_case name
+    snake_names = [to_snake(p['name']) for p in pub_items]
+    if len(set(snake_names)) < len(snake_names):
+        print(f"Skip {file_path}: types have duplicate snake_case names")
+        return
+
     # Skip files with inner attributes (#![...]) - too complex for auto-split
     if any(l.strip().startswith('#![') for l in lines):
         print(f"Skip {file_path}: has inner attributes")
