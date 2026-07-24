@@ -1,140 +1,11 @@
 //! 对齐: `cn.hutool.core.lang.hash.MetroHash`
 //! 常量按 Java `int` 字面量拓宽为 `long`（高位符号扩展）。
 
-const K0_64: u64 = 0xffff_ffff_d6d0_18f5;
-const K1_64: u64 = 0xffff_ffff_a2aa_033b;
-const K2_64: u64 = 0x6299_2fc1;
-const K3_64: u64 = 0x30bc_5b29;
-
-const K0_128: u64 = 0xffff_ffff_c83a_91e1;
-const K1_128: u64 = 0xffff_ffff_8648_dbdb;
-const K2_128: u64 = 0x7bde_c03b;
-const K3_128: u64 = 0x2f58_70a5;
-
-/// 对齐 Java: `Number128`（`getLongArray()` = `[low, high]`）
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub struct Number128 {
-    /// 低位（数组下标 0）
-    pub low: i64,
-    /// 高位（数组下标 1）
-    pub high: i64,
-}
-
-impl Number128 {
-    /// 对齐 Java: `Number128(long lowValue, long highValue)`
-    #[must_use]
-    pub fn new(low: i64, high: i64) -> Self {
-        Self { low, high }
-    }
-
-    /// 对齐 `getLowValue`
-    #[must_use]
-    pub fn get_low_value(&self) -> i64 {
-        self.low
-    }
-
-    /// 对齐 `setLowValue`
-    pub fn set_low_value(&mut self, low: i64) {
-        self.low = low;
-    }
-
-    /// 对齐 `getHighValue`
-    #[must_use]
-    pub fn get_high_value(&self) -> i64 {
-        self.high
-    }
-
-    /// 对齐 `setHighValue`
-    pub fn set_high_value(&mut self, high: i64) {
-        self.high = high;
-    }
-
-    /// 对齐 `getLongArray()` → `[low, high]`
-    #[must_use]
-    pub fn get_long_array(&self) -> [i64; 2] {
-        [self.low, self.high]
-    }
-
-    /// 对齐 `intValue` — 取低位截断。
-    #[must_use]
-    pub fn int_value(&self) -> i32 {
-        self.low as i32
-    }
-
-    /// 对齐 `longValue` — 低位。
-    #[must_use]
-    pub fn long_value(&self) -> i64 {
-        self.low
-    }
-
-    /// 对齐 `floatValue`
-    #[must_use]
-    pub fn float_value(&self) -> f32 {
-        self.low as f32
-    }
-
-    /// 对齐 `doubleValue`
-    #[must_use]
-    pub fn double_value(&self) -> f64 {
-        self.low as f64
-    }
-}
-
-#[cfg(test)]
-mod number128_idiomatic_parity {
-    use super::*;
-
-    /// 对齐 Java Number128 getters/conversions 可执行证据。
-    #[test]
-    fn number128_getters_and_conversions() {
-        let mut n = Number128::new(7, 9);
-        assert_eq!(n.get_low_value(), 7);
-        assert_eq!(n.get_high_value(), 9);
-        assert_eq!(n.get_long_array(), [7, 9]);
-        assert_eq!(n.int_value(), 7);
-        assert_eq!(n.long_value(), 7);
-        assert_eq!(n.float_value(), 7.0);
-        assert_eq!(n.double_value(), 7.0);
-        n.set_low_value(1);
-        n.set_high_value(2);
-        assert_eq!(n, Number128::new(1, 2));
-    }
-}
+use super::number128::Number128;
 
 /// 对齐 Java: `MetroHash`
 #[derive(Debug, Clone, Copy, Default)]
 pub struct MetroHash;
-
-fn rotate_left64(v: u64, k: i32) -> u64 {
-    let s = (k as u32) & 63;
-    let left = v << s;
-    let right = ((v as i64) >> (64 - s)) as u64;
-    left | right
-}
-
-fn rotate_right(v: u64, shift: i32) -> u64 {
-    let shift = shift as u32;
-    ((v as i64) >> shift) as u64 | (v << (64 - shift))
-}
-
-fn le64(buf: &[u8], off: usize) -> u64 {
-    let mut b = [0u8; 8];
-    let n = (buf.len().saturating_sub(off)).min(8);
-    b[..n].copy_from_slice(&buf[off..off + n]);
-    u64::from_le_bytes(b)
-}
-
-fn le32(buf: &[u8]) -> i32 {
-    let b0 = buf[0] as i8 as i32;
-    let b1 = buf[1] as i8 as i32;
-    let b2 = buf[2] as i8 as i32;
-    let b3 = buf[3] as i8 as i32;
-    b0 | (b1 << 8) | (b2 << 16) | (b3 << 24)
-}
-
-fn le16(buf: &[u8]) -> i16 {
-    i16::from_le_bytes([buf[0], buf[1]])
-}
 
 impl MetroHash {
     /// 对齐 Java: `MetroHash.hash64(byte[])`
@@ -296,3 +167,50 @@ impl MetroHash {
         }
     }
 }
+
+fn le64(buf: &[u8], off: usize) -> u64 {
+    let mut b = [0u8; 8];
+    let n = (buf.len().saturating_sub(off)).min(8);
+    b[..n].copy_from_slice(&buf[off..off + n]);
+    u64::from_le_bytes(b)
+}
+
+fn le32(buf: &[u8]) -> i32 {
+    let b0 = buf[0] as i8 as i32;
+    let b1 = buf[1] as i8 as i32;
+    let b2 = buf[2] as i8 as i32;
+    let b3 = buf[3] as i8 as i32;
+    b0 | (b1 << 8) | (b2 << 16) | (b3 << 24)
+}
+
+const K2_128: u64 = 0x7bde_c03b;
+
+fn rotate_right(v: u64, shift: i32) -> u64 {
+    let shift = shift as u32;
+    ((v as i64) >> shift) as u64 | (v << (64 - shift))
+}
+
+fn le16(buf: &[u8]) -> i16 {
+    i16::from_le_bytes([buf[0], buf[1]])
+}
+
+const K0_128: u64 = 0xffff_ffff_c83a_91e1;
+
+const K1_128: u64 = 0xffff_ffff_8648_dbdb;
+
+const K1_64: u64 = 0xffff_ffff_a2aa_033b;
+
+const K0_64: u64 = 0xffff_ffff_d6d0_18f5;
+
+const K3_128: u64 = 0x2f58_70a5;
+
+const K2_64: u64 = 0x6299_2fc1;
+
+fn rotate_left64(v: u64, k: i32) -> u64 {
+    let s = (k as u32) & 63;
+    let left = v << s;
+    let right = ((v as i64) >> (64 - s)) as u64;
+    left | right
+}
+
+const K3_64: u64 = 0x30bc_5b29;
