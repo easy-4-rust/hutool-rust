@@ -3,15 +3,7 @@
 
 use rand::RngCore;
 
-/// 默认长度
-pub const DEFAULT_SIZE: usize = 21;
-
-const DEFAULT_ALPHABET: &[u8] =
-    b"_-0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-/// 对齐 Java: `cn.hutool.core.lang.id.NanoId`
-#[derive(Debug, Clone, Copy, Default)]
-pub struct NanoId;
+use super::nano_id::NanoId;
 
 /// Java `java.util.Random` LCG，用于种子可复现测试向量。
 #[derive(Debug, Clone)]
@@ -105,19 +97,4 @@ impl NanoId {
     }
 }
 
-#[cfg(test)]
-mod nano_id_idiomatic_parity {
-    use super::*;
-
-    /// 对齐 Java NanoId.randomNanoId 可执行证据。
-    #[test]
-    fn nano_id_default_and_sized() {
-        let a = NanoId::random_nano_id();
-        assert_eq!(a.len(), DEFAULT_SIZE);
-        let b = NanoId::random_nano_id_size(8);
-        assert_eq!(b.len(), 8);
-        let mut jr = JavaRandom::new(42);
-        let c = NanoId::random_nano_id_with(Some(&mut jr), None, 10).unwrap();
-        assert_eq!(c.len(), 10);
-    }
-}
+use super::{DEFAULT_ALPHABET, DEFAULT_SIZE};

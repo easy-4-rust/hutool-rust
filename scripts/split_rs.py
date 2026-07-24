@@ -269,24 +269,37 @@ def scan_file(content):
                               lines[j].lstrip().startswith("b'")):
                     multi = True
             if multi:
-                depth = 0
-                started = False
-                j = i
-                while j < n:
-                    for ch in lines[j]:
-                        if ch == '{' or (kind_word == 'const' and ch in '[('):
-                            depth += 1
-                            started = True
-                        elif ch == '}' or (kind_word == 'const' and ch in '])'):
-                            depth -= 1
-                    if started and depth == 0:
+                # Special case: const with string/byte literal body ends at `;`
+                next_line = lines[i + 1].lstrip() if i + 1 < n else ''
+                if kind_word == 'const' and (next_line.startswith('b"') or next_line.startswith("b'") or next_line.startswith('"') or next_line.startswith("'")):
+                    j = i + 1
+                    while j < n and not lines[j].rstrip().endswith(';'):
+                        j += 1
+                    if j < n:
                         items.append({'kind': kind, 'name': name, 'start': i, 'end': j + 1, 'is_pub': is_pub})
                         i = j + 1
-                        break
-                    j += 1
+                    else:
+                        items.append({'kind': kind, 'name': name, 'start': i, 'end': n, 'is_pub': is_pub})
+                        i = n
                 else:
-                    items.append({'kind': kind, 'name': name, 'start': i, 'end': n, 'is_pub': is_pub})
-                    i = n
+                    depth = 0
+                    started = False
+                    j = i
+                    while j < n:
+                        for ch in lines[j]:
+                            if ch == '{' or (kind_word == 'const' and ch in '[('):
+                                depth += 1
+                                started = True
+                            elif ch == '}' or (kind_word == 'const' and ch in '])'):
+                                depth -= 1
+                        if started and depth == 0:
+                            items.append({'kind': kind, 'name': name, 'start': i, 'end': j + 1, 'is_pub': is_pub})
+                            i = j + 1
+                            break
+                        j += 1
+                    else:
+                        items.append({'kind': kind, 'name': name, 'start': i, 'end': n, 'is_pub': is_pub})
+                        i = n
             else:
                 items.append({'kind': kind, 'name': name, 'start': i, 'end': i + 1, 'is_pub': is_pub})
                 i += 1
