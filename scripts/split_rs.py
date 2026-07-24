@@ -441,6 +441,11 @@ def split_file(file_path):
                 break
         if owner:
             mod_chunks.append(f"pub use {to_snake(owner)}::{h['name']};")
+    # Emit non-pub helpers directly in mod.rs so submodules can use super::name
+    for h in helper_items:
+        if not h.get('is_pub'):
+            mod_chunks.append('')
+            mod_chunks.append('\n'.join(lines[h['start']:h['end']]).rstrip())
     mod_chunks.append('')
     (sub_dir / 'mod.rs').write_text('\n'.join(mod_chunks))
 
