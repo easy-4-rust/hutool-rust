@@ -8,21 +8,21 @@ use std::sync::{Arc, Condvar, Mutex, OnceLock};
 use std::thread::{self, JoinHandle, Thread, ThreadId};
 use std::time::{Duration, Instant};
 
-use super::concurrency_tester::ConcurrencyTester;
-use super::executor_builder::{ExecutorBuilder, SimpleExecutor};
-use super::global_thread_pool::GlobalThreadPool;
-use super::named_thread_factory::NamedThreadFactory;
-use super::reject_policy::RejectPolicy;
-use super::thread_factory_builder::ThreadFactoryBuilder;
+use crate::thread::concurrency_tester::ConcurrencyTester;
+use crate::thread::executor_builder::{ExecutorBuilder, SimpleExecutor};
+use crate::thread::global_thread_pool::GlobalThreadPool;
+use crate::thread::named_thread_factory::NamedThreadFactory;
+use crate::thread::reject_policy::RejectPolicy;
+use crate::thread::thread_factory_builder::ThreadFactoryBuilder;
 
-/// 对齐 Java 类: `cn.hutool.core.thread.ThreadUtil`
-#[derive(Debug, Clone, Copy, Default)]
-pub struct ThreadUtil;
+use super::count_down_latch::CountDownLatch;
+use super::scheduled_pool::ScheduledPool;
+use super::thread_util::ThreadUtil;
 
 /// 简易定时调度句柄（对齐 `ScheduledThreadPoolExecutor` 可运行子集）。
 pub struct ScheduledHandle {
-    stop: Arc<(Mutex<bool>, Condvar)>,
-    join: Option<JoinHandle<()>>,
+    pub(crate) stop: Arc<(Mutex<bool>, Condvar)>,
+    pub(crate) join: Option<JoinHandle<()>>,
 }
 
 impl ScheduledHandle {
@@ -46,8 +46,6 @@ impl Drop for ScheduledHandle {
         cv.notify_all();
     }
 }
-
-static SCHEDULE_SEQ: AtomicU64 = AtomicU64::new(1);
 
 impl ThreadUtil {
     /// 对齐 Java: `MAIN_THREAD_NAME`
@@ -345,178 +343,4 @@ impl ThreadUtil {
     }
 }
 
-/// 对齐 `CountDownLatch` 可移植子集。
-#[derive(Debug)]
-pub struct CountDownLatch {
-    inner: Mutex<usize>,
-    cv: Condvar,
-}
-
-impl CountDownLatch {
-    /// 创建门闩。
-    pub fn new(count: usize) -> Self {
-        Self {
-            inner: Mutex::new(count),
-            cv: Condvar::new(),
-        }
-    }
-
-    /// 计数减一。
-    pub fn count_down(&self) {
-        let mut g = self.inner.lock().unwrap();
-        if *g > 0 {
-            *g -= 1;
-            if *g == 0 {
-                self.cv.notify_all();
-            }
-        }
-    }
-
-    /// 等待归零。
-    pub fn await_zero(&self) {
-        let mut g = self.inner.lock().unwrap();
-        while *g > 0 {
-            g = self.cv.wait(g).unwrap();
-        }
-    }
-}
-
-/// 简易定时任务池。
-#[derive(Debug, Default)]
-pub struct ScheduledPool;
-
-impl ScheduledPool {
-    /// 创建调度池。
-    pub fn new() -> Self {
-        Self
-    }
-
-    /// fixedRate / fixedDelay 循环。
-    pub fn schedule<F>(
-        &self,
-        command: F,
-        initial_delay: Duration,
-        period: Duration,
-        fixed_rate: bool,
-    ) -> ScheduledHandle
-    where
-        F: Fn() + Send + Sync + 'static,
-    {
-        let stop = Arc::new((Mutex::new(false), Condvar::new()));
-        let stop2 = Arc::clone(&stop);
-        let command = Arc::new(command);
-        let join = thread::Builder::new()
-            .name(format!(
-                "hutool-schedule-{}",
-                SCHEDULE_SEQ.fetch_add(1, Ordering::Relaxed)
-            ))
-            .spawn(move || {
-                {
-                    let (lock, cv) = &*stop2;
-                    let mut g = lock.lock().unwrap();
-                    let deadline = Instant::now() + initial_delay;
-                    while !*g {
-                        let now = Instant::now();
-                        if now >= deadline {
-                            break;
-                        }
-                        let (gg, _) = cv.wait_timeout(g, deadline - now).unwrap();
-                        g = gg;
-                    }
-                    if *g {
-                        return;
-                    }
-                }
-                loop {
-                    let started = Instant::now();
-                    command();
-                    let (lock, cv) = &*stop2;
-                    let mut g = lock.lock().unwrap();
-                    let wait = if fixed_rate {
-                        period.saturating_sub(started.elapsed())
-                    } else {
-                        period
-                    };
-                    let deadline = Instant::now() + wait;
-                    while !*g {
-                        let now = Instant::now();
-                        if now >= deadline {
-                            break;
-                        }
-                        let (gg, _) = cv.wait_timeout(g, deadline - now).unwrap();
-                        g = gg;
-                    }
-                    if *g {
-                        break;
-                    }
-                }
-            })
-            .expect("spawn schedule thread");
-        ScheduledHandle {
-            stop,
-            join: Some(join),
-        }
-    }
-}
-
-static SYNC_SLOT: OnceLock<(Mutex<()>, Condvar)> = OnceLock::new();
-
-impl ThreadUtil {
-    /// 对齐 `sync(Object)` 近似 —— 永久等待直至 [`Self::notify_sync`]。
-    pub fn sync() {
-        let (lock, cv) = SYNC_SLOT.get_or_init(|| (Mutex::new(()), Condvar::new()));
-        let g = lock.lock().unwrap();
-        let _guard = cv.wait(g).unwrap();
-    }
-
-    /// 唤醒所有 `sync()` 等待者。
-    pub fn notify_sync() {
-        let (lock, cv) = SYNC_SLOT.get_or_init(|| (Mutex::new(()), Condvar::new()));
-        let _g = lock.lock().unwrap();
-        cv.notify_all();
-    }
-}
-
-#[cfg(test)]
-mod thread_util_parity {
-    use super::*;
-    use std::sync::{Arc, Mutex};
-
-    #[test]
-    fn sleep_and_async_exec() {
-        assert!(ThreadUtil::safe_sleep(1));
-        let flag = Arc::new(Mutex::new(false));
-        let f2 = Arc::clone(&flag);
-        let h = ThreadUtil::exec_async(move || {
-            *f2.lock().unwrap() = true;
-        });
-        h.join().unwrap();
-        assert!(*flag.lock().unwrap());
-    }
-
-    #[test]
-    fn named_thread_and_builder() {
-        let h = ThreadUtil::new_thread(|| {}, "hutool-test");
-        h.join().unwrap();
-        let ex = ThreadUtil::new_executor(2);
-        ex.shutdown();
-        let ex = ThreadUtil::new_single_executor();
-        ex.shutdown();
-    }
-
-    #[test]
-    fn count_down_and_concurrency() {
-        let latch = ThreadUtil::new_count_down_latch(2);
-        let l1 = Arc::clone(&latch);
-        let l2 = Arc::clone(&latch);
-        let h1 = thread::spawn(move || l1.count_down());
-        let h2 = thread::spawn(move || l2.count_down());
-        latch.await_zero();
-        h1.join().unwrap();
-        h2.join().unwrap();
-        let tester = ThreadUtil::concurrency_test(2, || {
-            let _ = ThreadUtil::sleep(1);
-        });
-        let _ = tester.get_interval();
-    }
-}
+use super::{SCHEDULE_SEQ, SYNC_SLOT};
