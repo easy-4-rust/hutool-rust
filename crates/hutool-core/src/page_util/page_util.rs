@@ -2,16 +2,7 @@ use std::ops::Range;
 
 use thiserror::Error;
 
-/// Errors returned by checked pagination calculations.
-#[derive(Debug, Clone, PartialEq, Eq, Error)]
-pub enum PageError {
-    /// A computed page count does not fit Hutool's signed 32-bit return type.
-    #[error("computed page count does not fit i32")]
-    PageCountOverflow,
-    /// Rainbow pagination cannot allocate a negative number of entries.
-    #[error("total pages and display count must be non-negative")]
-    NegativeRainbowSize,
-}
+use super::page_error::PageError;
 
 /// Hutool-compatible pagination arithmetic with explicit, owned numbering state.
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
@@ -121,67 +112,5 @@ impl PageUtil {
     /// Produces a rainbow page window with Hutool's default display count of ten.
     pub fn rainbow_default(page_no: i32, total_page: i32) -> Result<Vec<i32>, PageError> {
         Self::rainbow(page_no, total_page, 10)
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn numbering_offsets_segments_and_totals_match_hutool_semantics() {
-        let mut pages = PageUtil::default();
-        assert_eq!(pages.first_page_no(), 0);
-        assert_eq!(pages.start_end(0, 10), [0, 10]);
-        assert_eq!(pages.start_end(1, 10), [10, 20]);
-        assert_eq!(pages.segment(1, 10), 10..20);
-        assert_eq!(pages.end(1, 10), 20);
-        assert_eq!(pages.start(-1, -10), 0);
-        assert_eq!(pages.end(-1, -10), 0);
-
-        pages.set_one_as_first_page_no();
-        assert_eq!(pages.first_page_no(), 1);
-        assert_eq!(pages.start_end(0, 10), [0, 10]);
-        assert_eq!(pages.start_end(2, 10), [10, 20]);
-        pages.set_first_page_no(0);
-        assert_eq!(pages, PageUtil::new(0));
-
-        assert_eq!(PageUtil::total_page_i32(20, 3), Ok(7));
-        assert_eq!(PageUtil::total_page_i64(20, 5), Ok(4));
-        assert_eq!(PageUtil::total_page_i64(20, 0), Ok(0));
-        assert_eq!(PageUtil::total_page_i64(-20, 3), Ok(-5));
-        assert_eq!(
-            PageUtil::total_page_i64(i64::MAX, 1),
-            Err(PageError::PageCountOverflow)
-        );
-        assert_eq!(
-            PageUtil::total_page_i64(i64::MIN, -1),
-            Err(PageError::PageCountOverflow)
-        );
-    }
-
-    #[test]
-    fn rainbow_covers_short_leading_centered_trailing_even_and_odd_windows() {
-        assert_eq!(PageUtil::rainbow(5, 20, 6).unwrap(), [3, 4, 5, 6, 7, 8]);
-        assert_eq!(PageUtil::rainbow(2, 20, 6).unwrap(), [1, 2, 3, 4, 5, 6]);
-        assert_eq!(
-            PageUtil::rainbow(19, 20, 6).unwrap(),
-            [15, 16, 17, 18, 19, 20]
-        );
-        assert_eq!(PageUtil::rainbow(4, 6, 10).unwrap(), [1, 2, 3, 4, 5, 6]);
-        assert_eq!(PageUtil::rainbow(5, 20, 5).unwrap(), [3, 4, 5, 6, 7]);
-        assert_eq!(
-            PageUtil::rainbow_default(1, 20).unwrap(),
-            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-        );
-        assert_eq!(PageUtil::rainbow(1, 0, 0).unwrap(), Vec::<i32>::new());
-        assert_eq!(
-            PageUtil::rainbow(1, -1, 10),
-            Err(PageError::NegativeRainbowSize)
-        );
-        assert_eq!(
-            PageUtil::rainbow(1, 10, -1),
-            Err(PageError::NegativeRainbowSize)
-        );
     }
 }
