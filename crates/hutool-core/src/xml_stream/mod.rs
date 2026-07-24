@@ -14,64 +14,18 @@ use quick_xml::{
 
 use crate::{CoreError, Result};
 
-/// Namespace handling applied when XML names are copied into the DOM.
-#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
-pub enum NamespaceMode {
-    /// Keep qualified names such as `soap:Envelope`.
-    #[default]
-    Preserve,
-    /// Keep only the local part such as `Envelope`.
-    LocalName,
-}
+mod namespace_mode;
+mod xml_parse_options;
+mod xml_event_reader;
+mod xml_event_writer;
+mod xml_transform_action;
 
-/// Defensive limits and parsing policy for XML input.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct XmlParseOptions {
-    /// Maximum number of input bytes consumed by the parser.
-    pub max_input_bytes: usize,
-    /// Maximum element nesting depth.
-    pub max_depth: usize,
-    /// Maximum number of elements, including empty elements.
-    pub max_nodes: usize,
-    /// Maximum number of attributes on one element.
-    pub max_attributes_per_element: usize,
-    /// Maximum cumulative decoded text and CDATA bytes.
-    pub max_text_bytes: usize,
-    /// Whether insignificant leading and trailing text whitespace is removed.
-    pub trim_text: bool,
-    /// Namespace name handling used by DOM construction.
-    pub namespace_mode: NamespaceMode,
-    /// Whether a document type declaration may be observed.
-    pub allow_doctype: bool,
-    /// Whether unknown named general references are retained literally.
-    ///
-    /// Numeric references and the five predefined XML references are always
-    /// accepted. This option never expands declarations from a DTD.
-    pub allow_general_references: bool,
-    /// Whether illegal XML control characters are removed before string parsing.
-    ///
-    /// Generic `BufRead` input is buffered only when this is explicitly enabled.
-    pub sanitize_invalid_chars: bool,
-}
+pub use namespace_mode::NamespaceMode;
+pub use xml_parse_options::XmlParseOptions;
+pub use xml_event_reader::XmlEventReader;
+pub use xml_event_writer::XmlEventWriter;
+pub use xml_transform_action::XmlTransformAction;
 
-impl Default for XmlParseOptions {
-    fn default() -> Self {
-        Self {
-            max_input_bytes: 16 * 1024 * 1024,
-            max_depth: 128,
-            max_nodes: 100_000,
-            max_attributes_per_element: 256,
-            max_text_bytes: 8 * 1024 * 1024,
-            trim_text: true,
-            namespace_mode: NamespaceMode::Preserve,
-            allow_doctype: false,
-            allow_general_references: false,
-            sanitize_invalid_chars: false,
-        }
-    }
-}
-
-#[derive(Debug)]
 struct ParseState {
     depth: usize,
     nodes: usize,
@@ -81,162 +35,6 @@ struct ParseState {
     version: XmlVersion,
 }
 
-impl Default for ParseState {
-    fn default() -> Self {
-        Self {
-            depth: 0,
-            nodes: 0,
-            text_bytes: 0,
-            root_seen: false,
-            root_closed: false,
-            version: XmlVersion::Implicit1_0,
-        }
-    }
-}
-
-/// Pull reader that reuses one allocation buffer and enforces [`XmlParseOptions`].
-pub struct XmlEventReader<R: BufRead> {
-    reader: Reader<Take<R>>,
-    buffer: Vec<u8>,
-    options: XmlParseOptions,
-    state: ParseState,
-}
-
-impl<R: BufRead> std::fmt::Debug for XmlEventReader<R> {
-    fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        formatter
-            .debug_struct("XmlEventReader")
-            .field("buffer_capacity", &self.buffer.capacity())
-            .field("options", &self.options)
-            .field("depth", &self.state.depth)
-            .field("nodes", &self.state.nodes)
-            .field("text_bytes", &self.state.text_bytes)
-            .finish_non_exhaustive()
-    }
-}
-
-impl<R: BufRead> XmlEventReader<R> {
-    /// Creates a bounded reader. No input is consumed until [`Self::read_event`].
-    #[must_use]
-    pub fn new(source: R, options: XmlParseOptions) -> Self {
-        let limit = u64::try_from(options.max_input_bytes)
-            .unwrap_or(u64::MAX)
-            .saturating_add(1);
-        let mut reader = Reader::from_reader(source.take(limit));
-        reader.config_mut().trim_text(options.trim_text);
-        Self {
-            reader,
-            buffer: Vec::new(),
-            options,
-            state: ParseState::default(),
-        }
-    }
-
-    /// Reads the next borrowed event.
-    ///
-    /// The returned event borrows the reader's single reusable buffer, so it
-    /// must be dropped before reading another event.
-    pub fn read_event(&mut self) -> Result<Event<'_>> {
-        self.buffer.clear();
-        let event = self.reader.read_event_into(&mut self.buffer);
-        let position = usize::try_from(self.reader.buffer_position()).unwrap_or(usize::MAX);
-        if position > self.options.max_input_bytes {
-            return Err(CoreError::XmlLimit {
-                resource: "input bytes",
-                max: self.options.max_input_bytes,
-            });
-        }
-        let event = event.map_err(|error| CoreError::Xml(error.to_string()))?;
-        validate_event(&event, &self.options, &mut self.state)?;
-        Ok(event)
-    }
-
-    /// Returns the current reusable buffer capacity.
-    #[must_use]
-    pub fn buffer_capacity(&self) -> usize {
-        self.buffer.capacity()
-    }
-
-    /// Returns the active parsing policy.
-    #[must_use]
-    pub fn options(&self) -> &XmlParseOptions {
-        &self.options
-    }
-
-    /// Returns the XML version observed in the declaration, or implicit XML 1.0.
-    #[must_use]
-    pub(crate) fn xml_version(&self) -> XmlVersion {
-        self.state.version
-    }
-
-    /// Returns the decoder selected by the XML declaration.
-    #[must_use]
-    pub(crate) fn decoder(&self) -> quick_xml::encoding::Decoder {
-        self.reader.decoder()
-    }
-}
-
-/// Streaming XML writer backed by `quick_xml::Writer`.
-pub struct XmlEventWriter<W: Write> {
-    writer: Writer<W>,
-}
-
-impl<W: Write> std::fmt::Debug for XmlEventWriter<W> {
-    fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        formatter
-            .debug_struct("XmlEventWriter")
-            .finish_non_exhaustive()
-    }
-}
-
-impl<W: Write> XmlEventWriter<W> {
-    /// Creates a compact writer.
-    #[must_use]
-    pub fn new(target: W) -> Self {
-        Self {
-            writer: Writer::new(target),
-        }
-    }
-
-    /// Creates a writer that indents structural events.
-    #[must_use]
-    pub fn with_indent(target: W, indent_char: u8, indent_size: usize) -> Self {
-        Self {
-            writer: Writer::new_with_indent(target, indent_char, indent_size),
-        }
-    }
-
-    /// Selects whether empty elements are written as `<tag />` instead of `<tag/>`.
-    pub fn set_space_before_empty_slash(&mut self, enabled: bool) {
-        self.writer
-            .config_mut()
-            .add_space_before_slash_in_empty_elements = enabled;
-    }
-
-    /// Writes one XML event.
-    pub fn write_event(&mut self, event: Event<'_>) -> Result<()> {
-        self.writer.write_event(event).map_err(CoreError::Io)
-    }
-
-    /// Returns the underlying writer.
-    #[must_use]
-    pub fn into_inner(self) -> W {
-        self.writer.into_inner()
-    }
-}
-
-/// Action returned by a streaming transform callback.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum XmlTransformAction {
-    /// Copy the current event to the target.
-    Keep,
-    /// Omit the current event from the target.
-    Drop,
-}
-
-/// Visits validated events without constructing a DOM.
-///
-/// Returning [`ControlFlow::Break`] stops before the remaining input is read.
 pub fn visit_xml<R, B, F>(
     source: R,
     options: XmlParseOptions,
@@ -258,7 +56,6 @@ where
     }
 }
 
-/// Copies validated events through a filtering transform into a writer.
 pub fn transform_xml<R, W, F>(
     source: R,
     target: W,
