@@ -87,6 +87,7 @@ hutool-rust 是按 hutool 模块划分的 Cargo workspace，每个 hutool-* 模�
 | System | `hutool-system` | ✅ 稳定 | SystemUtil/OsInfo | sysinfo |
 | 可观测性 | `hutool-observability` | 🧪 实验性 | tracing、Prometheus metrics、health、授权诊断 | tracing/metrics |
 | AOP | `hutool-aop` | 🧪 实验性 | 代理/拦截器 | — |
+| Vernal 集成 | `hutool-vernal` | 🧪 实验性 | Context-local 工具组件 | Vernal Framework |
 | DFA | `hutool-dfa` | ✅ 稳定 | DFA 状态机 | — |
 | Script | `hutool-script` | ✅ 稳定 | ScriptUtil 脚本执行 | rhai |
 | POI | `hutool-poi` | ⚪ 未实现 | 仅有 API/文件占位，构造方法会 panic | 仅 thiserror |
@@ -208,11 +209,14 @@ flowchart TB
     FACADE --> DFA["hutool-dfa"]
     FACADE --> AI["hutool-ai"]
     FACADE --> COMPAT["hutool-compat-hutool"]
+    FACADE --> VERNAL["hutool-vernal"]
+    VERNAL --> HTTP
+    VERNAL --> CONTEXT["Vernal 公共合同"]
     CORE --> MACROS["hutool-macro"]
     CORE --> TEST["hutool-test-support"]
 ```
 
-### 4.3 Crate Map（25 个 workspace crate）
+### 4.3 Crate Map（26 个 workspace crate）
 
 | Crate | 路径 | 状态 | 职责 |
 |---|---|---|---|
@@ -240,6 +244,7 @@ flowchart TB
 | `hutool-setting` | `crates/hutool-setting` | ✅ | 设置/配置 |
 | `hutool-socket` | `crates/hutool-socket` | 🧪 | 套接字 |
 | `hutool-system` | `crates/hutool-system` | ✅ | 系统工具 |
+| `hutool-vernal` | `crates/hutool-vernal` | 🧪 | Hutool-Rust 主动消费 Vernal 的组件桥接 |
 
 ### 4.4 依赖和可见性规则
 
@@ -369,6 +374,7 @@ hutool Facade crate 的 features：
 | `dfa` | hutool-dfa | 状态机 |
 | `extra` | hutool-extra | 扩展（图片/邮件/拼音） |
 | `http` | hutool-http | HTTP 客户端 |
+| `vernal` | hutool-vernal + hutool-http | Context-local Hutool HTTP 组件 |
 | `hutool-compat` | hutool-compat-hutool | Java 风格兼容层 |
 | `jwt` | hutool-jwt | JWT |
 | `log` | hutool-log | 日志 |

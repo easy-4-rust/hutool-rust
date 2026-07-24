@@ -87,6 +87,7 @@
 | System | `hutool-system` | ✅ Stable | SystemUtil/OsInfo | sysinfo |
 | Observability | `hutool-observability` | 🧪 Experimental | Tracing, Prometheus metrics, health, authorized diagnostics | tracing/metrics |
 | AOP | `hutool-aop` | 🧪 Experimental | Proxy/interceptor | — |
+| Vernal integration | `hutool-vernal` | 🧪 Experimental | Context-local utility components | Vernal Framework |
 | DFA | `hutool-dfa` | ✅ Stable | DFA state machine | — |
 | Script | `hutool-script` | ✅ Stable | ScriptUtil script execution | rhai |
 | POI | `hutool-poi` | ⚪ Not implemented | API/file placeholders only; constructors panic | thiserror only |
@@ -208,11 +209,14 @@ flowchart TB
     FACADE --> DFA["hutool-dfa"]
     FACADE --> AI["hutool-ai"]
     FACADE --> COMPAT["hutool-compat-hutool"]
+    FACADE --> VERNAL["hutool-vernal"]
+    VERNAL --> HTTP
+    VERNAL --> CONTEXT["Vernal public contracts"]
     CORE --> MACROS["hutool-macro"]
     CORE --> TEST["hutool-test-support"]
 ```
 
-### 4.3 Crate Map (25 workspace crates)
+### 4.3 Crate Map (26 workspace crates)
 
 | Crate | Path | Status | Responsibility |
 |---|---|---|---|
@@ -240,6 +244,7 @@ flowchart TB
 | `hutool-setting` | `crates/hutool-setting` | ✅ | Settings/config |
 | `hutool-socket` | `crates/hutool-socket` | 🧪 | Socket |
 | `hutool-system` | `crates/hutool-system` | ✅ | System utilities |
+| `hutool-vernal` | `crates/hutool-vernal` | 🧪 | Consumer-owned Vernal component bridge |
 
 ### 4.4 Dependency and Visibility Rules
 
@@ -369,6 +374,7 @@ Features of the `hutool` Facade crate:
 | `dfa` | hutool-dfa | State machine |
 | `extra` | hutool-extra | Extensions (image/mail/pinyin) |
 | `http` | hutool-http | HTTP client |
+| `vernal` | hutool-vernal + hutool-http | Context-local Hutool HTTP components |
 | `hutool-compat` | hutool-compat-hutool | Java-style compat layer |
 | `jwt` | hutool-jwt | JWT |
 | `log` | hutool-log | Logging |
