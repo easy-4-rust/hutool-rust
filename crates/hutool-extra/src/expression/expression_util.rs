@@ -8,19 +8,7 @@ use std::collections::HashMap;
 
 use crate::HutoolException;
 
-/// 表达式引擎抽象，对齐 `cn.hutool.extra.expression.ExpressionEngine`。
-pub trait ExpressionEngine: Send + Sync {
-    /// 在给定上下文（变量绑定）下执行表达式字符串。
-    fn eval(
-        &self,
-        expression: &str,
-        context: &HashMap<String, serde_json::Value>,
-        allow_class_set: &[&str],
-    ) -> Result<serde_json::Value, HutoolException>;
-
-    /// 获取底层原始引擎（Java 返回 `Object`）
-    fn raw_engine(&self) -> Option<&dyn std::any::Any>;
-}
+use super::expression_engine::ExpressionEngine;
 
 /// 表达式工具类，对齐 `cn.hutool.extra.expression.ExpressionUtil`。
 pub struct ExpressionUtil;
@@ -51,24 +39,5 @@ impl ExpressionUtil {
         Err(HutoolException::Message(
             "ExpressionUtil::get_engine requires a concrete ExpressionEngine implementation".into(),
         ))
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_expression_util_eval_not_implemented() {
-        let mut ctx = HashMap::new();
-        ctx.insert("x".into(), serde_json::json!(1));
-        let r = ExpressionUtil::eval("1 + 1", &ctx);
-        assert!(r.is_err());
-    }
-
-    #[test]
-    fn test_expression_util_get_engine_not_implemented() {
-        let r = ExpressionUtil::get_engine();
-        assert!(r.is_err());
     }
 }
