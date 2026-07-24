@@ -255,7 +255,7 @@ def scan_file(content):
                     j += 1
                 if found_brace:
                     multi = True
-            if not multi and kind_word == 'const' and '=' in line:
+            if not multi and kind_word == 'const' and '=' in line and not line.rstrip().endswith(';'):
                 j = i + 1
                 while j < n and lines[j].strip() == '':
                     j += 1
