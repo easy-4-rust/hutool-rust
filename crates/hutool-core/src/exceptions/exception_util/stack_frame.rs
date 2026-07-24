@@ -7,32 +7,8 @@ use std::error::Error;
 use std::fmt;
 use std::panic::Location;
 
-/// 对齐 Java 类: `cn.hutool.core.exceptions.ExceptionUtil`
-#[derive(Debug, Clone, Copy, Default)]
-pub struct ExceptionUtil;
-
-/// 可携带 cause 的运行时错误，对齐 Java checked → runtime 包装场景。
-#[derive(Debug)]
-pub struct WrappedError {
-    /// 展示消息。
-    pub message: String,
-    /// 根因。
-    pub source: Option<Box<dyn Error + Send + Sync>>,
-}
-
-impl fmt::Display for WrappedError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", self.message)
-    }
-}
-
-impl Error for WrappedError {
-    fn source(&self) -> Option<&(dyn Error + 'static)> {
-        self.source
-            .as_ref()
-            .map(|e| e.as_ref() as &(dyn Error + 'static))
-    }
-}
+use super::exception_util::ExceptionUtil;
+use super::wrapped_error::WrappedError;
 
 /// 栈帧信息，对齐 Java `StackTraceElement` 子集。
 #[derive(Debug, Clone, PartialEq, Eq)]
