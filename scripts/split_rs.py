@@ -271,7 +271,7 @@ def scan_file(content):
             if multi:
                 # Special case: const with string/byte literal body ends at `;`
                 next_line = lines[i + 1].lstrip() if i + 1 < n else ''
-                if kind_word == 'const' and (next_line.startswith('b"') or next_line.startswith("b'") or next_line.startswith('"') or next_line.startswith("'")):
+                if kind_word == 'const' and (next_line.startswith('b"') or next_line.startswith("b'") or next_line.startswith('"') or next_line.startswith("'") or next_line.startswith('*b"') or next_line.startswith("*b'")):
                     j = i + 1
                     while j < n and not lines[j].rstrip().endswith(';'):
                         j += 1
