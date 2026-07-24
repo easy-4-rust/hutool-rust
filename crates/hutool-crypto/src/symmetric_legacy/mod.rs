@@ -10,62 +10,20 @@ use sha1::Sha1;
 use sm4::cipher::{BlockDecrypt, BlockEncrypt, KeyInit as Sm4KeyInit};
 use sm4::Sm4;
 
+mod rc4;
+mod fpe_ff1;
+
+pub use rc4::Rc4;
+pub use fpe_ff1::FpeFf1;
+
 type DesEcbEnc = EcbEncryptor<Des>;
+
 type DesEcbDec = EcbDecryptor<Des>;
 
-/// RC4 stream cipher (Hutool `RC4`).
-pub struct Rc4 {
-    s: [u8; 256],
-    i: u8,
-    j: u8,
-}
-
-impl Rc4 {
-    /// Builds RC4 from a UTF-8 key string.
-    pub fn new(key: impl AsRef<[u8]>) -> Self {
-        let key = key.as_ref();
-        let mut s = [0u8; 256];
-        for (i, slot) in s.iter_mut().enumerate() {
-            *slot = i as u8;
-        }
-        let mut j: u8 = 0;
-        for i in 0..256 {
-            j = j.wrapping_add(s[i]).wrapping_add(key[i % key.len()]);
-            s.swap(i, j as usize);
-        }
-        Self { s, i: 0, j: 0 }
-    }
-
-    /// Encrypts or decrypts in place.
-    pub fn apply_keystream(&mut self, data: &mut [u8]) {
-        for byte in data {
-            self.i = self.i.wrapping_add(1);
-            self.j = self.j.wrapping_add(self.s[self.i as usize]);
-            self.s.swap(self.i as usize, self.j as usize);
-            let k = self.s[(self.s[self.i as usize].wrapping_add(self.s[self.j as usize])) as usize];
-            *byte ^= k;
-        }
-    }
-
-    /// Returns encrypted bytes.
-    pub fn encrypt(&mut self, plaintext: &[u8]) -> Vec<u8> {
-        let mut out = plaintext.to_vec();
-        self.apply_keystream(&mut out);
-        out
-    }
-
-    /// Returns decrypted bytes.
-    pub fn decrypt(&mut self, ciphertext: &[u8]) -> Vec<u8> {
-        self.encrypt(ciphertext)
-    }
-}
-
-/// TEA block cipher encrypt (Hutool `SymmetricCrypto("TEA")`).
 pub fn tea_encrypt(key: &[u8], plaintext: &[u8]) -> Result<Vec<u8>, CryptoError> {
     tea_core(key, plaintext, false)
 }
 
-/// TEA decrypt.
 pub fn tea_decrypt(key: &[u8], ciphertext: &[u8]) -> Result<Vec<u8>, CryptoError> {
     tea_core(key, ciphertext, true)
 }
@@ -139,7 +97,6 @@ fn write_u32_be(out: &mut Vec<u8>, v: u32) {
     out.extend_from_slice(&v.to_be_bytes());
 }
 
-/// DES-ECB + PKCS7 encrypt (Hutool `SymmetricCrypto(DES)`).
 pub fn des_ecb_encrypt(key: &[u8], plaintext: &[u8]) -> Result<Vec<u8>, CryptoError> {
     if key.len() != 8 {
         return Err(CryptoError::InvalidAesKey);
@@ -153,7 +110,6 @@ pub fn des_ecb_encrypt(key: &[u8], plaintext: &[u8]) -> Result<Vec<u8>, CryptoEr
     Ok(written.to_vec())
 }
 
-/// DES-ECB + PKCS7 decrypt.
 pub fn des_ecb_decrypt(key: &[u8], ciphertext: &[u8]) -> Result<Vec<u8>, CryptoError> {
     if key.len() != 8 {
         return Err(CryptoError::InvalidAesKey);
@@ -166,24 +122,20 @@ pub fn des_ecb_decrypt(key: &[u8], ciphertext: &[u8]) -> Result<Vec<u8>, CryptoE
     Ok(plain.to_vec())
 }
 
-/// PBKDF2-HMAC-SHA1 hex (`PBKDF2.encryptHex`, 512-bit key, 1000 iterations).
 pub fn pbkdf2_sha1_hex(password: &[u8], salt: &[u8]) -> String {
     let mut out = [0u8; 64];
     pbkdf2_hmac::<Sha1>(password, salt, 1000, &mut out);
     hex::encode(out)
 }
 
-/// SM4-ECB + PKCS7 encrypt hex.
 pub fn sm4_ecb_encrypt_hex(key: &[u8], plaintext: &[u8]) -> Result<String, CryptoError> {
     Ok(hex::encode(sm4_ecb_encrypt(key, plaintext)?))
 }
 
-/// SM4-ECB + PKCS7 encrypt.
 pub fn sm4_ecb_encrypt(key: &[u8], plaintext: &[u8]) -> Result<Vec<u8>, CryptoError> {
     sm4_ecb(key, plaintext, true)
 }
 
-/// SM4-ECB + PKCS7 decrypt.
 pub fn sm4_ecb_decrypt(key: &[u8], ciphertext: &[u8]) -> Result<Vec<u8>, CryptoError> {
     sm4_ecb(key, ciphertext, false)
 }
@@ -231,7 +183,6 @@ fn pkcs7_unpad(data: &[u8]) -> Result<&[u8], CryptoError> {
     Ok(&data[..data.len() - pad])
 }
 
-/// Generates a random SM4 key (`KeyUtil.generateKey("sm4")`).
 pub fn generate_sm4_key(bits: usize) -> Result<Vec<u8>, CryptoError> {
     let len = bits / 8;
     if len != 16 && len != 32 {
@@ -243,60 +194,10 @@ pub fn generate_sm4_key(bits: usize) -> Result<Vec<u8>, CryptoError> {
     Ok(key)
 }
 
-/// FF1-style format-preserving encrypt/decrypt over a custom alphabet (Hutool `FPE.FF1`).
-pub struct FpeFf1 {
-    key: [u8; 16],
-    alphabet: Vec<u8>,
-}
-
-impl FpeFf1 {
-    /// Creates FF1 with a 128-bit key and alphabet bytes.
-    pub fn new(key: [u8; 16], alphabet: impl Into<Vec<u8>>) -> Self {
-        Self {
-            key,
-            alphabet: alphabet.into(),
-        }
-    }
-
-    /// Encrypts preserving length over the alphabet.
-    pub fn encrypt(&self, input: &str) -> Result<String, CryptoError> {
-        self.map(input, true)
-    }
-
-    /// Decrypts preserving length over the alphabet.
-    pub fn decrypt(&self, input: &str) -> Result<String, CryptoError> {
-        self.map(input, false)
-    }
-
-    fn map(&self, input: &str, enc: bool) -> Result<String, CryptoError> {
-        if self.alphabet.is_empty() {
-            return Err(CryptoError::InvalidCiphertext);
-        }
-        let mut out = String::with_capacity(input.len());
-        for (idx, ch) in input.chars().enumerate() {
-            let pos = self
-                .alphabet
-                .iter()
-                .position(|&b| b as char == ch)
-                .ok_or(CryptoError::InvalidCiphertext)?;
-            let shift = self.key[idx % self.key.len()] as usize % self.alphabet.len();
-            let mapped = if enc {
-                (pos + shift) % self.alphabet.len()
-            } else {
-                (pos + self.alphabet.len() - shift) % self.alphabet.len()
-            };
-            out.push(self.alphabet[mapped] as char);
-        }
-        Ok(out)
-    }
-}
-
-/// Vigenère encrypt (Hutool `Vigenere.encrypt`, ASCII 32..126).
 pub fn vigenere_encrypt(content: &str, key: &str) -> String {
     vigenere_map(content, key, true)
 }
 
-/// Vigenère decrypt.
 pub fn vigenere_decrypt(content: &str, key: &str) -> String {
     vigenere_map(content, key, false)
 }
