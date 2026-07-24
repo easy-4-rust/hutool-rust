@@ -4,50 +4,7 @@
 use rand::Rng;
 use std::hash::{Hash, Hasher};
 
-/// 对齐 Java: `WeightRandom.WeightObj<T>`
-#[derive(Debug, Clone)]
-pub struct WeightObj<T> {
-    obj: T,
-    weight: f64,
-}
-
-impl<T> WeightObj<T> {
-    /// 对齐 Java: `WeightObj(T, double)`
-    pub fn new(obj: T, weight: f64) -> Self {
-        Self { obj, weight }
-    }
-
-    /// 对齐 Java: `getObj`
-    pub fn get_obj(&self) -> &T {
-        &self.obj
-    }
-
-    /// 对齐 Java: `setObj`
-    pub fn set_obj(&mut self, obj: T) {
-        self.obj = obj;
-    }
-
-    /// 对齐 Java: `getWeight`
-    #[must_use]
-    pub fn get_weight(&self) -> f64 {
-        self.weight
-    }
-}
-
-impl<T: PartialEq> PartialEq for WeightObj<T> {
-    fn eq(&self, other: &Self) -> bool {
-        self.obj == other.obj
-            && self.weight.to_bits() == other.weight.to_bits()
-    }
-}
-impl<T: Eq> Eq for WeightObj<T> {}
-
-impl<T: Hash> Hash for WeightObj<T> {
-    fn hash<H: Hasher>(&self, state: &mut H) {
-        self.obj.hash(state);
-        self.weight.to_bits().hash(state);
-    }
-}
+use super::weight_obj::WeightObj;
 
 /// 对齐 Java: `WeightRandom<T>`
 pub struct WeightRandom<T> {
@@ -128,26 +85,5 @@ impl<T: Clone> WeightRandom<T> {
 impl<T: Clone> Default for WeightRandom<T> {
     fn default() -> Self {
         Self::create()
-    }
-}
-
-#[cfg(test)]
-mod weight_random_idiomatic_parity {
-    use super::*;
-
-    /// 对齐 Java WeightRandom/WeightObj 可执行证据。
-    #[test]
-    fn weight_random_add_next_clear_and_weight_obj() {
-        let mut wr = WeightRandom::create();
-        wr.add("a", 1.0).add("b", 0.0);
-        assert_eq!(wr.len(), 2);
-        let picked = wr.next().expect("pick");
-        assert!(picked == "a" || picked == "b");
-        let obj = WeightObj::new("x", 2.5);
-        assert_eq!(obj.get_obj(), &"x");
-        assert_eq!(obj.get_weight(), 2.5);
-        wr.clear();
-        assert!(wr.is_empty());
-        assert!(wr.next().is_none());
     }
 }
