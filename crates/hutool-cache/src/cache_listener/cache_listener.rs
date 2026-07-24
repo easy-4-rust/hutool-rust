@@ -22,6 +22,3 @@ where
         self(key, value);
     }
 }
-
-/// Type-erased shared reference to a [`CacheListener`].
-pub type SharedListener<K, V> = Arc<dyn CacheListener<K, V>>;
