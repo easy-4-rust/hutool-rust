@@ -12,32 +12,9 @@ use p256::{EncodedPoint, PublicKey, SecretKey};
 use rsa::pkcs1::{EncodeRsaPrivateKey, EncodeRsaPublicKey};
 use rsa::{RsaPrivateKey, RsaPublicKey};
 
-/// Named EC curve stand-in for Hutool `ECDomainParameters` (`BCUtil.toDomainParams(String)`).
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum EcDomainParams {
-    /// NIST P-256 / `secp256r1`.
-    P256,
-    /// SM2 curve (`sm2p256v1`).
-    Sm2,
-}
-
-/// Opaque EC private scalar params (Hutool `ECPrivateKeyParameters`).
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct EcPrivateParams {
-    /// Curve tag.
-    pub domain: EcDomainParams,
-    /// Private scalar bytes (32 for P-256/SM2).
-    pub d: Vec<u8>,
-}
-
-/// Opaque EC public point params (Hutool `ECPublicKeyParameters`).
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct EcPublicParams {
-    /// Curve tag.
-    pub domain: EcDomainParams,
-    /// Uncompressed SEC1 point bytes (`04 || X || Y`).
-    pub q: Vec<u8>,
-}
+use super::ec_domain_params::EcDomainParams;
+use super::ec_private_params::EcPrivateParams;
+use super::ec_public_params::EcPublicParams;
 
 /// Zero-sized facade for Hutool `BCUtil` static methods.
 #[derive(Debug, Clone, Copy, Default)]
