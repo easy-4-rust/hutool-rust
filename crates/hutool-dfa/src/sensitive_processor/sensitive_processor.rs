@@ -21,10 +21,3 @@ where
         self(found_word)
     }
 }
-
-/// Default asterisk-sensitive-word processor.
-#[derive(Debug, Default, Clone, Copy)]
-pub struct DefaultSensitiveProcessor;
-
-impl SensitiveProcessor for DefaultSensitiveProcessor {}
-
