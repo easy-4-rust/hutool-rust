@@ -256,18 +256,8 @@ def scan_file(content):
                 if found_brace:
                     multi = True
             if not multi and kind_word == 'const' and '=' in line and not line.rstrip().endswith(';'):
-                j = i + 1
-                while j < n and lines[j].strip() == '':
-                    j += 1
-                if j < n and (lines[j].lstrip().startswith('"') or
-                              lines[j].lstrip().startswith("'") or
-                              lines[j].lstrip().startswith('&') or
-                              lines[j].lstrip().startswith('[') or
-                              lines[j].lstrip().startswith('(') or
-                              lines[j].lstrip().startswith('-') or
-                              lines[j].lstrip().startswith('b"') or
-                              lines[j].lstrip().startswith("b'")):
-                    multi = True
+                # Any const ending with `=` (no `;`) is multi-line
+                multi = True
             if multi:
                 # Special case: const with string/byte literal body ends at `;`
                 next_line = lines[i + 1].lstrip() if i + 1 < n else ''
