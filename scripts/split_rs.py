@@ -209,7 +209,7 @@ def scan_file(content):
             continue
         # non-pub top-level: const, fn, static, struct, type, enum
         # Also handle `pub fn`/`pub const`/`pub static` - these are public helpers
-        m = re.match(r'^(pub(?:\s*)\s+)?(const|fn|static|struct|enum|type)\s+(\w+)', raw)
+        m = re.match(r'^(pub(?:\s*\(\s*crate\s*\))?\s+)?(const|fn|static|struct|enum|type)\s+(\w+)', raw)
         if m and not in_macro(i) and not in_test(i):
             is_pub = m.group(1) is not None
             kind_word, name = m.group(2), m.group(3)
@@ -389,17 +389,13 @@ def split_file(file_path):
         for m in type_data[pi['name']]['macros']:
             chunks.append('')
             chunks.append('\n'.join(lines[m['start']:m['end']]).rstrip())
-        # Helpers
-        for hname in type_data[pi['name']]['helpers']:
-            h = helper_by_name[hname]
-            helper_text = '\n'.join(lines[h['start']:h['end']]).rstrip()
-            # If helper was originally pub, downgrade to pub(crate) for cross-file use
-            if h.get('is_pub'):
-                helper_text = re.sub(r'^pub\s+fn\b', 'pub(crate) fn', helper_text, flags=re.MULTILINE)
-                helper_text = re.sub(r'^pub\s+const\b', 'pub(crate) const', helper_text, flags=re.MULTILINE)
-                helper_text = re.sub(r'^pub\s+static\b', 'pub(crate) static', helper_text, flags=re.MULTILINE)
+        # Helpers: import from mod.rs (non-pub helpers are defined there)
+        non_pub_helpers = sorted({h['name'] for h in helper_items if not h.get('is_pub')})
+        if non_pub_helpers:
             chunks.append('')
-            chunks.append(helper_text)
+            for i in range(0, len(non_pub_helpers), 8):
+                batch = non_pub_helpers[i:i+8]
+                chunks.append(f"use super::{{{', '.join(batch)}}};")
         new_path = sub_dir / f"{snake}.rs"
         new_path.write_text('\n'.join(chunks).rstrip() + '\n')
 
