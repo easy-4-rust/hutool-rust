@@ -5,43 +5,7 @@ use rust_decimal::Decimal;
 use serde_json::Value;
 use std::fmt::Write as _;
 
-/// LIKE 匹配方式 —— 对齐 Hutool `Condition.LikeType`。
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum LikeType {
-    StartWith,
-    EndWith,
-    Contains,
-}
-
-/// 条件值包装，用于 Entity 字段存储 Condition 或原始值。
-#[derive(Debug, Clone, PartialEq)]
-pub enum ConditionValue {
-    Raw(Value),
-    Condition(Condition),
-}
-
-impl ConditionValue {
-    /// 若值为 Condition 则返回引用。
-    #[must_use]
-    pub fn as_condition(&self) -> Option<&Condition> {
-        match self {
-            Self::Condition(c) => Some(c),
-            Self::Raw(_) => None,
-        }
-    }
-}
-
-impl From<Value> for ConditionValue {
-    fn from(value: Value) -> Self {
-        Self::Raw(value)
-    }
-}
-
-impl From<Condition> for ConditionValue {
-    fn from(value: Condition) -> Self {
-        Self::Condition(value)
-    }
-}
+use super::like_type::LikeType;
 
 /// SQL WHERE 条件 —— 对齐 Hutool `Condition`。
 #[derive(Debug, Clone, PartialEq)]
@@ -355,34 +319,13 @@ impl std::fmt::Display for Condition {
     }
 }
 
-/// 条件组 —— 对齐 Hutool `ConditionGroup`。
-#[derive(Debug, Clone, Default, PartialEq)]
-pub struct ConditionGroup {
-    conditions: Vec<Condition>,
-}
-
-impl ConditionGroup {
-    /// 追加条件。
-    pub fn add_conditions(&mut self, conditions: impl IntoIterator<Item = Condition>) {
-        self.conditions.extend(conditions);
-    }
-
-    /// 生成带括号的 SQL 片段。
-    pub fn to_sql(&self, param_values: &mut Vec<Value>) -> String {
-        if self.conditions.is_empty() {
-            return String::new();
-        }
-        format!(
-            "({})",
-            crate::sql::condition_builder::ConditionBuilder::of(&self.conditions)
-                .build(param_values)
-        )
-    }
-}
-
-impl std::fmt::Display for ConditionGroup {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.to_sql(&mut Vec::new()))
+fn json_scalar(value: &Value) -> String {
+    match value {
+        Value::Null => "NULL".to_string(),
+        Value::Bool(v) => v.to_string(),
+        Value::Number(n) => n.to_string(),
+        Value::String(s) => s.clone(),
+        other => other.to_string(),
     }
 }
 
@@ -390,16 +333,12 @@ fn split_once_space(input: &str) -> Option<(&str, &str)> {
     input.find(' ').map(|idx| (&input[..idx], input[idx + 1..].trim()))
 }
 
-fn unwrap_quote(value: &str) -> String {
-    let value = value.trim();
-    if value.len() >= 2 {
-        let start = value.as_bytes()[0];
-        let end = value.as_bytes()[value.len() - 1];
-        if (start == b'\'' && end == b'\'') || (start == b'"' && end == b'"') {
-            return value[1..value.len() - 1].to_string();
-        }
-    }
-    value.to_string()
+fn in_literal(value: &Value) -> String {
+    in_values(value)
+        .into_iter()
+        .map(|v| json_scalar(&v))
+        .collect::<Vec<_>>()
+        .join(",")
 }
 
 fn try_to_number(value: &str) -> Value {
@@ -424,20 +363,14 @@ fn in_values(value: &Value) -> Vec<Value> {
     }
 }
 
-fn in_literal(value: &Value) -> String {
-    in_values(value)
-        .into_iter()
-        .map(|v| json_scalar(&v))
-        .collect::<Vec<_>>()
-        .join(",")
-}
-
-fn json_scalar(value: &Value) -> String {
-    match value {
-        Value::Null => "NULL".to_string(),
-        Value::Bool(v) => v.to_string(),
-        Value::Number(n) => n.to_string(),
-        Value::String(s) => s.clone(),
-        other => other.to_string(),
+fn unwrap_quote(value: &str) -> String {
+    let value = value.trim();
+    if value.len() >= 2 {
+        let start = value.as_bytes()[0];
+        let end = value.as_bytes()[value.len() - 1];
+        if (start == b'\'' && end == b'\'') || (start == b'"' && end == b'"') {
+            return value[1..value.len() - 1].to_string();
+        }
     }
+    value.to_string()
 }
