@@ -468,8 +468,12 @@ def split_file(file_path):
     if header_text:
         mod_chunks.append(header_text)
         mod_chunks.append('')
+    seen_mods = set()
     for pi in pub_items:
-        mod_chunks.append(f"mod {to_snake(pi['name'])};")
+        mod_name = to_snake(pi['name'])
+        if mod_name not in seen_mods:
+            mod_chunks.append(f"mod {mod_name};")
+            seen_mods.add(mod_name)
     mod_chunks.append('')
     for pi in pub_items:
         mod_chunks.append(f"pub use {to_snake(pi['name'])}::{pi['name']};")
