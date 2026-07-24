@@ -6,7 +6,12 @@ use serde::de::DeserializeOwned;
 use serde::Serialize;
 use serde_json::{Map, Value};
 
-/// Database entity: row carrier and WHERE-condition map (Hutool `Entity`).
+/// Hutool 兼容的不可变键值实体。
+///
+/// 对齐 Java 类: `cn.hutool.db.Entity`
+/// 来源: hutool-db/src/main/java/cn/hutool/db/Entity.java
+///
+/// 数据库实体：行载体和 WHERE 条件映射。
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct Entity {
     table_name: Option<String>,
