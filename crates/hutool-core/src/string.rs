@@ -4,6 +4,9 @@
 //! (Apache-2.0) and substantially revised for borrowed strings, Unicode, and
 //! Rust extension traits.
 
+/// 对齐: `cn.hutool.core.text.StrUtil`
+/// 字符串定义
+
 use std::fmt::{Display, Write};
 
 use crate::{CoreError, Result};

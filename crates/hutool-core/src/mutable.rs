@@ -11,6 +11,9 @@
     clippy::cast_lossless
 )]
 
+/// 对齐: `cn.hutool.core.lang.mutable.MutableObj`
+/// 可变对象
+
 use std::{
     cmp::Ordering,
     convert::Infallible,

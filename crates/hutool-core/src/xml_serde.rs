@@ -1,5 +1,8 @@
 //! Optional direct Serde integration for XML.
 
+/// 对齐: `cn.hutool.core.xml.XmlUtil`
+/// XML 序列化/反序列化
+
 use std::io::{BufRead, Write};
 
 use serde::{de::DeserializeOwned, Serialize};
