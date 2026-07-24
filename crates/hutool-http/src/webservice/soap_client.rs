@@ -8,51 +8,7 @@ use std::collections::HashMap;
 
 use crate::HttpException;
 
-/// SOAP 协议枚举，对齐 `cn.hutool.http.webservice.SoapProtocol`。
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum SoapProtocol {
-    /// SOAP 1.1
-    Soap11,
-    /// SOAP 1.2
-    Soap12,
-}
-
-impl Default for SoapProtocol {
-    fn default() -> Self {
-        SoapProtocol::Soap11
-    }
-}
-
-/// Jakarta SOAP 协议枚举，对齐 `cn.hutool.http.webservice.JakartaSoapProtocol`。
-pub type JakartaSoapProtocol = SoapProtocol;
-
-/// SOAP 运行时异常，对齐 `cn.hutool.http.webservice.SoapRuntimeException`。
-#[derive(Debug, thiserror::Error)]
-#[error("{message}")]
-pub struct SoapRuntimeException {
-    message: String,
-}
-
-impl SoapRuntimeException {
-    /// 对齐 `SoapRuntimeException(String)`
-    pub fn new<S: Into<String>>(message: S) -> Self {
-        Self {
-            message: message.into(),
-        }
-    }
-
-    /// 对齐 `SoapRuntimeException(Throwable)`
-    pub fn from_error<E: std::error::Error>(e: E) -> Self {
-        Self {
-            message: e.to_string(),
-        }
-    }
-
-    /// 获取消息
-    pub fn get_message(&self) -> &str {
-        &self.message
-    }
-}
+use super::soap_protocol::SoapProtocol;
 
 /// SOAP 客户端，对齐 `cn.hutool.http.webservice.SoapClient`。
 ///
@@ -136,64 +92,5 @@ pub trait SoapClient: Send + Sync {
     /// 对齐 `SoapClient.sendForDocument()` — Rust 版返回 String（Java 返回 org.w3c.dom.Document）
     fn send_for_document(&self) -> Result<String, HttpException> {
         self.send()
-    }
-}
-
-/// Jakarta SOAP 客户端，对齐 `cn.hutool.http.webservice.JakartaSoapClient`。
-///
-/// Java 9+ Jakarta EE 命名空间版本（javax.xml.soap → jakarta.xml.soap）。
-/// Rust 中与 `SoapClient` 等价，无 javax/jakarta 区分。
-pub trait JakartaSoapClient: SoapClient {}
-
-/// SOAP 工具类，对齐 `cn.hutool.http.webservice.SoapUtil`。
-pub struct SoapUtil;
-
-impl SoapUtil {
-    /// 对齐 `SoapUtil.createClient(String url)`
-    pub fn create_client(_url: &str) -> Result<Box<dyn SoapClient>, HttpException> {
-        Err(HttpException::new(
-            "SoapUtil::create_client requires javax.xml.soap; consider soap-rs crate in Rust",
-        ))
-    }
-
-    /// 对齐 `SoapUtil.createClient(String url, String method)`
-    pub fn create_client_with_method(
-        _url: &str,
-        _method: &str,
-    ) -> Result<Box<dyn SoapClient>, HttpException> {
-        Self::create_client(_url)
-    }
-}
-
-/// Jakarta SOAP 工具类，对齐 `cn.hutool.http.webservice.JakartaSoapUtil`。
-pub type JakartaSoapUtil = SoapUtil;
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_soap_protocol_default() {
-        let p = SoapProtocol::default();
-        assert_eq!(p, SoapProtocol::Soap11);
-    }
-
-    #[test]
-    fn test_soap_runtime_exception() {
-        let e = SoapRuntimeException::new("test error");
-        assert_eq!(e.get_message(), "test error");
-    }
-
-    #[test]
-    fn test_soap_runtime_exception_from_error() {
-        let io_err = std::io::Error::new(std::io::ErrorKind::Other, "io fail");
-        let e = SoapRuntimeException::from_error(io_err);
-        assert!(e.get_message().contains("io fail"));
-    }
-
-    #[test]
-    fn test_soap_util_create_client_unsupported() {
-        let r = SoapUtil::create_client("http://example.com/soap");
-        assert!(r.is_err());
     }
 }
