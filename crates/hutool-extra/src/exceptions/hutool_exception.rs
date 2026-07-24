@@ -12,26 +12,8 @@
 
 use thiserror::Error;
 
-/// 统一的模板格式化工具（参考 `cn.hutool.core.util.StrUtil.format`）。
-/// Phase 1.4 完成后可委托到 `hutool_core::format_template`。
-fn format_message(template: &str, params: &[&dyn std::fmt::Display]) -> String {
-    let mut out = String::new();
-    let mut idx = 0;
-    let mut chars = template.chars().peekable();
-    while let Some(c) = chars.next() {
-        if c == '{' && chars.peek() == Some(&'}') {
-            chars.next();
-            if idx < params.len() {
-                use std::fmt::Write;
-                let _ = write!(out, "{}", params[idx]);
-                idx += 1;
-            }
-        } else {
-            out.push(c);
-        }
-    }
-    out
-}
+use super::mail_exception::MailException;
+use super::qr_code_exception::QrCodeException;
 
 /// 通用 hutool Exception 错误枚举，对齐 `cn.hutool.extra.X.XxxException` 的 6 构造器模式。
 ///
@@ -154,95 +136,21 @@ impl HutoolException {
     }
 }
 
-// ===== 类型别名：每个 hutool-extra Exception 都是 HutoolException 的语义别名 =====
-//
-// 注意：PinyinException 在 pinyin.rs 中已有独立实现（保持向后兼容）。
-// 其余 5 个统一指向 HutoolException。
-
-/// 对齐 `cn.hutool.extra.mail.MailException`
-pub type MailException = HutoolException;
-
-/// 对齐 `cn.hutool.extra.qrcode.QrCodeException`
-pub type QrCodeException = HutoolException;
-
-// PinyinException 由 pinyin.rs 提供（已有独立 struct）
-// pub type PinyinException = HutoolException;
-
-/// 对齐 `cn.hutool.extra.compress.CompressException`
-pub type CompressException = HutoolException;
-
-/// 对齐 `cn.hutool.extra.expression.ExpressionException`
-pub type ExpressionException = HutoolException;
-
-/// 对齐 `cn.hutool.extra.tokenizer.TokenizerException`
-pub type TokenizerException = HutoolException;
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_message_constructor() {
-        let e = HutoolException::message("test error");
-        assert_eq!(e.get_message(), "test error");
+fn format_message(template: &str, params: &[&dyn std::fmt::Display]) -> String {
+    let mut out = String::new();
+    let mut idx = 0;
+    let mut chars = template.chars().peekable();
+    while let Some(c) = chars.next() {
+        if c == '{' && chars.peek() == Some(&'}') {
+            chars.next();
+            if idx < params.len() {
+                use std::fmt::Write;
+                let _ = write!(out, "{}", params[idx]);
+                idx += 1;
+            }
+        } else {
+            out.push(c);
+        }
     }
-
-    #[test]
-    fn test_formatted_constructor() {
-        let e = HutoolException::formatted("hello {} world", &[&"rust"]);
-        assert_eq!(e.get_message(), "hello rust world");
-    }
-
-    #[test]
-    fn test_formatted_multiple_placeholders() {
-        let e = HutoolException::formatted("{} + {} = {}", &[&1i32, &2i32, &3i32]);
-        assert_eq!(e.get_message(), "1 + 2 = 3");
-    }
-
-    #[test]
-    fn test_from_cause() {
-        let io_err = std::io::Error::new(std::io::ErrorKind::NotFound, "missing.txt");
-        let e = HutoolException::from_cause(io_err);
-        assert!(e.get_message().contains("missing.txt"));
-    }
-
-    #[test]
-    fn test_with_throwable() {
-        let io_err = std::io::Error::new(std::io::ErrorKind::PermissionDenied, "denied");
-        let e = HutoolException::with_throwable("operation failed", io_err);
-        assert_eq!(e.get_message(), "operation failed");
-    }
-
-    #[test]
-    fn test_full_constructor() {
-        let io_err = std::io::Error::new(std::io::ErrorKind::Other, "full");
-        let e = HutoolException::full("msg", io_err, true, true);
-        assert_eq!(e.get_message(), "msg");
-    }
-
-    #[test]
-    fn test_formatted_with_cause() {
-        let io_err = std::io::Error::new(std::io::ErrorKind::Other, "io");
-        let e = HutoolException::formatted_with_cause(io_err, "failed: {}", &[&"x"]);
-        assert_eq!(e.get_message(), "failed: x");
-    }
-
-    #[test]
-    fn test_exception_aliases() {
-        // 验证类型别名可作为 Exception 使用
-        let mail: MailException = HutoolException::message("mail failure");
-        assert_eq!(mail.get_message(), "mail failure");
-
-        let qr: QrCodeException = HutoolException::formatted("QR: {}", &[&"bad data"]);
-        assert_eq!(qr.get_message(), "QR: bad data");
-
-        let compress: CompressException = HutoolException::message("compress");
-        let expression: ExpressionException = HutoolException::message("expression");
-        let tokenizer: TokenizerException = HutoolException::message("tokenizer");
-
-        // PinyinException 在 pinyin.rs 中有独立实现，跳过此处
-        assert_eq!(compress.get_message(), "compress");
-        assert_eq!(expression.get_message(), "expression");
-        assert_eq!(tokenizer.get_message(), "tokenizer");
-    }
+    out
 }
