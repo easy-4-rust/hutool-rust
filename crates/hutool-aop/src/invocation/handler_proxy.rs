@@ -2,39 +2,8 @@
 
 use std::{borrow::Cow, fmt};
 
-/// Stable metadata for one proxied operation.
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub struct Method {
-    name: Cow<'static, str>,
-}
-
-impl Method {
-    /// Creates method metadata from an owned or static name.
-    pub fn new(name: impl Into<Cow<'static, str>>) -> Self {
-        Self { name: name.into() }
-    }
-
-    /// Returns the operation name.
-    #[must_use]
-    pub fn name(&self) -> &str {
-        &self.name
-    }
-}
-
-/// A typed equivalent of Java's `InvocationHandler`.
-pub trait InvocationHandler<T, A, R, E>: Send + Sync {
-    /// Invokes `method` against `target` with mutable arguments.
-    fn invoke(&self, target: &mut T, method: &Method, args: &mut A) -> Result<R, E>;
-}
-
-impl<T, A, R, E, F> InvocationHandler<T, A, R, E> for F
-where
-    F: Fn(&mut T, &Method, &mut A) -> Result<R, E> + Send + Sync,
-{
-    fn invoke(&self, target: &mut T, method: &Method, args: &mut A) -> Result<R, E> {
-        self(target, method, args)
-    }
-}
+use super::invocation_handler::InvocationHandler;
+use super::method::Method;
 
 /// Explicit proxy backed by a typed invocation handler.
 pub struct HandlerProxy<T, H> {
