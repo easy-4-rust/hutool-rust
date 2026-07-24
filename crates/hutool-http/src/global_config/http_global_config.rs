@@ -9,48 +9,7 @@ use crate::HostnameVerification;
 use std::sync::{Mutex, OnceLock};
 use std::time::Duration;
 
-/// Default multipart boundary used when none is configured.
-pub const DEFAULT_BOUNDARY: &str = "----HiToolHttpBoundary";
-
-/// Hutool-aligned global HTTP settings store.
-///
-/// Java: `cn.hutool.http.HttpGlobalConfig`
-#[derive(Debug, Clone)]
-pub struct HttpGlobalConfigState {
-    /// Connect/read timeout in milliseconds (`-1` = unset / infinite in Hutool).
-    pub timeout_ms: i32,
-    /// Multipart boundary string.
-    pub boundary: String,
-    /// Maximum redirect hops.
-    pub max_redirect_count: i32,
-    /// Whether to ignore EOF / truncated body errors.
-    pub ignore_eof_error: bool,
-    /// Whether to decode URLs before sending.
-    pub decode_url: bool,
-    /// Whether PATCH is allowed (always true for reqwest; flag retained for parity).
-    pub allow_patch: bool,
-    /// Whether to trust any host (Dangerous hostname verification when applied).
-    pub trust_any_host: bool,
-}
-
-impl Default for HttpGlobalConfigState {
-    fn default() -> Self {
-        Self {
-            timeout_ms: -1,
-            boundary: DEFAULT_BOUNDARY.to_string(),
-            max_redirect_count: 0,
-            ignore_eof_error: true,
-            decode_url: false,
-            allow_patch: true,
-            trust_any_host: false,
-        }
-    }
-}
-
-fn state() -> &'static Mutex<HttpGlobalConfigState> {
-    static STATE: OnceLock<Mutex<HttpGlobalConfigState>> = OnceLock::new();
-    STATE.get_or_init(|| Mutex::new(HttpGlobalConfigState::default()))
-}
+use super::http_global_config_state::HttpGlobalConfigState;
 
 /// Static accessors matching Hutool `HttpGlobalConfig`.
 pub struct HttpGlobalConfig;
@@ -189,33 +148,4 @@ impl HttpGlobalConfig {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn global_config_roundtrip_and_reset() {
-        HttpGlobalConfig::reset();
-        HttpGlobalConfig::set_timeout(3_000);
-        HttpGlobalConfig::set_boundary("----Test");
-        HttpGlobalConfig::set_max_redirect_count(5);
-        HttpGlobalConfig::set_ignore_eof_error(false);
-        HttpGlobalConfig::set_decode_url(true);
-        HttpGlobalConfig::allow_patch();
-        HttpGlobalConfig::set_trust_any_host(true);
-        assert_eq!(HttpGlobalConfig::get_timeout(), 3_000);
-        assert_eq!(HttpGlobalConfig::get_boundary(), "----Test");
-        assert_eq!(HttpGlobalConfig::get_max_redirect_count(), 5);
-        assert!(!HttpGlobalConfig::is_ignore_eof_error());
-        assert!(HttpGlobalConfig::is_decode_url());
-        assert!(HttpGlobalConfig::is_trust_any_host());
-        assert!(matches!(
-            HttpGlobalConfig::hostname_verification(),
-            HostnameVerification::DangerousAcceptInvalid
-        ));
-        assert!(HttpGlobalConfig::timeout_duration().is_some());
-        HttpGlobalConfig::reset();
-        assert_eq!(HttpGlobalConfig::get_timeout(), -1);
-        assert!(!HttpGlobalConfig::is_trust_any_host());
-    }
-}
+use super::{DEFAULT_BOUNDARY, state};
