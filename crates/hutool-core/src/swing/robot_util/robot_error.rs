@@ -28,51 +28,13 @@ use image::RgbaImage;
 use std::path::Path;
 use std::time::Duration;
 
-/// 鼠标按键枚举,对应 Java `java.awt.event.InputEvent` 的按钮掩码。
-///
-/// 对齐 Java: `InputEvent.BUTTON1_MASK` / `BUTTON2_MASK` / `BUTTON3_MASK`
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum MouseButton {
-    /// 对齐 Java: `InputEvent.BUTTON1_MASK`(左键)
-    Left,
-    /// 对齐 Java: `InputEvent.BUTTON2_MASK`(中键)
-    Middle,
-    /// 对齐 Java: `InputEvent.BUTTON3_MASK`(右键)
-    Right,
-}
-
-impl MouseButton {
-    /// 转换为 enigo 的鼠标按键类型。
-    fn to_enigo(self) -> enigo::Button {
-        match self {
-            MouseButton::Left => enigo::Button::Left,
-            MouseButton::Middle => enigo::Button::Middle,
-            MouseButton::Right => enigo::Button::Right,
-        }
-    }
-}
-
-/// Robot facade。
-///
-/// 对齐 Java: `cn.hutool.core.swing.RobotUtil`(Java 中为静态方法 + 静态 Robot 单例;
-/// Rust 版本以 ZST + 关联函数呈现,内部每次操作创建 Enigo 句柄)。
-///
-/// # Rust 化说明
-///
-/// Java 的 `Robot` 在静态块中创建单例,所有静态方法共享。Rust 的
-/// [`enigo::Enigo`] 不是 `Sync`,无法简单放进 `static`。该实现采用
-/// "每次操作 new 一个 Enigo"的简化策略,调用方在批量操作时应考虑
-/// 自行持有 `Enigo` 实例以减少开销。
-#[derive(Debug, Clone, Copy, Default)]
-pub struct RobotUtil;
+use super::mouse_button::MouseButton;
+use super::robot_util::RobotUtil;
 
 /// Robot 错误别名。
 ///
 /// 对齐 Java: `RobotUtil` 路径抛出的 `AWTException`
 pub type RobotError = SwingError;
-
-/// 全局默认延迟(毫秒),对齐 Java 的 `RobotUtil.delay` 静态字段。
-static DEFAULT_DELAY_MILLIS: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
 
 impl RobotUtil {
     /// 创建一个 Enigo 句柄。
@@ -270,24 +232,4 @@ impl RobotUtil {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn default_delay_round_trips() {
-        // 仅验证静态字段读写,不触发实际 sleep
-        let original = RobotUtil::get_delay();
-        RobotUtil::set_delay(42);
-        assert_eq!(RobotUtil::get_delay(), 42);
-        RobotUtil::set_delay(original);
-        assert_eq!(RobotUtil::get_delay(), original);
-    }
-
-    #[test]
-    fn mouse_button_maps_to_enigo() {
-        assert_eq!(MouseButton::Left.to_enigo(), enigo::Button::Left);
-        assert_eq!(MouseButton::Middle.to_enigo(), enigo::Button::Middle);
-        assert_eq!(MouseButton::Right.to_enigo(), enigo::Button::Right);
-    }
-}
+static DEFAULT_DELAY_MILLIS: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
