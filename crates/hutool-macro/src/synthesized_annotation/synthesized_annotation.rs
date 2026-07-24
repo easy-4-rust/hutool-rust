@@ -3,9 +3,9 @@
 use std::collections::HashMap;
 use std::sync::Arc;
 
-use super::annotation_attribute::AnnotationAttribute;
-use super::hierarchical::Hierarchical;
-use super::mirror::{AnnotationMirror, AnnotationTypeName, AnnotationValue, ValueKind};
+use crate::annotation_attribute::AnnotationAttribute;
+use crate::hierarchical::Hierarchical;
+use crate::mirror::{AnnotationMirror, AnnotationTypeName, AnnotationValue, ValueKind};
 
 /// 对齐 Java interface: `cn.hutool.core.annotation.SynthesizedAnnotation`
 pub trait SynthesizedAnnotation: Hierarchical + Send + Sync {
@@ -33,28 +33,4 @@ pub trait SynthesizedAnnotation: Hierarchical + Send + Sync {
 
     /// 注解类型。
     fn annotation_type(&self) -> AnnotationTypeName;
-}
-
-/// 属性值提供者。
-pub trait AnnotationAttributeValueProvider {
-    /// 按名称与类型获取属性值。
-    fn get_attribute_value_typed(
-        &self,
-        attribute_name: &str,
-        attribute_type: ValueKind,
-    ) -> Option<AnnotationValue>;
-}
-
-impl<T: SynthesizedAnnotation> AnnotationAttributeValueProvider for T {
-    fn get_attribute_value_typed(
-        &self,
-        attribute_name: &str,
-        attribute_type: ValueKind,
-    ) -> Option<AnnotationValue> {
-        if self.has_attribute(attribute_name, attribute_type) {
-            self.get_attribute_value(attribute_name)
-        } else {
-            None
-        }
-    }
 }
