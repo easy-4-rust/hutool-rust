@@ -8,107 +8,13 @@ use std::sync::{Arc, Mutex};
 use std::thread::{self, JoinHandle};
 use std::time::Duration;
 
-/// 工作队列形态（对齐 BlockingQueue / SynchronousQueue 子集）。
-#[derive(Debug, Clone, Copy)]
-enum QueueKind {
-    /// 无界（近似 LinkedBlockingQueue 大容量）。
-    Unbounded,
-    /// 有界 ArrayBlockingQueue。
-    Bounded(usize),
-    /// SynchronousQueue：无缓冲，直接 hand-off（此处用容量 0 同步通道近似）。
-    Synchronous,
-}
-
-enum JobChannel {
-    Unbounded(Sender<Box<dyn FnOnce() + Send + 'static>>),
-    Bounded(SyncSender<Box<dyn FnOnce() + Send + 'static>>),
-}
-
-impl JobChannel {
-    fn try_send(&self, job: Box<dyn FnOnce() + Send + 'static>) -> Result<(), Box<dyn FnOnce() + Send + 'static>> {
-        match self {
-            JobChannel::Unbounded(tx) => tx.send(job).map_err(|e| e.0),
-            JobChannel::Bounded(tx) => tx.try_send(job).map_err(|e| match e {
-                mpsc::TrySendError::Full(j) | mpsc::TrySendError::Disconnected(j) => j,
-            }),
-        }
-    }
-}
-
-/// 简易线程池（对齐 ExecutorBuilder 构建结果的可运行子集）
-pub struct SimpleExecutor {
-    tx: Mutex<Option<JobChannel>>,
-    handles: Mutex<Vec<JoinHandle<()>>>,
-    reject: RejectPolicy,
-}
-
-impl SimpleExecutor {
-    /// 提交任务
-    pub fn execute<F>(&self, f: F)
-    where
-        F: FnOnce() + Send + 'static,
-    {
-        let mut guard = self.tx.lock().unwrap();
-        if let Some(tx) = guard.as_ref() {
-            if let Err(job) = tx.try_send(Box::new(f)) {
-                Self::reject_job(self.reject, job);
-            }
-        } else {
-            // shutdown 后：CALLER_RUNS / BLOCK 在调用线程执行
-            match self.reject {
-                RejectPolicy::ABORT | RejectPolicy::DISCARD | RejectPolicy::DISCARD_OLDEST => {}
-                RejectPolicy::CALLER_RUNS | RejectPolicy::BLOCK => f(),
-            }
-        }
-    }
-
-    fn reject_job(policy: RejectPolicy, job: Box<dyn FnOnce() + Send + 'static>) {
-        match policy {
-            RejectPolicy::ABORT => {
-                // 对齐 AbortPolicy：丢弃并视为拒绝（Rust 不抛 RejectedExecutionException）
-            }
-            RejectPolicy::DISCARD | RejectPolicy::DISCARD_OLDEST => {}
-            RejectPolicy::CALLER_RUNS | RejectPolicy::BLOCK => job(),
-        }
-    }
-
-    /// 关闭线程池
-    pub fn shutdown(&self) {
-        let mut guard = self.tx.lock().unwrap();
-        *guard = None;
-        drop(guard);
-        let mut handles = self.handles.lock().unwrap();
-        for h in handles.drain(..) {
-            let _ = h.join();
-        }
-    }
-
-    /// 提交并返回 JoinHandle（供 GlobalThreadPool.submit 使用）。
-    pub fn submit<F, T>(&self, f: F) -> thread::JoinHandle<T>
-    where
-        F: FnOnce() -> T + Send + 'static,
-        T: Send + 'static,
-    {
-        let (tx, rx) = mpsc::channel();
-        self.execute(move || {
-            let _ = tx.send(f());
-        });
-        thread::spawn(move || rx.recv().expect("task result"))
-    }
-}
-
-impl Drop for SimpleExecutor {
-    fn drop(&mut self) {
-        // Arc 共享时仅最后一个 owner drop；避免对全局池误关。
-        // 显式 shutdown() 仍可用。
-    }
-}
+use super::simple_executor::SimpleExecutor;
 
 /// 对齐 Java: `ExecutorBuilder`
 pub struct ExecutorBuilder {
     core: usize,
     max: usize,
-    reject: RejectPolicy,
+    pub(crate) reject: RejectPolicy,
     keep_alive: Duration,
     allow_core_timeout: bool,
     queue: QueueKind,
@@ -257,3 +163,5 @@ impl ExecutorBuilder {
         }
     }
 }
+
+use super::{JobChannel, QueueKind};
