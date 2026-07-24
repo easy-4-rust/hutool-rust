@@ -264,7 +264,9 @@ def scan_file(content):
                               lines[j].lstrip().startswith('&') or
                               lines[j].lstrip().startswith('[') or
                               lines[j].lstrip().startswith('(') or
-                              lines[j].lstrip().startswith('-')):
+                              lines[j].lstrip().startswith('-') or
+                              lines[j].lstrip().startswith('b"') or
+                              lines[j].lstrip().startswith("b'")):
                     multi = True
             if multi:
                 depth = 0
