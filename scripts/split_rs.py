@@ -227,10 +227,11 @@ def scan_file(content):
             continue
         # non-pub top-level: const, fn, static, struct, type, enum
         # Also handle `pub fn`/`pub const`/`pub static` - these are public helpers
-        m = re.match(r'^(pub(?:\s*\(\s*crate\s*\))?\s+)?(const|fn|static|struct|enum|type)\s+(\w+)', raw)
+        m = re.match(r'^(pub(?:\s*\(\s*crate\s*\))?\s+)?(async\s+)?(const|fn|static|struct|enum|type)\s+(\w+)', raw)
         if m and not in_macro(i) and not in_test(i):
             is_pub = m.group(1) is not None
-            kind_word, name = m.group(2), m.group(3)
+            is_async = m.group(2) is not None
+            kind_word, name = m.group(3), m.group(4)
             kind = f'helper_{kind_word}'
             # Public helpers need pub(crate) to be visible across files in the crate
             # We'll wrap their bodies later if needed. For now, keep them.
