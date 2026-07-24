@@ -4,82 +4,8 @@
 use std::fmt;
 use std::time::{Duration, Instant};
 
-/// 时间单位（对齐 Java `TimeUnit` 的常用子集）。
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum TimeUnit {
-    /// 纳秒
-    Nanos,
-    /// 微秒
-    Micros,
-    /// 毫秒
-    Millis,
-    /// 秒
-    Seconds,
-}
-
-impl TimeUnit {
-    /// 将纳秒时长换算为本单位数值。
-    pub fn convert_from_nanos(self, nanos: u128) -> f64 {
-        match self {
-            Self::Nanos => nanos as f64,
-            Self::Micros => nanos as f64 / 1_000.0,
-            Self::Millis => nanos as f64 / 1_000_000.0,
-            Self::Seconds => nanos as f64 / 1_000_000_000.0,
-        }
-    }
-
-    /// 单位短名（prettyPrint 用）。
-    pub fn short_name(self) -> &'static str {
-        match self {
-            Self::Nanos => "ns",
-            Self::Micros => "µs",
-            Self::Millis => "ms",
-            Self::Seconds => "s",
-        }
-    }
-}
-
-/// 对齐 Java: `StopWatch.TaskInfo`
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct TaskInfo {
-    task_name: String,
-    time_nanos: u128,
-}
-
-impl TaskInfo {
-    /// 构造任务信息。
-    pub fn new(task_name: impl Into<String>, time_nanos: u128) -> Self {
-        Self {
-            task_name: task_name.into(),
-            time_nanos,
-        }
-    }
-
-    /// 对齐 Java: `TaskInfo.getTaskName()`
-    pub fn get_task_name(&self) -> &str {
-        &self.task_name
-    }
-
-    /// 对齐 Java: `TaskInfo.getTime(TimeUnit)`
-    pub fn get_time(&self, unit: TimeUnit) -> f64 {
-        unit.convert_from_nanos(self.time_nanos)
-    }
-
-    /// 对齐 Java: `TaskInfo.getTimeNanos()`
-    pub fn get_time_nanos(&self) -> u128 {
-        self.time_nanos
-    }
-
-    /// 对齐 Java: `TaskInfo.getTimeMillis()`
-    pub fn get_time_millis(&self) -> u128 {
-        self.time_nanos / 1_000_000
-    }
-
-    /// 对齐 Java: `TaskInfo.getTimeSeconds()`
-    pub fn get_time_seconds(&self) -> f64 {
-        self.time_nanos as f64 / 1_000_000_000.0
-    }
-}
+use super::task_info::TaskInfo;
+use super::time_unit::TimeUnit;
 
 /// 对齐 Java: `cn.hutool.core.date.StopWatch`
 #[derive(Debug, Clone)]
