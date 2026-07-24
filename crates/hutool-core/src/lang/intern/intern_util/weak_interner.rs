@@ -34,13 +34,3 @@ impl Default for WeakInterner {
         Self::new()
     }
 }
-
-/// 对齐 Java: `InternUtil`
-pub struct InternUtil;
-
-impl InternUtil {
-    /// 对齐 `createWeakInterner`
-    pub fn create_weak_interner() -> WeakInterner {
-        WeakInterner::new()
-    }
-}
