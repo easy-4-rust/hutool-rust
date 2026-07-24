@@ -6,6 +6,7 @@ use moka::sync::{Cache as MokaCache, CacheBuilder};
 use std::{hash::Hash, sync::Arc, time::Duration};
 
 mod compat;
+mod global_prune_timer;
 mod file_cache;
 mod cache_util;
 
@@ -15,6 +16,7 @@ pub use compat::{
     TimedCache, WeakCache,
 };
 pub use file_cache::{AbstractFileCache, LFUFileCache, LRUFileCache};
+pub use cache_util::CacheUtil;
 
 /// Hutool-aligned implementation namespace.
 pub mod r#impl {

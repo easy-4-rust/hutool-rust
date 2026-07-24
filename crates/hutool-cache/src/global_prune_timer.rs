@@ -6,8 +6,8 @@ use std::thread::{self, JoinHandle};
 use std::time::Duration;
 
 pub(crate) struct PruneHandle {
-    stop: Option<mpsc::Sender<()>>,
-    worker: Option<JoinHandle<()>>,
+    pub(crate) stop: Option<mpsc::Sender<()>>,
+    pub(crate) worker: Option<JoinHandle<()>>,
 }
 impl fmt::Debug for PruneHandle {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result { f.debug_struct("PruneHandle").finish() }

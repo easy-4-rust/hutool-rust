@@ -3,6 +3,7 @@
 use std::hash::Hash;
 use std::time::Duration;
 use std::sync::Arc;
+use crate::global_prune_timer::{GlobalPruneTimer, PruneHandle};
 use crate::compat::{AbstractCache, CachePolicy, FIFOCache, LFUCache, LRUCache, WeakCache, NoCache, ReentrantCache, StampedCache, TimedCache, ScheduledTimedCache};
 
 pub struct CacheUtil;
