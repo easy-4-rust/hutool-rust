@@ -42,6 +42,3 @@ impl<K: Eq + Hash, V> WeakConcurrentMap<K, V> {
         ))
     }
 }
-
-/// 对齐 Java: `ReferenceConcurrentMap`
-pub type ReferenceConcurrentMap<K, V> = WeakConcurrentMap<K, V>;
