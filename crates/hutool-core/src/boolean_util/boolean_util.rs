@@ -3,22 +3,7 @@
 use std::{any::TypeId, fmt};
 use thiserror::Error;
 
-const TRUE_VALUES: &[&str] = &[
-    "true", "yes", "y", "t", "ok", "correct", "success", "on", "1", "是", "对", "真", "對", "正确",
-    "开", "开启", "√", "☑",
-];
-const FALSE_VALUES: &[&str] = &[
-    "false", "no", "n", "f", "wrong", "fail", "off", "0", "否", "错", "假", "錯", "错误", "关",
-    "关闭", "×", "☒",
-];
-
-/// Errors produced by boolean aggregations.
-#[derive(Debug, Clone, Copy, Error, PartialEq, Eq)]
-pub enum BooleanError {
-    /// Hutool requires at least one operand for aggregate operations.
-    #[error("boolean input must not be empty")]
-    EmptyInput,
-}
+use super::boolean_error::BooleanError;
 
 /// Hutool-aligned boolean convenience methods.
 #[derive(Debug, Clone, Copy, Default)]
@@ -270,6 +255,11 @@ impl fmt::Display for BooleanUtil {
     }
 }
 
+const TRUE_VALUES: &[&str] = &[
+    "true", "yes", "y", "t", "ok", "correct", "success", "on", "1", "是", "对", "真", "對", "正确",
+    "开", "开启", "√", "☑",
+];
+
 fn require_values<T>(values: &[T]) -> Result<(), BooleanError> {
     if values.is_empty() {
         Err(BooleanError::EmptyInput)
@@ -278,113 +268,7 @@ fn require_values<T>(values: &[T]) -> Result<(), BooleanError> {
     }
 }
 
-#[cfg(test)]
-#[allow(clippy::float_cmp)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn optional_negation_type_checks_and_all_conversions_are_explicit() {
-        assert_eq!(BooleanUtil::negate_option(Some(true)), Some(false));
-        assert_eq!(BooleanUtil::negate_option(None), None);
-        assert!(BooleanUtil::is_true(Some(true)));
-        assert!(!BooleanUtil::is_true(None));
-        assert!(BooleanUtil::is_false(Some(false)));
-        assert!(!BooleanUtil::is_false(None));
-        assert!(BooleanUtil::negate(false));
-        assert!(BooleanUtil::is_boolean_type::<bool>());
-        assert!(!BooleanUtil::is_boolean_type::<u8>());
-
-        assert_eq!(BooleanUtil::to_int(true), 1);
-        assert_eq!(BooleanUtil::to_integer(false), 0);
-        assert_eq!(BooleanUtil::to_char(true), '\u{1}');
-        assert_eq!(BooleanUtil::to_character(false), '\0');
-        assert_eq!(BooleanUtil::to_byte(true), 1);
-        assert_eq!(BooleanUtil::to_byte_object(false), 0);
-        assert_eq!(BooleanUtil::to_long(true), 1);
-        assert_eq!(BooleanUtil::to_long_object(false), 0);
-        assert_eq!(BooleanUtil::to_short(true), 1);
-        assert_eq!(BooleanUtil::to_short_object(false), 0);
-        assert_eq!(BooleanUtil::to_float(true), 1.0);
-        assert_eq!(BooleanUtil::to_float_object(false), 0.0);
-        assert_eq!(BooleanUtil::to_double(true), 1.0);
-        assert_eq!(BooleanUtil::to_double_object(false), 0.0);
-        assert_eq!(BooleanUtil.to_string(), "BooleanUtil");
-    }
-
-    #[test]
-    fn parser_covers_hutool_multilingual_vocabulary_blank_and_unknown_values() {
-        for value in TRUE_VALUES {
-            assert!(BooleanUtil::to_boolean(value));
-            assert_eq!(BooleanUtil::to_boolean_object(value), Some(true));
-        }
-        for value in FALSE_VALUES {
-            assert!(!BooleanUtil::to_boolean(value));
-            assert_eq!(BooleanUtil::to_boolean_object(value), Some(false));
-        }
-        assert!(BooleanUtil::to_boolean("  TrUe  "));
-        assert_eq!(BooleanUtil::to_boolean_object(""), None);
-        assert_eq!(BooleanUtil::to_boolean_object("unknown"), None);
-        assert!(!BooleanUtil::to_boolean("unknown"));
-    }
-
-    #[test]
-    fn string_selection_covers_true_false_and_none() {
-        assert_eq!(BooleanUtil::to_string_true_false(true), "true");
-        assert_eq!(BooleanUtil::to_string_true_false(false), "false");
-        assert_eq!(BooleanUtil::to_string_on_off(true), "on");
-        assert_eq!(BooleanUtil::to_string_on_off(false), "off");
-        assert_eq!(BooleanUtil::to_string_yes_no(true), "yes");
-        assert_eq!(BooleanUtil::to_string_yes_no(false), "no");
-        assert_eq!(BooleanUtil::to_string(true, "T", "F"), "T");
-        assert_eq!(BooleanUtil::to_string(false, "T", "F"), "F");
-        assert_eq!(
-            BooleanUtil::option_to_string(Some(true), "T", "F", "N"),
-            "T"
-        );
-        assert_eq!(
-            BooleanUtil::option_to_string(Some(false), "T", "F", "N"),
-            "F"
-        );
-        assert_eq!(BooleanUtil::option_to_string(None, "T", "F", "N"), "N");
-    }
-
-    #[test]
-    fn aggregations_match_hutool_empty_short_circuit_none_and_parity_rules() {
-        assert_eq!(BooleanUtil::and(&[true, true]), Ok(true));
-        assert_eq!(BooleanUtil::and(&[true, false]), Ok(false));
-        assert_eq!(BooleanUtil::or(&[false, false]), Ok(false));
-        assert_eq!(BooleanUtil::or(&[false, true]), Ok(true));
-        assert_eq!(BooleanUtil::xor(&[true, true, true]), Ok(true));
-        assert_eq!(BooleanUtil::xor(&[true, true]), Ok(false));
-        assert_eq!(
-            BooleanUtil::exactly_one_true(&[false, true, false]),
-            Ok(true)
-        );
-        assert_eq!(BooleanUtil::exactly_one_true(&[false, false]), Ok(false));
-        assert_eq!(BooleanUtil::exactly_one_true(&[true, true]), Ok(false));
-        assert_eq!(BooleanUtil::and_wrapped(&[Some(true), None]), Ok(false));
-        assert_eq!(
-            BooleanUtil::and_wrapped(&[Some(true), Some(true)]),
-            Ok(true)
-        );
-        assert_eq!(BooleanUtil::or_wrapped(&[None, Some(true)]), Ok(true));
-        assert_eq!(BooleanUtil::or_wrapped(&[None, Some(false)]), Ok(false));
-        assert_eq!(BooleanUtil::xor_wrapped(&[Some(true), None]), Ok(true));
-        assert_eq!(
-            BooleanUtil::xor_wrapped(&[Some(true), Some(true)]),
-            Ok(false)
-        );
-
-        assert_eq!(BooleanUtil::and(&[]), Err(BooleanError::EmptyInput));
-        assert_eq!(BooleanUtil::and_wrapped(&[]), Err(BooleanError::EmptyInput));
-        assert_eq!(BooleanUtil::or(&[]), Err(BooleanError::EmptyInput));
-        assert_eq!(BooleanUtil::or_wrapped(&[]), Err(BooleanError::EmptyInput));
-        assert_eq!(BooleanUtil::xor(&[]), Err(BooleanError::EmptyInput));
-        assert_eq!(
-            BooleanUtil::exactly_one_true(&[]),
-            Err(BooleanError::EmptyInput)
-        );
-        assert_eq!(BooleanUtil::xor_wrapped(&[]), Err(BooleanError::EmptyInput));
-    }
-}
+const FALSE_VALUES: &[&str] = &[
+    "false", "no", "n", "f", "wrong", "fail", "off", "0", "否", "错", "假", "錯", "错误", "关",
+    "关闭", "×", "☒",
+];
