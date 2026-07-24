@@ -417,12 +417,12 @@ def split_file(file_path):
         for m in type_data[pi['name']]['macros']:
             chunks.append('')
             chunks.append('\n'.join(lines[m['start']:m['end']]).rstrip())
-        # Helpers: import from mod.rs (non-pub helpers are defined there)
-        non_pub_helpers = sorted({h['name'] for h in helper_items if not h.get('is_pub')})
-        if non_pub_helpers:
+        # Helpers: import ALL helpers from mod.rs
+        all_helpers = sorted({h['name'] for h in helper_items})
+        if all_helpers:
             chunks.append('')
-            for i in range(0, len(non_pub_helpers), 8):
-                batch = non_pub_helpers[i:i+8]
+            for i in range(0, len(all_helpers), 8):
+                batch = all_helpers[i:i+8]
                 chunks.append(f"use super::{{{', '.join(batch)}}};")
         new_path = sub_dir / f"{snake}.rs"
         new_path.write_text('\n'.join(chunks).rstrip() + '\n')
