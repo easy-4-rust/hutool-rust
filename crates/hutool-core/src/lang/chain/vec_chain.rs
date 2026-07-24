@@ -1,13 +1,7 @@
 //! 对齐: `cn.hutool.core.lang.Chain`
 //! 来源: hutool-core/src/main/java/cn/hutool/core/lang/Chain.java
 
-/// 对齐 Java: `Chain<E, T>` — 可迭代责任链，`add_chain` 返回 `Self` 以链式调用。
-pub trait Chain<E>: IntoIterator {
-    /// 对齐 Java: `addChain(E)` — 追加环节并返回自身。
-    fn add_chain(self, element: E) -> Self
-    where
-        Self: Sized;
-}
+use super::chain::Chain;
 
 /// 基于 `Vec` 的简易责任链实现。
 #[derive(Debug, Clone, Default)]
@@ -42,18 +36,5 @@ impl<E> IntoIterator for VecChain<E> {
 
     fn into_iter(self) -> Self::IntoIter {
         self.items.into_iter()
-    }
-}
-
-#[cfg(test)]
-mod chain_idiomatic_parity {
-    use super::*;
-
-    #[test]
-    fn vec_chain_add_and_iterate() {
-        let chain = VecChain::new().add_chain("a").add_chain("b");
-        assert_eq!(chain.as_slice(), &["a", "b"]);
-        let collected: Vec<_> = chain.into_iter().collect();
-        assert_eq!(collected, vec!["a", "b"]);
     }
 }
