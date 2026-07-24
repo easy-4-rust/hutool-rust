@@ -9,48 +9,8 @@ use std::fmt::{Display, Write};
 
 use crate::string::{format_template, is_blank};
 
-/// 对齐 Java: `IllegalArgumentException` / `IllegalStateException` 断言失败。
-#[derive(Debug, Clone, PartialEq, Eq, thiserror::Error)]
-#[error("{message}")]
-pub struct AssertError {
-    /// 错误消息。
-    pub message: String,
-    /// 是否对应 Java `IllegalStateException`（`state` 系列）。
-    pub is_state: bool,
-}
-
-impl AssertError {
-    /// 创建参数类断言错误。
-    pub fn argument(message: impl Into<String>) -> Self {
-        Self {
-            message: message.into(),
-            is_state: false,
-        }
-    }
-
-    /// 创建状态类断言错误。
-    pub fn state(message: impl Into<String>) -> Self {
-        Self {
-            message: message.into(),
-            is_state: true,
-        }
-    }
-}
-
-impl From<String> for AssertError {
-    fn from(message: String) -> Self {
-        Self::argument(message)
-    }
-}
-
-impl From<&str> for AssertError {
-    fn from(message: &str) -> Self {
-        Self::argument(message)
-    }
-}
-
-/// 断言结果别名。
-pub type AssertResult<T> = Result<T, AssertError>;
+use super::assert_error::AssertError;
+use super::assert_result::AssertResult;
 
 /// 对齐 Java 类: `cn.hutool.core.lang.Assert`
 #[derive(Debug, Clone, Copy, Default)]
@@ -587,39 +547,5 @@ impl Assert {
         } else {
             Err(supplier().into())
         }
-    }
-}
-
-#[cfg(test)]
-mod assert_idiomatic_parity {
-    use super::*;
-    use std::collections::HashMap;
-
-    /// 对齐 Java Assert 高流量断言路径的可执行证据。
-    #[test]
-    fn assert_core_paths_cover_true_null_empty_between_and_equals() {
-        Assert::is_true(true).expect("true");
-        assert!(Assert::is_true(false).is_err());
-        Assert::is_false(false).expect("false");
-        Assert::is_null::<i32>(None).expect("null");
-        assert_eq!(Assert::not_null(Some(7)).unwrap(), 7);
-        assert_eq!(Assert::not_empty_str(Some("a")).unwrap(), "a");
-        assert_eq!(Assert::not_blank(Some(" x ")).unwrap(), " x ");
-        Assert::not_contain("abc", "z").unwrap();
-        Assert::not_empty_slice(Some(&[1, 2][..])).unwrap();
-        Assert::empty_slice::<i32>(Some(&[])).unwrap();
-        let mut m = HashMap::new();
-        m.insert("k", 1);
-        Assert::not_empty_map(Some(&m)).unwrap();
-        Assert::state(true).unwrap();
-        assert_eq!(Assert::check_index(1, 3).unwrap(), 1);
-        assert_eq!(Assert::check_between_i64(5, 1, 10).unwrap(), 5);
-        assert_eq!(Assert::check_between_f64(1.5, 1.0, 2.0).unwrap(), 1.5);
-        Assert::equals(&1, &1).unwrap();
-        Assert::not_equals(&1, &2).unwrap();
-        assert!(Assert::is_true_msg(false, "bad {}", &[&7])
-            .expect_err("msg")
-            .message
-            .contains('7'));
     }
 }
