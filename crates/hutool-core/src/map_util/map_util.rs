@@ -12,48 +12,11 @@ use indexmap::IndexMap;
 
 use crate::{CoreError, Result};
 
-/// 默认初始容量 —— 对齐 Java `MapUtil.DEFAULT_INITIAL_CAPACITY`
-pub const DEFAULT_INITIAL_CAPACITY: usize = 16;
-
-/// 默认负载因子 —— 对齐 Java `MapUtil.DEFAULT_LOAD_FACTOR`（Rust HashMap 不暴露，仅作文档常量）
-pub const DEFAULT_LOAD_FACTOR: f32 = 0.75;
-
-/// `MapUtil.empty(Class)` 所支持的 Map 种类 —— 对齐 Java `Class<?>` 分支。
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum EmptyMapKind {
-    /// `java.util.Map`
-    Map,
-    /// `java.util.SortedMap`
-    SortedMap,
-    /// `java.util.NavigableMap`
-    NavigableMap,
-    /// `java.util.TreeMap`（Hutool 不支持 empty）
-    TreeMap,
-}
-
-/// `MapUtil.createMap(Class)` 的 Rust 表达 —— 对齐常见 Map 实现类型。
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum CreateMapKind {
-    /// `HashMap` / 默认
-    Hash,
-    /// `LinkedHashMap`（IndexMap）
-    Linked,
-    /// `TreeMap`（BTreeMap）
-    Tree,
-    /// `IdentityHashMap` —— Rust 无引用相等 Map，退化为 HashMap
-    Identity,
-    /// `ConcurrentHashMap` —— 无锁创建入口
-    Concurrent,
-}
-
-/// 嵌套 Map 值 —— 对齐 `MapUtil.flatten` 的多层级结构。
-#[derive(Debug, Clone)]
-pub enum NestedMapValue<K, V> {
-    /// 叶子值
-    Leaf(V),
-    /// 子 Map
-    Nested(HashMap<K, NestedMapValue<K, V>>),
-}
+use super::create_map_kind::CreateMapKind;
+use super::empty_map_kind::EmptyMapKind;
+use super::linked_or_hash_map::LinkedOrHashMap;
+use super::map_builder_gate::MapBuilderGate;
+use super::nested_map_value::NestedMapValue;
 
 /// 对齐 Java: `cn.hutool.core.map.MapUtil`
 #[derive(Debug, Clone, Copy, Default)]
@@ -857,110 +820,4 @@ impl MapUtil {
     }
 }
 
-/// `newHashMap(isLinked)` 的 Rust 表达：有序用 IndexMap，无序用 HashMap。
-#[derive(Debug, Clone)]
-pub enum LinkedOrHashMap<K, V> {
-    /// 对齐 `LinkedHashMap`
-    Linked(IndexMap<K, V>),
-    /// 对齐 `HashMap`
-    Hash(HashMap<K, V>),
-}
-
-impl<K: Eq + Hash, V> LinkedOrHashMap<K, V> {
-    /// 插入键值。
-    pub fn insert(&mut self, k: K, v: V) -> Option<V> {
-        match self {
-            Self::Linked(m) => m.insert(k, v),
-            Self::Hash(m) => m.insert(k, v),
-        }
-    }
-
-    /// 获取值引用。
-    pub fn get(&self, k: &K) -> Option<&V> {
-        match self {
-            Self::Linked(m) => m.get(k),
-            Self::Hash(m) => m.get(k),
-        }
-    }
-
-    /// 条目数。
-    pub fn len(&self) -> usize {
-        match self {
-            Self::Linked(m) => m.len(),
-            Self::Hash(m) => m.len(),
-        }
-    }
-
-    /// 是否为空。
-    pub fn is_empty(&self) -> bool {
-        self.len() == 0
-    }
-}
-
-/// 简易驼峰转换（对齐 `StrUtil.toCamelCase` 常用路径）。
-fn simple_to_camel_case(name: &str) -> String {
-    if !name.contains('_') {
-        return name.to_string();
-    }
-    let mut sb = String::with_capacity(name.len());
-    let mut upper = false;
-    for c in name.chars() {
-        if c == '_' {
-            upper = true;
-        } else if upper {
-            for u in c.to_uppercase() {
-                sb.push(u);
-            }
-            upper = false;
-        } else {
-            for l in c.to_lowercase() {
-                sb.push(l);
-            }
-        }
-    }
-    sb
-}
-
-#[cfg(test)]
-mod map_util_unit_tests {
-    use super::*;
-
-    /// 对齐 Java: `MapUtil.isEmpty` / `renameKey` / `sortJoin` 烟测
-    #[test]
-    fn map_util_core_helpers_match_hutool_invariants() {
-        assert!(MapUtil::is_empty_opt::<i32, i32>(None));
-        let mut map = MapUtil::of(&[("a", 1), ("b", 2)]);
-        assert!(MapUtil::is_not_empty(&map));
-        MapUtil::rename_key(&mut map, "a", "c").unwrap();
-        assert_eq!(map.get("c"), Some(&1));
-        let joined = MapUtil::sort_join(&map, "", "", &[]);
-        assert!(joined.contains("b2") || joined.contains("c1"));
-    }
-}
-
-
-/// 轻量 Map builder 门面（避免依赖尚未接线的 `crate::map` 子包）。
-#[derive(Debug, Clone)]
-pub struct MapBuilderGate<K, V> {
-    map: HashMap<K, V>,
-}
-
-impl<K: Eq + Hash, V> MapBuilderGate<K, V> {
-    /// 创建空 builder。
-    pub fn create() -> Self {
-        Self { map: HashMap::new() }
-    }
-    /// 从已有 map 创建。
-    pub fn create_from(map: HashMap<K, V>) -> Self {
-        Self { map }
-    }
-    /// 放入键值对。
-    pub fn put(mut self, k: K, v: V) -> Self {
-        self.map.insert(k, v);
-        self
-    }
-    /// 构建 HashMap。
-    pub fn build(self) -> HashMap<K, V> {
-        self.map
-    }
-}
+use super::{DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR, simple_to_camel_case};
