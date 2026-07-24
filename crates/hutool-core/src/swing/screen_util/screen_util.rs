@@ -23,48 +23,7 @@ use crate::swing::{Result, SwingError};
 use image::RgbaImage;
 use std::path::Path;
 
-/// 屏幕矩形区域,对应 Java `java.awt.Rectangle`。
-///
-/// 对齐 Java: `java.awt.Rectangle` 在 ScreenUtil/RobotUtil 路径中的用法
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct ScreenRect {
-    /// 矩形左上角 X 坐标(像素,相对于显示器虚拟坐标)。
-    pub x: i32,
-    /// 矩形左上角 Y 坐标(像素,相对于显示器虚拟坐标)。
-    pub y: i32,
-    /// 矩形宽度(像素)。
-    pub width: u32,
-    /// 矩形高度(像素)。
-    pub height: u32,
-}
-
-impl ScreenRect {
-    /// 创建一个从原点开始的指定宽高的矩形。
-    ///
-    /// 对齐 Java: `new Rectangle(int width, int height)`
-    #[must_use]
-    pub const fn new(width: u32, height: u32) -> Self {
-        Self {
-            x: 0,
-            y: 0,
-            width,
-            height,
-        }
-    }
-
-    /// 创建一个指定位置和尺寸的矩形。
-    ///
-    /// 对齐 Java: `new Rectangle(int x, int y, int width, int height)`
-    #[must_use]
-    pub const fn with_origin(x: i32, y: i32, width: u32, height: u32) -> Self {
-        Self {
-            x,
-            y,
-            width,
-            height,
-        }
-    }
-}
+use super::screen_rect::ScreenRect;
 
 /// Screen facade.
 ///
@@ -162,32 +121,6 @@ impl ScreenUtil {
     }
 }
 
-/// 屏幕错误别名。
-pub type ScreenError = SwingError;
-
 fn screen_err(error: xcap::XCapError) -> SwingError {
     SwingError::Screen(error.to_string())
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn screen_rect_new_aligns_with_java_constructor() {
-        let rect = ScreenRect::new(1920, 1080);
-        assert_eq!(rect.x, 0);
-        assert_eq!(rect.y, 0);
-        assert_eq!(rect.width, 1920);
-        assert_eq!(rect.height, 1080);
-    }
-
-    #[test]
-    fn screen_rect_with_origin_aligns_with_java_full_constructor() {
-        let rect = ScreenRect::with_origin(-100, 200, 800, 600);
-        assert_eq!(rect.x, -100);
-        assert_eq!(rect.y, 200);
-        assert_eq!(rect.width, 800);
-        assert_eq!(rect.height, 600);
-    }
 }
