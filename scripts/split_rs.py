@@ -222,9 +222,19 @@ def scan_file(content):
             # Detect fn/struct/enum with multi-line signature spanning to a later `{`
             if not multi and kind_word in ('fn', 'struct', 'enum') and ('(' in line or '<' in line) and not line.rstrip().endswith(';'):
                 j = i + 1
-                while j < n and lines[j].strip() == '':
+                found_brace = False
+                while j < n and j < i + 50:
+                    s_j = lines[j].strip()
+                    if s_j == '':
+                        j += 1
+                        continue
+                    if '{' in lines[j]:
+                        found_brace = True
+                        break
+                    if re.match(r'^(pub\s+)?(fn|struct|enum|impl|const|static|type)\s', s_j) or s_j.startswith('//') or s_j.startswith('#['):
+                        break
                     j += 1
-                if j < n and '{' in lines[j]:
+                if found_brace:
                     multi = True
             if not multi and kind_word == 'const' and '=' in line:
                 j = i + 1
