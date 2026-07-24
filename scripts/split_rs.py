@@ -334,6 +334,16 @@ def split_file(file_path):
         print(f"Skip {file_path}: only {len(pub_items)} pub types")
         return
 
+    # Skip files with inner attributes (#![...]) - too complex for auto-split
+    if any(l.strip().startswith('#![') for l in lines):
+        print(f"Skip {file_path}: has inner attributes")
+        return
+
+    # Skip files with thread_local! - these have static refs that break after split
+    if 'thread_local!' in content:
+        print(f"Skip {file_path}: has thread_local!")
+        return
+
     header_text = '\n'.join(lines[:header_end]).rstrip()
     helper_items = [it for it in items if it['kind'].startswith('helper_')]
 
@@ -430,8 +440,14 @@ def split_file(file_path):
             for i in range(0, len(all_helpers), 8):
                 batch = all_helpers[i:i+8]
                 chunks.append(f"use super::{{{', '.join(batch)}}};")
+        # Fix cross-module imports: super::xxx -> crate::xxx for sibling modules
+        result_text = '\n'.join(chunks).rstrip() + '\n'
+        for other in pub_items:
+            if other['name'] == pi['name']:
+                continue
+            result_text = result_text.replace(f'use super::{other["name"]};', f'use crate::{other["name"]};')
         new_path = sub_dir / f"{snake}.rs"
-        new_path.write_text('\n'.join(chunks).rstrip() + '\n')
+        new_path.write_text(result_text)
 
     # Pre-step: assign each pub helper to its first owning type.
     # If no type uses it, assign to the first pub type.
