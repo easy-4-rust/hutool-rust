@@ -1,8 +1,5 @@
 //! Error types for core utilities.
 
-/// Result type returned by fallible core utilities.
-pub type Result<T> = std::result::Result<T, CoreError>;
-
 /// Errors produced by `hutool-core`.
 #[derive(Debug, thiserror::Error)]
 #[non_exhaustive]
