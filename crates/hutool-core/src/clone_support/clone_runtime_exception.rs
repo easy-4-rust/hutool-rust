@@ -1,5 +1,8 @@
 //! Rust-native equivalents of Hutool's `core.clone` package.
 
+/// 对齐: `cn.hutool.core.clone.CloneRuntimeException`
+/// 克隆运行时异常
+
 use std::{
     any::type_name,
     error::Error,

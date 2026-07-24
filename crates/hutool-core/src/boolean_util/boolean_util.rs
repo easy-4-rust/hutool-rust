@@ -1,5 +1,8 @@
 //! Boolean conversion and aggregation helpers aligned with Hutool.
 
+/// 对齐: `cn.hutool.core.util.BooleanUtil`
+/// 布尔值工具类
+
 use std::{any::TypeId, fmt};
 use thiserror::Error;
 

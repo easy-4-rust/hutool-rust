@@ -1,5 +1,8 @@
 //! Bounded streaming XML reader, visitor, transformer, and writer.
 
+/// 对齐: `cn.hutool.core.xml.XmlStream`
+/// XML 流解析
+
 use std::{
     io::{BufRead, Read, Take, Write},
     ops::ControlFlow,

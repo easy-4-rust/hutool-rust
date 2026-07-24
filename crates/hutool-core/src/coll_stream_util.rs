@@ -1,5 +1,8 @@
 //! Stream-style collection transformations aligned with Hutool's `CollStreamUtil`.
 
+/// 对齐: `cn.hutool.core.collection.CollStreamUtil`
+/// 集合流工具类
+
 use std::{
     collections::{HashMap, HashSet},
     hash::Hash,

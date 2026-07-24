@@ -1,5 +1,8 @@
 //! Hutool-aligned binary and text codecs with Rust-native error handling.
 
+/// 对齐: `cn.hutool.core.codec.Hashids`
+/// 哈希ID编码器
+
 use data_encoding::{BASE32, BASE32HEX};
 use idna::punycode;
 use sha2::{Digest as _, Sha256};

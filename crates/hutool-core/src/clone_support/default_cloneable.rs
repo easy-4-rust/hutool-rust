@@ -1,5 +1,8 @@
 //! Rust-native equivalents of Hutool's `core.clone` package.
 
+/// 对齐: `cn.hutool.core.clone.DefaultCloneable`
+/// 默认可克隆类型
+
 use std::{
     any::type_name,
     error::Error,
