@@ -51,6 +51,8 @@ pub use hutool_setting as setting;
 pub use hutool_socket as socket;
 #[cfg(feature = "system")]
 pub use hutool_system as system;
+#[cfg(feature = "vernal")]
+pub use hutool_vernal as vernal;
 
 /// Common extension traits and data types enabled by facade features.
 pub mod prelude {
@@ -101,6 +103,7 @@ impl Hutool {
         enabled!("setting", "setting");
         enabled!("socket", "socket");
         enabled!("system", "system");
+        enabled!("vernal", "vernal");
         modules
     }
 

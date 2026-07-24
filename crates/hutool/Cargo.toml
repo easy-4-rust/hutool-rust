@@ -70,6 +70,7 @@ observability-heap-profiler = ["observability", "hutool-observability/heap-profi
 script = ["core", "dep:hutool-script"]
 setting = ["json", "dep:hutool-setting"]
 system = ["core", "dep:hutool-system"]
+vernal = ["http", "dep:hutool-vernal"]
 json = ["core", "dep:hutool-json"]
 captcha = ["dep:hutool-captcha"]
 captcha-audio = ["captcha", "hutool-captcha/audio"]
@@ -96,6 +97,7 @@ full = [
     "script",
     "setting",
     "system",
+    "vernal",
     "json",
     "captcha",
     "captcha-audio",
@@ -128,3 +130,4 @@ hutool-script = { workspace = true, optional = true }
 hutool-setting = { workspace = true, optional = true }
 hutool-socket = { workspace = true, optional = true }
 hutool-system = { workspace = true, optional = true }
+hutool-vernal = { workspace = true, optional = true }

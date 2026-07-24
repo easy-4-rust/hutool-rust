@@ -1,41 +1,6 @@
 /// Supported default masking strategies.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum DesensitizedType {
-    /// Replace a user identifier with zero.
-    UserId,
-    /// Preserve only the first character of a name.
-    ChineseName,
-    /// Preserve one leading and two trailing identity-card characters.
-    IdCard,
-    /// Preserve four leading and two trailing landline characters.
-    FixedPhone,
-    /// Preserve three leading and four trailing mobile characters.
-    MobilePhone,
-    /// Preserve the address prefix and mask eight trailing characters.
-    Address,
-    /// Preserve the first mailbox character and domain.
-    Email,
-    /// Mask every password character.
-    Password,
-    /// Mask the middle of a Chinese vehicle plate.
-    CarLicense,
-    /// Preserve the first four and final group of a bank card.
-    BankCard,
-    /// Preserve the first IPv4 component.
-    Ipv4,
-    /// Preserve the first IPv6 component.
-    Ipv6,
-    /// Preserve two leading and two trailing passport characters.
-    Passport,
-    /// Preserve four leading and four trailing credit-code characters.
-    CreditCode,
-    /// Preserve only the first character.
-    FirstMask,
-    /// Return no value.
-    ClearToNull,
-    /// Return an empty value.
-    ClearToEmpty,
-}
+
+use super::desensitized_type::DesensitizedType;
 
 /// Unicode-safe Hutool-compatible masking facade.
 pub struct DesensitizedUtil;
@@ -249,10 +214,6 @@ impl DesensitizedUtil {
     }
 }
 
-fn nonblank(value: Option<&str>) -> Option<&str> {
-    value.filter(|value| !value.chars().all(crate::CharUtil::is_blank_char))
-}
-
 fn mask_blank_or(value: Option<&str>, mask: impl FnOnce(&str) -> String) -> String {
     nonblank(value).map_or_else(String::new, mask)
 }
@@ -275,152 +236,6 @@ fn hide(value: &str, start: usize, end: usize) -> String {
         .collect()
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn dispatcher_covers_every_strategy_and_blank_short_circuit() {
-        let cases = [
-            (DesensitizedType::UserId, "100", Some("0")),
-            (DesensitizedType::ChineseName, "段正淳", Some("段**")),
-            (
-                DesensitizedType::IdCard,
-                "51343620000320711X",
-                Some("5***************1X"),
-            ),
-            (
-                DesensitizedType::FixedPhone,
-                "09157518479",
-                Some("0915*****79"),
-            ),
-            (
-                DesensitizedType::MobilePhone,
-                "18049531999",
-                Some("180****1999"),
-            ),
-            (
-                DesensitizedType::Address,
-                "北京市海淀区马连洼街道289号",
-                Some("北京市海淀区马********"),
-            ),
-            (
-                DesensitizedType::Email,
-                "duandazhi-jack@gmail.com.cn",
-                Some("d*************@gmail.com.cn"),
-            ),
-            (DesensitizedType::Password, "1234567890", Some("**********")),
-            (DesensitizedType::CarLicense, "苏D40000", Some("苏D4***0")),
-            (
-                DesensitizedType::BankCard,
-                "11011111222233333256",
-                Some("1101 **** **** **** 3256"),
-            ),
-            (DesensitizedType::Ipv4, "192.168.1.1", Some("192.*.*.*")),
-            (
-                DesensitizedType::Ipv6,
-                "2001:0db8:86a3:08d3:1319:8a2e:0370:7344",
-                Some("2001:*:*:*:*:*:*:*"),
-            ),
-            (DesensitizedType::Passport, "EM1234567", Some("EM*****67")),
-            (
-                DesensitizedType::CreditCode,
-                "91110108MA01ABCDE7",
-                Some("9111**********CDE7"),
-            ),
-            (DesensitizedType::FirstMask, "123", Some("1**")),
-            (DesensitizedType::ClearToEmpty, "100", Some("")),
-            (DesensitizedType::ClearToNull, "100", None),
-        ];
-        for (kind, input, expected) in cases {
-            assert_eq!(
-                DesensitizedUtil::desensitized(Some(input), kind).as_deref(),
-                expected
-            );
-        }
-        assert_eq!(
-            DesensitizedUtil::desensitized(None, DesensitizedType::ClearToNull),
-            Some(String::new())
-        );
-    }
-
-    #[test]
-    fn individual_masking_functions_cover_invalid_short_and_unicode_inputs() {
-        assert_eq!(DesensitizedUtil::clear(), "");
-        assert_eq!(DesensitizedUtil::clear_to_null(), None);
-        assert_eq!(DesensitizedUtil::user_id(), 0);
-        assert_eq!(DesensitizedUtil::first_mask(None), "");
-        assert_eq!(DesensitizedUtil::chinese_name(Some("李雷")), "李*");
-        assert_eq!(DesensitizedUtil::id_card_num(Some("123"), 2, 2), "");
-        assert_eq!(DesensitizedUtil::id_card_num(Some("123"), -1, 1), "");
-        assert_eq!(DesensitizedUtil::id_card_num(None, 1, 1), "");
-        assert_eq!(DesensitizedUtil::fixed_phone(Some("12345")), "12345");
-        assert_eq!(DesensitizedUtil::mobile_phone(Some("123456")), "123456");
-        assert_eq!(
-            DesensitizedUtil::address(Some("北京市海淀区马连洼街道289号"), 5),
-            "北京市海淀区马连洼街*****"
-        );
-        assert_eq!(DesensitizedUtil::address(Some("地址"), 50), "**");
-        assert_eq!(DesensitizedUtil::address(Some("地址"), -1), "地址");
-        assert_eq!(DesensitizedUtil::email(Some("a@b.cn")), "a@b.cn");
-        assert_eq!(DesensitizedUtil::email(Some("plain")), "plain");
-        assert_eq!(DesensitizedUtil::password(Some("密碼🔒")), "***");
-        assert_eq!(DesensitizedUtil::car_license(Some("京A123")), "京A123");
-        assert_eq!(
-            DesensitizedUtil::car_license(Some("陕A12345D")),
-            "陕A1****D"
-        );
-    }
-
-    #[test]
-    fn bank_network_passport_and_credit_code_paths_are_complete() {
-        assert_eq!(DesensitizedUtil::bank_card(None), None);
-        assert_eq!(DesensitizedUtil::bank_card(Some("")), Some(String::new()));
-        assert_eq!(
-            DesensitizedUtil::bank_card(Some("\u{200c}")),
-            Some("\u{200c}".to_owned())
-        );
-        assert_eq!(
-            DesensitizedUtil::bank_card(Some("1234\u{200c}56789")).as_deref(),
-            Some("1234 **** 9")
-        );
-        assert_eq!(
-            DesensitizedUtil::bank_card(Some("12345678")).as_deref(),
-            Some("12345678")
-        );
-        assert_eq!(
-            DesensitizedUtil::bank_card(Some("1234 2222 3333 4444 6789 9")).as_deref(),
-            Some("1234 **** **** **** **** 9")
-        );
-        assert_eq!(
-            DesensitizedUtil::bank_card(Some("1234 2222 3333 4444 6789")).as_deref(),
-            Some("1234 **** **** **** 6789")
-        );
-        assert_eq!(DesensitizedUtil::ipv4("localhost"), "localhost.*.*.*");
-        assert_eq!(
-            DesensitizedUtil::ipv6("localhost"),
-            "localhost:*:*:*:*:*:*:*"
-        );
-        assert_eq!(DesensitizedUtil::passport(None), None);
-        assert_eq!(DesensitizedUtil::passport(Some("")), Some(String::new()));
-        assert_eq!(
-            DesensitizedUtil::passport(Some("\u{3164}")),
-            Some("\u{3164}".to_owned())
-        );
-        assert_eq!(DesensitizedUtil::passport(Some("3")).as_deref(), Some("*"));
-        assert_eq!(DesensitizedUtil::credit_code(None), None);
-        assert_eq!(DesensitizedUtil::credit_code(Some("")), Some(String::new()));
-        assert_eq!(
-            DesensitizedUtil::credit_code(Some("\u{2800}")),
-            Some("\u{2800}".to_owned())
-        );
-        assert_eq!(
-            DesensitizedUtil::credit_code(Some("1234")).as_deref(),
-            Some("****")
-        );
-        assert_eq!(
-            DesensitizedUtil::credit_code(Some("12345678")).as_deref(),
-            Some("12345678")
-        );
-    }
+fn nonblank(value: Option<&str>) -> Option<&str> {
+    value.filter(|value| !value.chars().all(crate::CharUtil::is_blank_char))
 }

@@ -133,6 +133,7 @@ hutool-script = { version = "=0.1.0", path = "crates/hutool-script" }
 hutool-setting = { version = "=0.1.0", path = "crates/hutool-setting" }
 hutool-socket = { version = "=0.1.0", path = "crates/hutool-socket" }
 hutool-system = { version = "=0.1.0", path = "crates/hutool-system" }
+hutool-vernal = { version = "=0.1.0", path = "crates/hutool-vernal" }
 
 [workspace.lints.rust]
 unsafe_code = "deny"

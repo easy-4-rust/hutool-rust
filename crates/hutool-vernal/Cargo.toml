@@ -1,0 +1,23 @@
+[package]
+name = "hutool-vernal"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme = "README.md"
+publish = false
+description = "Consumer-owned Vernal component bridge for Hutool-Rust utilities"
+
+[lints]
+workspace = true
+
+[dependencies]
+hutool-http = { version = "=0.1.0", path = "../hutool-http" }
+vernal-context = { git = "https://github.com/easy-4-rust/vernal.git", rev = "397437d86c58bd47d9e9cd82a11990465c38f5a5" }
+vernal-ioc = { git = "https://github.com/easy-4-rust/vernal.git", rev = "397437d86c58bd47d9e9cd82a11990465c38f5a5" }
+
+[dev-dependencies]
+tokio.workspace = true
