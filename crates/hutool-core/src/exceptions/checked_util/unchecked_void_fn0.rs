@@ -7,23 +7,14 @@ use std::panic::{catch_unwind, AssertUnwindSafe};
 use std::thread;
 use std::time::Duration;
 
-/// 对齐 Java 类: `cn.hutool.core.exceptions.CheckedUtil`
-#[derive(Debug, Clone, Copy, Default)]
-pub struct CheckedUtil;
-
-/// 对齐 Java: `CheckedUtil.Func0Rt`
-pub struct UncheckedFn0<R> {
-    inner: Box<dyn Fn() -> R + Send + Sync>,
-}
-
-/// 对齐 Java: `CheckedUtil.Func1Rt`
-pub struct UncheckedFn1<P, R> {
-    inner: Box<dyn Fn(P) -> R + Send + Sync>,
-}
+use super::checked_util::CheckedUtil;
+use super::unchecked_fn0::UncheckedFn0;
+use super::unchecked_fn1::UncheckedFn1;
+use super::wrapped_runtime::WrappedRuntime;
 
 /// 对齐 Java: `CheckedUtil.VoidFunc0Rt`
 pub struct UncheckedVoidFn0 {
-    inner: Box<dyn Fn() + Send + Sync>,
+    pub(crate) inner: Box<dyn Fn() + Send + Sync>,
 }
 
 impl CheckedUtil {
@@ -136,30 +127,4 @@ impl UncheckedVoidFn0 {
     }
 }
 
-/// 运行时包装错误。
-#[derive(Debug, Clone)]
-pub struct WrappedRuntime {
-    /// 消息。
-    pub message: String,
-}
-
-impl WrappedRuntime {
-    /// 构造。
-    pub fn new(message: impl Into<String>) -> Self {
-        Self {
-            message: message.into(),
-        }
-    }
-}
-
-impl std::fmt::Display for WrappedRuntime {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.message)
-    }
-}
-
-/// 模拟 Java `Thread.sleep` 的受检场景。
-pub fn sleep_checked(millis: u64) -> Result<(), std::io::Error> {
-    thread::sleep(Duration::from_millis(millis));
-    Ok(())
-}
+use super::{sleep_checked};
