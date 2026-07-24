@@ -16,8 +16,11 @@ workspace = true
 
 [dependencies]
 hutool-http = { version = "=0.1.0", path = "../hutool-http" }
-vernal-context = { git = "https://github.com/easy-4-rust/vernal.git", rev = "397437d86c58bd47d9e9cd82a11990465c38f5a5" }
-vernal-ioc = { git = "https://github.com/easy-4-rust/vernal.git", rev = "397437d86c58bd47d9e9cd82a11990465c38f5a5" }
+hutool-setting = { version = "=0.1.0", path = "../hutool-setting" }
+thiserror.workspace = true
+vernal-context = { git = "https://github.com/easy-4-rust/vernal.git", rev = "2d332cbd019c1341d91024dd12e3043e69da5b87" }
+vernal-ioc = { git = "https://github.com/easy-4-rust/vernal.git", rev = "2d332cbd019c1341d91024dd12e3043e69da5b87" }
 
 [dev-dependencies]
+tempfile.workspace = true
 tokio.workspace = true

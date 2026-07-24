@@ -12,6 +12,14 @@ The bridge currently installs Hutool-Rust `HttpConfig` and its Tokio/Reqwest
 configuration dependency visible in Vernal's validated graph and can use a
 custom `UrlPolicy` without any process-global registry.
 
+`HutoolSettingPropertySource` also turns a Hutool `.setting` document into an
+immutable Vernal `PropertySource`. Default-group keys keep their names, while
+`[database] host=localhost` becomes `database.host`. Flattened key collisions
+fail closed instead of choosing an implicit winner. Profile loading and
+variable expansion remain Hutool responsibilities; source priority, typed
+conversion, active profiles, and application-context freezing remain Vernal
+responsibilities.
+
 ```rust
 use hutool_vernal::HutoolHttpComponents;
 use vernal_context::VernalApplicationBuilder;
@@ -41,3 +49,9 @@ context.close().await?;
 Context-local Singleton 原生组件原子注册：配置依赖会进入 Vernal 的启动期依赖图，
 构造失败保留原始错误，URL 安全策略由应用显式选择，全程不使用全局 Service
 Locator。
+
+`HutoolSettingPropertySource` 还可以把 Hutool `.setting` 文档转换成不可变的
+Vernal `PropertySource`。默认分组的键保持原名，`[database]` 下的
+`host=localhost` 会投影成 `database.host`；扁平化后出现同名键时直接失败，不采用
+隐式覆盖。文件/Profile 装载、字符集、缓存和变量展开仍由 Hutool-Rust 负责，来源
+优先级、类型转换、Active Profile 与应用上下文冻结仍由 Vernal 负责。
