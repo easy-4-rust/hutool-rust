@@ -6,10 +6,18 @@ use std::sync::Arc;
 use crate::global_prune_timer::{GlobalPruneTimer, PruneHandle};
 use crate::compat::{AbstractCache, CachePolicy, FIFOCache, LFUCache, LRUCache, WeakCache, NoCache, ReentrantCache, StampedCache, TimedCache, ScheduledTimedCache};
 
+/// CacheUtil — 对齐 cn.hutool.cache.CacheUtil。缓存工厂方法静态门面。
+///
+/// 对齐 Java 类: `cn.hutool.cache.CacheUtil`
+/// 来源: hutool-cache/src/main/java/cn/hutool/cache/CacheUtil.java
+///
+/// 提供各种缓存类型的工厂方法，包括 FIFO、LFU、LRU、Weak、NoCache 等。
 pub struct CacheUtil;
 
 impl CacheUtil {
-    /// Creates FIFO cache without expiration.
+    /// 创建无过期时间的 FIFO 缓存。
+    ///
+    /// 对齐 Java: `CacheUtil.newFifoCache(int)`
     pub fn new_fifo_cache<K, V>(capacity: usize) -> FIFOCache<K, V>
     where
         K: Eq + Hash + Clone + Send + Sync + 'static,
@@ -18,7 +26,9 @@ impl CacheUtil {
         FIFOCache::new(capacity)
     }
 
-    /// Creates FIFO cache with expiration.
+    /// 创建带过期时间的 FIFO 缓存。
+    ///
+    /// 对齐 Java: `CacheUtil.newFifoCache(int, long)`
     pub fn new_fifo_cache_with_timeout<K, V>(capacity: usize, timeout: Duration) -> FIFOCache<K, V>
     where
         K: Eq + Hash + Clone + Send + Sync + 'static,
@@ -27,7 +37,9 @@ impl CacheUtil {
         FIFOCache::with_timeout(capacity, timeout)
     }
 
-    /// Creates LFU cache without expiration.
+    /// 创建无过期时间的 LFU 缓存。
+    ///
+    /// 对齐 Java: `CacheUtil.newLfuCache(int)`
     pub fn new_lfu_cache<K, V>(capacity: usize) -> LFUCache<K, V>
     where
         K: Eq + Hash + Clone + Send + Sync + 'static,
@@ -36,7 +48,9 @@ impl CacheUtil {
         LFUCache::new(capacity)
     }
 
-    /// Creates LFU cache with expiration.
+    /// 创建带过期时间的 LFU 缓存。
+    ///
+    /// 对齐 Java: `CacheUtil.newLfuCache(int, long)`
     pub fn new_lfu_cache_with_timeout<K, V>(capacity: usize, timeout: Duration) -> LFUCache<K, V>
     where
         K: Eq + Hash + Clone + Send + Sync + 'static,
@@ -45,7 +59,9 @@ impl CacheUtil {
         LFUCache::with_timeout(capacity, timeout)
     }
 
-    /// Creates LRU cache without expiration.
+    /// 创建无过期时间的 LRU 缓存。
+    ///
+    /// 对齐 Java: `CacheUtil.newLruCache(int)`
     pub fn new_lru_cache<K, V>(capacity: usize) -> LRUCache<K, V>
     where
         K: Eq + Hash + Clone + Send + Sync + 'static,
@@ -54,7 +70,9 @@ impl CacheUtil {
         LRUCache::new(capacity)
     }
 
-    /// Creates LRU cache with expiration.
+    /// 创建带过期时间的 LRU 缓存。
+    ///
+    /// 对齐 Java: `CacheUtil.newLruCache(int, long)`
     pub fn new_lru_cache_with_timeout<K, V>(capacity: usize, timeout: Duration) -> LRUCache<K, V>
     where
         K: Eq + Hash + Clone + Send + Sync + 'static,
@@ -63,7 +81,9 @@ impl CacheUtil {
         LRUCache::with_timeout(capacity, timeout)
     }
 
-    /// Creates an unscheduled timed cache.
+    /// 创建非定时清理的 TimedCache。
+    ///
+    /// 对齐 Java: `CacheUtil.newTimedCache(long)`
     pub fn new_timed_cache<K, V>(timeout: Duration) -> TimedCache<K, V>
     where
         K: Eq + Hash + Clone + Send + Sync + 'static,
@@ -72,7 +92,9 @@ impl CacheUtil {
         TimedCache::new(timeout)
     }
 
-    /// Creates and schedules a timed cache.
+    /// 创建并调度 TimedCache。
+    ///
+    /// 对齐 Java: `CacheUtil.newScheduledTimedCache(long, long)`
     pub fn new_scheduled_timed_cache<K, V>(
         timeout: Duration,
         delay: Duration,
@@ -86,7 +108,9 @@ impl CacheUtil {
         Ok(ScheduledTimedCache { cache })
     }
 
-    /// Creates a weak-value cache.
+    /// 创建弱引用缓存。
+    ///
+    /// 对齐 Java: `CacheUtil.newWeakCache(long)`
     pub fn new_weak_cache<K, V>(timeout: Option<Duration>) -> WeakCache<K, V>
     where
         K: Eq + Hash + Clone,
@@ -94,7 +118,9 @@ impl CacheUtil {
         WeakCache::new(timeout)
     }
 
-    /// Creates a no-op cache.
+    /// 创建空操作缓存（不存储任何内容）。
+    ///
+    /// 对齐 Java: `CacheUtil.newNoCache()`
     pub const fn new_no_cache<K, V>() -> NoCache<K, V> {
         NoCache::new()
     }
