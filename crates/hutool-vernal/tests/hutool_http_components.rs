@@ -16,6 +16,10 @@ async fn context_resolves_singleton_http_objects_and_applies_url_policy() {
     components
         .install(&mut application)
         .expect("Hutool components should install atomically");
+    assert!(
+        components.install(&mut application).is_err(),
+        "duplicate bundle should be rejected without mutating the first install"
+    );
 
     let context = application.build().expect("application should build");
     context.refresh().await.expect("context should refresh");

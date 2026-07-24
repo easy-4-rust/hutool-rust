@@ -8,6 +8,8 @@ use std::fs::File;
 use std::io::{self, BufReader, Write};
 use std::path::{Path, PathBuf};
 
+use super::reader_handler::ReaderHandler;
+
 /// 对齐 Java 类: `cn.hutool.core.io.file.FileReader`
 #[derive(Debug, Clone)]
 pub struct FileReader {
@@ -69,6 +71,3 @@ impl FileReader {
         &self.path
     }
 }
-
-/// 对齐 Java: `FileReader.ReaderHandler` — 函数式读处理器别名。
-pub type ReaderHandler<R> = Box<dyn FnOnce(&[u8]) -> R>;
