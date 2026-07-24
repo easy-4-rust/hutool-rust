@@ -5,37 +5,12 @@
 
 use crate::Result;
 
-/// 对齐 Java: `PasswdStrength#PASSWD_LEVEL` 枚举
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum PasswdLevel {
-    Easy,
-    Medium,
-    Strong,
-    VeryStrong,
-    ExtremelyStrong,
-}
-
-/// 对齐 Java: `PasswdStrength#CHAR_TYPE` 枚举
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum CharType {
-    Num,
-    SmallLetter,
-    CapitalLetter,
-    OtherChar,
-}
+use super::char_type::CharType;
+use super::passwd_level::PasswdLevel;
 
 /// 对齐 Java: `PasswdStrength#`
 #[derive(Debug, Clone, Copy, Default)]
 pub struct PasswdStrength;
-
-const DICTIONARY: &[&str] = &[
-    "password", "abc123", "iloveyou", "adobe123", "123123", "sunshine", "1314520", "a1b2c3",
-    "123qwe", "aaa111", "qweasd", "admin", "passwd",
-];
-
-const SIZE_TABLE: &[i32] = &[
-    9, 99, 999, 9999, 99999, 999999, 9999999, 99999999, 999999999, i32::MAX,
-];
 
 impl PasswdStrength {
     /// 对齐 Java: `PasswdStrength::check#int (String passwd)`
@@ -256,40 +231,4 @@ impl PasswdStrength {
     }
 }
 
-fn check_character_type(c: char) -> CharType {
-    match c as u32 {
-        48..=57 => CharType::Num,
-        65..=90 => CharType::CapitalLetter,
-        97..=122 => CharType::SmallLetter,
-        _ => CharType::OtherChar,
-    }
-}
-
-fn count_letter(passwd: &str, ty: CharType) -> i32 {
-    passwd
-        .chars()
-        .filter(|c| check_character_type(*c) == ty)
-        .count() as i32
-}
-
-fn is_numeric(s: &str) -> bool {
-    !s.is_empty() && s.chars().all(|c| c.is_ascii_digit())
-}
-
-fn is_char_equals(s: &str) -> bool {
-    let mut chars = s.chars();
-    let Some(first) = chars.next() else {
-        return false;
-    };
-    chars.all(|c| c == first)
-}
-
-fn size_of_int(x: i32) -> i32 {
-    for (i, &bound) in SIZE_TABLE.iter().enumerate() {
-        if x <= bound {
-            return (i + 1) as i32;
-        }
-    }
-    10
-}
-
+use super::{DICTIONARY, SIZE_TABLE, check_character_type, count_letter, is_char_equals, is_numeric, size_of_int};
