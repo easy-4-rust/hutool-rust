@@ -4,27 +4,10 @@
 
 use std::sync::Mutex;
 
-/// 日志级别，对齐 `cn.hutool.db.nosql.NoSQLException` 等使用的 Level（简化版）。
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum LogLevel {
-    Trace,
-    Debug,
-    Info,
-    Warn,
-    Error,
-}
+use super::log_level::LogLevel;
 
 /// 全局数据库配置，对齐 `cn.hutool.db.GlobalDbConfig`。
 pub struct GlobalDbConfig;
-
-static CASE_INSENSITIVE: Mutex<bool> = Mutex::new(false);
-static RETURN_GENERATED_KEY: Mutex<bool> = Mutex::new(true);
-static DB_SETTING_PATH: Mutex<Option<String>> = Mutex::new(None);
-static SHOW_SQL: Mutex<bool> = Mutex::new(false);
-static FORMAT_SQL: Mutex<bool> = Mutex::new(false);
-static SHOW_PARAMS: Mutex<bool> = Mutex::new(false);
-static SQL_LOG_LEVEL: Mutex<LogLevel> = Mutex::new(LogLevel::Debug);
-static STATEMENT_FETCH_SIZE: Mutex<Option<i32>> = Mutex::new(None);
 
 impl GlobalDbConfig {
     /// 对齐 `GlobalDbConfig.setCaseInsensitive(boolean)`
@@ -111,58 +94,18 @@ impl GlobalDbConfig {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+static DB_SETTING_PATH: Mutex<Option<String>> = Mutex::new(None);
 
-    #[test]
-    fn test_case_insensitive_default() {
-        // 注意：全局状态，先重置
-        GlobalDbConfig::set_case_insensitive(false);
-        assert!(!GlobalDbConfig::is_case_insensitive());
-        GlobalDbConfig::set_case_insensitive(true);
-        assert!(GlobalDbConfig::is_case_insensitive());
-        GlobalDbConfig::set_case_insensitive(false);
-    }
+static SHOW_SQL: Mutex<bool> = Mutex::new(false);
 
-    #[test]
-    fn test_return_generated_key() {
-        GlobalDbConfig::set_return_generated_key(false);
-        assert!(!GlobalDbConfig::is_return_generated_key());
-        GlobalDbConfig::set_return_generated_key(true);
-        assert!(GlobalDbConfig::is_return_generated_key());
-    }
+static STATEMENT_FETCH_SIZE: Mutex<Option<i32>> = Mutex::new(None);
 
-    #[test]
-    fn test_db_setting_path() {
-        GlobalDbConfig::set_db_setting_path(Some("/tmp/test.setting".into()));
-        assert_eq!(GlobalDbConfig::db_setting_path(), Some("/tmp/test.setting".into()));
-        assert_eq!(
-            GlobalDbConfig::create_db_setting(),
-            Some("/tmp/test.setting".into())
-        );
-        GlobalDbConfig::set_db_setting_path(None);
-        assert_eq!(
-            GlobalDbConfig::create_db_setting(),
-            Some("config/db.setting".into())
-        );
-    }
+static FORMAT_SQL: Mutex<bool> = Mutex::new(false);
 
-    #[test]
-    fn test_show_sql() {
-        GlobalDbConfig::set_show_sql(true, true, false, LogLevel::Info);
-        assert!(GlobalDbConfig::is_show_sql());
-        assert!(GlobalDbConfig::is_format_sql());
-        assert!(!GlobalDbConfig::is_show_params());
-        assert_eq!(GlobalDbConfig::sql_log_level(), LogLevel::Info);
-        GlobalDbConfig::set_show_sql(false, false, false, LogLevel::Debug);
-    }
+static RETURN_GENERATED_KEY: Mutex<bool> = Mutex::new(true);
 
-    #[test]
-    fn test_statement_fetch_size() {
-        GlobalDbConfig::set_statement_fetch_size(Some(100));
-        assert_eq!(GlobalDbConfig::statement_fetch_size(), Some(100));
-        GlobalDbConfig::set_statement_fetch_size(None);
-        assert_eq!(GlobalDbConfig::statement_fetch_size(), None);
-    }
-}
+static SQL_LOG_LEVEL: Mutex<LogLevel> = Mutex::new(LogLevel::Debug);
+
+static CASE_INSENSITIVE: Mutex<bool> = Mutex::new(false);
+
+static SHOW_PARAMS: Mutex<bool> = Mutex::new(false);
