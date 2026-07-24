@@ -5,7 +5,12 @@ use serde_json::{Map, Number, Value};
 
 use crate::{JsonError, Result};
 
-/// Configuration shared by Hutool-compatible JSON containers.
+/// Hutool 兼容的 JSON 配置。
+///
+/// 对齐 Java 类: `cn.hutool.json.JSONConfig`
+/// 来源: hutool-json/src/main/java/cn/hutool/json/JSONConfig.java
+///
+/// 控制 JSON 解析和序列化行为的配置选项。
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[allow(clippy::struct_excessive_bools)]
 pub struct JSONConfig {
@@ -285,7 +290,9 @@ pub trait JsonContainer: Clone + fmt::Display {
     }
 }
 
-/// Mutable, configured JSON object compatible with Hutool's `JSONObject`.
+/// 可变的 JSON 对象，兼容 Hutool。
+///
+/// 对齐 Java 类: `cn.hutool.json.JSONObject`'s `JSONObject`.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct JSONObject {
     entries: Map<String, Value>,
@@ -505,7 +512,9 @@ impl Index<&str> for JSONObject {
     }
 }
 
-/// Mutable, configured JSON array compatible with Hutool's `JSONArray`.
+/// 可变的 JSON 数组，兼容 Hutool。
+///
+/// 对齐 Java 类: `cn.hutool.json.JSONArray`'s `JSONArray`.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct JSONArray {
     values: Vec<Value>,
@@ -662,7 +671,9 @@ impl Index<usize> for JSONArray {
     }
 }
 
-/// JSON null singleton counterpart.
+/// JSON null 单例。
+///
+/// 对齐 Java 类: `cn.hutool.json.JSONNull`
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct JSONNull;
 
