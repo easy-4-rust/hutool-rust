@@ -102,7 +102,25 @@ def scan_file(content):
                     while j >= 0 and (lines[j].strip().startswith('///') or lines[j].strip().startswith('#[')):
                         attrs_start = j
                         j -= 1
-            if '{' in line and not line.rstrip().endswith(';'):
+            # Check if struct/enum/trait has multi-line definition (e.g. with where clause)
+            has_open = '{' in line
+            if not has_open and kind in ('struct', 'enum', 'trait') and ('<' in line or '(' in line):
+                j = i + 1
+                found_brace = False
+                while j < n and j < i + 50:
+                    s_j = lines[j].strip()
+                    if s_j == '':
+                        j += 1
+                        continue
+                    if '{' in lines[j]:
+                        found_brace = True
+                        break
+                    if re.match(r'^(pub\s+)?(fn|struct|enum|impl|const|static|type)\s', s_j) or s_j.startswith('//') or s_j.startswith('#['):
+                        break
+                    j += 1
+                if found_brace:
+                    has_open = True
+            if has_open and not line.rstrip().endswith(';'):
                 depth = 0
                 started = False
                 j = i
