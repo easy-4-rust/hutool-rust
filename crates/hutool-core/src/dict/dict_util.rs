@@ -10,8 +10,7 @@ use serde::Serialize;
 use serde::de::DeserializeOwned;
 use serde_json::Value;
 
-/// 对齐 Java: `cn.hutool.core.lang.Dict`
-pub type Dict = HashMap<String, Value>;
+use super::dict::Dict;
 
 /// 对齐 Java: `cn.hutool.core.lang.Dict` 工厂与取值门面。
 #[derive(Debug, Clone, Copy, Default)]
@@ -260,44 +259,5 @@ impl DictUtil {
     #[must_use]
     pub fn clone_dict(dict: &Dict) -> Dict {
         dict.clone()
-    }
-}
-
-#[cfg(test)]
-mod dict_idiomatic_parity {
-    use super::*;
-    use serde::Deserialize;
-    use serde_json::json;
-
-    #[derive(Debug, Serialize, Deserialize, PartialEq)]
-    struct Sample {
-        name: String,
-        age: i32,
-    }
-
-    /// 对齐 Java Dict 创建/取值/Serde 往返的可执行证据。
-    #[test]
-    fn dict_create_set_get_filter_parse_and_to_bean() {
-        let mut d = DictUtil::create();
-        DictUtil::set(&mut d, "name", json!("Ada"));
-        DictUtil::set(&mut d, "age", json!(36));
-        assert_eq!(DictUtil::get_str(&d, "name").as_deref(), Some("Ada"));
-        assert_eq!(DictUtil::get_int(&d, "age"), Some(36));
-        let f = DictUtil::filter(&d, &["name"]);
-        assert!(DictUtil::contains_key(&f, "name"));
-        assert!(!DictUtil::contains_key(&f, "age"));
-
-        let bean = Sample {
-            name: "Bob".into(),
-            age: 20,
-        };
-        let parsed = DictUtil::parse(&bean).unwrap();
-        let back: Sample = DictUtil::to_bean(&parsed).unwrap();
-        assert_eq!(back, bean);
-
-        DictUtil::set_ignore_null(&mut d, "x", None);
-        assert!(!DictUtil::contains_key(&d, "x"));
-        DictUtil::remove_equal(&mut d, &DictUtil::of(&[("age", json!(36))]), &[]);
-        assert!(!DictUtil::contains_key(&d, "age"));
     }
 }

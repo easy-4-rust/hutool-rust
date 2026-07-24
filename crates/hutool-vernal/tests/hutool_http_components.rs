@@ -2,9 +2,7 @@
 
 use std::sync::Arc;
 
-use hutool_http::{
-    HttpClient, HttpConfig, HttpError, UrlPolicyError,
-};
+use hutool_http::{HttpClient, HttpConfig, HttpError, UrlPolicyError};
 use hutool_vernal::HutoolHttpComponents;
 use vernal_context::VernalApplicationBuilder;
 

@@ -2,9 +2,7 @@
 
 use std::{error::Error, sync::Arc};
 
-use hutool_http::{
-    AllowAllUrls, DenyLocalTargets, HttpClient, HttpConfig, UrlPolicy,
-};
+use hutool_http::{AllowAllUrls, DenyLocalTargets, HttpClient, HttpConfig, UrlPolicy};
 use vernal_context::VernalApplicationBuilder;
 use vernal_ioc::{ComponentDefinition, DefinitionError};
 
@@ -81,8 +79,8 @@ impl HutoolHttpComponents {
             ComponentDefinition::singleton::<HttpConfig, _>(move |_| config.clone());
 
         // HttpClient 的真实构造延迟到首次解析，并把显式配置依赖交给 Vernal 图校验。
-        let client_definition = ComponentDefinition::try_singleton::<HttpClient, _>(
-            move |resolver| {
+        let client_definition =
+            ComponentDefinition::try_singleton::<HttpClient, _>(move |resolver| {
                 let config = resolver
                     .resolve::<HttpConfig>()
                     .map_err(|source| Box::new(source) as BridgeFactoryError)?;
@@ -91,9 +89,8 @@ impl HutoolHttpComponents {
                     .url_policy_arc(Arc::clone(&url_policy))
                     .build()
                     .map_err(|source| Box::new(source) as BridgeFactoryError)
-            },
-        )
-        .depends_on::<HttpConfig>();
+            })
+            .depends_on::<HttpConfig>();
 
         [config_definition, client_definition]
     }

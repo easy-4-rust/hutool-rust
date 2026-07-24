@@ -2361,6 +2361,7 @@ dependencies = [
  "hutool-setting",
  "hutool-socket",
  "hutool-system",
+ "hutool-vernal",
 ]
 
 [[package]]
@@ -2702,6 +2703,16 @@ version = "0.1.0"
 dependencies = [
  "serde_json",
  "tempfile",
+]
+
+[[package]]
+name = "hutool-vernal"
+version = "0.1.0"
+dependencies = [
+ "hutool-http",
+ "tokio",
+ "vernal-context",
+ "vernal-ioc",
 ]
 
 [[package]]
@@ -5992,6 +6003,7 @@ dependencies = [
  "bytes",
  "futures-core",
  "futures-sink",
+ "futures-util",
  "pin-project-lite",
  "tokio",
 ]
@@ -6349,6 +6361,41 @@ name = "vcpkg"
 version = "0.2.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "accd4ea62f7bb7a82fe23066fb0957d48ef677f6eeb8215f372f52e48bb32426"
+
+[[package]]
+name = "vernal-aop"
+version = "0.0.0-dev"
+source = "git+https://github.com/easy-4-rust/vernal.git?rev=397437d86c58bd47d9e9cd82a11990465c38f5a5#397437d86c58bd47d9e9cd82a11990465c38f5a5"
+dependencies = [
+ "tokio",
+ "tokio-util",
+ "vernal-core",
+]
+
+[[package]]
+name = "vernal-context"
+version = "0.0.0-dev"
+source = "git+https://github.com/easy-4-rust/vernal.git?rev=397437d86c58bd47d9e9cd82a11990465c38f5a5#397437d86c58bd47d9e9cd82a11990465c38f5a5"
+dependencies = [
+ "tokio",
+ "tokio-util",
+ "vernal-aop",
+ "vernal-core",
+ "vernal-ioc",
+]
+
+[[package]]
+name = "vernal-core"
+version = "0.0.0-dev"
+source = "git+https://github.com/easy-4-rust/vernal.git?rev=397437d86c58bd47d9e9cd82a11990465c38f5a5#397437d86c58bd47d9e9cd82a11990465c38f5a5"
+
+[[package]]
+name = "vernal-ioc"
+version = "0.0.0-dev"
+source = "git+https://github.com/easy-4-rust/vernal.git?rev=397437d86c58bd47d9e9cd82a11990465c38f5a5#397437d86c58bd47d9e9cd82a11990465c38f5a5"
+dependencies = [
+ "vernal-core",
+]
 
 [[package]]
 name = "version-compare"
