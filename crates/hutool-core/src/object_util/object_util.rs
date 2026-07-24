@@ -7,126 +7,10 @@ use std::any::Any;
 use std::collections::{BTreeMap, HashMap};
 use std::hash::Hash;
 
-/// 对齐 Java `CharSequence`：文本序列视图。
-pub trait CharSequence {
-    /// 返回 UTF-8 文本内容。
-    fn as_text(&self) -> &str;
-}
-
-impl CharSequence for str {
-    fn as_text(&self) -> &str {
-        self
-    }
-}
-
-impl CharSequence for String {
-    fn as_text(&self) -> &str {
-        self.as_str()
-    }
-}
-
-/// 对齐 Java `ObjectUtil.length` 支持的长度探测目标。
-pub trait ObjectLength {
-    /// 返回对象长度。
-    fn object_length(&self) -> i32;
-}
-
-impl ObjectLength for str {
-    fn object_length(&self) -> i32 {
-        i32_from_usize(self.len())
-    }
-}
-
-impl ObjectLength for String {
-    fn object_length(&self) -> i32 {
-        i32_from_usize(self.len())
-    }
-}
-
-impl<T> ObjectLength for [T] {
-    fn object_length(&self) -> i32 {
-        i32_from_usize(self.len())
-    }
-}
-
-impl<T> ObjectLength for Vec<T> {
-    fn object_length(&self) -> i32 {
-        i32_from_usize(self.len())
-    }
-}
-
-impl<K, V, S> ObjectLength for HashMap<K, V, S> {
-    fn object_length(&self) -> i32 {
-        i32_from_usize(self.len())
-    }
-}
-
-impl<K: Ord, V> ObjectLength for BTreeMap<K, V> {
-    fn object_length(&self) -> i32 {
-        i32_from_usize(self.len())
-    }
-}
-
-/// 对齐 Java `ObjectUtil.contains` 支持的包含探测目标。
-pub trait ObjectContains<E: ?Sized> {
-    /// 判断对象是否包含指定元素。
-    fn object_contains(&self, element: &E) -> bool;
-}
-
-impl ObjectContains<str> for str {
-    fn object_contains(&self, element: &str) -> bool {
-        self.contains(element)
-    }
-}
-
-impl ObjectContains<String> for str {
-    fn object_contains(&self, element: &String) -> bool {
-        self.contains(element.as_str())
-    }
-}
-
-impl<T: PartialEq> ObjectContains<T> for [T] {
-    fn object_contains(&self, element: &T) -> bool {
-        self.iter()
-            .any(|item| ObjectUtil::equal(Some(item), Some(element)))
-    }
-}
-
-impl<T: PartialEq> ObjectContains<T> for Vec<T> {
-    fn object_contains(&self, element: &T) -> bool {
-        self.as_slice().object_contains(element)
-    }
-}
-
-impl<V: PartialEq, K: Eq + Hash, S: std::hash::BuildHasher> ObjectContains<V> for HashMap<K, V, S> {
-    fn object_contains(&self, element: &V) -> bool {
-        self.values()
-            .any(|value| ObjectUtil::equal(Some(value), Some(element)))
-    }
-}
-
-/// 对齐 Java CharSequence 元素经 `toString()` 后的文本；`None` 等价于 Java 返回 null。
-pub trait CharSequenceElement {
-    /// 返回元素文本；`None` 表示 `toString()` 为 null 或不可用。
-    fn element_text(&self) -> Option<&str>;
-}
-
-impl CharSequenceElement for str {
-    fn element_text(&self) -> Option<&str> {
-        Some(self)
-    }
-}
-
-impl CharSequenceElement for String {
-    fn element_text(&self) -> Option<&str> {
-        Some(self.as_str())
-    }
-}
-
-/// 将 `usize` 安全转换为 Java `int` 长度语义下的 `i32`。
-fn i32_from_usize(value: usize) -> i32 {
-    i32::try_from(value).unwrap_or(i32::MAX)
-}
+use super::char_sequence::CharSequence;
+use super::char_sequence_element::CharSequenceElement;
+use super::object_contains::ObjectContains;
+use super::object_length::ObjectLength;
 
 /// 对齐 Java: `cn.hutool.core.util.ObjectUtil`
 #[derive(Debug, Clone, Copy, Default)]
@@ -402,4 +286,8 @@ impl ObjectUtil {
     pub fn clone_value<T: Clone>(value: &T) -> T {
         value.clone()
     }
+}
+
+fn i32_from_usize(value: usize) -> i32 {
+    i32::try_from(value).unwrap_or(i32::MAX)
 }
