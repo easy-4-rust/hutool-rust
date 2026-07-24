@@ -8,6 +8,8 @@ use crate::page_result::PageResult;
 use crate::hutool_page::HutoolPage;
 use crate::DbResult;
 
+use super::dao_operations::DaoOperations;
+
 /// DAO 模板，对齐 `cn.hutool.db.DaoTemplate`。
 ///
 /// Java 版通过 Db + DataSource 操作；Rust 版用 trait + Db 引用。
@@ -219,83 +221,5 @@ impl DaoTemplate {
     /// 对齐 `exist(Entity where)`
     pub fn exist(&self, where_entity: &Entity, ops: &dyn DaoOperations) -> DbResult<bool> {
         ops.exist(&self.table_name, where_entity)
-    }
-}
-
-/// DAO 操作 trait，DaoTemplate 通过此 trait 执行具体数据库操作。
-///
-/// 用户/框架提供具体实现（基于 SQLx 或其他 ORM）。
-pub trait DaoOperations {
-    fn add(&self, table: &str, entity: &Entity) -> DbResult<i64>;
-    fn add_for_generated_keys(
-        &self,
-        table: &str,
-        entity: &Entity,
-    ) -> DbResult<Vec<serde_json::Value>>;
-    fn add_for_generated_key(&self, table: &str, entity: &Entity) -> DbResult<i64>;
-    fn del_by_field(&self, table: &str, field: &str, value: &str) -> DbResult<i64>;
-    fn del_by_entity(&self, table: &str, where_entity: &Entity) -> DbResult<i64>;
-    fn update(
-        &self,
-        table: &str,
-        record: &Entity,
-        where_entity: &Entity,
-    ) -> DbResult<i64>;
-    fn update_by_pk(&self, table: &str, pk_field: &str, entity: &Entity) -> DbResult<i64>;
-    fn add_or_update(&self, table: &str, pk_field: &str, entity: &Entity) -> DbResult<i64>;
-    fn get_by_field(
-        &self,
-        table: &str,
-        field: &str,
-        value: &str,
-    ) -> DbResult<Option<Entity>>;
-    fn get_by_entity(&self, table: &str, where_entity: &Entity) -> DbResult<Option<Entity>>;
-    fn find_by_field(&self, table: &str, field: &str, value: &str) -> DbResult<Vec<Entity>>;
-    fn find_all(&self, table: &str) -> DbResult<Vec<Entity>>;
-    fn find_by_entity(&self, table: &str, where_entity: &Entity) -> DbResult<Vec<Entity>>;
-    fn find_by_sql(
-        &self,
-        table: &str,
-        sql: &str,
-        params: &[serde_json::Value],
-    ) -> DbResult<Vec<Entity>>;
-    fn page(
-        &self,
-        table: &str,
-        where_entity: &Entity,
-        page: &HutoolPage,
-        select_fields: &[&str],
-    ) -> DbResult<PageResult>;
-    fn count(&self, table: &str, where_entity: &Entity) -> DbResult<i64>;
-    fn exist(&self, table: &str, where_entity: &Entity) -> DbResult<bool>;
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_dao_template_new() {
-        let t = DaoTemplate::new("users");
-        assert_eq!(t.table_name(), "users");
-        assert_eq!(t.primary_key_field(), "id");
-    }
-
-    #[test]
-    fn test_dao_template_with_primary_key() {
-        let t = DaoTemplate::with_primary_key("users", "user_id");
-        assert_eq!(t.primary_key_field(), "user_id");
-    }
-
-    #[test]
-    fn test_dao_template_with_datasource_name() {
-        let t = DaoTemplate::with_datasource_name("orders", "main_ds");
-        assert_eq!(t.table_name(), "orders");
-    }
-
-    #[test]
-    fn test_dao_template_with_pk_and_ds() {
-        let t = DaoTemplate::with_pk_and_ds("orders", "order_id", "main_ds");
-        assert_eq!(t.primary_key_field(), "order_id");
     }
 }
