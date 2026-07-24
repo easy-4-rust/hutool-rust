@@ -3,6 +3,8 @@
 
 use num_bigint::{BigInt, Sign};
 
+use super::arithmetic_overflow::ArithmeticOverflow;
+
 /// 组合 C(n, m) —— 对齐 Java `Combination`。
 #[derive(Debug, Clone)]
 pub struct Combination {
@@ -111,22 +113,6 @@ impl Combination {
     }
 }
 
-/// 对齐 Java `ArithmeticException`（countSafe 溢出）。
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ArithmeticOverflow {
-    /// 错误描述。
-    pub message: String,
-}
-
-impl std::fmt::Display for ArithmeticOverflow {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.message)
-    }
-}
-
-impl std::error::Error for ArithmeticOverflow {}
-
-/// Java `BigInteger.longValue()`：取低 64 位（二补码截断）。
 fn long_value(v: &BigInt) -> i64 {
     let mut bytes = v.to_signed_bytes_le();
     let fill = if v.sign() == Sign::Minus { 0xff } else { 0 };
