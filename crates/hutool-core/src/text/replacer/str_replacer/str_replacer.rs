@@ -30,6 +30,3 @@ pub trait StrReplacer: Send + Sync {
     /// 从 `pos` 尝试替换；返回 `(消耗码点数, 替换片段)`，`None` 表示未匹配。
     fn replace_at(&self, chars: &[char], pos: usize) -> Result<Option<(usize, String)>>;
 }
-
-/// 堆分配的替换器对象。
-pub type BoxedStrReplacer = Box<dyn StrReplacer>;
