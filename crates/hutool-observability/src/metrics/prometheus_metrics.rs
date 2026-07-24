@@ -8,6 +8,8 @@ pub use metrics::{
     gauge, histogram,
 };
 
+use super::metrics_error::MetricsError;
+
 /// Handle for rendering the process-wide Prometheus recorder.
 #[derive(Debug, Clone)]
 pub struct PrometheusMetrics {
@@ -31,26 +33,5 @@ impl PrometheusMetrics {
     #[must_use]
     pub fn render(&self) -> String {
         self.handle.render()
-    }
-}
-
-/// Metrics initialization failures.
-#[derive(Debug, Error, Clone, PartialEq, Eq)]
-pub enum MetricsError {
-    /// Another recorder is already installed or the recorder could not start.
-    #[error("failed to install Prometheus recorder: {0}")]
-    Install(String),
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn recorder_is_installed_explicitly_and_renders_metrics() {
-        let metrics = PrometheusMetrics::install().unwrap();
-        counter!("hutool_observability_test_counter").increment(2);
-        let rendered = metrics.render();
-        assert!(rendered.contains("hutool_observability_test_counter_total 2"));
     }
 }
