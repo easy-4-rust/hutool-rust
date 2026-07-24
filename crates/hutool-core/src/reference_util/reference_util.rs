@@ -4,42 +4,8 @@
 use std::marker::PhantomData;
 use std::sync::{Arc, Weak as StdWeak};
 
-/// 对齐 Java: `ReferenceUtil.ReferenceType`
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum ReferenceType {
-    /// 软引用。
-    Soft,
-    /// 弱引用。
-    Weak,
-    /// 虚引用。
-    Phantom,
-}
-
-/// 对齐 Java `Reference<T>` 的统一封装。
-#[derive(Debug)]
-pub enum HitReference<T> {
-    /// 弱引用。
-    Weak(StdWeak<T>),
-    /// 软引用（Rust 用 Arc 持有，语义上 get 可返回值）。
-    Soft(Arc<T>),
-    /// 虚引用（get 恒为 None）。
-    Phantom(PhantomData<T>),
-}
-
-impl<T> HitReference<T> {
-    /// 对齐 Java: `Reference.get()`
-    #[must_use]
-    pub fn get(&self) -> Option<T>
-    where
-        T: Clone,
-    {
-        match self {
-            Self::Weak(reference) => reference.upgrade().map(|value| (*value).clone()),
-            Self::Soft(value) => Some((**value).clone()),
-            Self::Phantom(_) => None,
-        }
-    }
-}
+use super::hit_reference::HitReference;
+use super::reference_type::ReferenceType;
 
 /// 对齐 Java: `cn.hutool.core.util.ReferenceUtil`
 #[derive(Debug, Clone, Copy, Default)]
