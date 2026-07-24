@@ -9,21 +9,8 @@ use std::sync::LazyLock;
 use crate::text::str_splitter::StrSplitter;
 use crate::Result;
 
-/// 对齐 Java `java.lang.reflect.Method` 的轻量描述。
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ClassMethod {
-    /// 方法名。
-    pub name: String,
-    /// 是否为 public。
-    pub is_public: bool,
-}
-
-/// 对齐 Java `java.lang.reflect.Field` 的轻量描述。
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ClassField {
-    /// 字段名。
-    pub name: String,
-}
+use super::class_field::ClassField;
+use super::class_method::ClassMethod;
 
 /// 对齐 Java: `cn.hutool.core.util.ClassUtil`
 #[derive(Debug, Clone, Copy, Default)]
@@ -108,37 +95,6 @@ impl ClassUtil {
     }
 }
 
-#[derive(Debug, Clone)]
-struct TypeRegistry {
-    methods: Vec<ClassMethod>,
-    fields: Vec<ClassField>,
-}
-
-static TEST_SUB_CLASS_REGISTRY: LazyLock<TypeRegistry> = LazyLock::new(|| TypeRegistry {
-    methods: vec![
-        ClassMethod {
-            name: "publicMethod".to_string(),
-            is_public: true,
-        },
-        ClassMethod {
-            name: "privateMethod".to_string(),
-            is_public: false,
-        },
-        ClassMethod {
-            name: "publicSubMethod".to_string(),
-            is_public: true,
-        },
-        ClassMethod {
-            name: "privateSubMethod".to_string(),
-            is_public: false,
-        },
-    ],
-    fields: vec![ClassField {
-        name: "subField".to_string(),
-    }],
-});
-
-/// Hutool `ClassUtilTest` 使用的类型元数据（对齐 Java 内部类结构）。
 fn parity_registry(type_key: &str) -> Option<&'static TypeRegistry> {
     match type_key {
         "ClassUtilTest.TestSubClass" => Some(&TEST_SUB_CLASS_REGISTRY),
