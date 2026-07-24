@@ -4,16 +4,7 @@
 use std::collections::HashMap;
 use std::hash::Hash;
 
-/// 对齐 Java 接口: `Table.Cell`
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct TableCell<R, C, V> {
-    /// 行键
-    pub row_key: R,
-    /// 列键
-    pub column_key: C,
-    /// 值
-    pub value: V,
-}
+use super::table_cell::TableCell;
 
 /// 对齐 Java 类: `cn.hutool.core.map.multi.RowKeyTable`
 ///
@@ -170,9 +161,3 @@ impl<R: Eq + Hash + Clone, C: Eq + Hash + Clone, V: Clone> RowKeyTable<R, C, V> 
         self.rows.values().flat_map(|c| c.values()).collect()
     }
 }
-
-/// 对齐 Java: `AbsTable` —— 与 RowKeyTable 同构的类型别名。
-pub type AbsTable<R, C, V> = RowKeyTable<R, C, V>;
-
-/// 对齐 Java: `Table` 接口的实现类型。
-pub type Table<R, C, V> = RowKeyTable<R, C, V>;
