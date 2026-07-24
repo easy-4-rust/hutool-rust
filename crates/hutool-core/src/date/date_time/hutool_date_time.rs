@@ -16,21 +16,7 @@ use crate::date::quarter::Quarter;
 use crate::date::week::Week;
 use crate::{CoreError, Result};
 
-/// Hutool 默认墙钟时区：UTC+08:00（对齐 Asia/Shanghai，无 DST）。
-pub fn parity_zone() -> FixedOffset {
-    FixedOffset::east_opt(8 * 3600).expect("fixed +08:00")
-}
-
-/// 对齐 Java: `cn.hutool.core.date.DateTime`
-#[derive(Debug, Clone, Copy)]
-pub struct DateTime {
-    /// epoch 毫秒
-    millis: i64,
-    /// 一周起始（默认周一，便于 beginOfWeek 与常见中国习惯一致；可 set）
-    first_day_of_week: Week,
-    /// 可变模式（Hutool mutable）
-    mutable: bool,
-}
+use super::date_time::DateTime;
 
 /// 兼容旧占位名。
 pub type HutoolDateTime = DateTime;
@@ -340,51 +326,4 @@ impl std::fmt::Display for DateTime {
     }
 }
 
-/// 以周一为一周起点、首周最少 1 天的周数。
-pub fn week_of_year_mon_min1(date: NaiveDate) -> u32 {
-    let jan1 = NaiveDate::from_ymd_opt(date.year(), 1, 1).unwrap();
-    let jan1_from_mon = jan1.weekday().num_days_from_monday();
-    let day_of_year = date.ordinal();
-    ((day_of_year + jan1_from_mon - 1) / 7) + 1
-}
-
-fn days_in_month(year: i32, month: u32) -> u32 {
-    NaiveDate::from_ymd_opt(year, month + 1, 1)
-        .unwrap_or_else(|| NaiveDate::from_ymd_opt(year + 1, 1, 1).unwrap())
-        .pred_opt()
-        .unwrap()
-        .day()
-}
-
-/// 按 Hutool pattern 格式化 DateTime。
-pub fn format_with_pattern(dt: DateTime, pattern: &str) -> String {
-    if pattern == "#sss" {
-        return (dt.get_time() / 1000).to_string();
-    }
-    if pattern == "#SSS" {
-        return dt.get_time().to_string();
-    }
-    let naive = dt.naive_local();
-    // Millisecond pattern
-    if pattern.contains("SSS") || pattern == NORM_DATETIME_MS_PATTERN {
-        let base = naive.format("%Y-%m-%d %H:%M:%S").to_string();
-        let ms = naive.nanosecond() / 1_000_000;
-        return format!("{base}.{ms:03}");
-    }
-    // HTTP date in GMT
-    if pattern.contains("EEE") && pattern.contains("MMM") {
-        let utc = chrono::DateTime::from_timestamp_millis(dt.get_time())
-            .unwrap_or(chrono::DateTime::UNIX_EPOCH)
-            .naive_utc();
-        // Wed, 02 Jan 2019 14:32:01 GMT
-        return utc.format("%a, %d %b %Y %H:%M:%S GMT").to_string();
-    }
-    let chrono_pat = date_pattern::to_chrono_format(pattern);
-    // Handle single-digit month/day patterns that chrono always zero-pads: post-process if needed
-    naive.format(&chrono_pat).to_string()
-}
-
-/// 毫秒时长单位换算辅助。
-pub fn between_unit(begin: DateTime, end: DateTime, unit: DateUnit) -> i64 {
-    (end.get_time() - begin.get_time()) / unit.get_millis()
-}
+use super::{between_unit, days_in_month, format_with_pattern, parity_zone, week_of_year_mon_min1};
