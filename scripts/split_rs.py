@@ -423,25 +423,11 @@ def split_file(file_path):
     mod_chunks.append('')
     for pi in pub_items:
         mod_chunks.append(f"pub use {to_snake(pi['name'])}::{pi['name']};")
-    # Re-export all public helpers from their owner file
-    seen_helpers = set()
+    # Emit ALL helpers directly in mod.rs (both pub and non-pub)
+    # This ensures submodules can use super::name for any helper
     for h in helper_items:
-        if not h.get('is_pub') or h['name'] in seen_helpers:
-            continue
-        seen_helpers.add(h['name'])
-        # Find owner (just assigned above)
-        owner = None
-        for tname, tdata in type_data.items():
-            if h['name'] in tdata['helpers']:
-                owner = tname
-                break
-        if owner:
-            mod_chunks.append(f"pub use {to_snake(owner)}::{h['name']};")
-    # Emit non-pub helpers directly in mod.rs so submodules can use super::name
-    for h in helper_items:
-        if not h.get('is_pub'):
-            mod_chunks.append('')
-            mod_chunks.append('\n'.join(lines[h['start']:h['end']]).rstrip())
+        mod_chunks.append('')
+        mod_chunks.append('\n'.join(lines[h['start']:h['end']]).rstrip())
     mod_chunks.append('')
     (sub_dir / 'mod.rs').write_text('\n'.join(mod_chunks))
 
