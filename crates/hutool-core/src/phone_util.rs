@@ -23,6 +23,9 @@ fn full_regex(pattern: &str) -> Regex {
 }
 
 /// Convenient Hutool-compatible validation and slicing for Chinese phone numbers.
+
+/// 对齐: `cn.hutool.core.util.PhoneUtil`
+/// 手机号工具类
 pub struct PhoneUtil;
 
 impl PhoneUtil {
