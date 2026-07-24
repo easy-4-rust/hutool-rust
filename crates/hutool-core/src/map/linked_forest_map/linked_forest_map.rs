@@ -4,61 +4,7 @@
 use std::collections::HashMap;
 use std::hash::Hash;
 
-/// 对齐 Java 接口: `cn.hutool.core.map.TreeEntry`
-#[derive(Debug, Clone)]
-pub struct TreeEntry<K, V> {
-    key: K,
-    value: V,
-    parent: Option<K>,
-    children: Vec<K>,
-}
-
-impl<K: Clone + Eq + Hash, V: Clone> TreeEntry<K, V> {
-    /// 新建节点。
-    pub fn new(key: K, value: V) -> Self {
-        Self {
-            key,
-            value,
-            parent: None,
-            children: Vec::new(),
-        }
-    }
-
-    /// 对齐 Java: `getKey`
-    pub fn key(&self) -> &K {
-        &self.key
-    }
-
-    /// 对齐 Java: `getValue`
-    pub fn value(&self) -> &V {
-        &self.value
-    }
-
-    /// 对齐 Java: `setValue`
-    pub fn set_value(&mut self, value: V) -> V {
-        std::mem::replace(&mut self.value, value)
-    }
-
-    /// 对齐 Java: `getDeclaredParent` / `hasParent`
-    pub fn parent_key(&self) -> Option<&K> {
-        self.parent.as_ref()
-    }
-
-    /// 对齐 Java: `hasParent`
-    pub fn has_parent(&self) -> bool {
-        self.parent.is_some()
-    }
-
-    /// 子节点键。
-    pub fn children(&self) -> &[K] {
-        &self.children
-    }
-}
-
-/// 对齐 Java 接口: `cn.hutool.core.map.ForestMap`
-///
-/// 以 `LinkedForestMap` 为默认实现。
-pub type ForestMap<K, V> = LinkedForestMap<K, V>;
+use super::tree_entry::TreeEntry;
 
 /// 对齐 Java 类: `cn.hutool.core.map.LinkedForestMap`
 #[derive(Debug, Clone, Default)]
