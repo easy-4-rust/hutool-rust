@@ -6,6 +6,8 @@
 use crate::string::is_blank;
 use std::fmt;
 
+use super::opt_empty_error::OptEmptyError;
+
 /// 对齐 Java: `cn.hutool.core.lang.Opt`
 #[derive(Clone)]
 pub struct Opt<T> {
@@ -310,38 +312,5 @@ impl<T: fmt::Display> fmt::Display for Opt<T> {
             Some(v) => write!(f, "Opt[{v}]"),
             None => write!(f, "Opt.empty"),
         }
-    }
-}
-
-/// 对齐 Java: `NoSuchElementException` 空 Opt 抛出。
-#[derive(Debug, Clone, Copy, PartialEq, Eq, thiserror::Error)]
-#[error("No value present")]
-pub struct OptEmptyError;
-
-#[cfg(test)]
-mod opt_idiomatic_parity {
-    use super::*;
-
-    /// 对齐 Java Opt 工厂与函数式变换的可执行证据。
-    #[test]
-    fn opt_factories_map_filter_or_else_and_try() {
-        assert!(Opt::<i32>::empty().is_empty());
-        assert_eq!(Opt::of(1).get(), Some(&1));
-        assert_eq!(Opt::of_nullable(None::<i32>).get(), None);
-        assert_eq!(Opt::of_blank_able(Some("  ".into())).get(), None);
-        assert_eq!(Opt::of_empty_able(Some(vec![1])).get().unwrap(), &vec![1]);
-        let failed = Opt::of_try(|| Err::<i32, _>("boom"));
-        assert!(failed.is_fail());
-        assert_eq!(failed.get_exception(), Some("boom"));
-        assert_eq!(Opt::of(2).map(|x| x * 3).or_else(0), 6);
-        assert_eq!(Opt::of(2).filter(|x| *x > 0).or_else(0), 2);
-        assert_eq!(
-            Opt::of(1)
-                .flat_map(|x| Opt::of(x + 1))
-                .or_else(0),
-            2
-        );
-        assert_eq!(Opt::empty().or(|| Opt::of(9)).or_else(0), 9);
-        assert!(Opt::<i32>::empty().or_else_throw().is_err());
     }
 }
