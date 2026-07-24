@@ -11,7 +11,13 @@ use std::{
 
 use super::auto_load_handle::AutoLoadHandle;
 
-/// Hutool-compatible grouped setting document.
+/// Hutool 兼容的分组配置文档。
+///
+/// 对齐 Java 类: `cn.hutool.setting.Setting`
+/// 来源: hutool-setting/src/main/java/cn/hutool/setting/Setting.java
+///
+/// 支持分组的键值对配置，支持变量替换、自动重载等特性。
+/// Rust 版本使用 `Arc<RwLock<GroupedMap>>` 实现线程安全。
 #[derive(Debug, Clone)]
 pub struct Setting {
     data: Arc<RwLock<GroupedMap>>,
@@ -29,7 +35,9 @@ impl Default for Setting {
 }
 
 impl Setting {
-    /// Creates an empty setting.
+    /// 创建空的 Setting。
+    ///
+    /// 对齐 Java: `Setting::new()`
     #[must_use]
     pub fn new() -> Self {
         Self {
@@ -41,12 +49,16 @@ impl Setting {
             variable_suffix: "}".into(),
         }
     }
-    /// Alias of `new`, matching Hutool.
+    /// 别名，对齐 Hutool 命名规范。
+    ///
+    /// 对齐 Java: `Setting::create()`
     #[must_use]
     pub fn create() -> Self {
         Self::new()
     }
-    /// Loads a UTF-8 path.
+    /// 加载 UTF-8 编码的配置文件。
+    ///
+    /// 对齐 Java: `Setting::fromPath(String)`
     pub fn from_path(path: impl AsRef<Path>) -> Result<Self, SettingError> {
         Self::from_path_with_options(path, DEFAULT_ENCODING, false)
     }
@@ -80,7 +92,9 @@ impl Setting {
             .expect("stored delimiters are valid");
         loader
     }
-    /// Reloads the configured path atomically.
+    /// 原子重载配置文件。
+    ///
+    /// 对齐 Java: `Setting::load()`
     pub fn load(&mut self) -> Result<bool, SettingError> {
         let path = self
             .path
@@ -93,7 +107,9 @@ impl Setting {
         *self.data.write().expect("setting poisoned") = parsed;
         Ok(true)
     }
-    /// Starts explicit automatic reload and returns its owner.
+    /// 启动自动重载并返回其句柄。
+    ///
+    /// 对齐 Java: `Setting::autoLoad(Function<String, Boolean>)`
     pub fn auto_load<F>(&self, callback: F) -> Result<AutoLoadHandle, SettingError>
     where
         F: Fn(bool) + Send + Sync + 'static,
@@ -129,17 +145,23 @@ impl Setting {
         watcher.watch_path(&path)?;
         Ok(AutoLoadHandle { _watcher: watcher })
     }
-    /// Returns the source path.
+    /// 返回配置文件路径。
+    ///
+    /// 对齐 Java: `Setting::getPath()`
     #[must_use]
     pub fn path(&self) -> Option<&Path> {
         self.path.as_deref()
     }
-    /// Counts entries.
+    /// 返回配置条目数量。
+    ///
+    /// 对齐 Java: `Setting::size()`
     #[must_use]
     pub fn size(&self) -> usize {
         self.data.read().expect("setting poisoned").size()
     }
-    /// Gets a value by group.
+    /// 按分组获取配置值。
+    ///
+    /// 对齐 Java: `Setting::getByGroup(String, String)`
     #[must_use]
     pub fn get_by_group(&self, key: &str, group: &str) -> Option<String> {
         self.data
@@ -148,7 +170,9 @@ impl Setting {
             .get(group, key)
             .map(str::to_owned)
     }
-    /// Gets a default-group value.
+    /// 获取默认分组的配置值。
+    ///
+    /// 对齐 Java: `Setting::get(String)`
     #[must_use]
     pub fn get(&self, key: &str) -> Option<String> {
         self.get_by_group(key, "")
@@ -227,7 +251,9 @@ impl Setting {
     pub fn to_properties(&self, group: &str) -> IndexMap<String, String> {
         self.get_map(group)
     }
-    /// Stores the whole document.
+    /// 存储整个配置文档到文件。
+    ///
+    /// 对齐 Java: `Setting::store(String)`
     pub fn store(&self, path: impl AsRef<Path>) -> Result<(), SettingError> {
         self.store_path(path.as_ref())
     }
@@ -301,7 +327,9 @@ impl Setting {
             .expect("setting poisoned")
             .put(group, key, value)
     }
-    /// Inserts a default-group value.
+    /// 插入默认分组的配置值。
+    ///
+    /// 对齐 Java: `Setting::set(String, String)`
     pub fn set(&self, key: impl Into<String>, value: impl Into<String>) -> &Self {
         self.put_by_group(key, "", value);
         self
