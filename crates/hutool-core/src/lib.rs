@@ -81,7 +81,7 @@ pub use byte_util::{
 };
 pub use char_util::{CharError, CharUtil};
 pub use charset_util::{Charset, CharsetError, CharsetUtil};
-pub use clone_support::{CloneRuntimeException, CloneSupport, Cloneable, DefaultCloneable};
+pub use clone_support::{CloneRuntimeException, CloneSupport, DefaultCloneable};
 pub use codec::{
     base64_decode, base64_encode, base64_url_decode, base64_url_encode, hex_decode, hex_encode,
     percent_decode, percent_encode_component,
