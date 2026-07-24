@@ -3,7 +3,9 @@
 use crate::StopChar;
 use std::{collections::HashMap, fmt, sync::Arc};
 
-/// One matched word and its exact source span.
+/// 单个匹配结果（UTF-8 字节偏移）。
+///
+/// 对齐 Java 类: `cn.hutool.dfa.FoundWord`
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct FoundWord {
     word: String,

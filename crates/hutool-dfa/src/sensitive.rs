@@ -1,4 +1,7 @@
-//! Thread-safe sensitive-word facade.
+//! 对齐: `cn.hutool.dfa.SensitiveUtil`
+//! 来源: hutool-dfa/src/main/java/cn/hutool/dfa/SensitiveUtil.java
+//!
+//! 敏感词过滤工具，支持线程安全的敏感词查找、替换和序列化。
 
 use crate::{DfaError, FoundWord, MatchOptions, WordTree};
 use parking_lot::RwLock;
@@ -6,20 +9,26 @@ use serde::{Serialize, de::DeserializeOwned};
 use std::{collections::BTreeMap, sync::Arc, thread::JoinHandle};
 
 use crate::sensitive_processor::{DefaultSensitiveProcessor, SensitiveProcessor};
-/// Explicit, cloneable, thread-safe replacement for Hutool's global utility.
+/// 敏感词过滤工具，支持线程安全的敏感词查找、替换和序列化。
+///
+/// 对齐 Java 类: `cn.hutool.dfa.SensitiveUtil`
 #[derive(Debug, Default, Clone)]
 pub struct SensitiveUtil {
     tree: Arc<RwLock<WordTree>>,
 }
 
 impl SensitiveUtil {
-    /// Creates an empty sensitive-word service.
+    /// 创建空的敏感词服务。
+///
+/// 对齐 Java: `SensitiveUtil.SensitiveUtil()`
     #[must_use]
     pub fn new() -> Self {
         Self::default()
     }
 
-    /// Creates and initializes a service.
+    /// 创建并初始化敏感词服务。
+///
+/// 对齐 Java: `SensitiveUtil.SensitiveUtil(Set<String>)`
     pub fn from_words<I, S>(words: I) -> Self
     where
         I: IntoIterator<Item = S>,
@@ -30,13 +39,17 @@ impl SensitiveUtil {
         service
     }
 
-    /// Returns whether at least one effective word is configured.
+    /// 返回是否已初始化敏感词。
+///
+/// 对齐 Java: `SensitiveUtil.isInitialized()`
     #[must_use]
     pub fn is_initialized(&self) -> bool {
         !self.tree.read().is_empty()
     }
 
-    /// Atomically replaces all sensitive words.
+    /// 原子替换所有敏感词。
+///
+/// 对齐 Java: `SensitiveUtil.init(Set<String>)`
     pub fn init<I, S>(&self, words: I)
     where
         I: IntoIterator<Item = S>,
@@ -74,7 +87,9 @@ impl SensitiveUtil {
         self.tree.write().set_char_filter(filter);
     }
 
-    /// Returns whether text contains a sensitive word.
+    /// 返回文本是否包含敏感词。
+///
+/// 对齐 Java: `SensitiveUtil.containsSensitive(String)`
     #[must_use]
     pub fn contains_sensitive(&self, text: &str) -> bool {
         self.tree.read().is_match(text)
@@ -85,7 +100,9 @@ impl SensitiveUtil {
         Ok(self.contains_sensitive(&serde_json::to_string(value)?))
     }
 
-    /// Returns the first sensitive match.
+    /// 返回第一个敏感词匹配。
+///
+/// 对齐 Java: `SensitiveUtil.findFirstSensitive(String)`
     #[must_use]
     pub fn find_first_sensitive(&self, text: &str) -> Option<FoundWord> {
         self.tree.read().match_word(text)
@@ -99,7 +116,9 @@ impl SensitiveUtil {
         Ok(self.find_first_sensitive(&serde_json::to_string(value)?))
     }
 
-    /// Returns default non-dense sensitive matches.
+    /// 返回所有敏感词匹配。
+///
+/// 对齐 Java: `SensitiveUtil.findAllSensitive(String)`
     #[must_use]
     pub fn find_all_sensitive(&self, text: &str) -> Vec<FoundWord> {
         self.tree.read().match_all_words(text)
@@ -124,13 +143,17 @@ impl SensitiveUtil {
         Ok(self.find_all_sensitive_with_options(&serde_json::to_string(value)?, options))
     }
 
-    /// Replaces sensitive words greedily with asterisks.
+    /// 用星号替换敏感词（贪婪模式）。
+///
+/// 对齐 Java: `SensitiveUtil.filterSensitive(String)`
     #[must_use]
     pub fn filter_sensitive(&self, text: &str) -> String {
         self.filter_sensitive_with(text, true, &DefaultSensitiveProcessor)
     }
 
-    /// Replaces sensitive words with a caller-provided processor.
+    /// 用自定义处理器替换敏感词。
+///
+/// 对齐 Java: `SensitiveUtil.filterSensitive(String, SensitiveProcessor)`
     #[must_use]
     pub fn filter_sensitive_with(
         &self,

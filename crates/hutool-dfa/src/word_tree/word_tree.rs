@@ -6,7 +6,9 @@ use std::{collections::HashMap, fmt, sync::Arc};
 use super::found_word::FoundWord;
 use super::match_options::MatchOptions;
 
-/// Mutable trie with Hutool stop-character matching semantics.
+/// 可变字典树，支持 Hutool 停止字符匹配语义。
+///
+/// 对齐 Java 类: `cn.hutool.dfa.WordTree`
 #[derive(Clone)]
 pub struct WordTree {
     root: Node,

@@ -1,4 +1,7 @@
-//! Mutable Hutool-compatible word trie.
+//! 对齐: `cn.hutool.dfa.WordTree`
+//! 来源: hutool-dfa/src/main/java/cn/hutool/dfa/WordTree.java
+//!
+//! Hutool 兼容的可变字典树。
 
 use crate::StopChar;
 use std::{collections::HashMap, fmt, sync::Arc};
