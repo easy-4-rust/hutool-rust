@@ -3,21 +3,7 @@
 use crate::DfaError;
 use aho_corasick::{AhoCorasick, AhoCorasickBuilder, MatchKind};
 
-const MAX_PATTERN_COUNT: usize = 100_000;
-const MAX_PATTERN_BYTES: usize = 16 * 1024 * 1024;
-
-/// One immutable-engine match in UTF-8 byte offsets.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct PatternMatch {
-    /// Index of the matching pattern supplied at construction time.
-    pub pattern_index: usize,
-    /// Inclusive UTF-8 byte start offset.
-    pub start: usize,
-    /// Exclusive UTF-8 byte end offset.
-    pub end: usize,
-    /// Matching pattern text.
-    pub pattern: String,
-}
+use super::pattern_match::PatternMatch;
 
 /// Immutable, thread-safe leftmost-longest multi-pattern matcher.
 #[derive(Debug, Clone)]
@@ -100,46 +86,6 @@ impl DfaMatcher {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+const MAX_PATTERN_BYTES: usize = 16 * 1024 * 1024;
 
-    #[test]
-    fn validates_patterns_and_uses_leftmost_longest_engine() {
-        let error = DfaMatcher::new(Vec::<String>::new()).unwrap_err();
-        assert!(error.to_string().contains("at least one"));
-        let error = DfaMatcher::new(vec!["valid".to_owned(), String::new()]).unwrap_err();
-        assert!(error.to_string().contains("must not be empty"));
-        let error = DfaMatcher::new(vec!["a".to_owned(); MAX_PATTERN_COUNT + 1]).unwrap_err();
-        assert!(error.to_string().contains("too large"));
-        let error = DfaMatcher::new(vec!["a".repeat(MAX_PATTERN_BYTES + 1)]).unwrap_err();
-        assert!(error.to_string().contains("too large"));
-
-        let matcher = DfaMatcher::new(vec![
-            "敏感".to_owned(),
-            "敏感词".to_owned(),
-            "bad".to_owned(),
-        ])
-        .unwrap();
-        assert!(matcher.is_match("包含敏感词和bad"));
-        assert!(!matcher.is_match("clean"));
-        assert_eq!(
-            matcher.find_all("包含敏感词 bad"),
-            [
-                PatternMatch {
-                    pattern_index: 1,
-                    start: 6,
-                    end: 15,
-                    pattern: "敏感词".to_owned(),
-                },
-                PatternMatch {
-                    pattern_index: 2,
-                    start: 16,
-                    end: 19,
-                    pattern: "bad".to_owned(),
-                }
-            ]
-        );
-        assert_eq!(matcher.replace_all("敏感词 bad", "***"), "*** ***");
-    }
-}
+const MAX_PATTERN_COUNT: usize = 100_000;
