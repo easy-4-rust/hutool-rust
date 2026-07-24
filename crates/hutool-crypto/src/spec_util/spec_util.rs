@@ -5,51 +5,10 @@ use base64::Engine as _;
 use base64::engine::general_purpose::STANDARD;
 use num_bigint::BigUint;
 
-/// Algorithm key material stand-in for Java `KeySpec` / `SecretKeySpec`.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct KeySpecBytes {
-    /// Algorithm name (DES / DESede / AES / …).
-    pub algorithm: String,
-    /// Raw key bytes.
-    pub key: Vec<u8>,
-}
-
-/// PBE password stand-in for Java `PBEKeySpec`.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct PbeKeySpec {
-    /// Password characters as UTF-8 bytes.
-    pub password: Vec<u8>,
-}
-
-/// PBE salt + iteration stand-in for Java `PBEParameterSpec`.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct PbeParameterSpec {
-    /// Salt bytes.
-    pub salt: Vec<u8>,
-    /// Iteration count.
-    pub iteration_count: u32,
-}
-
-/// RSA CRT components from C# XML key export (`SpecUtil.xmlToRSAPrivateCrtKeySpec`).
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct RsaPrivateCrtKeySpec {
-    /// Modulus `n`.
-    pub modulus: BigUint,
-    /// Public exponent `e`.
-    pub public_exponent: BigUint,
-    /// Private exponent `d`.
-    pub private_exponent: BigUint,
-    /// Prime `p`.
-    pub prime_p: BigUint,
-    /// Prime `q`.
-    pub prime_q: BigUint,
-    /// `d mod (p-1)`.
-    pub prime_exponent_p: BigUint,
-    /// `d mod (q-1)`.
-    pub prime_exponent_q: BigUint,
-    /// CRT coefficient `q^-1 mod p`.
-    pub crt_coefficient: BigUint,
-}
+use super::key_spec_bytes::KeySpecBytes;
+use super::pbe_key_spec::PbeKeySpec;
+use super::pbe_parameter_spec::PbeParameterSpec;
+use super::rsa_private_crt_key_spec::RsaPrivateCrtKeySpec;
 
 /// Zero-sized facade for Hutool `SpecUtil`.
 #[derive(Debug, Clone, Copy, Default)]
