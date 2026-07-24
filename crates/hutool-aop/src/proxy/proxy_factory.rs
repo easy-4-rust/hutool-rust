@@ -10,7 +10,12 @@ use std::{fmt, sync::Arc};
 use super::proxy::Proxy;
 use super::proxy_backend::ProxyBackend;
 
-/// Selects and constructs typed aspect proxies.
+/// 选择并构建类型化的切面代理。
+///
+/// 对齐 Java 类: `cn.hutool.aop.ProxyFactory`
+/// 来源: hutool-aop/src/main/java/cn/hutool/aop/ProxyFactory.java
+///
+/// 提供创建 AOP 代理实例的工厂方法。
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
 pub struct ProxyFactory {
     backend: ProxyBackend,
