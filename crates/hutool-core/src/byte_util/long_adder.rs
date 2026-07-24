@@ -1,5 +1,8 @@
 //! Endian-aware numeric byte conversion aligned with Hutool's `ByteUtil` family.
 
+/// 对齐: `cn.hutool.core.util.ByteUtil.LongAdder`
+/// 长整型累加器
+
 use std::{
     str::FromStr,
     sync::atomic::{AtomicI32, AtomicI64, Ordering},

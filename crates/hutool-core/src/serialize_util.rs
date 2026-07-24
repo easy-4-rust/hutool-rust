@@ -5,6 +5,9 @@
 //! upgraded peers, storage is for forward-evolving persisted data, packed is for
 //! synchronized models, and descriptive is for inspection and migration.
 
+/// 对齐: `cn.hutool.core.util.SerializeUtil`
+/// 序列化工具类
+
 use std::{fmt, ops::RangeInclusive};
 
 #[cfg(feature = "serialization")]
