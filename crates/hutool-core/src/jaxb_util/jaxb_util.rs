@@ -9,25 +9,8 @@ use quick_xml::Writer;
 
 use crate::{CoreError, Result};
 
-/// 对齐 Java `JAXBUtilTest.SchoolVo.RoomVo`。
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct RoomVo {
-    /// 教室编号。
-    pub room_no: String,
-    /// 教室名称。
-    pub room_name: String,
-}
-
-/// 对齐 Java `JAXBUtilTest.SchoolVo`。
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct SchoolVo {
-    /// 学校名称。
-    pub school_name: String,
-    /// 学校地址。
-    pub school_address: String,
-    /// 教室信息。
-    pub room: RoomVo,
-}
+use super::room_vo::RoomVo;
+use super::school_vo::SchoolVo;
 
 /// 对齐 Java: `cn.hutool.core.util.JAXBUtil`
 #[derive(Debug, Clone, Copy, Default)]
@@ -99,7 +82,6 @@ impl JAXBUtil {
     }
 }
 
-/// 写入 `<school>` 节点，格式对齐 Hutool JAXB 输出。
 fn write_school(writer: &mut Writer<Vec<u8>>, bean: &SchoolVo, format: bool) -> Result<()> {
     let mut school_tag = BytesStart::new("school");
     writer.write_event(Event::Start(school_tag.clone()))?;
@@ -128,26 +110,6 @@ fn write_school(writer: &mut Writer<Vec<u8>>, bean: &SchoolVo, format: bool) -> 
         writer.write_event(Event::Text(BytesText::new("\n")))?;
     }
     writer.write_event(Event::End(BytesEnd::new("school")))?;
-    if format {
-        writer.write_event(Event::Text(BytesText::new("\n")))?;
-    }
-    Ok(())
-}
-
-/// 写入单个 XML 元素。
-fn write_element(
-    writer: &mut Writer<Vec<u8>>,
-    tag: &str,
-    value: &str,
-    format: bool,
-) -> Result<()> {
-    if format {
-        writer.write_event(Event::Text(BytesText::new("    ")))?;
-    }
-    let start_tag = BytesStart::new(tag);
-    writer.write_event(Event::Start(start_tag))?;
-    writer.write_event(Event::Text(BytesText::new(value)))?;
-    writer.write_event(Event::End(BytesEnd::new(tag)))?;
     if format {
         writer.write_event(Event::Text(BytesText::new("\n")))?;
     }
