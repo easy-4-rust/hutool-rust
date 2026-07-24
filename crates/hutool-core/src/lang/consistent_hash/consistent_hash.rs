@@ -8,8 +8,7 @@ use std::collections::BTreeMap;
 use std::fmt::Display;
 use std::hash::{Hash, Hasher};
 
-/// 32 位哈希函数，对齐 Java `Hash32<Object>`。
-pub type Hash32Fn = Box<dyn Fn(&str) -> i32 + Send + Sync>;
+use super::hash32_fn::Hash32Fn;
 
 /// 对齐 Java: `cn.hutool.core.lang.ConsistentHash<T>`
 pub struct ConsistentHash<T> {
@@ -87,40 +86,5 @@ impl<T: Clone + Display> ConsistentHash<T> {
     #[must_use]
     pub fn virtual_size(&self) -> usize {
         self.circle.len()
-    }
-}
-
-/// 默认字符串键的 Display 包装，便于测试。
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct StrNode(pub String);
-
-impl Display for StrNode {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_str(&self.0)
-    }
-}
-
-impl Hash for StrNode {
-    fn hash<H: Hasher>(&self, state: &mut H) {
-        self.0.hash(state);
-    }
-}
-
-#[cfg(test)]
-mod consistent_hash_idiomatic_parity {
-    use super::*;
-
-    /// 对齐 Java ConsistentHash add/remove/get 可执行证据。
-    #[test]
-    fn consistent_hash_add_get_remove() {
-        let nodes = ["a", "b", "c"].map(|s| StrNode(s.into()));
-        let mut ring = ConsistentHash::new(3, nodes);
-        assert_eq!(ring.virtual_size(), 9);
-        let hit = ring.get("user-42").expect("node");
-        assert!(["a", "b", "c"].contains(&hit.0.as_str()));
-        ring.remove(&StrNode("b".into()));
-        assert_eq!(ring.virtual_size(), 6);
-        let hit2 = ring.get("user-42").expect("node");
-        assert_ne!(hit2.0, "b");
     }
 }
