@@ -5,17 +5,7 @@
 
 use crate::Result;
 
-/// 对齐 Java: `StrJoiner#NullMode` 枚举
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
-pub enum NullMode {
-    /// 忽略 null
-    #[default]
-    Ignore,
-    /// 视为空字符串
-    ToEmpty,
-    /// 输出字面量 `"null"`
-    NullString,
-}
+use super::null_mode::NullMode;
 
 /// 对齐 Java: `StrJoiner#`
 #[derive(Debug, Clone)]
