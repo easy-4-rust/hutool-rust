@@ -9,11 +9,15 @@ use crate::{
 
 use super::json_container_object::JsonContainerObject;
 
+/// 对齐: `cn.hutool.json.JSONConverter`
+/// 中文说明: 动态 JSON 转换辅助器，根据值的形状返回对象或数组包装器。
+///
 /// Dynamic JSON conversion helper.
 pub struct JSONConverter;
 
 impl JSONConverter {
-    /// Returns an object or array wrapper matching the dynamic shape.
+    /// 中文说明: 根据动态值的形状返回对象或数组包装器。
+    /// 对齐 Java 方法: `convert`
     pub fn convert(value: Value, config: JSONConfig) -> Result<Box<dyn JsonContainerObject>> {
         match value {
             Value::Object(entries) => Ok(Box::new(JSONObject::from_entries(entries, config))),

@@ -5,16 +5,21 @@ use serde_json::{Map, Number, Value};
 
 use crate::{JSONConfig, JSONObject, JsonError, ParseConfig, Result};
 
+/// 对齐: `cn.hutool.json.XML`
+/// 中文说明: XML 转换门面，匹配 Hutool 的 `XML` 工具类。
+///
 /// XML conversion facade matching Hutool's `XML` utility.
 pub struct XML;
 
 impl XML {
-    /// Parses XML with production defaults.
+    /// 中文说明: 使用生产环境默认配置解析 XML 为 JSON 对象。
+    /// 对齐 Java 方法: `toJSONObject`
     pub fn to_json(input: &str) -> Result<JSONObject> {
         Self::to_json_with(input, ParseConfig::default())
     }
 
-    /// Parses XML with explicit defensive limits.
+    /// 中文说明: 使用显式防御性限制解析 XML 为 JSON 对象。
+    /// 对齐 Java 方法: `toJSONObject`
     pub fn to_json_with(input: &str, config: ParseConfig) -> Result<JSONObject> {
         config.validate(input)?;
         let mut reader = Reader::from_str(input);
@@ -82,7 +87,8 @@ impl XML {
         JSONObject::from_value(Value::Object(root), JSONConfig::default())
     }
 
-    /// Serializes a dynamic value without an additional root tag.
+    /// 中文说明: 将动态值序列化为 XML（不带额外根标签）。
+    /// 对齐 Java 方法: `toXml`
     #[must_use]
     pub fn to_xml(value: &Value) -> String {
         let mut output = String::new();
@@ -90,7 +96,8 @@ impl XML {
         output
     }
 
-    /// Serializes a dynamic value inside an explicit root tag.
+    /// 中文说明: 将动态值序列化为 XML（带指定根标签）。
+    /// 对齐 Java 方法: `toXml`
     #[must_use]
     pub fn to_xml_with_root(value: &Value, root: &str) -> String {
         let mut output = String::new();

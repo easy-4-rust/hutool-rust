@@ -9,6 +9,9 @@ use crate::{
 
 use super::json_util::JSONUtil;
 
+/// 对齐: `cn.hutool.json.JSONWriter`
+/// 中文说明: 流式 JSON 写入器，支持显式所有权和错误传播。
+///
 /// Streaming JSON writer with explicit ownership and error propagation.
 pub struct JSONWriter<W: Write> {
     writer: W,
@@ -19,7 +22,8 @@ pub struct JSONWriter<W: Write> {
 }
 
 impl<W: Write> JSONWriter<W> {
-    /// Creates a writer around an owned destination.
+    /// 中文说明: 创建基于目标写入器的 JSON 写入器。
+    /// 对齐 Java 方法: `new JSONWriter(Writer)`
     #[must_use]
     pub const fn new(writer: W, config: JSONConfig) -> Self {
         Self {
@@ -31,21 +35,24 @@ impl<W: Write> JSONWriter<W> {
         }
     }
 
-    /// Starts an object.
+    /// 中文说明: 开始写入对象。
+    /// 对齐 Java 方法: `startObject`
     pub fn begin_obj(&mut self) -> Result<&mut Self> {
         self.writer.write_all(b"{")?;
         self.mode = Some(WriterMode::Object);
         Ok(self)
     }
 
-    /// Starts an array.
+    /// 中文说明: 开始写入数组。
+    /// 对齐 Java 方法: `startArray`
     pub fn begin_array(&mut self) -> Result<&mut Self> {
         self.writer.write_all(b"[")?;
         self.mode = Some(WriterMode::Array);
         Ok(self)
     }
 
-    /// Writes an object key.
+    /// 中文说明: 写入对象的键。
+    /// 对齐 Java 方法: `writeKey`
     pub fn write_key(&mut self, key: &str) -> Result<&mut Self> {
         if self.mode != Some(WriterMode::Object) || self.pending_key {
             return Err(JsonError::Syntax(
@@ -58,7 +65,8 @@ impl<W: Write> JSONWriter<W> {
         Ok(self)
     }
 
-    /// Writes one array element or the value for the pending object key.
+    /// 中文说明: 写入一个数组元素或待处理对象键的值。
+    /// 对齐 Java 方法: `writeValue`
     pub fn write_value(&mut self, value: &Value) -> Result<&mut Self> {
         match self.mode {
             Some(WriterMode::Object) if !self.pending_key => {
@@ -73,7 +81,8 @@ impl<W: Write> JSONWriter<W> {
         Ok(self)
     }
 
-    /// Writes one object field, respecting null omission.
+    /// 中文说明: 写入一个对象字段，遵循 null 省略配置。
+    /// 对齐 Java 方法: `writeField`
     pub fn write_field(&mut self, key: &str, value: &Value) -> Result<&mut Self> {
         if self.config.is_ignore_null_value() && value.is_null() {
             return Ok(self);
@@ -81,7 +90,8 @@ impl<W: Write> JSONWriter<W> {
         self.write_key(key)?.write_value(value)
     }
 
-    /// Ends the active container and flushes the destination.
+    /// 中文说明: 结束当前容器并刷新目标写入器。
+    /// 对齐 Java 方法: `end`
     pub fn end(&mut self) -> Result<&mut Self> {
         if self.pending_key {
             return Err(JsonError::Syntax("object key has no value".into()));
@@ -96,7 +106,8 @@ impl<W: Write> JSONWriter<W> {
         Ok(self)
     }
 
-    /// Returns the owned destination.
+    /// 中文说明: 返回拥有的目标写入器。
+    /// 对齐 Java 方法: `getWriter`
     #[must_use]
     pub fn into_inner(self) -> W {
         self.writer

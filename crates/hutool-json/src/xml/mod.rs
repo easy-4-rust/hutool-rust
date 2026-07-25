@@ -1,3 +1,7 @@
+//! 对齐: `cn.hutool.json` 包中的 XML 互转组件
+//! 来源: hutool-json/src/main/java/cn/hutool/json/XML.java, XMLTokener.java
+//! 中文说明: 提供 JSON 与 XML 之间的解析和序列化功能。
+
 use std::fmt::Write as _;
 
 use quick_xml::{Reader, XmlVersion, events::Event};

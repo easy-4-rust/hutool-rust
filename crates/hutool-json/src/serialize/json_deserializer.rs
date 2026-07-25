@@ -8,9 +8,13 @@ use serde_json::Value;
 
 use crate::{JsonError, Result};
 
+/// 对齐: `cn.hutool.json.JSONDeserializer`
+/// 中文说明: 类型化的自定义反序列化器 trait。
+///
 /// Typed custom deserializer contract.
 pub trait JSONDeserializer<T>: Send + Sync {
-    /// Deserializes one value.
+    /// 中文说明: 反序列化一个值。
+    /// 对齐 Java 方法: `deserialize`
     fn deserialize(&self, value: &Value) -> Result<T>;
 }
 

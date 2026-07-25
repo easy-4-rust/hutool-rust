@@ -4,6 +4,9 @@ use serde_json::Value;
 
 use crate::{JSONArray, JSONConfig, JSONObject, JsonError, Result};
 
+/// 对齐: `cn.hutool.json.JSONTokener` 中的解析配置
+/// 中文说明: 防御性解析器选项，对应 Hutool 的 `ParseConfig`。
+///
 /// Defensive parser options corresponding to Hutool's `ParseConfig`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct ParseConfig {
@@ -23,43 +26,50 @@ impl Default for ParseConfig {
 }
 
 impl ParseConfig {
-    /// Creates production defaults.
+    /// 中文说明: 创建生产环境默认配置。
+    /// 对齐 Java 方法: `create`
     #[must_use]
     pub fn create() -> Self {
         Self::default()
     }
 
-    /// Returns whether scalar XML values remain strings.
+    /// 中文说明: 是否将 XML 标量值保持为字符串。
+    /// 对齐 Java 方法: `isKeepStrings`
     #[must_use]
     pub const fn is_keep_strings(&self) -> bool {
         self.keep_strings
     }
 
-    /// Configures scalar XML conversion.
+    /// 中文说明: 设置是否将 XML 标量值保持为字符串。
+    /// 对齐 Java 方法: `setKeepStrings`
     pub const fn set_keep_strings(&mut self, value: bool) -> &mut Self {
         self.keep_strings = value;
         self
     }
 
-    /// Returns the maximum structured nesting depth.
+    /// 中文说明: 返回最大嵌套深度限制。
+    /// 对齐 Java 方法: `getMaxNestingDepth`
     #[must_use]
     pub const fn max_nesting_depth(&self) -> usize {
         self.max_nesting_depth
     }
 
-    /// Replaces the structured nesting limit.
+    /// 中文说明: 设置最大嵌套深度限制。
+    /// 对齐 Java 方法: `setMaxNestingDepth`
     pub const fn set_max_nesting_depth(&mut self, value: usize) -> &mut Self {
         self.max_nesting_depth = value;
         self
     }
 
-    /// Returns the maximum encoded input size.
+    /// 中文说明: 返回最大编码输入大小限制。
+    /// 对齐 Java 方法: `getMaxInputBytes`
     #[must_use]
     pub const fn max_input_bytes(&self) -> usize {
         self.max_input_bytes
     }
 
-    /// Replaces the encoded input limit.
+    /// 中文说明: 设置最大编码输入大小限制。
+    /// 对齐 Java 方法: `setMaxInputBytes`
     pub const fn set_max_input_bytes(&mut self, value: usize) -> &mut Self {
         self.max_input_bytes = value;
         self

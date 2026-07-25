@@ -842,13 +842,14 @@ impl Scheduler {
         Ok(self)
     }
 
-    /// Removes a task and ignores absence.
+    /// 中文说明: 移除任务（忽略不存在的情况）。
+    /// 对齐 Java 方法: `deschedule`
     pub fn deschedule(&self, id: &str) -> &Self {
         self.deschedule_with_status(id);
         self
     }
 
-    /// Removes a task and reports whether it existed.
+    /// 中文说明: 移除任务并报告是否存在。
     pub fn deschedule_with_status(&self, id: &str) -> bool {
         self.task_table
             .write()
@@ -856,7 +857,8 @@ impl Scheduler {
             .remove(id)
     }
 
-    /// Updates a task pattern.
+    /// 中文说明: 更新任务的调度表达式。
+    /// 对齐 Java 方法: `updatePattern`
     pub fn update_pattern(&self, id: &str, pattern: CronPattern) -> bool {
         self.task_table
             .read()
@@ -864,13 +866,14 @@ impl Scheduler {
             .update_pattern(id, pattern)
     }
 
-    /// Returns the shared task table for read-only inspection.
+    /// 中文说明: 返回共享的任务表（只读检查）。
     #[must_use]
     pub fn task_table(&self) -> Arc<RwLock<TaskTable>> {
         Arc::clone(&self.task_table)
     }
 
-    /// Returns a task pattern.
+    /// 中文说明: 返回指定任务的调度表达式。
+    /// 对齐 Java 方法: `getPattern`
     #[must_use]
     pub fn pattern(&self, id: &str) -> Option<CronPattern> {
         self.task_table
@@ -879,7 +882,8 @@ impl Scheduler {
             .get_pattern(id)
     }
 
-    /// Returns a scheduled task.
+    /// 中文说明: 返回指定 ID 的定时任务。
+    /// 对齐 Java 方法: `getTask`
     #[must_use]
     pub fn task(&self, id: &str) -> Option<Arc<CronTask>> {
         self.task_table
@@ -888,31 +892,34 @@ impl Scheduler {
             .get_task(id)
     }
 
-    /// Returns whether the schedule is empty.
+    /// 中文说明: 返回调度表是否为空。
     #[must_use]
     pub fn is_empty(&self) -> bool {
         self.len() == 0
     }
 
-    /// Returns the scheduled task count.
+    /// 中文说明: 返回已调度的任务数量。
     #[must_use]
     pub fn len(&self) -> usize {
         self.task_table.read().expect("task table poisoned").len()
     }
 
-    /// Clears all tasks.
+    /// 中文说明: 清除所有任务。
+    /// 对齐 Java 方法: `clear`
     pub fn clear(&self) -> &Self {
         *self.task_table.write().expect("task table poisoned") = TaskTable::new();
         self
     }
 
-    /// Returns whether the scheduler worker is active.
+    /// 中文说明: 返回调度器工作线程是否活跃。
+    /// 对齐 Java 方法: `isStarted`
     #[must_use]
     pub const fn is_started(&self) -> bool {
         self.worker.is_some()
     }
 
-    /// Starts on the injected runtime or the current Tokio runtime.
+    /// 中文说明: 在注入的运行时或当前 Tokio 运行时上启动调度器。
+    /// 对齐 Java 方法: `start`
     pub fn start(&mut self) -> Result<&mut Self, CronError> {
         if self.is_started() {
             return Err(CronError::SchedulerAlreadyStarted);
@@ -953,7 +960,8 @@ impl Scheduler {
         Ok(self)
     }
 
-    /// Stops the scheduler, optionally clearing tasks.
+    /// 中文说明: 停止调度器，可选清除任务。
+    /// 对齐 Java 方法: `stop`
     pub fn stop(&mut self, clear_tasks: bool) -> &mut Self {
         if let Some(worker) = self.worker.take() {
             worker.abort();
@@ -971,6 +979,9 @@ impl Drop for Scheduler {
     }
 }
 
+/// 对齐: `cn.hutool.cron.TaskLauncher`
+/// 中文说明: 执行匹配指定时间戳的所有任务。
+///
 /// Executes every task matching one timestamp.
 #[derive(Debug, Clone)]
 pub struct TaskLauncher {
@@ -981,7 +992,7 @@ pub struct TaskLauncher {
 }
 
 impl TaskLauncher {
-    /// Creates a one-shot launcher.
+    /// 中文说明: 创建一次性任务启动器。
     #[must_use]
     pub fn new(scheduler: &Scheduler, millis: i64) -> Self {
         Self {
@@ -992,7 +1003,8 @@ impl TaskLauncher {
         }
     }
 
-    /// Executes all matching tasks and returns their results.
+    /// 中文说明: 执行所有匹配的任务并返回结果。
+    /// 对齐 Java 方法: `run`
     #[must_use]
     pub fn run(&self) -> Vec<Result<(), CronError>> {
         self.table
@@ -1005,6 +1017,9 @@ impl TaskLauncher {
     }
 }
 
+/// 对齐: `cn.hutool.cron.TaskLauncherManager`
+/// 中文说明: 任务启动器工厂。
+///
 /// Factory for launchers.
 #[derive(Debug, Clone)]
 pub struct TaskLauncherManager {
@@ -1014,7 +1029,7 @@ pub struct TaskLauncherManager {
 }
 
 impl TaskLauncherManager {
-    /// Captures a scheduler's shared resources.
+    /// 中文说明: 捕获调度器的共享资源。
     #[must_use]
     pub fn new(scheduler: &Scheduler) -> Self {
         Self {
@@ -1024,7 +1039,7 @@ impl TaskLauncherManager {
         }
     }
 
-    /// Creates a launcher for one timestamp.
+    /// 中文说明: 为指定时间戳创建启动器。
     #[must_use]
     pub fn launcher(&self, millis: i64) -> TaskLauncher {
         TaskLauncher {
@@ -1036,6 +1051,9 @@ impl TaskLauncherManager {
     }
 }
 
+/// 对齐: `cn.hutool.cron.CronUtil`
+/// 中文说明: 对应 Hutool 静态 `CronUtil` 的拥有式门面。
+///
 /// Owned facade corresponding to Hutool's static `CronUtil` surface.
 #[derive(Debug, Default)]
 pub struct CronUtil {
@@ -1043,30 +1061,33 @@ pub struct CronUtil {
 }
 
 impl CronUtil {
-    /// Creates an isolated facade.
+    /// 中文说明: 创建隔离的门面实例。
     #[must_use]
     pub fn new() -> Self {
         Self::default()
     }
 
-    /// Returns the owned scheduler.
+    /// 中文说明: 返回拥有的调度器引用。
+    /// 对齐 Java 方法: `getScheduler`
     #[must_use]
     pub const fn scheduler(&self) -> &Scheduler {
         &self.scheduler
     }
 
-    /// Returns the owned scheduler mutably.
+    /// 中文说明: 返回拥有的调度器可变引用。
     pub fn scheduler_mut(&mut self) -> &mut Scheduler {
         &mut self.scheduler
     }
 
-    /// Configures second matching before start.
+    /// 中文说明: 启动前配置是否匹配秒字段。
+    /// 对齐 Java 方法: `setMatchSecond`
     pub fn set_match_second(&mut self, value: bool) -> Result<&mut Self, CronError> {
         self.scheduler.set_match_second(value)?;
         Ok(self)
     }
 
-    /// Adds an auto-ID task.
+    /// 中文说明: 添加自动分配 ID 的任务。
+    /// 对齐 Java 方法: `schedule`
     pub fn schedule<T>(&mut self, pattern: &str, task: T) -> Result<String, CronError>
     where
         T: Task,
@@ -1074,7 +1095,8 @@ impl CronUtil {
         self.scheduler.schedule(pattern, task)
     }
 
-    /// Adds an explicit-ID task.
+    /// 中文说明: 添加指定 ID 的任务。
+    /// 对齐 Java 方法: `schedule`
     pub fn schedule_with_id(
         &self,
         id: impl Into<String>,
@@ -1094,7 +1116,8 @@ impl CronUtil {
         Ok(self)
     }
 
-    /// Adds an explicit batch setting.
+    /// 中文说明: 批量添加已解析的调度设置。
+    /// 对齐 Java 方法: `scheduleSetting`
     pub fn schedule_setting(
         &self,
         entries: impl IntoIterator<Item = CronSettingEntry>,
@@ -1103,35 +1126,43 @@ impl CronUtil {
         Ok(self)
     }
 
-    /// Removes a task.
+    /// 中文说明: 移除任务。
+    /// 对齐 Java 方法: `remove`
     pub fn remove(&self, id: &str) -> bool {
         self.scheduler.deschedule_with_status(id)
     }
 
-    /// Replaces a task pattern.
+    /// 中文说明: 替换任务的调度表达式。
+    /// 对齐 Java 方法: `updatePattern`
     pub fn update_pattern(&self, id: &str, pattern: CronPattern) -> bool {
         self.scheduler.update_pattern(id, pattern)
     }
 
-    /// Starts the scheduler.
+    /// 中文说明: 启动调度器。
+    /// 对齐 Java 方法: `start`
     pub fn start(&mut self) -> Result<&mut Self, CronError> {
         self.scheduler.start()?;
         Ok(self)
     }
 
-    /// Restarts without clearing tasks.
+    /// 中文说明: 重启调度器（不清除任务）。
+    /// 对齐 Java 方法: `restart`
     pub fn restart(&mut self) -> Result<&mut Self, CronError> {
         self.scheduler.stop(false).start()?;
         Ok(self)
     }
 
-    /// Stops and clears tasks.
+    /// 中文说明: 停止并清除任务。
+    /// 对齐 Java 方法: `stop`
     pub fn stop(&mut self) -> &mut Self {
         self.scheduler.stop(true);
         self
     }
 }
 
+/// 对齐: `cn.hutool.cron.CronTimer`
+/// 中文说明: 兼容 Hutool `CronTimer` 的轻量拥有的定时器门面。
+///
 /// Thin owned timer facade for compatibility with Hutool's `CronTimer`.
 #[derive(Debug)]
 pub struct CronTimer<'a> {
@@ -1139,17 +1170,19 @@ pub struct CronTimer<'a> {
 }
 
 impl<'a> CronTimer<'a> {
-    /// Creates a timer for a scheduler.
+    /// 中文说明: 为调度器创建定时器。
     pub fn new(scheduler: &'a mut Scheduler) -> Self {
         Self { scheduler }
     }
 
-    /// Starts the scheduler.
+    /// 中文说明: 启动调度器。
+    /// 对齐 Java 方法: `start`
     pub fn run(&mut self) -> Result<(), CronError> {
         self.scheduler.start().map(|_| ())
     }
 
-    /// Stops the scheduler without clearing tasks.
+    /// 中文说明: 停止调度器（不清除任务）。
+    /// 对齐 Java 方法: `stop`
     pub fn stop_timer(&mut self) {
         self.scheduler.stop(false);
     }

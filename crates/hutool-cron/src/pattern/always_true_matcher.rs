@@ -1,5 +1,7 @@
 #![allow(clippy::missing_panics_doc)]
-//! Hutool-aligned cron patterns, builders, parsers, and matchers.
+//! 对齐: `cn.hutool.cron.pattern.matcher.AlwaysTrueMatcher`
+//! 来源: hutool-cron/src/main/java/cn/hutool/cron/pattern/matcher/AlwaysTrueMatcher.java
+//! 中文说明: 匹配所有值的通配字段匹配器。
 
 
 use std::{fmt, str::FromStr};
@@ -11,6 +13,9 @@ use crate::CronError;
 
 use super::part_matcher::PartMatcher;
 
+/// 对齐: `cn.hutool.cron.pattern.matcher.AlwaysTrueMatcher`
+/// 中文说明: 匹配所有值的通配字段匹配器。
+///
 /// Matcher that accepts every value.
 #[derive(Debug, Clone, Copy, Default)]
 pub struct AlwaysTrueMatcher;

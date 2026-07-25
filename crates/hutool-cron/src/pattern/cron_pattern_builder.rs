@@ -1,5 +1,7 @@
 #![allow(clippy::missing_panics_doc)]
-//! Hutool-aligned cron patterns, builders, parsers, and matchers.
+//! 对齐: `cn.hutool.cron.pattern.CronPatternBuilder`
+//! 来源: hutool-cron/src/main/java/cn/hutool/cron/pattern/CronPatternBuilder.java
+//! 中文说明: 增量构建 Hutool 风格 cron 表达式的构建器。
 
 
 use std::{fmt, str::FromStr};
@@ -12,29 +14,33 @@ use crate::CronError;
 use super::cron_pattern::CronPattern;
 use super::part::Part;
 
-/// Incrementally builds a Hutool-style cron expression.
+/// 对齐: `cn.hutool.cron.pattern.CronPatternBuilder`
+/// 中文说明: 增量构建 Hutool 风格 cron 表达式的构建器，
+/// 未设置的秒/年字段在构建时会被忽略（`NullMode.IGNORE`）。
 ///
-/// Unset second/year fields are omitted from [`Self::build`], matching Hutool
-/// `CronPatternBuilder` (`NullMode.IGNORE`).
+/// Incrementally builds a Hutool-style cron expression.
 #[derive(Debug, Clone, Default)]
 pub struct CronPatternBuilder {
     parts: [Option<String>; 7],
 }
 
 impl CronPatternBuilder {
-    /// Creates an empty builder (minute–week default to `*` on build).
+    /// 中文说明: 创建空构建器（分至周字段构建时默认为 `*`）。
+    /// 对齐 Java 方法: `new`
     #[must_use]
     pub fn new() -> Self {
         Self::default()
     }
 
-    /// Alias for [`Self::new`], matching Hutool `CronPatternBuilder.of()`.
+    /// 中文说明: 匹配 Hutool `CronPatternBuilder.of()` 的别名。
+    /// 对齐 Java 方法: `of`
     #[must_use]
     pub fn of() -> Self {
         Self::new()
     }
 
-    /// Sets a comma-separated collection of values.
+    /// 中文说明: 设置逗号分隔的值集合。
+    /// 对齐 Java 方法: `setValues`
     pub fn set_values(&mut self, part: Part, values: &[i32]) -> Result<&mut Self, CronError> {
         if values.is_empty() {
             return Err(CronError::EmptyPartValues(part));
@@ -47,7 +53,8 @@ impl CronPatternBuilder {
         Ok(self)
     }
 
-    /// Sets a value range. When `begin > end`, Hutool wrap notation is kept.
+    /// 中文说明: 设置值范围。当 `begin > end` 时保留 Hutool 回绕表示法。
+    /// 对齐 Java 方法: `setRange`
     pub fn set_range(&mut self, part: Part, begin: i32, end: i32) -> Result<&mut Self, CronError> {
         part.check_value(begin)?;
         part.check_value(end)?;
@@ -55,7 +62,8 @@ impl CronPatternBuilder {
         Ok(self)
     }
 
-    /// Sets a raw field after validating it with the parser engine.
+    /// 中文说明: 设置原始字段值（经解析引擎验证）。
+    /// 对齐 Java 方法: `set`
     pub fn set(&mut self, part: Part, value: impl Into<String>) -> Result<&mut Self, CronError> {
         let value = value.into();
         let mut candidate = self.clone();

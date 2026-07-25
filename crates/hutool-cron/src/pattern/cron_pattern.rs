@@ -1,5 +1,7 @@
 #![allow(clippy::missing_panics_doc)]
-//! Hutool-aligned cron patterns, builders, parsers, and matchers.
+//! 对齐: `cn.hutool.cron.pattern.CronPattern`
+//! 来源: hutool-cron/src/main/java/cn/hutool/cron/pattern/CronPattern.java
+//! 中文说明: Hutool 风格的 cron 表达式，支持 `|` 分隔的多表达式备选。
 
 
 use std::{fmt, str::FromStr};
@@ -12,6 +14,9 @@ use crate::CronError;
 use super::day_of_month_matcher::DayOfMonthMatcher;
 use super::part::Part;
 
+/// 对齐: `cn.hutool.cron.pattern.CronPattern`
+/// 中文说明: Hutool 风格的 cron 表达式，支持 `|` 分隔的多表达式备选。
+///
 /// Hutool-style cron pattern with support for `|` alternatives.
 #[derive(Debug, Clone)]
 pub struct CronPattern {
@@ -23,7 +28,8 @@ pub struct CronPattern {
 }
 
 impl CronPattern {
-    /// Parses a five-, six-, or seven-part expression.
+    /// 中文说明: 解析五段、六段或七段 cron 表达式。
+    /// 对齐 Java 方法: `of`
     pub fn parse(expression: impl Into<String>) -> Result<Self, CronError> {
         let expression = expression.into();
         let alternatives = expression.split('|').map(str::trim).collect::<Vec<_>>();
@@ -51,12 +57,14 @@ impl CronPattern {
         })
     }
 
-    /// Alias matching Hutool's `of` constructor.
+    /// 中文说明: 匹配 Hutool `of` 构造方法的别名。
+    /// 对齐 Java 方法: `of`
     pub fn of(expression: impl Into<String>) -> Result<Self, CronError> {
         Self::parse(expression)
     }
 
-    /// Returns whether the UTC instant matches this pattern.
+    /// 中文说明: 返回指定 UTC 时刻是否匹配此表达式。
+    /// 对齐 Java 方法: `match`
     #[must_use]
     pub fn matches(&self, instant: DateTime<Utc>, match_second: bool) -> bool {
         let instant = if match_second {
@@ -82,7 +90,8 @@ impl CronPattern {
             })
     }
 
-    /// Returns whether a millisecond timestamp matches this pattern.
+    /// 中文说明: 返回毫秒时间戳是否匹配此表达式。
+    /// 对齐 Java 方法: `match`
     pub fn matches_millis(&self, millis: i64, match_second: bool) -> Result<bool, CronError> {
         let Some(instant) = Utc.timestamp_millis_opt(millis).single() else {
             return Err(CronError::InvalidTimestamp);
@@ -90,7 +99,8 @@ impl CronPattern {
         Ok(self.matches(instant, match_second))
     }
 
-    /// Returns the first matching instant at or after `start`.
+    /// 中文说明: 返回 `start` 时刻起（含）的首个匹配时刻。
+    /// 对齐 Java 方法: `nextMatch`
     #[must_use]
     pub fn next_match(&self, start: DateTime<Utc>, match_second: bool) -> Option<DateTime<Utc>> {
         if self.matches(start, match_second) {
@@ -100,7 +110,8 @@ impl CronPattern {
         }
     }
 
-    /// Returns the first matching instant strictly after `start`.
+    /// 中文说明: 返回 `start` 时刻之后（不含）的首个匹配时刻。
+    /// 对齐 Java 方法: `nextMatchAfter`
     #[must_use]
     pub fn next_match_after(
         &self,

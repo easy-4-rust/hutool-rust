@@ -24,12 +24,14 @@ pub trait JSONSupport: Serialize + DeserializeOwned + Sized {
         Ok(serde_json::to_value(self)?)
     }
 
-    /// Serializes this value compactly.
+    /// 中文说明: 将当前值序列化为紧凑 JSON 字符串。
+    /// 对齐 Java 方法: `toString`
     fn to_json_string(&self) -> Result<String> {
         crate::to_string(self)
     }
 
-    /// Serializes this value with indentation.
+    /// 中文说明: 将当前值序列化为带缩进的 JSON 字符串。
+    /// 对齐 Java 方法: `toStringPretty`
     fn to_pretty_string(&self) -> Result<String> {
         crate::to_string_pretty(self)
     }

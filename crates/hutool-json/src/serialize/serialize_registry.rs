@@ -11,6 +11,9 @@ use crate::{JsonError, Result};
 use super::json_deserializer::JSONDeserializer;
 use super::json_serializer::JSONSerializer;
 
+/// 对齐: `cn.hutool.json.JSONConverter`
+/// 中文说明: 显式拥有的自定义序列化映射注册表。
+///
 /// Explicitly owned custom serialization mapping.
 #[derive(Clone, Default)]
 pub struct SerializeRegistry {
@@ -29,13 +32,15 @@ impl std::fmt::Debug for SerializeRegistry {
 }
 
 impl SerializeRegistry {
-    /// Creates an empty mapping.
+    /// 中文说明: 创建空的序列化映射注册表。
+    /// 对齐 Java 方法: `new SerializeRegistry`
     #[must_use]
     pub fn new() -> Self {
         Self::default()
     }
 
-    /// Registers or replaces a typed serializer.
+    /// 中文说明: 注册或替换类型化的序列化器。
+    /// 对齐 Java 方法: `putSerializer`
     pub fn put_serializer<T: Any + Send + Sync>(
         &mut self,
         serializer: impl JSONSerializer<T> + 'static,
@@ -53,7 +58,8 @@ impl SerializeRegistry {
         self
     }
 
-    /// Registers or replaces a typed deserializer.
+    /// 中文说明: 注册或替换类型化的反序列化器。
+    /// 对齐 Java 方法: `putDeserializer`
     pub fn put_deserializer<T: Any + Send + Sync>(
         &mut self,
         deserializer: impl JSONDeserializer<T> + 'static,
@@ -65,14 +71,16 @@ impl SerializeRegistry {
         self
     }
 
-    /// Serializes a value using its registered mapping.
+    /// 中文说明: 使用已注册的映射序列化值。
+    /// 对齐 Java 方法: `serialize`
     pub fn serialize<T: Any + Send + Sync>(&self, value: &T) -> Result<Value> {
         self.serializers
             .get(&TypeId::of::<T>())
             .ok_or(JsonError::Mapping("serializer not registered"))?(value)
     }
 
-    /// Deserializes a value using its registered mapping.
+    /// 中文说明: 使用已注册的映射反序列化值。
+    /// 对齐 Java 方法: `deserialize`
     pub fn deserialize<T: Any + Send + Sync>(&self, value: &Value) -> Result<T> {
         Ok(*self
             .deserializers
@@ -82,13 +90,15 @@ impl SerializeRegistry {
         .map_err(|_| JsonError::Mapping("deserializer type mismatch"))?)
     }
 
-    /// Returns whether no mappings are registered.
+    /// 中文说明: 判断是否没有注册任何映射。
+    /// 对齐 Java 方法: `isEmpty`
     #[must_use]
     pub fn is_empty(&self) -> bool {
         self.serializers.is_empty() && self.deserializers.is_empty()
     }
 
-    /// Removes all mappings.
+    /// 中文说明: 清除所有已注册的映射。
+    /// 对齐 Java 方法: `clear`
     pub fn clear(&mut self) {
         self.serializers.clear();
         self.deserializers.clear();

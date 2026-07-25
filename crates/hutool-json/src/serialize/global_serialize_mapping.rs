@@ -10,11 +10,15 @@ use crate::{JsonError, Result};
 
 use super::serialize_registry::SerializeRegistry;
 
+/// 对齐: `cn.hutool.json.GlobalSerializeMapping`
+/// 中文说明: Hutool 全局序列化映射的兼容访问接口。
+///
 /// Explicit compatibility access to Hutool's global serialization mapping.
 pub struct GlobalSerializeMapping;
 
 impl GlobalSerializeMapping {
-    /// Returns a snapshot sharing registered closures.
+    /// 中文说明: 返回共享已注册闭包的快照。
+    /// 对齐 Java 方法: `get`
     ///
     /// # Panics
     ///
@@ -27,7 +31,8 @@ impl GlobalSerializeMapping {
             .clone()
     }
 
-    /// Replaces the compatibility global and returns its previous mapping.
+    /// 中文说明: 替换兼容全局映射并返回之前的映射。
+    /// 对齐 Java 方法: `set`
     ///
     /// # Panics
     ///
@@ -41,7 +46,8 @@ impl GlobalSerializeMapping {
         )
     }
 
-    /// Restores an empty global mapping.
+    /// 中文说明: 恢复为空的全局映射。
+    /// 对齐 Java 方法: `reset`
     pub fn reset() -> SerializeRegistry {
         Self::set(SerializeRegistry::new())
     }

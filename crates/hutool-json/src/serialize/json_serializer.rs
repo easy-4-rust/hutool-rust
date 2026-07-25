@@ -8,9 +8,13 @@ use serde_json::Value;
 
 use crate::{JsonError, Result};
 
+/// 对齐: `cn.hutool.json.JSONSerializer`
+/// 中文说明: 类型化的自定义序列化器 trait。
+///
 /// Typed custom serializer contract.
 pub trait JSONSerializer<T>: Send + Sync {
-    /// Serializes one value.
+    /// 中文说明: 序列化一个值。
+    /// 对齐 Java 方法: `serialize`
     fn serialize(&self, value: &T) -> Result<Value>;
 }
 

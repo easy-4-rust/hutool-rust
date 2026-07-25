@@ -1,5 +1,7 @@
 #![allow(clippy::missing_panics_doc)]
-//! Hutool-aligned cron patterns, builders, parsers, and matchers.
+//! 对齐: `cn.hutool.cron.pattern.matcher.BoolArrayMatcher`
+//! 来源: hutool-cron/src/main/java/cn/hutool/cron/pattern/matcher/BoolArrayMatcher.java
+//! 中文说明: 基于有序有限值集合的字段匹配器，适用于大多数 cron 字段。
 
 
 use std::{fmt, str::FromStr};
@@ -11,6 +13,9 @@ use crate::CronError;
 
 use super::part_matcher::PartMatcher;
 
+/// 对齐: `cn.hutool.cron.pattern.matcher.BoolArrayMatcher`
+/// 中文说明: 基于有序有限值集合的字段匹配器，适用于大多数 cron 字段。
+///
 /// Sorted finite-value matcher used for most cron fields.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BoolArrayMatcher {
@@ -18,7 +23,8 @@ pub struct BoolArrayMatcher {
 }
 
 impl BoolArrayMatcher {
-    /// Creates a matcher from a non-empty value collection.
+    /// 中文说明: 从非空值集合创建匹配器。
+    /// 对齐 Java 方法: `new`
     pub fn new(values: impl IntoIterator<Item = i32>) -> Result<Self, CronError> {
         Self::from_values(values.into_iter().collect())
     }
@@ -32,13 +38,15 @@ impl BoolArrayMatcher {
         Ok(Self { values })
     }
 
-    /// Returns the minimum represented value.
+    /// 中文说明: 返回最小匹配值。
+    /// 对齐 Java 方法: `getMinValue`
     #[must_use]
     pub fn min_value(&self) -> i32 {
         self.values[0]
     }
 
-    /// Returns the maximum represented value.
+    /// 中文说明: 返回最大匹配值。
+    /// 对齐 Java 方法: `getMaxValue`
     #[must_use]
     pub fn max_value(&self) -> i32 {
         self.values[self.values.len() - 1]

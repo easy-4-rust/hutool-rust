@@ -1,5 +1,7 @@
 #![allow(clippy::missing_panics_doc)]
-//! Hutool-aligned cron patterns, builders, parsers, and matchers.
+//! 对齐: `cn.hutool.cron.pattern.Part`
+//! 来源: hutool-cron/src/main/java/cn/hutool/cron/pattern/Part.java
+//! 中文说明: Cron 表达式字段枚举，定义秒、分、时、日、月、周、年各字段的取值范围。
 
 
 use std::{fmt, str::FromStr};
@@ -9,6 +11,9 @@ use cron::Schedule;
 
 use crate::CronError;
 
+/// 对齐: `cn.hutool.cron.pattern.Part`
+/// 中文说明: Hutool cron 表达式中的字段类型。
+///
 /// A field in a Hutool cron expression.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Part {
@@ -29,7 +34,8 @@ pub enum Part {
 }
 
 impl Part {
-    /// Returns the Hutool/Calendar field index.
+    /// 中文说明: 返回 Hutool/Calendar 字段索引。
+    /// 对齐 Java 方法: `getCalendarField`
     #[must_use]
     pub const fn calendar_field(self) -> usize {
         match self {
@@ -43,7 +49,8 @@ impl Part {
         }
     }
 
-    /// Returns the inclusive minimum.
+    /// 中文说明: 返回字段的最小值（含）。
+    /// 对齐 Java 方法: `getMin`
     #[must_use]
     pub const fn min(self) -> i32 {
         match self {
@@ -53,7 +60,8 @@ impl Part {
         }
     }
 
-    /// Returns the inclusive maximum.
+    /// 中文说明: 返回字段的最大值（含）。
+    /// 对齐 Java 方法: `getMax`
     #[must_use]
     pub const fn max(self) -> i32 {
         match self {
@@ -66,7 +74,8 @@ impl Part {
         }
     }
 
-    /// Validates and returns a field value.
+    /// 中文说明: 验证并返回字段值。
+    /// 对齐 Java 方法: `checkValue`
     pub fn check_value(self, value: i32) -> Result<i32, CronError> {
         if (self.min()..=self.max()).contains(&value) {
             Ok(value)
@@ -75,7 +84,8 @@ impl Part {
         }
     }
 
-    /// Resolves a field by its zero-based expression index.
+    /// 中文说明: 按零基索引解析字段。
+    /// 对齐 Java 方法: `of`
     pub fn of(index: usize) -> Result<Self, CronError> {
         [
             Self::Second,

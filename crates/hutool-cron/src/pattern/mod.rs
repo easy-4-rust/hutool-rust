@@ -1,5 +1,8 @@
 #![allow(clippy::missing_panics_doc)]
-//! Hutool-aligned cron patterns, builders, parsers, and matchers.
+//! 对齐: `cn.hutool.cron.pattern`
+//! 来源: hutool-cron/src/main/java/cn/hutool/cron/pattern/
+//! 中文说明: Hutool 定时任务表达式解析模块，包含表达式构建器、
+//! 解析器、字段匹配器等核心组件。
 
 
 use std::{fmt, str::FromStr};
