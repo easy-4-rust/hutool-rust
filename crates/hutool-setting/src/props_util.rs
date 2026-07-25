@@ -1,8 +1,17 @@
+//! 对齐: `cn.hutool.setting.PropsUtil`
+//! 来源: hutool-setting/src/main/java/cn/hutool/setting/PropsUtil.java
+//! 中文说明: 属性文件加载工具类，提供按名称加载、查找首个存在的文件、获取系统属性等便捷方法。
+
 use crate::SettingError;
 use std::path::{Path, PathBuf};
 
 use super::props::Props;
 
+/// 属性文件加载工具类，对应 Hutool 的 `PropsUtil`。
+///
+/// 对齐 Java 类: `cn.hutool.setting.PropsUtil`
+/// 来源: hutool-setting/src/main/java/cn/hutool/setting/PropsUtil.java
+///
 /// Properties lookup helpers.
 pub struct PropsUtil;
 impl PropsUtil {

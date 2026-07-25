@@ -273,25 +273,27 @@ impl OsInfo {
     }
 }
 
-/// Current-user and locale properties.
+/// 对齐: `cn.hutool.system.UserInfo`
+/// 中文说明: 当前用户和区域设置属性，包含用户名、主目录、工作目录、临时目录及语言国家信息
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct UserInfo {
-    /// User name.
+    /// 中文说明: 用户名
     pub name: Option<String>,
-    /// Home directory.
+    /// 中文说明: 用户主目录
     pub home_dir: Option<PathBuf>,
-    /// Current working directory.
+    /// 中文说明: 当前工作目录
     pub current_dir: Option<PathBuf>,
-    /// Temporary directory.
+    /// 中文说明: 临时目录
     pub temp_dir: PathBuf,
-    /// ISO-like language component.
+    /// 中文说明: ISO 风格的语言部分
     pub language: Option<String>,
-    /// ISO-like country component.
+    /// 中文说明: ISO 风格的国家部分
     pub country: Option<String>,
 }
 
 impl UserInfo {
-    /// Creates user information from explicit portable inputs.
+    /// 中文说明: 从显式便携式输入创建用户信息
+    /// 对齐 Java 方法: `UserInfo` 构造逻辑
     #[must_use]
     pub fn from_parts(
         name: Option<String>,
@@ -315,7 +317,8 @@ impl UserInfo {
         }
     }
 
-    /// Collects user, path, and locale properties.
+    /// 中文说明: 采集用户、路径和区域设置属性
+    /// 对齐 Java 方法: `SystemUtil.getUserInfo`
     #[must_use]
     pub fn collect() -> Self {
         let locale = option_or_default(first_env(env::var("LC_ALL"), env::var("LANG")));
@@ -356,21 +359,23 @@ fn non_empty(value: &str) -> Option<String> {
     (!value.is_empty()).then(|| value.to_owned())
 }
 
-/// Rust process/runtime memory counterpart of Hutool's `RuntimeInfo`.
+/// 对齐: `cn.hutool.system.RuntimeInfo`
+/// 中文说明: Rust 进程/运行时内存信息，对应 Hutool 的 `RuntimeInfo`，包含最大内存、总内存、可用内存和进程内存
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct RuntimeInfo {
-    /// Maximum usable memory (physical memory on native Rust).
+    /// 中文说明: 最大可用内存（原生 Rust 为物理内存总量）
     pub max_memory: u64,
-    /// Total physical memory.
+    /// 中文说明: 总物理内存
     pub total_memory: u64,
-    /// Available physical memory.
+    /// 中文说明: 可用物理内存
     pub free_memory: u64,
-    /// Current process resident memory.
+    /// 中文说明: 当前进程常驻内存
     pub process_memory: u64,
 }
 
 impl RuntimeInfo {
-    /// Collects runtime memory counters.
+    /// 中文说明: 采集运行时内存计数器
+    /// 对齐 Java 方法: `RuntimeInfo` 构造/初始化逻辑
     #[must_use]
     pub fn collect() -> Self {
         let memory = OshiUtil::memory();
@@ -383,26 +388,29 @@ impl RuntimeInfo {
         }
     }
 
-    /// Returns memory usable without exceeding the native host limit.
+    /// 中文说明: 返回不超过原生主机限制的可用内存
+    /// 对齐 Java 方法: `RuntimeInfo.getUsableMemory`
     #[must_use]
     pub fn usable_memory(self) -> u64 {
         self.free_memory.saturating_add(self.process_memory)
     }
 }
 
-/// Parsed Java version/vendor properties when a Java installation is configured.
+/// 对齐: `cn.hutool.system.JavaInfo`
+/// 中文说明: 解析后的 Java 版本/供应商属性，当配置了 Java 安装时可用
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct JavaInfo {
-    /// Version string.
+    /// 中文说明: 版本字符串
     pub version: Option<String>,
-    /// Vendor name.
+    /// 中文说明: 供应商名称
     pub vendor: Option<String>,
-    /// Vendor URL.
+    /// 中文说明: 供应商 URL
     pub vendor_url: Option<String>,
 }
 
 impl JavaInfo {
-    /// Creates explicit Java properties.
+    /// 中文说明: 创建显式的 Java 属性
+    /// 对齐 Java 方法: `JavaInfo` 构造函数
     #[must_use]
     pub fn new(
         version: Option<String>,
@@ -416,7 +424,8 @@ impl JavaInfo {
         }
     }
 
-    /// Detects opt-in Java environment properties without spawning a JVM.
+    /// 中文说明: 检测可选的 Java 环境属性，无需启动 JVM
+    /// 对齐 Java 方法: `JavaInfo` 的静态检测逻辑
     #[must_use]
     pub fn detect() -> Self {
         Self::new(
@@ -426,7 +435,8 @@ impl JavaInfo {
         )
     }
 
-    /// Returns a decimal representation of the leading version components.
+    /// 中文说明: 返回主要版本组件的十进制表示（如 `1.8`）
+    /// 对齐 Java 方法: `JavaInfo.getVersionFloat`
     #[must_use]
     pub fn version_float(&self) -> Option<f32> {
         let (major, minor) = self.version_components()?;
@@ -448,20 +458,23 @@ impl JavaInfo {
         Some((major, minor))
     }
 
-    /// Returns the Java feature version (`1.8` becomes `8`).
+    /// 中文说明: 返回 Java 特性版本号（`1.8` 变为 `8`）
+    /// 对齐 Java 方法: `JavaInfo.getVersionInt`
     #[must_use]
     pub fn version_int(&self) -> Option<u32> {
         let (major, minor) = self.version_components()?;
         if major == 1 { Some(minor) } else { Some(major) }
     }
 
-    /// Checks an exact feature version.
+    /// 中文说明: 检查是否为指定的特性版本
+    /// 对齐 Java 方法: `JavaInfo.isVersion`
     #[must_use]
     pub fn is_version(&self, version: u32) -> bool {
         self.version_int() == Some(version)
     }
 
-    /// Checks a minimum feature version.
+    /// 中文说明: 检查是否至少为指定的特性版本
+    /// 对齐 Java 方法: `JavaInfo.isVersionAtLeast`
     #[must_use]
     pub fn is_version_at_least(&self, version: u32) -> bool {
         self.version_int().is_some_and(|current| current >= version)
@@ -481,16 +494,22 @@ macro_rules! property_info {
     };
 }
 
+/// 对齐: `cn.hutool.system.JavaSpecInfo`
+/// 中文说明: Java 规范属性快照，包含规范名称、版本和供应商
 property_info!(JavaSpecInfo {
     name,
     version,
     vendor
 });
+/// 对齐: `cn.hutool.system.JvmSpecInfo`
+/// 中文说明: JVM 规范属性快照，包含规范名称、版本和供应商
 property_info!(JvmSpecInfo {
     name,
     version,
     vendor
 });
+/// 对齐: `cn.hutool.system.JvmInfo`
+/// 中文说明: JVM 属性快照，包含虚拟机名称、版本、供应商和附加信息
 property_info!(JvmInfo {
     name,
     version,

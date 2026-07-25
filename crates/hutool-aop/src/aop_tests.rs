@@ -1,4 +1,6 @@
-//! End-to-end tests for Hutool-aligned AOP semantics.
+//! 对齐: Hutool AOP 模块端到端测试
+//! 来源: hutool-aop/src/test/java/cn/hutool/aop/
+//! 中文说明: AOP 模块的端到端测试，验证代理、拦截器、切面及工厂的对齐语义。
 
 use crate::{
     BeforeAfter, HandlerProxy, Interceptor, InterceptorChain, InvocationHandler, Method,

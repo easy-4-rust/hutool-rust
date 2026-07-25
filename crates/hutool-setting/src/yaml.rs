@@ -1,3 +1,7 @@
+//! 对齐: `cn.hutool.setting.dialect.YamlProps` (YAML 工具)
+//! 来源: hutool-setting/src/main/java/cn/hutool/setting/dialect/YamlProps.java
+//! 中文说明: 安全的 YAML 解析与序列化工具类，基于 Serde 实现，支持文件路径和 Reader/Writer。
+
 use crate::{SettingError, checked_path};
 use serde::{Serialize, de::DeserializeOwned};
 use serde_yaml_ng::Value;
@@ -6,6 +10,11 @@ use std::{
     path::Path,
 };
 
+/// 安全的 YAML 解析与序列化工具类，对应 Hutool 的 `YamlProps`。
+///
+/// 对齐 Java 类: `cn.hutool.setting.dialect.YamlProps`
+/// 来源: hutool-setting/src/main/java/cn/hutool/setting/dialect/YamlProps.java
+///
 /// Safe YAML parsing and dumping helpers backed by Serde.
 pub struct YamlUtil;
 impl YamlUtil {

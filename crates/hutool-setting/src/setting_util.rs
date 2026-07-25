@@ -1,6 +1,15 @@
+//! 对齐: `cn.hutool.setting.SettingUtil` (静态工具)
+//! 来源: hutool-setting/src/main/java/cn/hutool/setting/SettingUtil.java
+//! 中文说明: 基于路径的 Setting 便捷加载工具，支持自动补全扩展名和查找首个存在的文件。
+
 use crate::{Setting, SettingError};
 use std::path::{Path, PathBuf};
 
+/// 基于路径的 Setting 便捷加载工具，对应 Hutool 的 `SettingUtil`。
+///
+/// 对齐 Java 类: `cn.hutool.setting.SettingUtil`
+/// 来源: hutool-setting/src/main/java/cn/hutool/setting/SettingUtil.java
+///
 /// Path-based convenience operations.
 pub struct SettingUtil;
 impl SettingUtil {

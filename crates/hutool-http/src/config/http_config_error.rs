@@ -1,4 +1,6 @@
-//! Hutool-aligned HTTP configuration backed by Reqwest and Rustls.
+//! 对齐: `cn.hutool.http.HttpConfig` (错误类型部分)
+//! 来源: hutool-http/src/main/java/cn/hutool/http/HttpConfig.java
+//! 中文说明: HTTP配置构建错误类型，处理超时、代理等配置异常
 
 use reqwest::{Method, StatusCode, Url, header::HeaderMap, tls::Version};
 use std::{fmt, sync::Arc, time::Duration};

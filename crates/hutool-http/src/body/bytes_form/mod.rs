@@ -1,4 +1,6 @@
-//! Byte / form / resource request bodies aligned with Hutool `cn.hutool.http.body`.
+//! 对齐: `cn.hutool.http.body`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/body/
+//! 中文说明: 请求体类型模块，包含字节体、表单体和资源体
 
 use crate::http_util::HttpUtil;
 use indexmap::IndexMap;

@@ -121,6 +121,9 @@ impl InvokeRegistry {
     }
 }
 
+/// 对齐: `cn.hutool.cron.CronInvoke`
+/// 中文说明: 通过注入的注册表解析的命名调用任务。
+///
 /// A named invocation resolved through an injected registry.
 #[derive(Clone)]
 pub struct InvokeTask {
@@ -138,7 +141,8 @@ impl fmt::Debug for InvokeTask {
 }
 
 impl InvokeTask {
-    /// Resolves a Hutool-style `type::method` name without reflection.
+    /// 中文说明: 解析 Hutool 风格的 `type::method` 名称（无需反射）。
+    /// 对齐 Java 方法: `CronInvoke.invoke`
     pub fn new(name: impl Into<String>, registry: &InvokeRegistry) -> Result<Self, CronError> {
         let name = name.into();
         let task = registry
@@ -147,7 +151,7 @@ impl InvokeTask {
         Ok(Self { name, task })
     }
 
-    /// Returns the registered method name.
+    /// 中文说明: 返回已注册的方法名称。
     #[must_use]
     pub fn name(&self) -> &str {
         &self.name
@@ -160,6 +164,9 @@ impl Task for InvokeTask {
     }
 }
 
+/// 对齐: `cn.hutool.cron.CronTask`
+/// 中文说明: 带有稳定 ID 和可变调度表达式的定时任务。
+///
 /// A task together with its stable ID and mutable schedule.
 pub struct CronTask {
     id: String,
@@ -181,7 +188,8 @@ impl fmt::Debug for CronTask {
 }
 
 impl CronTask {
-    /// Creates a scheduled task.
+    /// 中文说明: 创建带 ID 和调度表达式的定时任务。
+    /// 对齐 Java 方法: `new`
     #[must_use]
     pub fn new(id: impl Into<String>, pattern: CronPattern, task: Arc<dyn Task>) -> Self {
         Self {
@@ -191,36 +199,43 @@ impl CronTask {
         }
     }
 
-    /// Executes the raw task.
+    /// 中文说明: 执行底层任务。
+    /// 对齐 Java 方法: `execute`
     pub fn execute(&self) -> Result<(), CronError> {
         self.task.execute()
     }
 
-    /// Returns the task ID.
+    /// 中文说明: 返回任务 ID。
+    /// 对齐 Java 方法: `getId`
     #[must_use]
     pub fn id(&self) -> &str {
         &self.id
     }
 
-    /// Returns a snapshot of the current pattern.
+    /// 中文说明: 返回当前调度表达式的快照。
+    /// 对齐 Java 方法: `getPattern`
     #[must_use]
     pub fn pattern(&self) -> CronPattern {
         self.pattern.read().expect("cron pattern poisoned").clone()
     }
 
-    /// Replaces the schedule.
+    /// 中文说明: 替换调度表达式。
+    /// 对齐 Java 方法: `setPattern`
     pub fn set_pattern(&self, pattern: CronPattern) -> &Self {
         *self.pattern.write().expect("cron pattern poisoned") = pattern;
         self
     }
 
-    /// Returns the underlying task.
+    /// 中文说明: 返回底层任务的共享引用。
     #[must_use]
     pub fn raw(&self) -> Arc<dyn Task> {
         Arc::clone(&self.task)
     }
 }
 
+/// 对齐: `cn.hutool.cron.TaskTable`
+/// 中文说明: 稳定的按插入顺序排列的定时任务表。
+///
 /// Stable insertion-ordered scheduled-task table.
 #[derive(Default)]
 pub struct TaskTable {
@@ -246,7 +261,7 @@ impl fmt::Display for TaskTable {
 }
 
 impl TaskTable {
-    /// Creates an empty table.
+    /// 中文说明: 创建空任务表。
     #[must_use]
     pub const fn new() -> Self {
         Self {

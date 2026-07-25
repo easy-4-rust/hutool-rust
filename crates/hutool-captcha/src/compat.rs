@@ -1,4 +1,8 @@
 //! Hutool-named raster CAPTCHA facade.
+//!
+//! 对齐: `cn.hutool.captcha` (Hutool 验证码核心实现)
+//! 来源: hutool-captcha/src/main/java/cn/hutool/captcha/
+//! 中文说明: Hutool 风格的光栅验证码门面，包含 LineCaptcha、CircleCaptcha、ShearCaptcha、GifCaptcha 等实现
 
 use std::fmt;
 use std::fs;
@@ -18,6 +22,9 @@ use crate::{CaptchaError, CodeGenerator, RenderedCaptcha, constant_time_ascii_ca
 const HUTOOL_ALPHABET: &[u8] = b"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 /// Shared state used by Hutool-style random generators.
+///
+/// 对齐: `cn.hutool.captcha.generator.RandomGenerator` (基类)
+/// 中文说明: Hutool 风格随机生成器的共享状态，管理字母表和生成长度
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct AbstractGenerator {
     alphabet: Vec<u8>,
@@ -52,6 +59,9 @@ impl AbstractGenerator {
 }
 
 /// Hutool-compatible random-character generator.
+///
+/// 对齐: `cn.hutool.captcha.generator.RandomGenerator`
+/// 中文说明: Hutool 兼容的随机字符验证码生成器
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct RandomGenerator(AbstractGenerator);
 
@@ -97,6 +107,9 @@ impl Default for RandomGenerator {
 }
 
 /// Arithmetic CAPTCHA generator using addition, subtraction, and multiplication.
+///
+/// 对齐: `cn.hutool.captcha.generator.MathGenerator`
+/// 中文说明: 算术验证码生成器，支持加法、减法和乘法运算
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct MathGenerator {
     number_length: u8,
@@ -181,10 +194,16 @@ impl CodeGenerator for MathGenerator {
 }
 
 /// RGBA color used by the compatibility renderer.
+///
+/// 对齐: Rust 扩展，对应 Hutool 中的颜色配置
+/// 中文说明: 兼容渲染器使用的 RGBA 颜色
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct CaptchaColor(pub [u8; 4]);
 
 /// Bitmap font scale used by the compatibility renderer.
+///
+/// 对齐: Rust 扩展，对应 Hutool 中的字体配置
+/// 中文说明: 兼容渲染器使用的位图字体缩放
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct CaptchaFont {
     /// Integer scale applied to the embedded 8x8 glyphs.
@@ -192,6 +211,9 @@ pub struct CaptchaFont {
 }
 
 /// Stroke width used for interference elements.
+///
+/// 对齐: Rust 扩展，对应 Hutool 中的干扰线配置
+/// 中文说明: 干扰元素使用的笔触宽度
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct CaptchaStroke {
     /// Width in pixels.
@@ -207,6 +229,9 @@ enum CaptchaKind {
 }
 
 /// Common mutable CAPTCHA state corresponding to Hutool's `AbstractCaptcha`.
+///
+/// 对齐: `cn.hutool.captcha.AbstractCaptcha`
+/// 中文说明: Hutool 的 AbstractCaptcha 对应的通用可变验证码状态
 pub struct AbstractCaptcha {
     width: u16,
     height: u16,
@@ -540,6 +565,9 @@ impl AbstractCaptcha {
 }
 
 /// Common operations exposed by all Hutool-style CAPTCHA variants.
+///
+/// 对齐: `cn.hutool.captcha.ICaptcha`
+/// 中文说明: 所有 Hutool 风格验证码变体的通用操作接口
 pub trait ICaptcha {
     /// Generates a fresh challenge.
     fn create_code(&mut self) -> Result<(), CaptchaError>;
@@ -570,8 +598,11 @@ impl ICaptcha for AbstractCaptcha {
 }
 
 macro_rules! captcha_type {
-    ($name:ident, $kind:expr, $default_interference:expr) => {
+    ($name:ident, $kind:expr, $default_interference:expr, $java_class:expr) => {
         #[doc = concat!("Hutool-compatible `", stringify!($name), "`.")]
+        #[doc = ""]
+        #[doc = concat!("对齐: `", $java_class, "`")]
+        /// 中文说明: Hutool 兼容的验证码类型
         #[derive(Debug)]
         pub struct $name(AbstractCaptcha);
 
@@ -638,10 +669,10 @@ macro_rules! captcha_type {
     };
 }
 
-captcha_type!(LineCaptcha, CaptchaKind::Line, 150);
-captcha_type!(CircleCaptcha, CaptchaKind::Circle, 15);
-captcha_type!(ShearCaptcha, CaptchaKind::Shear, 4);
-captcha_type!(GifCaptcha, CaptchaKind::Gif, 10);
+captcha_type!(LineCaptcha, CaptchaKind::Line, 150, "cn.hutool.captcha.LineCaptcha");
+captcha_type!(CircleCaptcha, CaptchaKind::Circle, 15, "cn.hutool.captcha.CircleCaptcha");
+captcha_type!(ShearCaptcha, CaptchaKind::Shear, 4, "cn.hutool.captcha.ShearCaptcha");
+captcha_type!(GifCaptcha, CaptchaKind::Gif, 10, "cn.hutool.captcha.GifCaptcha");
 
 impl ShearCaptcha {
     /// Creates a shear CAPTCHA with the default line thickness.
@@ -730,6 +761,9 @@ impl GifCaptcha {
 }
 
 /// Hutool-named factory facade.
+///
+/// 对齐: `cn.hutool.captcha.CaptchaUtil`
+/// 中文说明: Hutool 风格的验证码工厂门面类，提供各种验证码的便捷创建方法
 pub struct CaptchaUtil;
 
 impl CaptchaUtil {

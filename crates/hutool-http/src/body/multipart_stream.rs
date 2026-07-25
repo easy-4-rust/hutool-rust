@@ -1,4 +1,6 @@
-//! Incremental multipart writer aligned with Hutool `MultipartOutputStream`.
+//! 对齐: `cn.hutool.http.MultipartOutputStream`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/MultipartOutputStream.java
+//! 中文说明: 流式multipart/form-data写入器，增量写入多部分请求体
 
 use crate::DEFAULT_BOUNDARY;
 use std::io::{self, Write};

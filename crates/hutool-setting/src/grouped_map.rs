@@ -1,5 +1,14 @@
+//! 对齐: `cn.hutool.setting.GroupedMap` (分组有序映射)
+//! 来源: hutool-setting/src/main/java/cn/hutool/setting/GroupedMap.java
+//! 中文说明: 按分组分区的插入有序映射，是 Setting 内部的核心数据结构。
+
 use indexmap::IndexMap;
 
+/// 按分组分区的插入有序键值对映射，对应 Hutool 的 `GroupedMap`。
+///
+/// 对齐 Java 类: `cn.hutool.setting.GroupedMap`
+/// 来源: hutool-setting/src/main/java/cn/hutool/setting/GroupedMap.java
+///
 /// Insertion-ordered values partitioned by group.
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct GroupedMap(IndexMap<String, IndexMap<String, String>>);

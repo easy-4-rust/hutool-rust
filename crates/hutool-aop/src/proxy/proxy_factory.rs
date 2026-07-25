@@ -1,4 +1,6 @@
-//! Proxy factories and the Hutool-aligned `ProxyUtil` facade.
+//! 对齐: `cn.hutool.aop.ProxyFactory`
+//! 来源: hutool-aop/src/main/java/cn/hutool/aop/ProxyFactory.java
+//! 中文说明: 代理工厂，选择并构建类型化的切面代理实例。
 
 use crate::{
     HandlerProxy, Method,
@@ -10,12 +12,9 @@ use std::{fmt, sync::Arc};
 use super::proxy::Proxy;
 use super::proxy_backend::ProxyBackend;
 
-/// 选择并构建类型化的切面代理。
-///
-/// 对齐 Java 类: `cn.hutool.aop.ProxyFactory`
+/// 对齐: `cn.hutool.aop.ProxyFactory`
 /// 来源: hutool-aop/src/main/java/cn/hutool/aop/ProxyFactory.java
-///
-/// 提供创建 AOP 代理实例的工厂方法。
+/// 中文说明: 选择并构建类型化的切面代理，提供创建 AOP 代理实例的工厂方法。
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
 pub struct ProxyFactory {
     backend: ProxyBackend,

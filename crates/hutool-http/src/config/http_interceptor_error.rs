@@ -1,4 +1,6 @@
-//! Hutool-aligned HTTP configuration backed by Reqwest and Rustls.
+//! 对齐: `cn.hutool.http.interceptor.HttpInterceptorException`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/interceptor/HttpInterceptorException.java
+//! 中文说明: HTTP拦截器异常类型，拦截器拒绝操作时抛出
 
 use reqwest::{Method, StatusCode, Url, header::HeaderMap, tls::Version};
 use std::{fmt, sync::Arc, time::Duration};

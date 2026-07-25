@@ -1,4 +1,6 @@
-//! Hutool-aligned HTTP configuration backed by Reqwest and Rustls.
+//! 对齐: `cn.hutool.http.HttpResponseContext`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/HttpResponseContext.java
+//! 中文说明: 响应拦截器上下文，暴露可变的响应状态码和头部信息
 
 use reqwest::{Method, StatusCode, Url, header::HeaderMap, tls::Version};
 use std::{fmt, sync::Arc, time::Duration};

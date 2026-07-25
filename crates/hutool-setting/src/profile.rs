@@ -1,8 +1,18 @@
+//! 对齐: `cn.hutool.setting.GroupedProfile` (配置档案)
+//! 来源: hutool-setting/src/main/java/cn/hutool/setting/GroupedProfile.java
+//! 中文说明: 显式持有缓存的配置档案，按 profile 名称分目录加载和缓存 Setting 文件。
+
 use crate::{DEFAULT_ENCODING, Setting, SettingError};
 use encoding_rs::Encoding;
 use indexmap::IndexMap;
 use std::path::{Path, PathBuf};
 
+/// 显式持有缓存的配置档案，对应 Hutool 的 `GroupedProfile`。
+///
+/// 对齐 Java 类: `cn.hutool.setting.GroupedProfile`
+/// 来源: hutool-setting/src/main/java/cn/hutool/setting/GroupedProfile.java
+///
+/// 按 profile 名称分目录加载和缓存 Setting 文件。
 /// Explicit, cache-owning configuration profile.
 #[derive(Debug, Clone)]
 pub struct Profile {

@@ -1,4 +1,6 @@
-//! Proxy factories and the Hutool-aligned `ProxyUtil` facade.
+//! 对齐: `cn.hutool.aop.proxy.CglibProxyFactory`
+//! 来源: hutool-aop/src/main/java/cn/hutool/aop/proxy/CglibProxyFactory.java
+//! 中文说明: CGLIB 风格代理工厂，使用 CGLIB 回调顺序创建代理。
 
 use crate::{
     HandlerProxy, Method,
@@ -11,7 +13,8 @@ use super::proxy::Proxy;
 use super::proxy_backend::ProxyBackend;
 use super::proxy_factory::ProxyFactory;
 
-/// Factory for CGLIB-style proxies.
+/// 对齐: `cn.hutool.aop.proxy.CglibProxyFactory`
+/// 中文说明: CGLIB 风格代理工厂，通过 CGLIB 回调顺序创建切面代理。
 #[derive(Debug, Default, Clone, Copy)]
 pub struct CglibProxyFactory;
 

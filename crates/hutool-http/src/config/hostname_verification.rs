@@ -1,4 +1,6 @@
-//! Hutool-aligned HTTP configuration backed by Reqwest and Rustls.
+//! 对齐: `cn.hutool.http.HttpConfig` (主机名验证部分)
+//! 来源: hutool-http/src/main/java/cn/hutool/http/HttpConfig.java
+//! 中文说明: TLS主机名验证策略枚举，支持严格验证和宽松模式
 
 use reqwest::{Method, StatusCode, Url, header::HeaderMap, tls::Version};
 use std::{fmt, sync::Arc, time::Duration};

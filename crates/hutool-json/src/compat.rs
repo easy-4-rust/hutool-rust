@@ -108,86 +108,101 @@ impl JSONConfig {
         self
     }
 
-    /// Returns the configured date format.
+    /// 中文说明: 返回配置的日期格式。
+    /// 对齐 Java 方法: `getDateFormat`
     #[must_use]
     pub fn date_format(&self) -> Option<&str> {
         self.date_format.as_deref()
     }
 
-    /// Replaces the date format; an empty value restores timestamp mode.
+    /// 中文说明: 设置日期格式，空值恢复时间戳模式。
+    /// 对齐 Java 方法: `setDateFormat`
     pub fn set_date_format(&mut self, value: &str) -> &mut Self {
         self.date_format = (!value.is_empty()).then(|| value.to_owned());
         self
     }
 
-    /// Returns whether null object fields and array entries are omitted.
+    /// 中文说明: 是否省略 null 值的字段和数组元素。
+    /// 对齐 Java 方法: `isIgnoreNullValue`
     #[must_use]
     pub const fn is_ignore_null_value(&self) -> bool {
         self.ignore_null_value
     }
 
-    /// Configures null omission.
+    /// 中文说明: 设置是否省略 null 值。
+    /// 对齐 Java 方法: `setIgnoreNullValue`
     pub const fn set_ignore_null_value(&mut self, value: bool) -> &mut Self {
         self.ignore_null_value = value;
         self
     }
 
-    /// Returns whether transient Java-style fields are ignored during migration.
+    /// 中文说明: 是否忽略 Java 风格的 transient 字段。
+    /// 对齐 Java 方法: `isTransientSupport`
     #[must_use]
     pub const fn is_transient_support(&self) -> bool {
         self.transient_support
     }
 
-    /// Retains the Java transient-field compatibility option.
+    /// 中文说明: 设置是否支持 Java transient 字段兼容。
+    /// 对齐 Java 方法: `setTransientSupport`
     pub const fn set_transient_support(&mut self, value: bool) -> &mut Self {
         self.transient_support = value;
         self
     }
 
-    /// Returns whether decimal trailing zeroes are stripped.
+    /// 中文说明: 是否去除小数尾部的零。
+    /// 对齐 Java 方法: `isStripTrailingZeros`
     #[must_use]
     pub const fn is_strip_trailing_zeros(&self) -> bool {
         self.strip_trailing_zeros
     }
 
-    /// Configures decimal formatting.
+    /// 中文说明: 设置是否去除小数尾部的零。
+    /// 对齐 Java 方法: `setStripTrailingZeros`
     pub const fn set_strip_trailing_zeros(&mut self, value: bool) -> &mut Self {
         self.strip_trailing_zeros = value;
         self
     }
 
-    /// Returns whether duplicate object keys are rejected.
+    /// 中文说明: 是否检查重复的键。
+    /// 对齐 Java 方法: `isCheckDuplicate`
     #[must_use]
     pub const fn is_check_duplicate(&self) -> bool {
         self.check_duplicate
     }
 
-    /// Configures duplicate-key rejection for explicit mutations.
+    /// 中文说明: 设置是否检查重复键。
+    /// 对齐 Java 方法: `setCheckDuplicate`
     pub const fn set_check_duplicate(&mut self, value: bool) -> &mut Self {
         self.check_duplicate = value;
         self
     }
 
-    /// Returns whether 64-bit integers are serialized as strings.
+    /// 中文说明: 是否将 64 位整数序列化为字符串（JavaScript 安全）。
+    /// 对齐 Java 方法: `isWriteLongAsString`
     #[must_use]
     pub const fn is_write_long_as_string(&self) -> bool {
         self.write_long_as_string
     }
 
-    /// Configures JavaScript-safe 64-bit integer serialization.
+    /// 中文说明: 设置是否将 64 位整数序列化为字符串。
+    /// 对齐 Java 方法: `setWriteLongAsString`
     pub const fn set_write_long_as_string(&mut self, value: bool) -> &mut Self {
         self.write_long_as_string = value;
         self
     }
 }
 
+/// 对齐: `cn.hutool.json.JSONPath`
+/// 中文说明: JSON 路径解析或遍历时产生的错误。
+///
 /// Error raised by JSON path parsing or traversal.
 #[derive(Debug, Clone, PartialEq, Eq, thiserror::Error)]
 pub enum PathError {
-    /// The path has invalid syntax.
+    /// 中文说明: 路径语法无效。
     #[error("invalid JSON path: {0}")]
     Invalid(String),
-    /// Traversal encountered a value with an incompatible shape.
+    /// 中文说明: 遍历遇到形状不兼容的值。
     #[error("cannot traverse JSON path segment: {0}")]
     Type(String),
 }
@@ -229,7 +244,8 @@ fn parse_path(path: &str) -> std::result::Result<Vec<PathToken>, PathError> {
     Ok(tokens)
 }
 
-/// Borrows a nested value using dot and array-index notation.
+/// 中文说明: 使用点号和数组索引符号借用嵌套值。
+/// 对齐 Java 方法: `cn.hutool.json.JSONUtil.getByPath`
 pub fn get_by_path<'a>(value: &'a Value, path: &str) -> Option<&'a Value> {
     let tokens = parse_path(path).ok()?;
     let mut current = value;
@@ -242,7 +258,8 @@ pub fn get_by_path<'a>(value: &'a Value, path: &str) -> Option<&'a Value> {
     Some(current)
 }
 
-/// Writes a nested value, creating missing objects and arrays.
+/// 中文说明: 写入嵌套值，自动创建缺失的对象和数组。
+/// 对齐 Java 方法: `cn.hutool.json.JSONUtil.putByPath`
 pub fn put_by_path(value: &mut Value, path: &str, replacement: Value) -> Result<()> {
     let tokens = parse_path(path)?;
     if tokens.is_empty() {

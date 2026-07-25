@@ -1,3 +1,7 @@
+//! 对齐: `cn.hutool.setting.GlobalProfile` (全局配置档案)
+//! 来源: hutool-setting/src/main/java/cn/hutool/setting/GlobalProfile.java
+//! 中文说明: 兼容用的进程级全局配置档案，建议优先使用显式持有的 `Profile`。
+
 use super::profile::Profile;
 use crate::{Setting, SettingError};
 use std::{
@@ -5,6 +9,12 @@ use std::{
     sync::{OnceLock, RwLock},
 };
 
+/// 兼容用的进程级全局配置档案，对应 Hutool 的 `GlobalProfile`。
+///
+/// 对齐 Java 类: `cn.hutool.setting.GlobalProfile`
+/// 来源: hutool-setting/src/main/java/cn/hutool/setting/GlobalProfile.java
+///
+/// 建议优先使用显式持有的 [`Profile`] 值以避免隐式全局状态。
 /// Compatibility-only process profile. Prefer owned [`Profile`] values.
 pub struct GlobalProfile;
 impl GlobalProfile {

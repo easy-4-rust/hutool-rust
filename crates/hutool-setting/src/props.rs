@@ -1,3 +1,7 @@
+//! 对齐: `cn.hutool.core.util.Props`
+//! 来源: hutool-core/src/main/java/cn/hutool/core/util/Props.java
+//! 中文说明: 有序的 Java 属性文档，支持 Hutool 风格的类型化访问器（int/bool/date/BigDecimal 等）。
+
 use crate::{SettingError, checked_path, read_text};
 use chrono::{DateTime, FixedOffset};
 use encoding_rs::{Encoding, WINDOWS_1252};
@@ -11,6 +15,12 @@ use std::{
     str::FromStr,
 };
 
+/// 有序的 Java 属性文档，对应 Hutool 的 `cn.hutool.core.util.Props`。
+///
+/// 对齐 Java 类: `cn.hutool.core.util.Props`
+/// 来源: hutool-core/src/main/java/cn/hutool/core/util/Props.java
+///
+/// 支持 Hutool 风格的类型化访问器（int/bool/date/BigDecimal 等）。
 /// Ordered Java-properties document with Hutool-style typed accessors.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Props {

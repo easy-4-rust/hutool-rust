@@ -1,4 +1,6 @@
-//! Byte / form / resource request bodies aligned with Hutool `cn.hutool.http.body`.
+//! 对齐: `cn.hutool.http.body.FormUrlEncodedBody`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/body/FormUrlEncodedBody.java
+//! 中文说明: application/x-www-form-urlencoded格式表单请求体
 
 use crate::http_util::HttpUtil;
 use indexmap::IndexMap;

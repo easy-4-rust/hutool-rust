@@ -1,4 +1,6 @@
-//! Byte / form / resource request bodies aligned with Hutool `cn.hutool.http.body`.
+//! 对齐: `cn.hutool.http.body.ResourceBody`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/body/ResourceBody.java
+//! 中文说明: 资源请求体实现，支持文件和字节资源上传
 
 use crate::http_util::HttpUtil;
 use indexmap::IndexMap;

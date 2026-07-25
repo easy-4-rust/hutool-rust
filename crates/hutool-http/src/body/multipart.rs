@@ -1,4 +1,6 @@
-//! Multipart request body aligned with Hutool `MultipartBody`.
+//! 对齐: `cn.hutool.http.MultipartBody`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/MultipartBody.java
+//! 中文说明: multipart/form-data请求体构建器，用于表单文件上传
 
 use std::collections::HashMap;
 use std::fmt;

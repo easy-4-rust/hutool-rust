@@ -1,8 +1,17 @@
+//! 对齐: `cn.hutool.setting.GroupedSet` (分组有序集合)
+//! 来源: hutool-setting/src/main/java/cn/hutool/setting/GroupedSet.java
+//! 中文说明: 从 Hutool 分组集合语法加载的插入有序分组字符串集合。
+
 use crate::{DEFAULT_ENCODING, SettingError, checked_path, read_text};
 use encoding_rs::Encoding;
 use indexmap::IndexSet;
 use std::path::{Path, PathBuf};
 
+/// 插入有序的分组字符串集合，对应 Hutool 的 `GroupedSet`。
+///
+/// 对齐 Java 类: `cn.hutool.setting.GroupedSet`
+/// 来源: hutool-setting/src/main/java/cn/hutool/setting/GroupedSet.java
+///
 /// Insertion-ordered grouped string sets loaded from Hutool's grouped-set syntax.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct GroupedSet {

@@ -1,4 +1,6 @@
-//! Byte / form / resource request bodies aligned with Hutool `cn.hutool.http.body`.
+//! 对齐: `cn.hutool.http.body.RequestBody`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/body/RequestBody.java
+//! 中文说明: 请求体写入器trait，定义将请求体写入输出流的接口
 
 use crate::http_util::HttpUtil;
 use indexmap::IndexMap;

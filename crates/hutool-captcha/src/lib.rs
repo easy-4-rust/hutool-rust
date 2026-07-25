@@ -1,4 +1,8 @@
 //! CAPTCHA code generation and verification primitives.
+//!
+//! 对齐: `cn.hutool.captcha` (crate root)
+//! 来源: hutool-captcha/src/main/java/cn/hutool/captcha/
+//! 中文说明: 验证码生成与验证模块，提供多种验证码类型和渲染方式
 
 #![forbid(unsafe_code)]
 
@@ -27,6 +31,9 @@ pub use raster::PngRenderer;
 const DEFAULT_ALPHABET: &[u8] = b"23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
 
 /// A strategy for generating and comparing CAPTCHA codes.
+///
+/// 对齐: `cn.hutool.captcha.ICodeGenerator`
+/// 中文说明: 验证码生成与比对策略接口
 pub trait CodeGenerator: Send + Sync {
     /// Generates a new challenge code.
     fn generate(&self) -> String;
@@ -36,6 +43,9 @@ pub trait CodeGenerator: Send + Sync {
 }
 
 /// Media produced by a CAPTCHA renderer.
+///
+/// 对齐: Rust 扩展，Java Hutool 无直接对应
+/// 中文说明: 验证码渲染器生成的媒体产物，包含 MIME 类型和编码字节
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct RenderedCaptcha {
     mime_type: &'static str,
@@ -68,6 +78,9 @@ impl RenderedCaptcha {
 }
 
 /// Converts a generated code into a client-facing challenge.
+///
+/// 对齐: `cn.hutool.captcha.ICaptcha`
+/// 中文说明: 将生成的验证码转换为客户端可见挑战的渲染器接口
 pub trait CaptchaRenderer: Send + Sync {
     /// Renders a code.
     fn render(&self, code: &str) -> Result<RenderedCaptcha, CaptchaError>;
@@ -79,6 +92,9 @@ pub trait CaptchaRenderer: Send + Sync {
 /// high-abuse environment should combine them with rate limits and a stronger
 /// proof-of-human mechanism. The plaintext code must never be logged or sent
 /// separately from the rendered artifact.
+///
+/// 对齐: Rust 扩展，Java Hutool 无直接 SVG 渲染器
+/// 中文说明: 无依赖 SVG 验证码渲染器，支持随机字形放置和干扰线
 #[derive(Debug, Clone)]
 pub struct SvgRenderer {
     width: u16,
@@ -185,6 +201,9 @@ fn escape_xml_char(value: char) -> String {
 }
 
 /// Generates unambiguous uppercase ASCII codes.
+///
+/// 对齐: `cn.hutool.captcha.generator.RandomGenerator`
+/// 中文说明: 生成无歧义大写字母数字验证码
 #[derive(Debug, Clone)]
 pub struct AlphanumericGenerator {
     length: usize,
@@ -245,6 +264,9 @@ impl CodeGenerator for AlphanumericGenerator {
 }
 
 /// CAPTCHA creation and verification errors.
+///
+/// 对齐: Rust 扩展，Java Hutool 无直接对应
+/// 中文说明: 验证码创建和验证过程中的错误类型
 #[derive(Debug, Error, Clone, PartialEq, Eq)]
 pub enum CaptchaError {
     /// Code length must be positive.
@@ -290,6 +312,9 @@ impl From<image::ImageError> for CaptchaError {
 }
 
 /// A generated code paired with an expiration deadline.
+///
+/// 对齐: Rust 扩展，Java Hutool 无直接对应
+/// 中文说明: 带过期时间的验证码挑战，封装生成码和验证逻辑
 pub struct CaptchaChallenge {
     code: String,
     expires_at: Instant,

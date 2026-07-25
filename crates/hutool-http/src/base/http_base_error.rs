@@ -1,4 +1,6 @@
-//! Shared Hutool-style request and response metadata.
+//! 对齐: `cn.hutool.http.HttpBaseError`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/base/HttpBaseError.java
+//! 中文说明: HTTP基础元数据错误类型，处理编码不支持等异常
 
 use crate::Header;
 use encoding_rs::{Encoding, UTF_8};

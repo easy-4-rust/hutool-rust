@@ -1,4 +1,6 @@
-//! Proxy factories and the Hutool-aligned `ProxyUtil` facade.
+//! 对齐: `cn.hutool.aop.Proxy`
+//! 来源: hutool-aop/src/main/java/cn/hutool/aop/Proxy.java
+//! 中文说明: 类型化代理枚举，封装 JDK/CGLIB/SpringCglib 三种代理策略。
 
 use crate::{
     HandlerProxy, Method,
@@ -9,7 +11,8 @@ use std::{fmt, sync::Arc};
 
 use super::proxy_factory::ProxyFactory;
 
-/// A typed proxy produced by a [`ProxyFactory`].
+/// 对齐: `cn.hutool.aop.Proxy`
+/// 中文说明: 由 [`ProxyFactory`] 产生的类型化代理，支持 JDK、CGLIB、SpringCglib 三种策略。
 pub enum Proxy<T, A, R, E> {
     /// JDK-style proxy.
     Jdk(JdkInterceptor<T, A, R, E>),

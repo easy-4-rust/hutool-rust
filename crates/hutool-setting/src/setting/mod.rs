@@ -1,3 +1,7 @@
+//! 对齐: `cn.hutool.setting` (Setting 子模块)
+//! 来源: hutool-setting/src/main/java/cn/hutool/setting/Setting.java
+//! 中文说明: Hutool Setting 配置文档子模块，包含核心 Setting 结构体、自动重载句柄及文件监听机制。
+
 use crate::{DEFAULT_ENCODING, GroupedMap, Props, SettingError, SettingLoader, checked_path};
 use encoding_rs::Encoding;
 use indexmap::IndexMap;

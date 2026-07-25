@@ -1,3 +1,7 @@
+//! 对齐: `cn.hutool.setting` (配置模块)
+//! 来源: hutool-setting/src/main/java/cn/hutool/setting/
+//! 中文说明: Hutool 兼容的有序配置工具集，支持分组键值对、属性文件、YAML 解析等。
+//!
 //! Hutool-aligned, ordered configuration utilities with explicit ownership.
 
 #![forbid(unsafe_code)]

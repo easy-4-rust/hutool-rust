@@ -1,4 +1,6 @@
-//! Shared Hutool-style request and response metadata.
+//! 对齐: `cn.hutool.http.HttpBase`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/base/HttpBase.java
+//! 中文说明: 请求和响应共享的基础元数据结构，包含协议版本和编码信息
 
 use crate::Header;
 use encoding_rs::{Encoding, UTF_8};

@@ -1,11 +1,14 @@
-//! Typed method metadata and explicit invocation handlers.
+//! 对齐: `cn.hutool.aop.Proxy`（处理器代理部分）
+//! 来源: hutool-aop/src/main/java/cn/hutool/aop/
+//! 中文说明: 处理器代理，基于 InvocationHandler 的显式类型化代理实现。
 
 use std::{borrow::Cow, fmt};
 
 use super::invocation_handler::InvocationHandler;
 use super::method::Method;
 
-/// Explicit proxy backed by a typed invocation handler.
+/// 对齐: `cn.hutool.aop.Proxy`（处理器代理模式）
+/// 中文说明: 由类型化调用处理器支撑的显式代理，组合目标对象与 InvocationHandler。
 pub struct HandlerProxy<T, H> {
     target: T,
     handler: H,

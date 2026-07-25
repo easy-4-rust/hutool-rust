@@ -1,4 +1,6 @@
-//! Proxy factories and the Hutool-aligned `ProxyUtil` facade.
+//! 对齐: `cn.hutool.aop.proxy`
+//! 来源: hutool-aop/src/main/java/cn/hutool/aop/proxy/
+//! 中文说明: 代理工厂模块，提供 JDK/CGLIB/SpringCglib 多种代理策略及 ProxyUtil 便捷门面。
 
 use crate::{
     HandlerProxy, Method,
