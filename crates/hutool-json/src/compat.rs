@@ -618,13 +618,15 @@ impl JSONArray {
         Self::from_value(crate::parse(input)?, JSONConfig::default())
     }
 
-    /// Returns the number of elements.
+    /// 中文说明: 返回元素数量。
+    /// 对齐 Java 方法: `size`
     #[must_use]
     pub fn len(&self) -> usize {
         self.values.len()
     }
 
-    /// Returns whether the array is empty.
+    /// 中文说明: 判断数组是否为空。
+    /// 对齐 Java 方法: `isEmpty`
     #[must_use]
     pub fn is_empty(&self) -> bool {
         self.values.is_empty()

@@ -525,7 +525,7 @@ impl TaskExecutor {
         self.cron_task.raw()
     }
 
-    /// Returns the scheduled task.
+    /// 中文说明: 返回关联的定时任务。
     #[must_use]
     pub fn cron_task(&self) -> &Arc<CronTask> {
         &self.cron_task
