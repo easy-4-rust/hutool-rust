@@ -351,17 +351,18 @@ def split_file(file_path):
         print(f"Skip {file_path}: types have duplicate snake_case names")
         return
 
-    # Skip files with inner attributes (#![...]) - too complex for auto-split
-    if any(l.strip().startswith('#![') for l in lines):
-        print(f"Skip {file_path}: has inner attributes")
-        return
+    # Extract inner attributes (#![...]) to place at top of generated files
+    inner_attrs = [l for l in lines if l.strip().startswith('#![')]
+    inner_attr_text = ''.join(inner_attrs) if inner_attrs else ''
 
     # Skip files with thread_local! - these have static refs that break after split
     if 'thread_local!' in content:
         print(f"Skip {file_path}: has thread_local!")
         return
 
-    header_text = '\n'.join(lines[:header_end]).rstrip()
+    # Strip inner_attr lines from header (they'll be prepended separately)
+    header_lines_clean = [l for l in lines[:header_end] if not l.strip().startswith('#![')]
+    header_text = '\n'.join(header_lines_clean).rstrip()
     helper_items = [it for it in items if it['kind'].startswith('helper_')]
 
     helper_by_name = {it['name']: it for it in helper_items}
@@ -422,6 +423,8 @@ def split_file(file_path):
     for pi in pub_items:
         snake = to_snake(pi['name'])
         chunks = []
+        if inner_attr_text:
+            chunks.append(inner_attr_text.rstrip())
         if header_text:
             chunks.append(header_text)
             chunks.append('')
@@ -482,6 +485,8 @@ def split_file(file_path):
 
     # mod.rs
     mod_chunks = []
+    if inner_attr_text:
+        mod_chunks.append(inner_attr_text.rstrip())
     if header_text:
         mod_chunks.append(header_text)
         mod_chunks.append('')
