@@ -4,6 +4,9 @@
 //! `DigestUtil.md5_hex`, `HMac`, `AES`, `RSA`, `HOTP`, `TOTP`, etc. without
 //! changing the underlying RustCrypto implementations.
 
+/// 对齐: `cn.hutool.crypto.digest.Sm3Util`
+/// SM3 摘要
+
 use crate::{
     aes128_cbc_decrypt, aes128_cbc_encrypt, aes128_ecb_decrypt, aes128_ecb_encrypt,
     aes256_gcm_decrypt, aes256_gcm_encrypt, hotp, hmac_md5_hex, hmac_sha1_hex, hmac_sha256,
