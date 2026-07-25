@@ -1,4 +1,6 @@
-//! Explicitly rejected legacy algorithms (DES / RC4).
+//! 对齐: `cn.hutool.crypto.symmetric.DES` / `cn.hutool.crypto.symmetric.RC4`
+//! 来源: hutool-crypto/src/main/java/cn/hutool/crypto/symmetric/DES.java
+//! 中文说明: 已废弃的遗留算法（DES/RC4），安全策略拒绝执行
 
 use crate::CryptoError;
 

@@ -1,4 +1,6 @@
-//! Hutool-aligned before/after aspects.
+//! 对齐: `cn.hutool.aop` 包中的切面相关类
+//! 来源: hutool-aop/src/main/java/cn/hutool/aop/
+//! 中文说明: Hutool 切面前后置处理模块，提供 Aspect 接口及多种切面实现。
 
 use crate::Method;
 use parking_lot::Mutex;

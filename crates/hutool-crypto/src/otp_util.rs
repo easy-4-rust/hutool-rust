@@ -1,4 +1,6 @@
-//! HOTP/TOTP aligned with Hutool `OTPTest` / RFC 4226 / RFC 6238.
+//! 对齐: `cn.hutool.crypto.digest.OTP`
+//! 来源: hutool-crypto/src/main/java/cn/hutool/crypto/digest/OTP.java
+//! 中文说明: HOTP/TOTP 一次性密码工具（RFC 4226/6238），对齐 Hutool OTP
 
 use crate::CryptoError;
 use hmac::{Hmac, Mac};

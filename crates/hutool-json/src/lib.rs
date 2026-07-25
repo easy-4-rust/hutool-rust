@@ -1,3 +1,7 @@
+//! 对齐: `cn.hutool.json` 包
+//! 来源: hutool-json/src/main/java/cn/hutool/json/
+//! 中文说明: Hutool JSON 模块的 Rust 实现，提供 JSON 解析、序列化、格式化等工具。
+//!
 //! Typed JSON serialization and value utilities.
 //!
 //! The initial operation set and tests were adapted from yimi-rutool 0.2.5
@@ -28,52 +32,59 @@ pub use parser::{JSONParser, JSONTokener, ParseConfig};
 pub use serialize::{GlobalSerializeMapping, JSONDeserializer, JSONSerializer, SerializeRegistry};
 pub use xml::{JSONXMLParser, JSONXMLSerializer, XML, XMLTokener};
 
+/// 对齐: `cn.hutool.json.JSON`
+/// 中文说明: JSON 操作的结果类型别名。
+///
 /// Result type returned by JSON operations.
 pub type Result<T> = std::result::Result<T, JsonError>;
 
+/// 对齐: `cn.hutool.json.JSONException`
+/// 中文说明: JSON 操作产生的错误类型，涵盖解析、序列化、路径遍历等场景。
+///
 /// Errors produced by `hutool-json`.
 #[derive(Debug, thiserror::Error)]
 #[non_exhaustive]
 pub enum JsonError {
-    /// Serialization or parsing failed in `serde_json`.
+    /// 中文说明: serde_json 序列化或解析失败。
     #[error("JSON operation failed: {0}")]
     Serde(#[from] serde_json::Error),
 
-    /// A JSON value had a different shape than the requested operation.
+    /// 中文说明: JSON 值的形状与请求的操作不匹配。
     #[error("expected a JSON {expected}, found {actual}")]
     UnexpectedType {
-        /// Expected JSON type.
+        /// 期望的 JSON 类型。
         expected: &'static str,
-        /// Actual JSON type.
+        /// 实际的 JSON 类型。
         actual: &'static str,
     },
 
-    /// A JSON path could not be parsed or traversed.
+    /// 中文说明: JSON 路径解析或遍历失败。
     #[error(transparent)]
     Path(#[from] PathError),
 
-    /// A defensive parser resource limit was exceeded.
+    /// 中文说明: 防御性解析器资源限制被超出。
     #[error("JSON resource limit exceeded: {0}")]
     Limit(&'static str),
 
-    /// Stateful tokenizer syntax was invalid.
+    /// 中文说明: 有状态分词器遇到语法错误。
     #[error("JSON syntax error: {0}")]
     Syntax(String),
 
-    /// Reading JSON bytes failed.
+    /// 中文说明: 读取 JSON 字节流失败。
     #[error("JSON I/O failed: {0}")]
     Io(#[from] std::io::Error),
 
-    /// Input bytes were not UTF-8.
+    /// 中文说明: 输入字节不是有效的 UTF-8 编码。
     #[error("JSON input is not UTF-8: {0}")]
     Utf8(#[from] std::string::FromUtf8Error),
 
-    /// A custom serializer or deserializer was unavailable or incompatible.
+    /// 中文说明: 自定义序列化器或反序列化器不可用或不兼容。
     #[error("JSON mapping failed: {0}")]
     Mapping(&'static str),
 }
 
-/// Serializes a value to compact JSON.
+/// 中文说明: 将值序列化为紧凑 JSON 字符串。
+/// 对齐 Java 方法: `cn.hutool.json.JSONUtil.toJsonStr`
 ///
 /// # Errors
 ///
@@ -82,7 +93,8 @@ pub fn to_string<T: Serialize + ?Sized>(value: &T) -> Result<String> {
     Ok(serde_json::to_string(value)?)
 }
 
-/// Serializes a value to indented JSON.
+/// 中文说明: 将值序列化为带缩进的 JSON 字符串。
+/// 对齐 Java 方法: `cn.hutool.json.JSONUtil.toJsonPrettyStr`
 ///
 /// # Errors
 ///
@@ -91,7 +103,8 @@ pub fn to_string_pretty<T: Serialize + ?Sized>(value: &T) -> Result<String> {
     Ok(serde_json::to_string_pretty(value)?)
 }
 
-/// Deserializes JSON text into a requested type.
+/// 中文说明: 将 JSON 文本反序列化为指定类型的 Rust 值。
+/// 对齐 Java 方法: `cn.hutool.json.JSONUtil.toBean`
 ///
 /// # Errors
 ///
@@ -100,7 +113,8 @@ pub fn from_str<T: DeserializeOwned>(input: &str) -> Result<T> {
     Ok(serde_json::from_str(input)?)
 }
 
-/// Parses arbitrary JSON into [`Value`].
+/// 中文说明: 将任意 JSON 文本解析为动态 [`Value`]。
+/// 对齐 Java 方法: `cn.hutool.json.JSONUtil.parse`
 ///
 /// # Errors
 ///
@@ -109,7 +123,8 @@ pub fn parse(input: &str) -> Result<Value> {
     from_str(input)
 }
 
-/// Parses a JSON object.
+/// 中文说明: 解析 JSON 对象，返回键值映射。
+/// 对齐 Java 方法: `cn.hutool.json.JSONUtil.parseObj`
 ///
 /// # Errors
 ///
@@ -123,7 +138,8 @@ pub fn parse_object(input: &str) -> Result<Map<String, Value>> {
     })
 }
 
-/// Parses a JSON array.
+/// 中文说明: 解析 JSON 数组，返回值列表。
+/// 对齐 Java 方法: `cn.hutool.json.JSONUtil.parseArray`
 ///
 /// # Errors
 ///
@@ -137,25 +153,29 @@ pub fn parse_array(input: &str) -> Result<Vec<Value>> {
     })
 }
 
-/// Returns `true` when the complete input is valid JSON.
+/// 中文说明: 判断输入是否为合法的 JSON。
+/// 对齐 Java 方法: `cn.hutool.json.JSONUtil.isJson`
 #[must_use]
 pub fn is_valid(input: &str) -> bool {
     parse(input).is_ok()
 }
 
-/// Returns `true` when the complete input is a JSON object.
+/// 中文说明: 判断输入是否为 JSON 对象。
+/// 对齐 Java 方法: `cn.hutool.json.JSONUtil.isJsonObj`
 #[must_use]
 pub fn is_json_object(input: &str) -> bool {
     parse(input).is_ok_and(|value| value.is_object())
 }
 
-/// Returns `true` when the complete input is a JSON array.
+/// 中文说明: 判断输入是否为 JSON 数组。
+/// 对齐 Java 方法: `cn.hutool.json.JSONUtil.isJsonArray`
 #[must_use]
 pub fn is_json_array(input: &str) -> bool {
     parse(input).is_ok_and(|value| value.is_array())
 }
 
-/// Converts JSON text to its compact representation.
+/// 中文说明: 将 JSON 文本转换为紧凑表示。
+/// 对齐 Java 方法: `cn.hutool.json.JSONUtil.minify`
 ///
 /// # Errors
 ///
@@ -164,7 +184,8 @@ pub fn minify(input: &str) -> Result<String> {
     to_string(&parse(input)?)
 }
 
-/// Converts JSON text to its indented representation.
+/// 中文说明: 将 JSON 文本转换为带缩进的表示。
+/// 对齐 Java 方法: `cn.hutool.json.JSONUtil.formatJsonStr`
 ///
 /// # Errors
 ///
@@ -184,6 +205,8 @@ const fn type_name(value: &Value) -> &'static str {
     }
 }
 
+/// 中文说明: 使用 `hutool-json` 时的常用导入集合。
+///
 /// Common imports for applications using `hutool-json`.
 pub mod prelude {
     pub use crate::{Deserialize, Serialize, Value, json};

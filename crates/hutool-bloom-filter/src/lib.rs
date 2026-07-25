@@ -1,4 +1,8 @@
 //! Production bloom filters and Hutool-compatible bitmap/hash strategies.
+//!
+//! 对齐: `cn.hutool.bloomFilter` (crate root)
+//! 来源: hutool-bloomFilter/src/main/java/cn/hutool/bloomFilter/
+//! 中文说明: 布隆过滤器模块，提供生产级布隆过滤器和 Hutool 兼容的位图/哈希策略
 
 #![forbid(unsafe_code)]
 
@@ -17,6 +21,9 @@ pub use hutool::{
 };
 
 /// Errors returned by filter construction, indexing, and file initialization.
+///
+/// 对齐: Rust 扩展，Java Hutool 无直接对应
+/// 中文说明: 布隆过滤器构造、索引和文件初始化返回的错误类型
 #[derive(Debug, thiserror::Error)]
 pub enum BloomFilterError {
     /// A capacity or expected item count was zero.
@@ -72,6 +79,9 @@ impl PartialEq for BloomFilterError {
 }
 
 /// A high-throughput generic filter backed by the mature `bloomfilter` crate.
+///
+/// 对齐: Rust 扩展，封装 `bloomfilter` 库
+/// 中文说明: 基于成熟 bloomfilter 库的高吞吐量泛型布隆过滤器
 #[derive(Debug)]
 pub struct BloomFilter<T: ?Sized> {
     inner: Bloom<T>,

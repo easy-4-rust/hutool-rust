@@ -1,4 +1,6 @@
-//! Portable host and runtime information.
+//! 对齐: `cn.hutool.system` (system-util 与 system-snapshot 整合模块)
+//! 来源: hutool-system/src/main/java/cn/hutool/system/SystemUtil.java
+//! 中文说明: 提供跨平台的主机信息、操作系统信息、运行时内存信息等系统属性查询工具，对应 Hutool `system` 模块入口
 
 #![forbid(unsafe_code)]
 
@@ -16,29 +18,31 @@ pub use oshi::{
     SensorInfo,
 };
 
-/// A point-in-time view of the current host.
+/// 对齐: `cn.hutool.system.SystemUtil` (系统快照)
+/// 中文说明: 当前主机的某一时刻系统快照，包含主机名、操作系统、CPU、内存和运行时间等信息
 #[derive(Debug, Clone, PartialEq)]
 pub struct SystemSnapshot {
-    /// Host name reported by the operating system.
+    /// 中文说明: 操作系统报告的主机名
     pub host_name: Option<String>,
-    /// Operating system name.
+    /// 中文说明: 操作系统名称
     pub os_name: Option<String>,
-    /// Operating system version.
+    /// 中文说明: 操作系统版本
     pub os_version: Option<String>,
-    /// Logical CPU count.
+    /// 中文说明: 逻辑 CPU 数量
     pub cpu_count: usize,
-    /// Average CPU usage percentage across logical CPUs.
+    /// 中文说明: 所有逻辑 CPU 的平均使用率百分比
     pub cpu_usage_percent: f32,
-    /// Total memory in bytes.
+    /// 中文说明: 总物理内存（字节）
     pub total_memory: u64,
-    /// Used memory in bytes.
+    /// 中文说明: 已使用内存（字节）
     pub used_memory: u64,
-    /// System uptime in seconds.
+    /// 中文说明: 系统运行时间（秒）
     pub uptime_seconds: u64,
 }
 
 impl SystemSnapshot {
-    /// Collects a fresh system snapshot.
+    /// 中文说明: 采集一份全新的系统快照
+    /// 对齐 Java 方法: `SystemUtil` 的系统属性收集逻辑
     #[must_use]
     pub fn collect() -> Self {
         let mut system = System::new_all();

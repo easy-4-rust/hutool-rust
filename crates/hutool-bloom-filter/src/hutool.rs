@@ -1,8 +1,15 @@
+//! 对齐: `cn.hutool.bloomFilter` (Hutool 布隆过滤器核心实现)
+//! 来源: hutool-bloomFilter/src/main/java/cn/hutool/bloomFilter/
+//! 中文说明: Hutool 风格的布隆过滤器实现，包含 FuncFilter、BitMapBloomFilter、BitSetBloomFilter 和 BloomFilterUtil
+
 use crate::{BitMap, BloomFilterError, MachineWord, bitmap::create_bitmap, hashes};
 use encoding_rs::Encoding;
 use std::{fs, path::Path, sync::Arc};
 
 /// Common string filter contract matching Hutool's `BloomFilter` interface.
+///
+/// 对齐: `cn.hutool.bloomFilter.BloomFilter` (接口)
+/// 中文说明: 通用字符串布隆过滤器接口，匹配 Hutool 的 BloomFilter 接口
 pub trait StringBloomFilter: Send {
     /// Returns false only when the string is definitely absent.
     fn contains(&self, value: &str) -> bool;
@@ -13,6 +20,9 @@ pub trait StringBloomFilter: Send {
 type HashFunction = dyn Fn(&str) -> i64 + Send + Sync;
 
 /// One Hutool-compatible hash function backed by a checked bitmap.
+///
+/// 对齐: `cn.hutool.bloomFilter.FilterFunc`
+/// 中文说明: 基于校验位图的 Hutool 兼容哈希函数过滤器
 pub struct FuncFilter {
     bitmap: Box<dyn BitMap>,
     size: u64,
@@ -72,8 +82,11 @@ impl StringBloomFilter for FuncFilter {
 }
 
 macro_rules! filter {
-    ($name:ident, $hash:path) => {
+    ($name:ident, $hash:path, $java_class:expr) => {
         /// A Hutool-compatible named hash filter.
+        ///
+        #[doc = concat!("对齐: `", $java_class, "`")]
+        /// 中文说明: Hutool 兼容的命名哈希过滤器
         pub struct $name(FuncFilter);
 
         impl $name {
@@ -110,17 +123,20 @@ macro_rules! filter {
     };
 }
 
-filter!(DefaultFilter, hashes::java_default_hash);
-filter!(ELFFilter, hashes::elf_hash);
-filter!(FNVFilter, hashes::fnv_hash);
-filter!(JSFilter, hashes::js_hash);
-filter!(PJWFilter, hashes::pjw_hash);
-filter!(RSFilter, hashes::rs_hash);
-filter!(SDBMFilter, hashes::sdbm_hash);
+filter!(DefaultFilter, hashes::java_default_hash, "cn.hutool.bloomFilter.filter.DefaultFilter");
+filter!(ELFFilter, hashes::elf_hash, "cn.hutool.bloomFilter.filter.ELFFilter");
+filter!(FNVFilter, hashes::fnv_hash, "cn.hutool.bloomFilter.filter.FNVFilter");
+filter!(JSFilter, hashes::js_hash, "cn.hutool.bloomFilter.filter.JSFilter");
+filter!(PJWFilter, hashes::pjw_hash, "cn.hutool.bloomFilter.filter.PJWFilter");
+filter!(RSFilter, hashes::rs_hash, "cn.hutool.bloomFilter.filter.RSFilter");
+filter!(SDBMFilter, hashes::sdbm_hash, "cn.hutool.bloomFilter.filter.SDBMFilter");
 
 macro_rules! wide_filter {
-    ($name:ident, $hash:path) => {
+    ($name:ident, $hash:path, $java_class:expr) => {
         /// A Hutool-compatible named 64-bit hash filter.
+        ///
+        #[doc = concat!("对齐: `", $java_class, "`")]
+        /// 中文说明: Hutool 兼容的命名 64 位哈希过滤器
         pub struct $name(FuncFilter);
 
         impl $name {
@@ -156,11 +172,14 @@ macro_rules! wide_filter {
     };
 }
 
-wide_filter!(HfFilter, hashes::hf_hash);
-wide_filter!(HfIpFilter, hashes::hf_ip_hash);
-wide_filter!(TianlFilter, hashes::tianl_hash);
+wide_filter!(HfFilter, hashes::hf_hash, "cn.hutool.bloomFilter.filter.HfFilter");
+wide_filter!(HfIpFilter, hashes::hf_ip_hash, "cn.hutool.bloomFilter.filter.HfIpFilter");
+wide_filter!(TianlFilter, hashes::tianl_hash, "cn.hutool.bloomFilter.filter.TianlFilter");
 
 /// An AND-composed group of independently hashed bitmap filters.
+///
+/// 对齐: `cn.hutool.bloomFilter.BitMapBloomFilter`
+/// 中文说明: 由多个独立哈希位图过滤器 AND 组合而成的布隆过滤器
 pub struct BitMapBloomFilter {
     filters: Vec<Box<dyn StringBloomFilter>>,
 }
@@ -220,6 +239,9 @@ impl StringBloomFilter for BitMapBloomFilter {
 }
 
 /// Hutool's fixed one-to-eight-hash `BitSet` implementation.
+///
+/// 对齐: `cn.hutool.bloomFilter.BitSetBloomFilter`
+/// 中文说明: Hutool 的固定一至八个哈希函数的 BitSet 布隆过滤器实现
 #[derive(Debug, Clone)]
 pub struct BitSetBloomFilter {
     words: Vec<u64>,
@@ -340,6 +362,9 @@ impl StringBloomFilter for BitSetBloomFilter {
 }
 
 /// Constructors corresponding to Hutool's `BloomFilterUtil`.
+///
+/// 对齐: `cn.hutool.bloomFilter.BloomFilterUtil`
+/// 中文说明: 布隆过滤器工具类，提供 BitSetBloomFilter 和 BitMapBloomFilter 的便捷构造方法
 pub struct BloomFilterUtil;
 
 impl BloomFilterUtil {

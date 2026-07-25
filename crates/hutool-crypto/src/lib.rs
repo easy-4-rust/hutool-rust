@@ -1,4 +1,6 @@
-//! Cryptographic utilities with authenticated encryption by default.
+//! 对齐: `cn.hutool.crypto.SecureUtil`
+//! 来源: hutool-crypto/src/main/java/cn/hutool/crypto/SecureUtil.java
+//! 中文说明: 加密工具库入口，默认使用认证加密，对齐 Hutool SecureUtil
 
 #![forbid(unsafe_code)]
 

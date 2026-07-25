@@ -1,4 +1,6 @@
-//! Explicit JDK/CGLIB-compatible aspect interceptors.
+//! 对齐: `cn.hutool.aop.interceptor`
+//! 来源: hutool-aop/src/main/java/cn/hutool/aop/interceptor/
+//! 中文说明: 显式的 JDK/CGLIB 兼容切面拦截器，负责在代理调用时执行切面前后置逻辑。
 
 use crate::{Method, aspects::Aspect};
 use std::{fmt, marker::PhantomData, sync::Arc};
@@ -147,17 +149,20 @@ macro_rules! define_interceptor {
 }
 
 define_interceptor!(
-    /// JDK-style interceptor: `after` is skipped when `before` rejects.
+    /// 对齐: `cn.hutool.aop.interceptor.JdkInterceptor`
+    /// 中文说明: JDK 风格拦截器，当 `before` 拒绝时跳过 `after` 回调。
     JdkInterceptor,
     InvocationMode::Jdk
 );
 define_interceptor!(
-    /// CGLIB-style interceptor: `after` also runs when `before` rejects.
+    /// 对齐: `cn.hutool.aop.interceptor.CglibInterceptor`
+    /// 中文说明: CGLIB 风格拦截器，即使 `before` 拒绝也会执行 `after` 回调。
     CglibInterceptor,
     InvocationMode::Cglib
 );
 define_interceptor!(
-    /// Spring-CGLIB-compatible interceptor with CGLIB callback ordering.
+    /// 对齐: `cn.hutool.aop.interceptor.SpringCglibInterceptor`
+    /// 中文说明: Spring CGLIB 兼容拦截器，使用 CGLIB 回调顺序。
     SpringCglibInterceptor,
     InvocationMode::Cglib
 );

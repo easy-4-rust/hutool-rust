@@ -1,4 +1,6 @@
-//! Hutool-aligned before/after aspects.
+//! 对齐: `cn.hutool.aop` 包中的计时事件
+//! 来源: hutool-aop/src/main/java/cn/hutool/aop/
+//! 中文说明: 计时事件数据结构，记录一次切面拦截的调用耗时信息。
 
 use crate::Method;
 use parking_lot::Mutex;
@@ -11,7 +13,8 @@ use std::{
     time::{Duration, Instant},
 };
 
-/// One completed timed invocation.
+/// 对齐: Hutool 计时切面的事件记录
+/// 中文说明: 一次已完成的计时调用事件，包含目标类型、方法名、耗时和返回值信息。
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct TimingEvent {
     /// Rust type name of the target.

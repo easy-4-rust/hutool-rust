@@ -1,3 +1,8 @@
+//! 对齐: `cn.hutool.cron` (Task / TaskListener / CronTask / Scheduler / CronUtil)
+//! 来源: hutool-cron/src/main/java/cn/hutool/cron/*.java
+//! 中文说明: 提供与 Hutool Java 定时任务框架对齐的任务、监听器、
+//! 任务表、调度器等核心类型。
+//!
 //! Hutool-aligned task, listener, table, and scheduler facades.
 
 #![allow(clippy::missing_fields_in_debug, clippy::missing_panics_doc)]
@@ -13,10 +18,15 @@ use tokio::{task::JoinHandle, time};
 
 use crate::{CronError, CronPattern};
 
+/// 对齐: `cn.hutool.cron.task.Task`
+/// 中文说明: 同步任务契约，调度器在 Tokio 阻塞线程池上执行，
+/// 任务不应阻塞调度循环。
+///
 /// Synchronous task contract. Scheduler execution happens on Tokio's blocking
 /// pool so a task cannot block the scheduling loop.
 pub trait Task: Send + Sync + 'static {
-    /// Executes one task invocation.
+    /// 中文说明: 执行一次任务调用。
+    /// 对齐 Java 方法: `execute`
     fn execute(&self) -> Result<(), CronError>;
 }
 
@@ -29,6 +39,9 @@ where
     }
 }
 
+/// 对齐: `cn.hutool.cron.task.RunnableTask`
+/// 中文说明: 将不会出错的 Rust 闭包适配为 `Task` 接口。
+///
 /// Adapts an infallible Rust closure to `Task`.
 pub struct RunnableTask<F> {
     runnable: F,
@@ -38,7 +51,8 @@ impl<F> RunnableTask<F>
 where
     F: Fn() + Send + Sync + 'static,
 {
-    /// Creates a task adapter.
+    /// 中文说明: 创建任务适配器。
+    /// 对齐 Java 方法: `new`
     #[must_use]
     pub const fn new(runnable: F) -> Self {
         Self { runnable }
@@ -55,6 +69,9 @@ where
     }
 }
 
+/// 对齐: `cn.hutool.cron.CronInvoke`
+/// 中文说明: 显式方法注册表，替代 Java 反射和类路径查找机制。
+///
 /// Explicit method registry replacing Java reflection and classpath lookup.
 #[derive(Clone, Default)]
 pub struct InvokeRegistry {
@@ -74,13 +91,14 @@ impl fmt::Debug for InvokeRegistry {
 }
 
 impl InvokeRegistry {
-    /// Creates an empty registry.
+    /// 中文说明: 创建空注册表。
     #[must_use]
     pub fn new() -> Self {
         Self::default()
     }
 
-    /// Registers or replaces a named task.
+    /// 中文说明: 注册或替换一个命名任务。
+    /// 对齐 Java 方法: `register`
     pub fn register<T>(&self, name: impl Into<String>, task: T) -> Option<Arc<dyn Task>>
     where
         T: Task,
@@ -91,7 +109,8 @@ impl InvokeRegistry {
             .insert(name.into(), Arc::new(task))
     }
 
-    /// Resolves a named task.
+    /// 中文说明: 按名称查找已注册的任务。
+    /// 对齐 Java 方法: `resolve`
     #[must_use]
     pub fn resolve(&self, name: &str) -> Option<Arc<dyn Task>> {
         self.methods

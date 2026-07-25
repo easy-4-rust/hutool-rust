@@ -1,3 +1,7 @@
+//! 对齐: `cn.hutool.log.LogRecord`
+//! 来源: hutool-log/src/main/java/cn/hutool/log/LogRecord.java
+//! 中文说明: 后端无关的日志事件记录，包含名称、级别、消息和可选的错误描述。
+
 use std::{
     collections::HashMap,
     fmt,
@@ -6,6 +10,11 @@ use std::{
 
 use super::log_level::LogLevel;
 
+/// 后端无关的日志事件记录，对应 Hutool 的 `LogRecord`。
+///
+/// 对齐 Java 类: `cn.hutool.log.LogRecord`
+/// 来源: hutool-log/src/main/java/cn/hutool/log/LogRecord.java
+///
 /// A backend-neutral logging event.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LogRecord {

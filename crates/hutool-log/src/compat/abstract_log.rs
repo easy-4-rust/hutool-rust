@@ -1,3 +1,7 @@
+//! 对齐: `cn.hutool.log.AbstractLog`
+//! 来源: hutool-log/src/main/java/cn/hutool/log/AbstractLog.java
+//! 中文说明: 日志的抽象基类，持有日志名称和后端接收器（LogSink），提供各级别启用状态查询。
+
 use std::{
     collections::HashMap,
     fmt,
@@ -9,6 +13,12 @@ use super::log_level::LogLevel;
 use super::log_record::LogRecord;
 use super::log_sink::LogSink;
 
+/// 日志的抽象基类，对应 Hutool 的 `AbstractLog`。
+///
+/// 对齐 Java 类: `cn.hutool.log.AbstractLog`
+/// 来源: hutool-log/src/main/java/cn/hutool/log/AbstractLog.java
+///
+/// 持有日志名称和可插拔的 `LogSink` 后端，提供各级别启用状态查询。
 /// Shared implementation corresponding to Hutool's `AbstractLog`.
 #[derive(Clone)]
 pub struct AbstractLog {

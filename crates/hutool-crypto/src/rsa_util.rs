@@ -1,4 +1,6 @@
-//! RSA asymmetric encryption aligned with Hutool `RSATest`.
+//! 对齐: `cn.hutool.crypto.asymmetric.RSA`
+//! 来源: hutool-crypto/src/main/java/cn/hutool/crypto/asymmetric/RSA.java
+//! 中文说明: RSA 非对称加密/解密与签名工具，对齐 Hutool RSA
 
 use crate::CryptoError;
 use rsa::pkcs1::{DecodeRsaPrivateKey, EncodeRsaPrivateKey, EncodeRsaPublicKey};

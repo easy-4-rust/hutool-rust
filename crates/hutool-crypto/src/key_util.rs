@@ -1,4 +1,6 @@
-//! Key helpers aligned with Hutool `KeyUtil`.
+//! 对齐: `cn.hutool.crypto.KeyUtil`
+//! 来源: hutool-crypto/src/main/java/cn/hutool/crypto/KeyUtil.java
+//! 中文说明: 密钥生成与转换工具（RSA/EC），对齐 Hutool KeyUtil
 
 use crate::CryptoError;
 use p256::pkcs8::{DecodePrivateKey, EncodePrivateKey};

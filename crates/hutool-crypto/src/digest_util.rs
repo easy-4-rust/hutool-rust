@@ -1,4 +1,6 @@
-//! Digest helpers aligned with Hutool `DigestUtil` / `DigestTest` vectors.
+//! 对齐: `cn.hutool.crypto.digest.DigestUtil`
+//! 来源: hutool-crypto/src/main/java/cn/hutool/crypto/digest/DigestUtil.java
+//! 中文说明: 消息摘要工具（MD5/SHA1/SHA256/SHA512/SM3），对齐 Hutool DigestUtil
 
 use md5::{Digest as _, Md5};
 use sha1::{Digest as _, Sha1};

@@ -1,3 +1,7 @@
+//! 对齐: `cn.hutool.log.StaticLogFactory`
+//! 来源: hutool-log/src/main/java/cn/hutool/log/StaticLogFactory.java
+//! 中文说明: 进程级全局日志工厂的兼容访问点，提供 get/set/reset 操作。
+
 use std::{
     collections::HashMap,
     fmt,
@@ -6,6 +10,11 @@ use std::{
 
 use super::log_factory::LogFactory;
 
+/// 进程级全局日志工厂的兼容访问点，对应 Hutool 的 `StaticLogFactory`。
+///
+/// 对齐 Java 类: `cn.hutool.log.StaticLogFactory`
+/// 来源: hutool-log/src/main/java/cn/hutool/log/StaticLogFactory.java
+///
 /// Explicit compatibility access to Hutool's process-wide factory.
 pub struct GlobalLogFactory;
 

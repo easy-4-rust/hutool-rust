@@ -1,4 +1,6 @@
-//! PEM helpers aligned with Hutool `PemUtil`.
+//! 对齐: `cn.hutool.crypto.PemUtil`
+//! 来源: hutool-crypto/src/main/java/cn/hutool/crypto/PemUtil.java
+//! 中文说明: PEM 格式密钥读写工具，对齐 Hutool PemUtil
 
 use crate::CryptoError;
 use rsa::pkcs8::{DecodePrivateKey, EncodePrivateKey, LineEnding};

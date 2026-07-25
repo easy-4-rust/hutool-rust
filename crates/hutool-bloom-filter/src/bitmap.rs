@@ -1,7 +1,14 @@
+//! 对齐: `cn.hutool.bloomFilter.BitMap` (内部位图实现)
+//! 来源: hutool-bloomFilter/src/main/java/cn/hutool/bloomFilter/BitMap.java
+//! 中文说明: Hutool 兼容的位图操作，提供带边界检查的 Rust 索引
+
 use crate::BloomFilterError;
 use std::collections::HashMap;
 
 /// Hutool-compatible bitmap operations with checked Rust indexing.
+///
+/// 对齐: `cn.hutool.bloomFilter.BitMap`
+/// 中文说明: Hutool 兼容的位图操作接口，支持添加、查询和删除位
 pub trait BitMap: Send {
     /// Sets a bit.
     fn add(&mut self, index: u64) -> Result<(), BloomFilterError>;
@@ -14,6 +21,9 @@ pub trait BitMap: Send {
 }
 
 /// Machine word width used by Hutool's bitmap filters.
+///
+/// 对齐: Rust 扩展，Java Hutool 无直接对应
+/// 中文说明: Hutool 位图过滤器使用的机器字宽度枚举
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum MachineWord {
     /// 32-bit words (`IntMap`).
@@ -34,8 +44,11 @@ impl MachineWord {
 const HUTOOL_DEFAULT_WORDS: usize = 93_750_000;
 
 macro_rules! bitmap {
-    ($name:ident, $word:ty, $bits:expr) => {
+    ($name:ident, $word:ty, $bits:expr, $java_class:expr) => {
         /// A sparse, bounded equivalent of Hutool's large eager bitmap.
+        ///
+        #[doc = concat!("对齐: `", $java_class, "`")]
+        /// 中文说明: 稀疏有界位图，等效于 Hutool 的大容量预分配位图
         #[derive(Debug, Clone)]
         pub struct $name {
             words: HashMap<usize, $word>,
@@ -106,8 +119,8 @@ macro_rules! bitmap {
     };
 }
 
-bitmap!(IntMap, u32, 32);
-bitmap!(LongMap, u64, 64);
+bitmap!(IntMap, u32, 32, "cn.hutool.bloomFilter.IntMap");
+bitmap!(LongMap, u64, 64, "cn.hutool.bloomFilter.LongMap");
 
 #[allow(clippy::cast_possible_truncation)]
 pub(crate) fn create_bitmap(

@@ -1,4 +1,6 @@
-//! ChaCha20 symmetric encryption (Hutool `ChaCha20Test`).
+//! 对齐: `cn.hutool.crypto.symmetric.ChaCha20`
+//! 来源: hutool-crypto/src/main/java/cn/hutool/crypto/symmetric/ChaCha20.java
+//! 中文说明: ChaCha20 对称加密工具，对齐 Hutool ChaCha20 测试向量
 
 use crate::CryptoError;
 use chacha20::cipher::{KeyIvInit, StreamCipher};

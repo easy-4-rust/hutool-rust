@@ -1,3 +1,7 @@
+//! 对齐: `cn.hutool.json` 包中的核心类型
+//! 来源: hutool-json/src/main/java/cn/hutool/json/JSONObject.java, JSONArray.java, JSONConfig.java, JSONNull.java
+//! 中文说明: 提供 Hutool 兼容的 JSONObject、JSONArray、JSONConfig、JSONNull 以及 JSON 路径操作。
+
 use std::{fmt, ops::Index};
 
 use serde::Serialize;
@@ -42,54 +46,63 @@ impl Default for JSONConfig {
 }
 
 impl JSONConfig {
-    /// Creates Hutool-compatible defaults.
+    /// 中文说明: 创建 Hutool 兼容的默认配置。
+    /// 对齐 Java 方法: `JSONConfig.create`
     #[must_use]
     pub fn create() -> Self {
         Self::default()
     }
 
-    /// JSON objects are deterministically ordered in Rust.
+    /// 中文说明: JSON 对象在 Rust 中是否有序（始终返回 true）。
+    /// 对齐 Java 方法: `isOrder`
     #[must_use]
     pub const fn is_order(&self) -> bool {
         true
     }
 
-    /// Retains the deprecated Hutool option as a no-op.
+    /// 中文说明: 保留已废弃的 Hutool 选项，实际为空操作。
+    /// 对齐 Java 方法: `setOrder`
     pub const fn set_order(&mut self, _order: bool) -> &mut Self {
         self
     }
 
-    /// Uses lexicographic key order when serializing an object.
+    /// 中文说明: 设置使用字典序键排序方式序列化对象。
+    /// 对齐 Java 方法: `setNatureKeyComparator`
     pub const fn set_nature_key_comparator(&mut self) -> &mut Self {
         self.natural_key_order = true;
         self
     }
 
-    /// Returns whether lexicographic key ordering was requested.
+    /// 中文说明: 是否使用字典序键排序。
+    /// 对齐 Java 方法: `hasNatureKeyComparator`
     #[must_use]
     pub const fn has_nature_key_comparator(&self) -> bool {
         self.natural_key_order
     }
 
-    /// Returns whether conversion failures may be ignored.
+    /// 中文说明: 是否忽略转换失败。
+    /// 对齐 Java 方法: `isIgnoreError`
     #[must_use]
     pub const fn is_ignore_error(&self) -> bool {
         self.ignore_error
     }
 
-    /// Configures conversion error handling.
+    /// 中文说明: 设置是否忽略转换错误。
+    /// 对齐 Java 方法: `setIgnoreError`
     pub const fn set_ignore_error(&mut self, value: bool) -> &mut Self {
         self.ignore_error = value;
         self
     }
 
-    /// Returns whether object lookup is ASCII case-insensitive.
+    /// 中文说明: 是否忽略键的 ASCII 大小写。
+    /// 对齐 Java 方法: `isIgnoreCase`
     #[must_use]
     pub const fn is_ignore_case(&self) -> bool {
         self.ignore_case
     }
 
-    /// Configures ASCII case-insensitive object lookup.
+    /// 中文说明: 设置是否忽略键的 ASCII 大小写。
+    /// 对齐 Java 方法: `setIgnoreCase`
     pub const fn set_ignore_case(&mut self, value: bool) -> &mut Self {
         self.ignore_case = value;
         self

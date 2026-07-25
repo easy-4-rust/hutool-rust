@@ -1,3 +1,7 @@
+//! 对齐: `cn.hutool.log.Log` (日志门面模块)
+//! 来源: hutool-log/src/main/java/cn/hutool/log/
+//! 中文说明: 基于 Rust `tracing` 生态的结构化应用日志模块，提供与 Hutool Java 日志体系兼容的抽象层。
+//!
 //! Structured application logging built on the Rust `tracing` ecosystem.
 
 #![forbid(unsafe_code)]

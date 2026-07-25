@@ -1,4 +1,6 @@
-//! PBKDF2 helpers aligned with Hutool `PBKDF2Test`.
+//! 对齐: `cn.hutool.crypto.digest.PBKDF2`
+//! 来源: hutool-crypto/src/main/java/cn/hutool/crypto/digest/PBKDF2.java
+//! 中文说明: PBKDF2 密码派生工具，对齐 Hutool PBKDF2
 
 use crate::CryptoError;
 use pbkdf2::pbkdf2_hmac;

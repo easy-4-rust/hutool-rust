@@ -1,3 +1,7 @@
+//! 对齐: `cn.hutool.log.Log`
+//! 来源: hutool-log/src/main/java/cn/hutool/log/Log.java
+//! 中文说明: 面向对象安全的 Hutool 日志接口 trait，提供各级别日志记录方法。
+
 use std::{
     collections::HashMap,
     fmt,
@@ -7,6 +11,11 @@ use std::{
 use super::log_level::LogLevel;
 use super::log_record::LogRecord;
 
+/// 面向对象安全的 Hutool 兼容日志接口，对应 Java 的 `cn.hutool.log.Log`。
+///
+/// 对齐 Java 类: `cn.hutool.log.Log`
+/// 来源: hutool-log/src/main/java/cn/hutool/log/Log.java
+///
 /// Object-safe Hutool-compatible logger contract.
 pub trait Log: Send + Sync {
     /// Returns the logger/category name.

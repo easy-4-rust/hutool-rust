@@ -1,4 +1,6 @@
-//! HMAC helpers aligned with Hutool `HMac` / `SecureUtil.hmac*`.
+//! 对齐: `cn.hutool.crypto.digest.HMac`
+//! 来源: hutool-crypto/src/main/java/cn/hutool/crypto/digest/HMac.java
+//! 中文说明: HMAC 消息认证码工具（MD5/SHA1/SHA256/SHA512/SM3），对齐 Hutool HMac
 
 use crate::CryptoError;
 use hmac::{Hmac, Mac};

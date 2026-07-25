@@ -1,3 +1,7 @@
+//! 对齐: `cn.hutool.log` 兼容层模块
+//! 来源: hutool-log/src/main/java/cn/hutool/log/
+//! 中文说明: Hutool 日志兼容层，将 Java 日志抽象（Log/LogFactory/StaticLog 等）映射到 Rust tracing 生态。
+
 use std::{
     collections::HashMap,
     fmt,

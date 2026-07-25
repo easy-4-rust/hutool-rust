@@ -1,3 +1,7 @@
+//! 对齐: `cn.hutool.log` 后端适配（tracing 桥接）
+//! 来源: hutool-log/src/main/java/cn/hutool/log/
+//! 中文说明: 基于 Rust tracing 生产级后端的 LogSink 实现，将 Hutool 日志事件桥接到 tracing 宏。
+
 use std::{
     collections::HashMap,
     fmt,
@@ -8,6 +12,11 @@ use super::log_level::LogLevel;
 use super::log_record::LogRecord;
 use super::log_sink::LogSink;
 
+/// 基于 tracing 生态的生产级 LogSink 实现。
+///
+/// 对齐: `cn.hutool.log` 中各后端的输出实现
+/// 来源: hutool-log/src/main/java/cn/hutool/log/
+///
 /// Production sink backed by the mature `tracing` ecosystem.
 #[derive(Debug, Default)]
 pub struct TracingSink;

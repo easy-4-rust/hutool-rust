@@ -1,3 +1,7 @@
+//! 对齐: `cn.hutool.aop`
+//! 来源: hutool-aop/src/main/java/cn/hutool/aop/
+//! 中文说明: Hutool AOP 模块，提供面向切面编程的代理、拦截器和切面支持。
+//!
 //! Typed interception aligned with Hutool's AOP capability.
 //!
 //! Rust has no JVM-style runtime class proxy. `HiTool` therefore preserves
@@ -20,7 +24,8 @@ use std::{fmt, marker::PhantomData, sync::Arc};
 #[cfg(test)]
 mod aop_tests;
 
-/// A synchronous around-interceptor.
+/// 对齐: `cn.hutool.aop.interceptor` 包中的拦截器概念
+/// 中文说明: 同步环绕拦截器，对目标操作进行前置和后置增强处理。
 pub trait Interceptor<C, R, E>: Send + Sync {
     /// Invokes behavior around the rest of the chain.
     fn intercept(
@@ -30,7 +35,8 @@ pub trait Interceptor<C, R, E>: Send + Sync {
     ) -> Result<R, E>;
 }
 
-/// An ordered, immutable chain of interceptors.
+/// 对齐: Hutool 拦截器链模式
+/// 中文说明: 有序、不可变的拦截器链，按顺序执行所有拦截器后再执行目标操作。
 pub struct InterceptorChain<C, R, E> {
     interceptors: Vec<Arc<dyn Interceptor<C, R, E>>>,
 }
@@ -108,7 +114,8 @@ fn dispatch<C, R, E>(
     current.intercept(context, &mut |context| dispatch(remaining, context, target))
 }
 
-/// An interceptor backed by before and after callbacks.
+/// 对齐: Hutool 切面前后置回调模式
+/// 中文说明: 基于前置和后置回调的拦截器实现。
 pub struct BeforeAfter<C, R, E, B, A> {
     before: B,
     after: A,

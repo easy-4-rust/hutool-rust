@@ -1,3 +1,8 @@
+//! 对齐: `cn.hutool.cron` (CronUtil / Cron)
+//! 来源: hutool-cron/src/main/java/cn/hutool/cron/CronUtil.java
+//! 中文说明: Hutool 定时任务模块的 Rust 入口，提供 cron 表达式解析、
+//! 调度器、时间轮等核心功能的对外导出。
+//!
 //! Cron expression parsing and occurrence calculation.
 
 #![forbid(unsafe_code)]
@@ -47,6 +52,10 @@ pub use pattern::{
 };
 pub use timingwheel::{SystemTimer, TimerTask, TimerTaskList, TimingWheel};
 
+/// 对齐: `cn.hutool.cron.CronException`
+/// 中文说明: Cron 模块统一错误类型，涵盖表达式解析、任务调度、
+/// 定时器生命周期等各类异常。
+///
 /// Errors returned by cron utilities.
 #[derive(Debug, Error)]
 pub enum CronError {
@@ -124,6 +133,9 @@ pub enum CronError {
     SchedulerAlreadyStarted,
 }
 
+/// 对齐: `cn.hutool.cron.pattern.CronPattern`
+/// 中文说明: 已解析的 cron 调度计划，线程安全，可计算下一次触发时间。
+///
 /// A parsed cron schedule that can be shared safely between threads.
 #[derive(Debug, Clone)]
 pub struct CronSchedule {
@@ -132,7 +144,8 @@ pub struct CronSchedule {
 }
 
 impl CronSchedule {
-    /// Parses a cron expression. The engine supports seconds as the first field.
+    /// 中文说明: 解析 cron 表达式，支持秒级精度（第一位为秒字段）。
+    /// 对齐 Java 方法: `of`
     pub fn parse(expression: impl Into<String>) -> Result<Self, CronError> {
         let expression = expression.into();
         let inner = Schedule::from_str(&expression)?;
@@ -145,13 +158,15 @@ impl CronSchedule {
         &self.expression
     }
 
-    /// Returns the next occurrence after the supplied UTC time.
+    /// 中文说明: 返回指定 UTC 时间之后的下一次触发时刻。
+    /// 对齐 Java 方法: `nextMatchAfter`
     #[must_use]
     pub fn next_after(&self, after: &DateTime<Utc>) -> Option<DateTime<Utc>> {
         self.inner.after(after).next()
     }
 
-    /// Returns at most `limit` occurrences after the supplied UTC time.
+    /// 中文说明: 返回指定时间之后最多 `limit` 个触发时刻。
+    /// 对齐 Java 方法: `matchedDates`
     #[must_use]
     pub fn upcoming(&self, after: &DateTime<Utc>, limit: usize) -> Vec<DateTime<Utc>> {
         self.inner.after(after).take(limit).collect()
@@ -167,6 +182,8 @@ impl CronSchedule {
     }
 }
 
+/// 中文说明: 运行中的定时任务句柄，丢弃时自动取消后续执行。
+///
 /// A running cron job. Dropping the handle aborts future executions.
 #[derive(Debug)]
 pub struct JobHandle {
@@ -193,6 +210,8 @@ impl Drop for JobHandle {
     }
 }
 
+/// 中文说明: 定时任务的运行时执行策略（如超时时间）。
+///
 /// Runtime execution policy for a cron job.
 #[derive(Debug, Clone, Copy, Default)]
 pub struct JobPolicy {
@@ -201,6 +220,8 @@ pub struct JobPolicy {
     pub timeout: Option<Duration>,
 }
 
+/// 中文说明: 失败任务的重试策略，支持指数退避。
+///
 /// Retry policy for fallible jobs, kept separate from the job implementation.
 #[derive(Debug, Clone, Copy)]
 pub struct RetryPolicy {
@@ -210,8 +231,8 @@ pub struct RetryPolicy {
 }
 
 impl RetryPolicy {
-    /// Creates a bounded exponential-backoff policy. `max_attempts` includes
-    /// the first execution.
+    /// 中文说明: 创建有界指数退避重试策略，`max_attempts` 包含首次执行。
+    /// 对齐 Java 方法: `new`
     pub fn new(
         max_attempts: u32,
         initial_delay: Duration,
@@ -227,7 +248,7 @@ impl RetryPolicy {
         })
     }
 
-    /// Returns a policy that executes exactly once.
+    /// 中文说明: 返回仅执行一次的策略（不重试）。
     #[must_use]
     pub const fn none() -> Self {
         Self {
@@ -252,12 +273,9 @@ impl Default for RetryPolicy {
     }
 }
 
-/// Starts an asynchronous job for every future occurrence on the current
-/// Tokio runtime.
-///
-/// A new run begins only after the previous run completes, preventing
-/// accidental overlap. Callers can create independent handles for parallel
-/// jobs when overlap is intentional.
+/// 中文说明: 在当前 Tokio 运行时上启动异步定时任务，
+/// 每次触发仅在上次完成后才开始，避免任务重叠。
+/// 对齐 Java 方法: `CronUtil.schedule`
 #[must_use]
 pub fn spawn<F, Fut>(schedule: CronSchedule, job: F) -> JobHandle
 where
@@ -272,7 +290,8 @@ where
     )
 }
 
-/// Starts a job on an explicitly supplied Tokio runtime handle.
+/// 中文说明: 在指定的 Tokio 运行时句柄上启动定时任务。
+/// 对齐 Java 方法: `CronUtil.schedule`
 #[must_use]
 pub fn spawn_on<F, Fut>(
     runtime: &tokio::runtime::Handle,
@@ -340,11 +359,9 @@ fn record_timeout(span: &tracing::Span) {
     tracing::warn!(parent: span, "cron job exceeded its execution timeout");
 }
 
-/// Starts a fallible job on the current Tokio runtime with an independent
-/// bounded retry policy.
-///
-/// Runs never overlap: a later scheduled occurrence is selected only after
-/// the current occurrence, including retries, has completed.
+/// 中文说明: 在当前 Tokio 运行时上启动可失败定时任务，
+/// 支持独立的有界重试策略，执行不会重叠。
+/// 对齐 Java 方法: `CronUtil.schedule`
 #[must_use]
 pub fn spawn_fallible<F, Fut>(
     schedule: CronSchedule,
@@ -365,7 +382,8 @@ where
     )
 }
 
-/// Starts a fallible job on an explicitly supplied Tokio runtime handle.
+/// 中文说明: 在指定的 Tokio 运行时句柄上启动可失败定时任务。
+/// 对齐 Java 方法: `CronUtil.schedule`
 #[must_use]
 pub fn spawn_fallible_on<F, Fut>(
     runtime: &tokio::runtime::Handle,

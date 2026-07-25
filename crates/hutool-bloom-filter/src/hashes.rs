@@ -1,4 +1,8 @@
 //! Hutool `HashUtil` algorithms, including Java UTF-16 and wrapping semantics.
+//!
+//! 对齐: `cn.hutool.bloomFilter.HashUtil`
+//! 来源: hutool-bloomFilter/src/main/java/cn/hutool/bloomFilter/HashUtil.java
+//! 中文说明: Hutool 哈希工具类，包含多种哈希算法实现（RS、JS、ELF、PJW 等）
 
 fn units(value: &str) -> impl Iterator<Item = i32> + '_ {
     value.encode_utf16().map(i32::from)

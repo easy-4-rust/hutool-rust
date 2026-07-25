@@ -1,4 +1,6 @@
-//! Hutool-aligned before/after aspects.
+//! 对齐: `cn.hutool.aop.aspect.TimeIntervalAspect`
+//! 来源: hutool-aop/src/main/java/cn/hutool/aop/aspect/TimeIntervalAspect.java
+//! 中文说明: 时间间隔切面，用于测量成功调用的执行耗时。
 
 use crate::Method;
 use parking_lot::Mutex;
@@ -14,7 +16,8 @@ use std::{
 use super::aspect::Aspect;
 use super::timing_event::TimingEvent;
 
-/// An aspect that measures successful invocation time.
+/// 对齐: `cn.hutool.aop.aspect.TimeIntervalAspect`
+/// 中文说明: 时间间隔切面，测量成功调用的耗时并通过 sink 回调报告计时事件。
 #[derive(Clone)]
 pub struct TimeIntervalAspect {
     started: Arc<Mutex<HashMap<ThreadId, Vec<Instant>>>>,

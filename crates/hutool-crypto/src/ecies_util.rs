@@ -1,8 +1,6 @@
-//! ECIES helpers aligned with Hutool `ECIES` (P-256 ECDH + AES-256-GCM).
-//!
-//! Hutool's BC `ECIES` Cipher SPI is replaced by an idiomatic Rust pipeline:
-//! ephemeral ECDH → SHA-256(shared) → AES-256-GCM. Ciphertext layout is
-//! `ephemeral_sec1_uncompressed (65) || nonce||ct+tag` from [`aes256_gcm_encrypt`].
+//! 对齐: `cn.hutool.crypto.asymmetric.ECIES`
+//! 来源: hutool-crypto/src/main/java/cn/hutool/crypto/asymmetric/ECIES.java
+//! 中文说明: ECIES 混合加密（P-256 ECDH + AES-256-GCM），对齐 Hutool ECIES
 
 use crate::{aes256_gcm_decrypt, aes256_gcm_encrypt, CryptoError};
 use p256::elliptic_curve::sec1::{FromEncodedPoint, ToEncodedPoint};

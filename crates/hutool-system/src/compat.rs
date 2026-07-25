@@ -1,4 +1,6 @@
-//! Hutool-named portable system property and runtime views.
+//! 对齐: `cn.hutool.system` (SystemUtil / UserInfo / OsInfo / JavaInfo / HostInfo 等)
+//! 来源: hutool-system/src/main/java/cn/hutool/system/*.java
+//! 中文说明: 提供与 Hutool 对齐的系统属性、用户信息、操作系统信息、Java 运行时信息等便携式视图
 
 use std::{
     env,
@@ -21,34 +23,42 @@ const PATH_SEPARATOR: char = ';';
 #[cfg(not(windows))]
 const PATH_SEPARATOR: char = ':';
 
-/// Common environment/property keys corresponding to Hutool's constants.
+/// 对齐: `cn.hutool.system.SystemProps`
+/// 中文说明: 常用的系统环境变量/属性键名常量，对应 Hutool `SystemProps` 中的字段
 #[derive(Debug, Clone, Copy, Default)]
 pub struct SystemPropsKeys;
 
 impl SystemPropsKeys {
-    /// User name environment key on Unix-like systems.
+    /// 中文说明: Unix 系统上用户名环境变量键名
+    /// 对齐 Java 方法: `SystemProps.USER_NAME`
     pub const USER_NAME: &'static str = "USER";
-    /// User home environment key.
+    /// 中文说明: 用户主目录环境变量键名
+    /// 对齐 Java 方法: `SystemProps.USER_HOME`
     pub const USER_HOME: &'static str = "HOME";
-    /// Temporary directory environment key.
+    /// 中文说明: 临时目录环境变量键名
+    /// 对齐 Java 方法: `SystemProps.TEMP_DIR`
     pub const TEMP_DIR: &'static str = "TMPDIR";
-    /// Java home environment key.
+    /// 中文说明: Java 安装目录环境变量键名
+    /// 对齐 Java 方法: `SystemProps.JAVA_HOME`
     pub const JAVA_HOME: &'static str = "JAVA_HOME";
-    /// Java version override key used by this portable facade.
+    /// 中文说明: Java 版本覆盖键名，用于此便携式门面
+    /// 对齐 Java 方法: `SystemProps.JAVA_VERSION`
     pub const JAVA_VERSION: &'static str = "JAVA_VERSION";
 }
 
-/// Host identity snapshot.
+/// 对齐: `cn.hutool.system.HostInfo`
+/// 中文说明: 主机身份信息快照，包含主机名和主地址
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct HostInfo {
-    /// Host name.
+    /// 中文说明: 主机名
     pub name: Option<String>,
-    /// Primary address when supplied by the caller.
+    /// 中文说明: 主地址（由调用方提供时填充）
     pub address: Option<String>,
 }
 
 impl HostInfo {
-    /// Collects portable host identity.
+    /// 中文说明: 采集便携式的主机身份信息
+    /// 对齐 Java 方法: `HostInfo` 构造/初始化逻辑
     #[must_use]
     pub fn collect() -> Self {
         Self {
@@ -58,25 +68,27 @@ impl HostInfo {
     }
 }
 
-/// Operating-system properties and Hutool-compatible family predicates.
+/// 对齐: `cn.hutool.system.SystemProps` (操作系统属性部分)
+/// 中文说明: 操作系统属性及 Hutool 兼容的系统家族判断谓词
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct OsInfo {
-    /// Target architecture.
+    /// 中文说明: 目标架构
     pub arch: String,
-    /// Operating-system name.
+    /// 中文说明: 操作系统名称
     pub name: String,
-    /// Operating-system version.
+    /// 中文说明: 操作系统版本
     pub version: String,
-    /// Filesystem separator.
+    /// 中文说明: 文件系统分隔符
     pub file_separator: char,
-    /// Native line separator.
+    /// 中文说明: 原生行分隔符
     pub line_separator: &'static str,
-    /// Search-path separator.
+    /// 中文说明: 搜索路径分隔符
     pub path_separator: char,
 }
 
 impl OsInfo {
-    /// Creates an OS view from explicit parts, useful for deterministic policy checks.
+    /// 中文说明: 从显式参数创建 OS 视图，适用于确定性策略检查
+    /// 对齐 Java 方法: `SystemProps` 构造逻辑
     #[must_use]
     pub fn from_parts(
         arch: impl Into<String>,
@@ -93,7 +105,8 @@ impl OsInfo {
         }
     }
 
-    /// Collects current OS properties.
+    /// 中文说明: 采集当前操作系统属性
+    /// 对齐 Java 方法: `SystemUtil.getOsInfo`
     #[must_use]
     pub fn collect() -> Self {
         Self::from_parts(
@@ -107,62 +120,72 @@ impl OsInfo {
         self.name.to_ascii_lowercase().replace([' ', '-'], "")
     }
 
-    /// Returns whether the OS name matches AIX.
+    /// 中文说明: 判断操作系统名称是否匹配 AIX
+    /// 对齐 Java 方法: `SystemUtil.isAix`
     #[must_use]
     pub fn is_aix(&self) -> bool {
         self.normalized_name().contains("aix")
     }
 
-    /// Returns whether the OS name matches HP-UX.
+    /// 中文说明: 判断操作系统名称是否匹配 HP-UX
+    /// 对齐 Java 方法: `SystemUtil.isHpUx`
     #[must_use]
     pub fn is_hp_ux(&self) -> bool {
         self.normalized_name().contains("hpux")
     }
 
-    /// Returns whether the OS name matches IRIX.
+    /// 中文说明: 判断操作系统名称是否匹配 IRIX
+    /// 对齐 Java 方法: `SystemUtil.isIrix`
     #[must_use]
     pub fn is_irix(&self) -> bool {
         self.normalized_name().contains("irix")
     }
 
-    /// Returns whether the OS name matches Linux.
+    /// 中文说明: 判断操作系统名称是否匹配 Linux
+    /// 对齐 Java 方法: `SystemUtil.isLinux`
     #[must_use]
     pub fn is_linux(&self) -> bool {
         self.normalized_name().contains("linux")
     }
 
-    /// Returns whether the OS name matches macOS.
+    /// 中文说明: 判断操作系统名称是否匹配 macOS
+    /// 对齐 Java 方法: `SystemUtil.isMac`
     #[must_use]
     pub fn is_mac(&self) -> bool {
         let name = self.normalized_name();
         name.contains("mac") || name.contains("darwin")
     }
 
-    /// Alias for [`Self::is_mac`].
+    /// 中文说明: [`Self::is_mac`] 的别名
+    /// 对齐 Java 方法: `SystemUtil.isMacOSX`
     #[must_use]
     pub fn is_mac_os_x(&self) -> bool {
         self.is_mac()
     }
 
-    /// Returns whether the OS name matches OS/2.
+    /// 中文说明: 判断操作系统名称是否匹配 OS/2
+    /// 对齐 Java 方法: `SystemUtil.isOS2`
     #[must_use]
     pub fn is_os2(&self) -> bool {
         self.normalized_name().contains("os/2") || self.normalized_name() == "os2"
     }
 
-    /// Returns whether the OS name matches Solaris.
+    /// 中文说明: 判断操作系统名称是否匹配 Solaris
+    /// 对齐 Java 方法: `SystemUtil.isSolaris`
     #[must_use]
     pub fn is_solaris(&self) -> bool {
         self.normalized_name().contains("solaris")
     }
 
-    /// Returns whether the OS name matches `SunOS`.
+    /// 中文说明: 判断操作系统名称是否匹配 SunOS
+    /// 对齐 Java 方法: `SystemUtil.isSunOs`
     #[must_use]
     pub fn is_sun_os(&self) -> bool {
         self.normalized_name().contains("sunos")
     }
 
-    /// Returns whether this is a Windows family.
+    /// 中文说明: 判断是否为 Windows 系列操作系统
+    /// 对齐 Java 方法: `SystemUtil.isWindows`
     #[must_use]
     pub fn is_windows(&self) -> bool {
         self.normalized_name().contains("windows")
@@ -172,67 +195,78 @@ impl OsInfo {
         self.is_windows() && self.version.to_ascii_lowercase().contains(expected)
     }
 
-    /// Windows 2000 predicate.
+    /// 中文说明: 判断是否为 Windows 2000
+    /// 对齐 Java 方法: `SystemUtil.isWindows2000`
     #[must_use]
     pub fn is_windows_2000(&self) -> bool {
         self.windows_version("2000")
     }
 
-    /// Windows 95 predicate.
+    /// 中文说明: 判断是否为 Windows 95
+    /// 对齐 Java 方法: `SystemUtil.isWindows95`
     #[must_use]
     pub fn is_windows_95(&self) -> bool {
         self.windows_version("95")
     }
 
-    /// Windows 98 predicate.
+    /// 中文说明: 判断是否为 Windows 98
+    /// 对齐 Java 方法: `SystemUtil.isWindows98`
     #[must_use]
     pub fn is_windows_98(&self) -> bool {
         self.windows_version("98")
     }
 
-    /// Windows ME predicate.
+    /// 中文说明: 判断是否为 Windows ME
+    /// 对齐 Java 方法: `SystemUtil.isWindowsME`
     #[must_use]
     pub fn is_windows_me(&self) -> bool {
         self.windows_version("me")
     }
 
-    /// Windows NT predicate.
+    /// 中文说明: 判断是否为 Windows NT
+    /// 对齐 Java 方法: `SystemUtil.isWindowsNT`
     #[must_use]
     pub fn is_windows_nt(&self) -> bool {
         self.windows_version("nt")
     }
 
-    /// Windows XP predicate.
+    /// 中文说明: 判断是否为 Windows XP
+    /// 对齐 Java 方法: `SystemUtil.isWindowsXP`
     #[must_use]
     pub fn is_windows_xp(&self) -> bool {
         self.windows_version("xp")
     }
 
-    /// Windows 7 predicate.
+    /// 中文说明: 判断是否为 Windows 7
+    /// 对齐 Java 方法: `SystemUtil.isWindows7`
     #[must_use]
     pub fn is_windows_7(&self) -> bool {
         self.windows_version("7")
     }
 
-    /// Windows 8 predicate excluding 8.1.
+    /// 中文说明: 判断是否为 Windows 8（不含 8.1）
+    /// 对齐 Java 方法: `SystemUtil.isWindows8`
     #[must_use]
     pub fn is_windows_8(&self) -> bool {
         self.windows_version("8") && !self.windows_version("8.1")
     }
 
-    /// Windows 8.1 predicate.
+    /// 中文说明: 判断是否为 Windows 8.1
+    /// 对齐 Java 方法: `SystemUtil.isWindows8_1`
     #[must_use]
     pub fn is_windows_8_1(&self) -> bool {
         self.windows_version("8.1")
     }
 
-    /// Windows 10 predicate.
+    /// 中文说明: 判断是否为 Windows 10
+    /// 对齐 Java 方法: `SystemUtil.isWindows10`
     #[must_use]
     pub fn is_windows_10(&self) -> bool {
         self.windows_version("10")
     }
 
-    /// Windows 11 predicate.
+    /// 中文说明: 判断是否为 Windows 11
+    /// 对齐 Java 方法: `SystemUtil.isWindows11`
     #[must_use]
     pub fn is_windows_11(&self) -> bool {
         self.windows_version("11")

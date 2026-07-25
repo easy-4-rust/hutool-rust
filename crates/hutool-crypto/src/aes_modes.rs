@@ -1,4 +1,6 @@
-//! AES block modes aligned with Hutool `AES` tests (CBC/ECB PKCS7, CTS).
+//! 对齐: `cn.hutool.crypto.symmetric.AES`
+//! 来源: hutool-crypto/src/main/java/cn/hutool/crypto/symmetric/AES.java
+//! 中文说明: AES 分组模式工具（CBC/ECB PKCS7 填充），对齐 Hutool AES 测试向量
 
 use crate::CryptoError;
 use aes::cipher::{BlockDecryptMut, BlockEncryptMut, KeyIvInit, KeyInit, block_padding::Pkcs7};

@@ -1,4 +1,6 @@
-//! ASN.1 DER helpers aligned with Hutool `ASN1Util` (without BouncyCastle types).
+//! 对齐: `cn.hutool.crypto.asymmetric.ASN1Util`
+//! 来源: hutool-crypto/src/main/java/cn/hutool/crypto/asymmetric/ASN1Util.java
+//! 中文说明: ASN.1 DER 编码工具，对齐 Hutool ASN1Util
 
 use crate::CryptoError;
 use der::{Decode, Encode};
