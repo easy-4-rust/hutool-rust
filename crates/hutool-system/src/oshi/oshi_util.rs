@@ -1,4 +1,6 @@
-//! OSHI-aligned hardware and operating-system snapshots backed by `sysinfo`.
+//! 对齐: `cn.hutool.system.oshi.OshiUtil`
+//! 来源: hutool-system/src/main/java/cn/hutool/system/oshi/OshiUtil.java
+//! 中文说明: 硬件信息采集工具类，提供系统、进程、内存、CPU、磁盘、网络、传感器和硬件信息的便捷查询方法
 
 use std::{thread, time::Duration};
 
@@ -13,18 +15,21 @@ use super::network_info::NetworkInfo;
 use super::process_info::ProcessInfo;
 use super::sensor_info::SensorInfo;
 
-/// Mature `sysinfo`-backed counterpart of Hutool's `OshiUtil`.
+/// 对齐: `cn.hutool.system.oshi.OshiUtil`
+/// 中文说明: 成熟的 `sysinfo` 支持的硬件信息采集工具，对应 Hutool 的 `OshiUtil`
 #[derive(Debug, Clone, Copy, Default)]
 pub struct OshiUtil;
 
 impl OshiUtil {
-    /// Returns a fully refreshed `sysinfo` system.
+    /// 中文说明: 返回一个完全刷新的 `sysinfo` 系统实例
+    /// 对齐 Java 方法: `OshiUtil.getSystem`
     #[must_use]
     pub fn system() -> System {
         System::new_all()
     }
 
-    /// Returns the current process when it remains visible during collection.
+    /// 中文说明: 返回当前进程信息（在采集期间可见时）
+    /// 对齐 Java 方法: `OshiUtil.getCurrentProcess`
     #[must_use]
     pub fn current_process() -> Option<ProcessInfo> {
         let system = Self::system();
@@ -32,13 +37,15 @@ impl OshiUtil {
         process_info(&system, pid)
     }
 
-    /// Looks up a process in an existing system snapshot.
+    /// 中文说明: 在现有系统快照中查找指定进程
+    /// 对齐 Java 方法: `OshiUtil.getProcess`
     #[must_use]
     pub fn process(system: &System, pid: u32) -> Option<ProcessInfo> {
         process_info(system, Pid::from_u32(pid))
     }
 
-    /// Returns current physical and swap memory counters.
+    /// 中文说明: 返回当前物理内存和交换内存计数器
+    /// 对齐 Java 方法: `OshiUtil.getMemory`
     #[must_use]
     pub fn memory() -> MemoryInfo {
         let system = Self::system();
@@ -51,7 +58,8 @@ impl OshiUtil {
         }
     }
 
-    /// Samples aggregate CPU utilization after `interval`.
+    /// 中文说明: 在指定时间间隔后采样聚合 CPU 利用率
+    /// 对齐 Java 方法: `OshiUtil.getCpuInfo`
     #[must_use]
     pub fn cpu_info(interval: Duration) -> CpuInfo {
         let mut system = System::new_all();
@@ -71,7 +79,8 @@ impl OshiUtil {
         )
     }
 
-    /// Collects disk-store summaries.
+    /// 中文说明: 采集磁盘存储摘要信息
+    /// 对齐 Java 方法: `OshiUtil.getDiskStores`
     #[must_use]
     pub fn disk_stores() -> Vec<DiskInfo> {
         Disks::new_with_refreshed_list()
@@ -86,7 +95,8 @@ impl OshiUtil {
             .collect()
     }
 
-    /// Collects network-interface counters.
+    /// 中文说明: 采集网络接口计数器
+    /// 对齐 Java 方法: `OshiUtil.getNetworkInterfaces`
     #[must_use]
     pub fn network_interfaces() -> Vec<NetworkInfo> {
         Networks::new_with_refreshed_list()
@@ -99,7 +109,8 @@ impl OshiUtil {
             .collect()
     }
 
-    /// Collects temperature sensors supported by the host.
+    /// 中文说明: 采集主机支持的温度传感器
+    /// 对齐 Java 方法: `OshiUtil.getSensors`
     #[must_use]
     pub fn sensors() -> Vec<SensorInfo> {
         Components::new_with_refreshed_list()
@@ -111,7 +122,8 @@ impl OshiUtil {
             .collect()
     }
 
-    /// Collects the complete hardware view.
+    /// 中文说明: 采集完整的硬件视图
+    /// 对齐 Java 方法: `OshiUtil.getHardware`
     #[must_use]
     pub fn hardware() -> HardwareInfo {
         HardwareInfo {

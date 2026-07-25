@@ -531,7 +531,8 @@ impl TaskExecutor {
         &self.cron_task
     }
 
-    /// Executes and emits lifecycle events.
+    /// 中文说明: 执行任务并触发生命周期事件。
+    /// 对齐 Java 方法: `execute`
     pub fn run(&self) -> Result<(), CronError> {
         self.listeners.notify_task_start(self);
         match self.cron_task.execute() {
@@ -547,6 +548,9 @@ impl TaskExecutor {
     }
 }
 
+/// 对齐: `cn.hutool.cron.TaskExecutorManager`
+/// 中文说明: 跟踪当前已派生的阻塞执行实例。
+///
 /// Tracks currently spawned blocking executions.
 #[derive(Debug, Clone)]
 pub struct TaskExecutorManager {
@@ -555,7 +559,7 @@ pub struct TaskExecutorManager {
 }
 
 impl TaskExecutorManager {
-    /// Creates an empty manager.
+    /// 中文说明: 创建空的执行管理器。
     #[must_use]
     pub fn new(listeners: TaskListenerManager) -> Self {
         Self {
@@ -564,7 +568,7 @@ impl TaskExecutorManager {
         }
     }
 
-    /// Returns a snapshot of active executions.
+    /// 中文说明: 返回当前活跃执行的快照。
     #[must_use]
     pub fn executors(&self) -> Vec<TaskExecutor> {
         self.executors
@@ -573,7 +577,7 @@ impl TaskExecutorManager {
             .clone()
     }
 
-    /// Creates and records an executor.
+    /// 中文说明: 创建并记录一个执行实例。
     pub fn spawn_executor(&self, task: Arc<CronTask>) -> TaskExecutor {
         let executor = TaskExecutor::new(task, self.listeners.clone());
         self.executors
@@ -583,7 +587,7 @@ impl TaskExecutorManager {
         executor
     }
 
-    /// Removes a completed executor by task identity.
+    /// 中文说明: 按任务标识移除已完成的执行实例。
     pub fn notify_executor_completed(&self, executor: &TaskExecutor) -> bool {
         let mut executors = self.executors.write().expect("executor manager poisoned");
         if let Some(index) = executors
@@ -598,6 +602,9 @@ impl TaskExecutorManager {
     }
 }
 
+/// 对齐: `cn.hutool.cron.CronConfig`
+/// 中文说明: 调度器配置（时区、是否匹配秒等）。
+///
 /// Scheduler configuration.
 #[derive(Debug, Clone)]
 pub struct CronConfig {
@@ -615,13 +622,15 @@ impl Default for CronConfig {
 }
 
 impl CronConfig {
-    /// Sets the fixed timezone offset.
+    /// 中文说明: 设置固定时区偏移。
+    /// 对齐 Java 方法: `setTimezone`
     pub fn set_timezone(&mut self, timezone: chrono::FixedOffset) -> &mut Self {
         self.timezone = timezone;
         self
     }
 
-    /// Returns the fixed timezone offset.
+    /// 中文说明: 返回固定时区偏移。
+    /// 对齐 Java 方法: `getTimezone`
     #[must_use]
     pub const fn timezone(&self) -> chrono::FixedOffset {
         self.timezone

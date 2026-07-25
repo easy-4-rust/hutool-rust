@@ -632,13 +632,15 @@ impl JSONArray {
         self.values.is_empty()
     }
 
-    /// Borrows one element.
+    /// 中文说明: 借用指定索引的元素。
+    /// 对齐 Java 方法: `get`
     #[must_use]
     pub fn get(&self, index: usize) -> Option<&Value> {
         self.values.get(index)
     }
 
-    /// Appends a value unless configured to ignore nulls.
+    /// 中文说明: 追加值，若配置忽略 null 则跳过 null 值。
+    /// 对齐 Java 方法: `add`
     pub fn push(&mut self, value: Value) -> &mut Self {
         if !(self.config.is_ignore_null_value() && value.is_null()) {
             self.values.push(normalize_value(value, &self.config));
@@ -646,7 +648,8 @@ impl JSONArray {
         self
     }
 
-    /// Sets an index, extending missing positions with nulls.
+    /// 中文说明: 设置指定索引的值，缺失位置用 null 填充。
+    /// 对齐 Java 方法: `set`
     pub fn set(&mut self, index: usize, value: Value) -> &mut Self {
         if self.values.len() <= index {
             self.values.resize(index + 1, Value::Null);
@@ -655,7 +658,8 @@ impl JSONArray {
         self
     }
 
-    /// Removes and returns an element.
+    /// 中文说明: 移除并返回指定索引的元素。
+    /// 对齐 Java 方法: `remove`
     pub fn remove(&mut self, index: usize) -> Option<Value> {
         if index < self.values.len() {
             Some(self.values.remove(index))
@@ -664,7 +668,8 @@ impl JSONArray {
         }
     }
 
-    /// Joins display values without JSON string quoting.
+    /// 中文说明: 将显示值用分隔符连接（不带 JSON 字符串引号）。
+    /// 对齐 Java 方法: `join`
     #[must_use]
     pub fn join(&self, separator: &str) -> String {
         self.values
@@ -674,7 +679,8 @@ impl JSONArray {
             .join(separator)
     }
 
-    /// Borrows a nested value by path.
+    /// 中文说明: 通过路径借用嵌套值。
+    /// 对齐 Java 方法: `getByPath`
     #[must_use]
     pub fn get_by_path(&self, path: &str) -> Option<&Value> {
         let tokens = parse_path(path).ok()?;
@@ -690,7 +696,8 @@ impl JSONArray {
         current
     }
 
-    /// Writes a nested value by path.
+    /// 中文说明: 通过路径写入嵌套值。
+    /// 对齐 Java 方法: `putByPath`
     pub fn put_by_path(&mut self, path: &str, value: Value) -> Result<()> {
         let mut root = self.to_value();
         put_by_path(&mut root, path, value)?;
@@ -701,7 +708,8 @@ impl JSONArray {
         Ok(())
     }
 
-    /// Iterates over array elements.
+    /// 中文说明: 迭代数组元素。
+    /// 对齐 Java 方法: `iterator`
     pub fn iter(&self) -> impl Iterator<Item = &Value> {
         self.values.iter()
     }

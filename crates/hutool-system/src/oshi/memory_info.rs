@@ -1,20 +1,23 @@
-//! OSHI-aligned hardware and operating-system snapshots backed by `sysinfo`.
+//! 对齐: `cn.hutool.system.oshi.GlobalMemory`
+//! 来源: hutool-system/src/main/java/cn/hutool/system/oshi/GlobalMemory.java
+//! 中文说明: 物理内存快照，包含总内存、已用内存、可用内存和交换空间信息
 
 use std::{thread, time::Duration};
 
 use sysinfo::{Components, Disks, Networks, Pid, System};
 
-/// Physical memory snapshot.
+/// 对齐: `cn.hutool.system.oshi.GlobalMemory`
+/// 中文说明: 物理内存快照，包含总内存、已用内存、可用内存和交换空间信息
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct MemoryInfo {
-    /// Total memory bytes.
+    /// 中文说明: 总内存（字节）
     pub total: u64,
-    /// Used memory bytes.
+    /// 中文说明: 已用内存（字节）
     pub used: u64,
-    /// Available memory bytes.
+    /// 中文说明: 可用内存（字节）
     pub available: u64,
-    /// Total swap bytes.
+    /// 中文说明: 交换空间总量（字节）
     pub swap_total: u64,
-    /// Used swap bytes.
+    /// 中文说明: 已用交换空间（字节）
     pub swap_used: u64,
 }

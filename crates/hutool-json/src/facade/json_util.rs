@@ -1,3 +1,7 @@
+//! 对齐: `cn.hutool.json.JSONUtil`
+//! 来源: hutool-json/src/main/java/cn/hutool/json/JSONUtil.java
+//! 中文说明: JSON 工具类，提供创建、解析、序列化、判断等静态方法。
+
 use std::io::Write;
 
 use serde::{Serialize, de::DeserializeOwned};
@@ -7,35 +11,41 @@ use crate::{
     JSONArray, JSONConfig, JSONObject, JsonContainer, JsonError, Result, get_by_path, put_by_path,
 };
 
-/// Static Hutool-compatible convenience facade.
+/// 对齐: `cn.hutool.json.JSONUtil`
+/// 中文说明: Hutool 兼容的 JSON 工具类，提供静态便捷方法。
 pub struct JSONUtil;
 
 impl JSONUtil {
-    /// Creates an empty object.
+    /// 中文说明: 创建空的 JSON 对象。
+    /// 对齐 Java 方法: `createObj`
     #[must_use]
     pub fn create_obj() -> JSONObject {
         JSONObject::new()
     }
 
-    /// Creates an empty configured object.
+    /// 中文说明: 使用指定配置创建空的 JSON 对象。
+    /// 对齐 Java 方法: `createObj`
     #[must_use]
     pub fn create_obj_with(config: JSONConfig) -> JSONObject {
         JSONObject::with_config(config)
     }
 
-    /// Creates an empty array.
+    /// 中文说明: 创建空的 JSON 数组。
+    /// 对齐 Java 方法: `createArray`
     #[must_use]
     pub fn create_array() -> JSONArray {
         JSONArray::new()
     }
 
-    /// Creates an empty configured array.
+    /// 中文说明: 使用指定配置创建空的 JSON 数组。
+    /// 对齐 Java 方法: `createArray`
     #[must_use]
     pub fn create_array_with(config: JSONConfig) -> JSONArray {
         JSONArray::with_config(config)
     }
 
-    /// Parses an object.
+    /// 中文说明: 解析 JSON 文本为对象。
+    /// 对齐 Java 方法: `parseObj`
     pub fn parse_obj(input: &str) -> Result<JSONObject> {
         JSONObject::parse(input)
     }

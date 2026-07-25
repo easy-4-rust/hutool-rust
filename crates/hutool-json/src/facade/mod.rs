@@ -1,3 +1,7 @@
+//! 对齐: `cn.hutool.json` 包中的门面工具类
+//! 来源: hutool-json/src/main/java/cn/hutool/json/JSONUtil.java, JSONWriter.java 等
+//! 中文说明: 提供 JSONUtil、JSONWriter、JSONConverter 等门面工具。
+
 use std::io::Write;
 
 use serde::{Serialize, de::DeserializeOwned};
