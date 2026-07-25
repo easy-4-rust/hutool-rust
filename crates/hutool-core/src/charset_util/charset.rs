@@ -8,6 +8,9 @@ use encoding_rs::{Encoding, GBK, UTF_8};
 use thiserror::Error;
 
 /// A Java-compatible character set, including encodings intentionally absent from WHATWG.
+
+/// 对齐: `cn.hutool.core.util.CharsetUtil`
+/// 字符集定义
 #[derive(Clone, Copy)]
 pub enum Charset {
     /// Exact ISO-8859-1 rather than the WHATWG Windows-1252 alias.

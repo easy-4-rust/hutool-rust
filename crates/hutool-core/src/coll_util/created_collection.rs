@@ -1,5 +1,8 @@
 //! General collection operations aligned with Hutool's `CollUtil` capability model.
 
+/// 对齐: `cn.hutool.core.collection.CollUtil`
+/// 创建集合
+
 use std::{
     cmp::Ordering,
     collections::{BTreeMap, BTreeSet, HashMap, HashSet, VecDeque},

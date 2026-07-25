@@ -1,3 +1,6 @@
+/// 对齐: `cn.hutool.core.util.CharsetUtil`
+/// 字符集工具类
+
 use std::{
     fmt, fs,
     io::{self, Read},

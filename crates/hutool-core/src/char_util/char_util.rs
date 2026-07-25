@@ -5,6 +5,9 @@ use unicode_general_category::{GeneralCategory, get_general_category};
 use super::char_error::CharError;
 
 /// Hutool-compatible ASCII, Unicode-category, and enclosed-character helpers.
+
+/// 对齐: `cn.hutool.core.util.CharUtil`
+/// 字符工具类
 pub struct CharUtil;
 
 impl CharUtil {

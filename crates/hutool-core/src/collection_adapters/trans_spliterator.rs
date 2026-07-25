@@ -1,5 +1,8 @@
 //! Stateful and view-based collection adapters aligned with Hutool.
 
+/// 对齐: `cn.hutool.core.collection.TransSpliterator`
+/// 转换分割器
+
 use std::{io, io::BufRead, marker::PhantomData};
 
 use crate::{ArrayIter, CollUtil};

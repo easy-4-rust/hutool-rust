@@ -1,5 +1,8 @@
 //! Hutool-aligned collection types with Rust-native ownership and concurrency.
 
+/// 对齐: `cn.hutool.core.collection.CollectionUtil`
+/// 集合类型定义
+
 use std::{
     cmp::Ordering,
     collections::HashSet,
