@@ -1,4 +1,5 @@
-//! Thread-safe sensitive-word facade.
+//! 对齐: `cn.hutool.dfa.DefaultSensitiveProcessor` (Rust 独有)
+//! 中文说明: 默认敏感词处理器，将匹配到的敏感词替换为等长的 * 号
 
 use crate::{DfaError, FoundWord, MatchOptions, WordTree};
 use parking_lot::RwLock;

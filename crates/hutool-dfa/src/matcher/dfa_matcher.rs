@@ -1,4 +1,5 @@
-//! Immutable high-throughput matching backed by `aho-corasick`.
+//! 对齐: `cn.hutool.dfa.DfaMatcher` (Rust 独有，基于 aho-corasick)
+//! 中文说明: 基于 DFA/Aho-Corasick 算法的高性能敏感词匹配器
 
 use crate::DfaError;
 use aho_corasick::{AhoCorasick, AhoCorasickBuilder, MatchKind};

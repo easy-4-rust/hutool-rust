@@ -1,4 +1,6 @@
-//! Hutool-compatible stop-character classification.
+//! 对齐: `cn.hutool.dfa.StopChar`
+//! 来源: hutool-dfa/src/main/java/cn/hutool/dfa/StopChar.java
+//! 中文说明: 停用字符分类，用于敏感词匹配时跳过无意义字符
 
 /// Stop-character predicates used by [`crate::WordTree`].
 #[derive(Debug, Default, Clone, Copy)]

@@ -1,4 +1,5 @@
-//! Immutable high-throughput matching backed by `aho-corasick`.
+//! 对齐: `cn.hutool.dfa.PatternMatch` (Rust 独有)
+//! 中文说明: 单次匹配结果，包含匹配的模式索引、起止偏移和匹配文本
 
 use crate::DfaError;
 use aho_corasick::{AhoCorasick, AhoCorasickBuilder, MatchKind};

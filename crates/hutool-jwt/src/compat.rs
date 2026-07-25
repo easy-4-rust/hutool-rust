@@ -1,4 +1,6 @@
-//! Hutool-named dynamic JWT facade backed by `jsonwebtoken`.
+//! 对齐: `cn.hutool.jwt.JWTUtil` + `cn.hutool.jwt.JWT`
+//! 来源: hutool-jwt/src/main/java/cn/hutool/jwt/
+//! 中文说明: JWT 工具类和 JWT 令牌封装，基于 jsonwebtoken crate 实现
 
 use std::fmt;
 use std::sync::Arc;
