@@ -255,13 +255,24 @@ def scan_file(content):
                     j += 1
                 if found_brace:
                     multi = True
-            if not multi and kind_word == 'const' and '=' in line and not line.rstrip().endswith(';'):
+            if not multi and kind_word in ('const', 'static') and '=' in line and not line.rstrip().endswith(';'):
                 # Any const ending with `=` (no `;`) is multi-line
                 multi = True
             if multi:
                 # Special case: const with string/byte literal body ends at `;`
                 next_line = lines[i + 1].lstrip() if i + 1 < n else ''
                 if kind_word == 'const' and (next_line.startswith('b"') or next_line.startswith("b'") or next_line.startswith('"') or next_line.startswith("'") or next_line.startswith('*b"') or next_line.startswith("*b'")):
+                    j = i + 1
+                    while j < n and not lines[j].rstrip().endswith(';'):
+                        j += 1
+                    if j < n:
+                        items.append({'kind': kind, 'name': name, 'start': i, 'end': j + 1, 'is_pub': is_pub})
+                        i = j + 1
+                    else:
+                        items.append({'kind': kind, 'name': name, 'start': i, 'end': n, 'is_pub': is_pub})
+                        i = n
+                elif kind_word == 'static' and '{' not in line:
+                    # static TYPE = expr; - scan forward to ;
                     j = i + 1
                     while j < n and not lines[j].rstrip().endswith(';'):
                         j += 1
