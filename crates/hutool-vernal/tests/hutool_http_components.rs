@@ -4,7 +4,7 @@ use std::sync::Arc;
 
 use hutool_http::{HttpClient, HttpConfig, HttpError, UrlPolicyError};
 use hutool_vernal::HutoolHttpComponents;
-use vernal_context::VernalApplicationBuilder;
+use vernal_context::{ApplicationModuleError, VernalApplicationBuilder};
 
 #[tokio::test]
 async fn context_resolves_singleton_http_objects_and_applies_url_policy() {
@@ -16,10 +16,15 @@ async fn context_resolves_singleton_http_objects_and_applies_url_policy() {
     components
         .install(&mut application)
         .expect("Hutool components should install atomically");
-    assert!(
-        components.install(&mut application).is_err(),
-        "duplicate bundle should be rejected without mutating the first install"
-    );
+    let Err(duplicate) = components.install(&mut application) else {
+        panic!("duplicate module should be rejected");
+    };
+    assert!(matches!(
+        duplicate,
+        ApplicationModuleError::DuplicateName {
+            name: "hutool.http"
+        }
+    ));
 
     let context = application.build().expect("application should build");
     context.refresh().await.expect("context should refresh");

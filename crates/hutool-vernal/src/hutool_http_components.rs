@@ -3,8 +3,10 @@
 use std::{error::Error, sync::Arc};
 
 use hutool_http::{AllowAllUrls, DenyLocalTargets, HttpClient, HttpConfig, UrlPolicy};
-use vernal_context::VernalApplicationBuilder;
-use vernal_ioc::{ComponentDefinition, DefinitionError};
+use vernal_context::{
+    ApplicationModule, ApplicationModuleError, ApplicationModuleRegistrar, VernalApplicationBuilder,
+};
+use vernal_ioc::ComponentDefinition;
 
 type BridgeFactoryError = Box<dyn Error + Send + Sync + 'static>;
 
@@ -99,13 +101,30 @@ impl HutoolHttpComponents {
     ///
     /// # Errors
     ///
-    /// 应用已注册 `HttpConfig` 或 `HttpClient` 时返回 [`DefinitionError`]。Vernal
-    /// 会在修改注册表前校验整个批次，因此失败不会留下半个组件包。
+    /// 模块身份重复，或应用已注册 `HttpConfig`/`HttpClient` 时返回
+    /// [`ApplicationModuleError`]。Vernal 会在修改真实建造器前校验模块身份与整个
+    /// Definition 批次，因此失败不会留下半个组件包或占用未成功提交的模块名。
     pub fn install<'a>(
         &self,
         application: &'a mut VernalApplicationBuilder,
-    ) -> Result<&'a mut VernalApplicationBuilder, DefinitionError> {
-        application.register_all(self.definitions())
+    ) -> Result<&'a mut VernalApplicationBuilder, ApplicationModuleError> {
+        application.register_module(self.clone())
+    }
+}
+
+impl ApplicationModule for HutoolHttpComponents {
+    /// 返回 HTTP 组件包的稳定模块身份。
+    fn name(&self) -> &'static str {
+        "hutool.http"
+    }
+
+    /// 在隔离 Registrar 中暂存 `HttpConfig` 与 `HttpClient` 定义。
+    fn configure(
+        self,
+        registrar: &mut ApplicationModuleRegistrar,
+    ) -> Result<(), Box<dyn Error + Send + Sync + 'static>> {
+        registrar.register_all(self.definitions());
+        Ok(())
     }
 }
 
