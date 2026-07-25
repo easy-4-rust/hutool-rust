@@ -1,4 +1,6 @@
-//! `HttpResource` wrapper aligned with Hutool `cn.hutool.http.HttpResource`.
+//! 对齐: `cn.hutool.http.HttpResource`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/HttpResource.java
+//! 中文说明: HTTP资源包装器，封装文件和字节资源用于上传
 
 use crate::body::ResourceBody;
 use std::io::{Cursor, Read};

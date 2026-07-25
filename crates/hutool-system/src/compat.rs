@@ -711,13 +711,15 @@ impl SystemUtil {
         JavaRuntimeInfo::detect()
     }
 
-    /// Returns operating-system properties.
+    /// 中文说明: 返回操作系统属性
+    /// 对齐 Java 方法: `SystemUtil.getOsInfo`
     #[must_use]
     pub fn os_info() -> OsInfo {
         OsInfo::collect()
     }
 
-    /// Returns user and locale properties.
+    /// 中文说明: 返回用户和区域设置属性
+    /// 对齐 Java 方法: `SystemUtil.getUserInfo`
     #[must_use]
     pub fn user_info() -> UserInfo {
         UserInfo::collect()

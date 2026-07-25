@@ -1,4 +1,6 @@
-//! URL query parsing/building aligned with Hutool `UrlQuery`.
+//! 对齐: `cn.hutool.http.UrlQuery`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/UrlQuery.java
+//! 中文说明: URL查询参数解析和构建，支持有序参数映射和URL编码
 
 use hutool_core::{percent_decode, Rfc3986, UrlUtil};
 use indexmap::IndexMap;

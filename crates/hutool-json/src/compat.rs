@@ -465,7 +465,8 @@ impl JSONObject {
         }
     }
 
-    /// Appends to an existing array field.
+    /// 中文说明: 向已有的数组字段追加值。
+    /// 对齐 Java 方法: `append`
     pub fn append(&mut self, key: &str, value: Value) -> Result<&mut Self> {
         let values = self
             .entries

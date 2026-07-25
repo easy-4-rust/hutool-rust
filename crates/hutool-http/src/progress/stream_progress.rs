@@ -1,6 +1,6 @@
-//! Stream progress callbacks aligned with Hutool `StreamProgress`.
-//!
-//! Java: `cn.hutool.core.io.StreamProgress` (used by HttpUtil download overloads).
+//! 对齐: `cn.hutool.core.io.StreamProgress`
+//! 来源: hutool-core/src/main/java/cn/hutool/core/io/StreamProgress.java
+//! 中文说明: 流进度回调trait，定义开始、进度和结束通知接口
 
 /// Callback notified while downloading / copying a stream.
 ///

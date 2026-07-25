@@ -1,7 +1,6 @@
-//! Hutool-aligned `HttpRequest` facade over the bounded reqwest client.
-//!
-//! Java source: `cn.hutool.http.HttpRequest`.
-//! Defaults keep timeouts, max response size, and [`DenyLocalTargets`].
+//! 对齐: `cn.hutool.http.HttpRequest`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/HttpRequest.java
+//! 中文说明: HTTP请求构建器，提供链式API设置方法、头部、超时和请求体
 
 use crate::body::ResourceBody;
 use crate::http_util::HttpUtil;

@@ -1,4 +1,6 @@
-//! Hutool-aligned buffered HTTP response facade (`cn.hutool.http.HttpResponse`).
+//! 对齐: `cn.hutool.http` (响应模块)
+//! 来源: hutool-http/src/main/java/cn/hutool/http/HttpResponse.java
+//! 中文说明: HTTP响应模块，包含HttpResponse和HttpCookie实现
 
 use crate::{HttpError, StatusCode, header};
 use encoding_rs::Encoding;

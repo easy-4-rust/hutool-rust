@@ -1,4 +1,6 @@
-//! Hutool-aligned buffered HTTP response facade (`cn.hutool.http.HttpResponse`).
+//! 对齐: `cn.hutool.http.HttpCookie`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/HttpCookie.java
+//! 中文说明: HTTP Cookie实现，解析Set-Cookie头部的名称/值对
 
 use crate::{HttpError, StatusCode, header};
 use encoding_rs::Encoding;

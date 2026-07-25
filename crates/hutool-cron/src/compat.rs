@@ -398,12 +398,18 @@ pub trait TaskListener: Send + Sync + 'static {
     fn on_failed(&self, _executor: &TaskExecutor, _error: &CronError) {}
 }
 
+/// 对齐: `cn.hutool.cron.listener.SimpleTaskListener`
+/// 中文说明: 空操作监听器，便于选择性重写。
+///
 /// No-op listener convenient for selective overrides.
 #[derive(Debug, Clone, Copy, Default)]
 pub struct SimpleTaskListener;
 
 impl TaskListener for SimpleTaskListener {}
 
+/// 对齐: `cn.hutool.cron.listener.TaskListenerManager`
+/// 中文说明: 线程安全的监听器集合。
+///
 /// Thread-safe listener collection.
 #[derive(Clone, Default)]
 pub struct TaskListenerManager {
