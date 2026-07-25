@@ -155,9 +155,11 @@ pub use serialize_util::{
 pub use stream::{CollectorCharacteristic, CollectorUtil, SimpleCollector, StreamUtil};
 pub use string::{
     StrExt, clean_blank, contains, contains_ignore_case, cut, end_with, equals,
-    equals_ignore_case, format_template, index_of_ignore_case, is_blank, last_index_of,
-    last_index_of_ignore_case, length, lower_first, remove_all, remove_chars, repeat, replace,
-    reverse, split, start_with, str_or_empty, strip, strip_ignore_case, trim, upper_first,
+    equals_ignore_case, fill, fill_after, fill_before, format_map, format_map_optional,
+    format_template, index_of_ignore_case, is_blank, last_index_of, last_index_of_ignore_case,
+    levenshtein_distance, length, lower_first, remove_all, remove_chars, repeat, replace,
+    reverse, reverse_by_code_point, similarity, similarity_str, split, start_with, str_or_empty,
+    strip, strip_ignore_case, truncate_by_byte_length, truncate_utf8, trim, upper_first,
 };
 pub use version_util::{VersionError, VersionUtil};
 
@@ -216,3 +218,7 @@ pub use io_util::IoUtil;
 mod random_util;
 pub use random_util::RandomUtil;
 pub use net::rfc3986::Rfc3986;
+
+/// 对齐 `cn.hutool.core.util.StrUtil`（高阶便捷方法，委托 `crate::string`）。
+#[path = "util/str_util.rs"]
+pub mod str_util;

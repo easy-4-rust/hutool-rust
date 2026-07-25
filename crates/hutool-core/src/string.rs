@@ -493,6 +493,267 @@ pub fn indexed_format(pattern: &str, args: &[&dyn Display]) -> Result<String> {
     Ok(result)
 }
 
+// ════════════════════════════════════════════════════════════
+//  StrUtil-delegated helpers (对齐 cn.hutool.core.util.StrUtil)
+// ════════════════════════════════════════════════════════════
+
+/// 对齐 Java: `StrUtil.reverseByCodePoint(String str)`
+///
+/// 按 Unicode 码点反转字符串。在 Rust 中等价于 `reverse`，
+/// 因为 `str::chars()` 已经按码点迭代。
+#[must_use]
+pub fn reverse_by_code_point(value: &str) -> String {
+    reverse(value)
+}
+
+/// 对齐 Java: `StrUtil.fillBefore(String str, char filledChar, int len)`
+///
+/// 在字符串**左侧**填充 `filled_char`，使总字符数达到 `len`。
+/// 若 `str` 已经足够长，原样返回。
+#[must_use]
+pub fn fill_before(value: &str, filled_char: char, len: usize) -> String {
+    let char_count = value.chars().count();
+    if char_count >= len {
+        return value.to_owned();
+    }
+    let pad_count = len - char_count;
+    let mut result = String::with_capacity(value.len() + pad_count * filled_char.len_utf8());
+    for _ in 0..pad_count {
+        result.push(filled_char);
+    }
+    result.push_str(value);
+    result
+}
+
+/// 对齐 Java: `StrUtil.fillAfter(String str, char filledChar, int len)`
+///
+/// 在字符串**右侧**填充 `filled_char`，使总字符数达到 `len`。
+/// 若 `str` 已经足够长，原样返回。
+#[must_use]
+pub fn fill_after(value: &str, filled_char: char, len: usize) -> String {
+    let char_count = value.chars().count();
+    if char_count >= len {
+        return value.to_owned();
+    }
+    let pad_count = len - char_count;
+    let mut result = String::with_capacity(value.len() + pad_count * filled_char.len_utf8());
+    result.push_str(value);
+    for _ in 0..pad_count {
+        result.push(filled_char);
+    }
+    result
+}
+
+/// 对齐 Java: `StrUtil.fill(String str, char filledChar, int len, boolean isPre)`
+///
+/// 根据 `is_pre` 分派到 `fill_before` 或 `fill_after`。
+#[must_use]
+pub fn fill(value: &str, filled_char: char, len: usize, is_pre: bool) -> String {
+    if is_pre {
+        fill_before(value, filled_char, len)
+    } else {
+        fill_after(value, filled_char, len)
+    }
+}
+
+/// 计算两个字符串之间的 Levenshtein 编辑距离。
+///
+/// 使用动态规划，时间和空间复杂度均为 O(m*n)。
+#[must_use]
+pub fn levenshtein_distance(s1: &str, s2: &str) -> usize {
+    let v1: Vec<char> = s1.chars().collect();
+    let v2: Vec<char> = s2.chars().collect();
+    let len1 = v1.len();
+    let len2 = v2.len();
+
+    if len1 == 0 {
+        return len2;
+    }
+    if len2 == 0 {
+        return len1;
+    }
+
+    // 只保留两行以节省内存
+    let mut prev = (0..=len2).collect::<Vec<_>>();
+    let mut curr = vec![0usize; len2 + 1];
+
+    for i in 1..=len1 {
+        curr[0] = i;
+        for j in 1..=len2 {
+            let cost = if v1[i - 1] == v2[j - 1] { 0 } else { 1 };
+            curr[j] = (prev[j] + 1)
+                .min(curr[j - 1] + 1)
+                .min(prev[j - 1] + cost);
+        }
+        std::mem::swap(&mut prev, &mut curr);
+    }
+    prev[len2]
+}
+
+/// 对齐 Java: `StrUtil.similar(String str1, String str2)`
+///
+/// 计算两个字符串的相似度比率 (0.0 ~ 1.0)，
+/// 基于 Levenshtein 编辑距离。
+#[must_use]
+pub fn similarity(s1: &str, s2: &str) -> f64 {
+    if s1 == s2 {
+        return 1.0;
+    }
+    let len1 = s1.chars().count();
+    let len2 = s2.chars().count();
+    let max_len = len1.max(len2);
+    if max_len == 0 {
+        return 1.0;
+    }
+    let distance = levenshtein_distance(s1, s2);
+    1.0 - (distance as f64 / max_len as f64)
+}
+
+/// 对齐 Java: `StrUtil.similar(String str1, String str2, int scale)`
+///
+/// 返回相似度字符串，保留 `scale` 位小数。
+#[must_use]
+pub fn similarity_str(s1: &str, s2: &str, scale: usize) -> String {
+    let ratio = similarity(s1, s2);
+    format!("{:.1$}", ratio, scale)
+}
+
+/// 对齐 Java: `StrUtil.format(CharSequence template, Map<?, ?> map)`
+///
+/// 使用 `Map` 中的键值替换模板中的 `{key}` 占位符。
+/// `{{` 产生字面量 `{`，`}}` 产生字面量 `}`。
+/// 未匹配的占位符保持原样。
+#[must_use]
+pub fn format_map(template: &str, map: &std::collections::HashMap<&str, &str>) -> String {
+    format_map_internal(template, map, false)
+}
+
+/// 对齐 Java: `StrUtil.format(CharSequence template, Map<?, ?> map, boolean ignoreNull)`
+///
+/// 同 `format_map`，但当 `ignore_null = true` 时，值为 `None` 的键
+/// 会保留占位符原样（而非插入 "null"）。
+#[must_use]
+pub fn format_map_optional(
+    template: &str,
+    map: &std::collections::HashMap<&str, Option<&str>>,
+    ignore_null: bool,
+) -> String {
+    // 构建一个 &str → &str 的 map，过滤掉 None 值
+    let filtered: std::collections::HashMap<&str, &str> = map
+        .iter()
+        .filter_map(|(k, v)| v.as_ref().map(|val| (*k, *val)))
+        .collect();
+    format_map_internal(template, &filtered, ignore_null)
+}
+
+/// 内部实现：替换 `{key}` 占位符
+fn format_map_internal(
+    template: &str,
+    map: &std::collections::HashMap<&str, &str>,
+    ignore_null: bool,
+) -> String {
+    let mut result = String::with_capacity(template.len());
+    let mut chars = template.chars().peekable();
+
+    while let Some(ch) = chars.next() {
+        match ch {
+            '{' if chars.peek() == Some(&'{') => {
+                chars.next();
+                result.push('{');
+            }
+            '}' if chars.peek() == Some(&'}') => {
+                chars.next();
+                result.push('}');
+            }
+            '{' => {
+                // 读取 key 直到 '}'
+                let mut key = String::new();
+                loop {
+                    match chars.next() {
+                        Some('}') => break,
+                        Some(c) => key.push(c),
+                        None => {
+                            // 未闭合的占位符，原样回退
+                            result.push('{');
+                            result.push_str(&key);
+                            return result;
+                        }
+                    }
+                }
+                if let Some(&value) = map.get(key.as_str()) {
+                    result.push_str(value);
+                } else if !ignore_null {
+                    // 保留原样
+                    result.push('{');
+                    result.push_str(&key);
+                    result.push('}');
+                }
+            }
+            _ => result.push(ch),
+        }
+    }
+    result
+}
+
+/// 对齐 Java: `StrUtil.truncateUtf8(String str, int maxBytes)`
+///
+/// 截断字符串使其 UTF-8 编码不超过 `max_bytes` 字节。
+/// 截断点保证在 UTF-8 字符边界。
+#[must_use]
+pub fn truncate_utf8(value: &str, max_bytes: usize) -> &str {
+    if value.len() <= max_bytes {
+        return value;
+    }
+    // 找到最后一个不超过 max_bytes 的 UTF-8 字符边界
+    let mut end = max_bytes;
+    while end > 0 && !value.is_char_boundary(end) {
+        end -= 1;
+    }
+    &value[..end]
+}
+
+/// 对齐 Java: `StrUtil.truncateByByteLength(String str, int maxBytesLength, int factor, boolean appendDots)`
+///
+/// 按字节长度截断字符串。`factor` 控制截断粒度(字节步长)；
+/// `append_dots` 为 `true` 时在末尾附加 `"..."`。
+///
+/// charset 参数在 Rust 中忽略(始终 UTF-8)。
+#[must_use]
+pub fn truncate_by_byte_length(
+    value: &str,
+    max_bytes: usize,
+    factor: usize,
+    append_dots: bool,
+) -> String {
+    let factor = factor.max(1);
+    let dots = if append_dots { "..." } else { "" };
+    let dots_len = dots.len();
+
+    if value.len() <= max_bytes {
+        return value.to_owned();
+    }
+
+    // 为 dots 预留空间
+    let available = if append_dots {
+        max_bytes.saturating_sub(dots_len)
+    } else {
+        max_bytes
+    };
+
+    // 按 factor 向下取整到字符边界
+    let mut end = (available / factor) * factor;
+    while end > 0 && !value.is_char_boundary(end) {
+        end -= 1;
+    }
+
+    let mut result = String::with_capacity(max_bytes);
+    result.push_str(&value[..end]);
+    if append_dots {
+        result.push_str(dots);
+    }
+    result
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -563,5 +824,109 @@ mod tests {
             indexed_format("I''m {0} years old.", &[&10]).unwrap(),
             "I'm 10 years old."
         );
+    }
+
+    #[test]
+    fn fill_before_pads_left() {
+        assert_eq!(fill_before("123", '0', 6), "000123");
+        assert_eq!(fill_before("hello", '0', 3), "hello");
+        assert_eq!(fill_before("", 'x', 4), "xxxx");
+    }
+
+    #[test]
+    fn fill_after_pads_right() {
+        assert_eq!(fill_after("123", '0', 6), "123000");
+        assert_eq!(fill_after("hello", '0', 3), "hello");
+        assert_eq!(fill_after("", 'x', 4), "xxxx");
+    }
+
+    #[test]
+    fn fill_dispatches_by_direction() {
+        assert_eq!(fill("ab", '*', 5, true), "***ab");
+        assert_eq!(fill("ab", '*', 5, false), "ab***");
+    }
+
+    #[test]
+    fn levenshtein_distance_basic() {
+        assert_eq!(levenshtein_distance("", ""), 0);
+        assert_eq!(levenshtein_distance("abc", "abc"), 0);
+        assert_eq!(levenshtein_distance("", "abc"), 3);
+        assert_eq!(levenshtein_distance("abc", ""), 3);
+        assert_eq!(levenshtein_distance("kitten", "sitting"), 3);
+        assert_eq!(levenshtein_distance("saturday", "sunday"), 3);
+    }
+
+    #[test]
+    fn similarity_ratio() {
+        assert!((similarity("abc", "abc") - 1.0).abs() < f64::EPSILON);
+        assert!((similarity("", "") - 1.0).abs() < f64::EPSILON);
+        assert!(similarity("abc", "def") < 0.5);
+        assert!((similarity("kitten", "sitting") - (1.0 - 3.0 / 7.0)).abs() < 1e-10);
+    }
+
+    #[test]
+    fn similarity_str_formatting() {
+        assert_eq!(similarity_str("abc", "abc", 2), "1.00");
+        assert_eq!(similarity_str("kitten", "sitting", 3), "0.571");
+    }
+
+    #[test]
+    fn format_map_replaces_named_placeholders() {
+        let mut map = std::collections::HashMap::new();
+        map.insert("name", "Alice");
+        map.insert("age", "30");
+        assert_eq!(
+            format_map("Hello {name}, you are {age}.", &map),
+            "Hello Alice, you are 30."
+        );
+    }
+
+    #[test]
+    fn format_map_handles_escapes() {
+        let map = std::collections::HashMap::new();
+        assert_eq!(format_map("{{literal}}", &map), "{literal}");
+    }
+
+    #[test]
+    fn format_map_preserves_unknown_keys() {
+        let map = std::collections::HashMap::new();
+        assert_eq!(format_map("Hello {unknown}!", &map), "Hello {unknown}!");
+    }
+
+    #[test]
+    fn truncate_utf8_respects_char_boundary() {
+        // "hello" = 5 bytes
+        assert_eq!(truncate_utf8("hello", 10), "hello");
+        assert_eq!(truncate_utf8("hello", 3), "hel");
+        // 中文字符每个 3 字节
+        assert_eq!(truncate_utf8("你好世界", 7), "你好");
+        assert_eq!(truncate_utf8("你好世界", 6), "你好");
+    }
+
+    #[test]
+    fn truncate_by_byte_length_with_dots() {
+        let result = truncate_by_byte_length("hello world", 8, 1, true);
+        assert!(result.len() <= 8);
+        assert!(result.ends_with("..."));
+    }
+
+    #[test]
+    fn truncate_by_byte_length_without_dots() {
+        let result = truncate_by_byte_length("hello world", 5, 1, false);
+        assert!(result.len() <= 5);
+        assert!(!result.ends_with("..."));
+    }
+
+    #[test]
+    fn truncate_by_byte_length_short_string() {
+        assert_eq!(truncate_by_byte_length("hi", 10, 1, true), "hi");
+    }
+
+    #[test]
+    fn reverse_by_code_point_works() {
+        assert_eq!(reverse_by_code_point("abc"), "cba");
+        assert_eq!(reverse_by_code_point(""), "");
+        // emoji + ASCII
+        assert_eq!(reverse_by_code_point("a\u{1F600}b"), "b\u{1F600}a");
     }
 }
