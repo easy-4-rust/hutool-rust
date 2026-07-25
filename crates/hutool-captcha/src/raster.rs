@@ -1,3 +1,7 @@
+//! 对齐: Rust 扩展，光栅 PNG 验证码渲染器
+//! 来源: hutool-captcha/src/main/java/cn/hutool/captcha/ (扩展)
+//! 中文说明: 基于位图字形和随机干扰线的静态 PNG 验证码渲染器
+
 use std::io::Cursor;
 
 use font8x8::{BASIC_FONTS, UnicodeFonts as _};
@@ -7,6 +11,9 @@ use rand::Rng;
 use crate::{CaptchaError, CaptchaRenderer, RenderedCaptcha};
 
 /// Static PNG CAPTCHA renderer with bitmap glyphs and randomized interference.
+///
+/// 对齐: Rust 扩展，Java Hutool 无直接 PNG 渲染器
+/// 中文说明: 静态 PNG 验证码渲染器，使用位图字形和随机干扰线
 #[derive(Debug, Clone)]
 pub struct PngRenderer {
     width: u16,

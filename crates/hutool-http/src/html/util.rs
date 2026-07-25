@@ -1,4 +1,6 @@
-//! Hutool-aligned `HtmlUtil` HTML tag / attribute helpers.
+//! 对齐: `cn.hutool.http.HtmlUtil`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/HtmlUtil.java
+//! 中文说明: HTML工具类，提供标签移除、属性清理、HTML转义等辅助方法
 
 use super::filter::HtmlFilter;
 use fancy_regex::Regex;

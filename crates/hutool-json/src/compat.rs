@@ -304,13 +304,16 @@ pub fn put_by_path(value: &mut Value, path: &str, replacement: Value) -> Result<
     Ok(())
 }
 
+/// 对齐: `cn.hutool.json.JSON` (JSONObject/JSONArray 共有行为)
+/// 中文说明: JSON 对象和数组包装器共享的公共行为。
+///
 /// Common behavior shared by JSON object and array wrappers.
 pub trait JsonContainer: Clone + fmt::Display {
-    /// Returns the container configuration.
+    /// 中文说明: 返回容器的配置。
     fn config(&self) -> &JSONConfig;
-    /// Returns an owned dynamic JSON representation.
+    /// 中文说明: 返回动态 JSON 表示的副本。
     fn to_value(&self) -> Value;
-    /// Serializes the container with an optional indentation width.
+    /// 中文说明: 使用可选缩进宽度序列化容器。
     fn to_json_string(&self, indent: usize) -> Result<String> {
         if indent == 0 {
             crate::to_string(&self.to_value())
@@ -339,13 +342,15 @@ impl JSONObject {
     pub(crate) fn from_entries(entries: Map<String, Value>, config: JSONConfig) -> Self {
         Self { entries, config }
     }
-    /// Creates an empty object.
+    /// 中文说明: 创建空的 JSON 对象。
+    /// 对齐 Java 方法: `new JSONObject()`
     #[must_use]
     pub fn new() -> Self {
         Self::with_config(JSONConfig::default())
     }
 
-    /// Creates an empty object with explicit configuration.
+    /// 中文说明: 使用指定配置创建空的 JSON 对象。
+    /// 对齐 Java 方法: `new JSONObject(JSONConfig)`
     #[must_use]
     pub fn with_config(config: JSONConfig) -> Self {
         Self {
@@ -354,13 +359,15 @@ impl JSONObject {
         }
     }
 
-    /// Converts a serializable Rust value into an object.
+    /// 中文说明: 将可序列化的 Rust 值转换为 JSON 对象。
+    /// 对齐 Java 方法: `new JSONObject(Object)`
     pub fn from_serializable<T: Serialize + ?Sized>(value: &T) -> Result<Self> {
         let value = serde_json::to_value(value)?;
         Self::from_value(value, JSONConfig::default())
     }
 
-    /// Builds an object from a dynamic value.
+    /// 中文说明: 从动态值构建 JSON 对象。
+    /// 对齐 Java 方法: `new JSONObject(JSONTokener)`
     pub fn from_value(value: Value, config: JSONConfig) -> Result<Self> {
         match value {
             Value::Object(entries) => Ok(Self { entries, config }),
@@ -371,24 +378,28 @@ impl JSONObject {
         }
     }
 
-    /// Parses a JSON object.
+    /// 中文说明: 解析 JSON 文本为对象。
+    /// 对齐 Java 方法: `new JSONObject(String)`
     pub fn parse(input: &str) -> Result<Self> {
         Self::from_value(crate::parse(input)?, JSONConfig::default())
     }
 
-    /// Returns the number of fields.
+    /// 中文说明: 返回字段数量。
+    /// 对齐 Java 方法: `size`
     #[must_use]
     pub fn len(&self) -> usize {
         self.entries.len()
     }
 
-    /// Returns whether the object has no fields.
+    /// 中文说明: 判断对象是否为空。
+    /// 对齐 Java 方法: `isEmpty`
     #[must_use]
     pub fn is_empty(&self) -> bool {
         self.entries.is_empty()
     }
 
-    /// Gets one field, applying configured ASCII case-insensitive lookup.
+    /// 中文说明: 获取字段值，支持配置的 ASCII 大小写不敏感查找。
+    /// 对齐 Java 方法: `get`
     #[must_use]
     pub fn get(&self, key: &str) -> Option<&Value> {
         self.entries.get(key).or_else(|| {
@@ -401,13 +412,15 @@ impl JSONObject {
         })
     }
 
-    /// Gets one field or a caller-provided default.
+    /// 中文说明: 获取字段值，不存在时返回默认值。
+    /// 对齐 Java 方法: `getOrDefault`
     #[must_use]
     pub fn get_or<'a>(&'a self, key: &str, default: &'a Value) -> &'a Value {
         self.get(key).unwrap_or(default)
     }
 
-    /// Inserts or replaces a field according to the configuration.
+    /// 中文说明: 根据配置插入或替换字段。
+    /// 对齐 Java 方法: `set`
     pub fn set(&mut self, key: &str, value: Value) -> Result<&mut Self> {
         if self.config.is_ignore_null_value() && value.is_null() {
             self.entries.remove(key);
@@ -421,7 +434,8 @@ impl JSONObject {
         Ok(self)
     }
 
-    /// Inserts only a non-null field.
+    /// 中文说明: 仅在键非空且值非 null 时插入字段。
+    /// 对齐 Java 方法: `putOpt`
     pub fn put_opt(&mut self, key: &str, value: Value) -> Result<&mut Self> {
         if !key.is_empty() && !value.is_null() {
             self.set(key, value)?;
@@ -429,7 +443,8 @@ impl JSONObject {
         Ok(self)
     }
 
-    /// Inserts a field only when it does not already exist.
+    /// 中文说明: 仅在字段不存在时插入（防止重复键）。
+    /// 对齐 Java 方法: `putOnce`
     pub fn put_once(&mut self, key: &str, value: Value) -> Result<&mut Self> {
         if self.entries.contains_key(key) {
             return Err(PathError::Invalid(format!("duplicate key: {key}")).into());
@@ -437,7 +452,8 @@ impl JSONObject {
         self.set(key, value)
     }
 
-    /// Accumulates repeated values into an array.
+    /// 中文说明: 将重复值累积到数组中。
+    /// 对齐 Java 方法: `accumulate`
     pub fn accumulate(&mut self, key: &str, value: Value) -> Result<&mut Self> {
         match self.entries.remove(key) {
             None => self.set(key, value),

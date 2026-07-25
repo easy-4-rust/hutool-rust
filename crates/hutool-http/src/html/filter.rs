@@ -1,7 +1,6 @@
-//! XSS-oriented HTML filter aligned with Hutool `cn.hutool.http.HTMLFilter`.
-//!
-//! Port of the classic XSS HTML filter pipeline: escape comments, balance tags,
-//! whitelist elements/attributes, strip empty tags, and validate entities.
+//! 对齐: `cn.hutool.http.HTMLFilter`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/HTMLFilter.java
+//! 中文说明: XSS过滤器，通过标签白名单、属性过滤和实体验证防止跨站脚本攻击
 
 use fancy_regex::{Captures, Regex};
 use std::collections::HashMap;

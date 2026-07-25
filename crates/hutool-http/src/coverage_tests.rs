@@ -1,3 +1,7 @@
+//! 对齐: 测试文件
+//! 来源: hutool-http/src/test/java/cn/hutool/http/
+//! 中文说明: HTTP模块集成测试，覆盖主要HTTP功能的端到端测试
+
 use super::*;
 use serde::Deserialize;
 use std::{

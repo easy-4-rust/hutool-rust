@@ -269,7 +269,7 @@ impl TaskTable {
         }
     }
 
-    /// Creates an empty table with reserved capacity.
+    /// 中文说明: 创建具有预分配容量的空任务表。
     #[must_use]
     pub fn with_capacity(capacity: usize) -> Self {
         Self {
@@ -277,7 +277,8 @@ impl TaskTable {
         }
     }
 
-    /// Adds a unique ID.
+    /// 中文说明: 添加一个具有唯一 ID 的任务。
+    /// 对齐 Java 方法: `addTask`
     pub fn add(&mut self, task: CronTask) -> Result<&mut Self, CronError> {
         if self.get_task(task.id()).is_some() {
             return Err(CronError::DuplicateTaskId(task.id().to_owned()));
@@ -286,7 +287,8 @@ impl TaskTable {
         Ok(self)
     }
 
-    /// Returns all IDs in insertion order.
+    /// 中文说明: 按插入顺序返回所有任务 ID。
+    /// 对齐 Java 方法: `getIds`
     #[must_use]
     pub fn ids(&self) -> Vec<String> {
         self.entries
@@ -295,19 +297,22 @@ impl TaskTable {
             .collect()
     }
 
-    /// Returns all pattern snapshots.
+    /// 中文说明: 返回所有调度表达式的快照。
+    /// 对齐 Java 方法: `getPatterns`
     #[must_use]
     pub fn patterns(&self) -> Vec<CronPattern> {
         self.entries.iter().map(|task| task.pattern()).collect()
     }
 
-    /// Returns all raw task handles.
+    /// 中文说明: 返回所有底层任务句柄。
+    /// 对齐 Java 方法: `getTasks`
     #[must_use]
     pub fn tasks(&self) -> Vec<Arc<dyn Task>> {
         self.entries.iter().map(|task| task.raw()).collect()
     }
 
-    /// Removes an ID.
+    /// 中文说明: 按 ID 移除任务。
+    /// 对齐 Java 方法: `remove`
     pub fn remove(&mut self, id: &str) -> bool {
         if let Some(index) = self.entries.iter().position(|task| task.id() == id) {
             self.entries.remove(index);
@@ -317,7 +322,8 @@ impl TaskTable {
         }
     }
 
-    /// Replaces one pattern and reports whether the ID exists.
+    /// 中文说明: 替换指定 ID 的调度表达式，返回 ID 是否存在。
+    /// 对齐 Java 方法: `updatePattern`
     pub fn update_pattern(&self, id: &str, pattern: CronPattern) -> bool {
         self.get_task(id).is_some_and(|task| {
             task.set_pattern(pattern);
@@ -325,37 +331,39 @@ impl TaskTable {
         })
     }
 
-    /// Returns a task by index.
+    /// 中文说明: 按索引返回任务。
     #[must_use]
     pub fn task_at(&self, index: usize) -> Option<Arc<CronTask>> {
         self.entries.get(index).cloned()
     }
 
-    /// Returns a task by ID.
+    /// 中文说明: 按 ID 返回任务。
+    /// 对齐 Java 方法: `getTask`
     #[must_use]
     pub fn get_task(&self, id: &str) -> Option<Arc<CronTask>> {
         self.entries.iter().find(|task| task.id() == id).cloned()
     }
 
-    /// Returns a pattern by index.
+    /// 中文说明: 按索引返回调度表达式。
     #[must_use]
     pub fn pattern_at(&self, index: usize) -> Option<CronPattern> {
         self.task_at(index).map(|task| task.pattern())
     }
 
-    /// Returns a pattern by ID.
+    /// 中文说明: 按 ID 返回调度表达式。
+    /// 对齐 Java 方法: `getPattern`
     #[must_use]
     pub fn get_pattern(&self, id: &str) -> Option<CronPattern> {
         self.get_task(id).map(|task| task.pattern())
     }
 
-    /// Returns the task count.
+    /// 中文说明: 返回任务数量。
     #[must_use]
     pub fn len(&self) -> usize {
         self.entries.len()
     }
 
-    /// Returns whether the table is empty.
+    /// 中文说明: 返回任务表是否为空。
     #[must_use]
     pub fn is_empty(&self) -> bool {
         self.entries.is_empty()
@@ -374,13 +382,19 @@ impl TaskTable {
     }
 }
 
+/// 对齐: `cn.hutool.cron.listener.TaskListener`
+/// 中文说明: 任务生命周期事件监听器接口。
+///
 /// Listener for task lifecycle events.
 pub trait TaskListener: Send + Sync + 'static {
-    /// Called immediately before execution.
+    /// 中文说明: 任务执行前调用。
+    /// 对齐 Java 方法: `onStart`
     fn on_start(&self, _executor: &TaskExecutor) {}
-    /// Called after successful execution.
+    /// 中文说明: 任务执行成功后调用。
+    /// 对齐 Java 方法: `onSucceeded`
     fn on_succeeded(&self, _executor: &TaskExecutor) {}
-    /// Called after failed execution.
+    /// 中文说明: 任务执行失败后调用。
+    /// 对齐 Java 方法: `onFailed`
     fn on_failed(&self, _executor: &TaskExecutor, _error: &CronError) {}
 }
 

@@ -1,4 +1,6 @@
-//! Hutool-aligned HTTP metadata and explicitly owned default headers.
+//! 对齐: `cn.hutool.http.Header`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/Header.java
+//! 中文说明: HTTP元数据模块，定义常用Header枚举、内容类型和HTTP版本常量
 
 use std::{
     collections::{HashMap, hash_map::Entry},

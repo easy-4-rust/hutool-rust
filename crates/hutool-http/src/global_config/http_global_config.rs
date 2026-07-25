@@ -1,8 +1,6 @@
-//! Process-scoped HTTP defaults aligned with Hutool `HttpGlobalConfig`.
-//!
-//! Values are stored for Hutool callers that opt in; [`HttpRequest`] /
-//! [`HttpClient`] do **not** auto-apply them unless the caller reads and
-//! overlays them (avoids silent process-global timeout injection).
+//! 对齐: `cn.hutool.http.HttpGlobalConfig`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/HttpGlobalConfig.java
+//! 中文说明: 全局HTTP配置静态访问器，提供进程级HTTP默认设置
 
 use crate::cookie::{CookieManagerHandle, GlobalCookieManager};
 use crate::HostnameVerification;

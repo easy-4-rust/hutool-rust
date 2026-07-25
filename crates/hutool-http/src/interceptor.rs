@@ -1,4 +1,6 @@
-//! Process-scoped HTTP interceptor registry aligned with Hutool `GlobalInterceptor`.
+//! 对齐: `cn.hutool.http.interceptor.GlobalInterceptor`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/interceptor/GlobalInterceptor.java
+//! 中文说明: 全局拦截器注册表，管理进程级请求和响应拦截器
 
 use crate::config::{
     HttpInterceptorError, HttpRequestContext, HttpResponseContext, RequestInterceptor,

@@ -1,4 +1,6 @@
-//! Hutool-aligned HTTP configuration backed by Reqwest and Rustls.
+//! 对齐: `cn.hutool.http.interceptor.ResponseInterceptor`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/interceptor/ResponseInterceptor.java
+//! 中文说明: 响应拦截器类型别名，在响应返回前修改响应上下文
 
 use reqwest::{Method, StatusCode, Url, header::HeaderMap, tls::Version};
 use std::{fmt, sync::Arc, time::Duration};

@@ -1,4 +1,6 @@
-//! Hutool-aligned HTTP configuration backed by Reqwest and Rustls.
+//! 对齐: `cn.hutool.http` (配置模块)
+//! 来源: hutool-http/src/main/java/cn/hutool/http/HttpConfig.java
+//! 中文说明: HTTP配置模块，包含TLS、拦截器、请求/响应上下文等配置组件
 
 use reqwest::{Method, StatusCode, Url, header::HeaderMap, tls::Version};
 use std::{fmt, sync::Arc, time::Duration};

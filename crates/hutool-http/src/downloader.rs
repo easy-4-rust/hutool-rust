@@ -1,4 +1,6 @@
-//! Hutool `HttpDownloader` facade over [`crate::HttpUtil`].
+//! 对齐: `cn.hutool.http.HttpDownloader`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/HttpDownloader.java
+//! 中文说明: HTTP下载器门面，提供字节数组、流和文件下载便捷方法
 
 use crate::progress::{NoopStreamProgress, StreamProgress};
 use crate::{HttpError, HttpUtil};

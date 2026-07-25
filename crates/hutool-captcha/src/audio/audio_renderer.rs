@@ -1,3 +1,7 @@
+//! 对齐: Rust 扩展，音频验证码渲染器
+//! 来源: hutool-captcha/src/main/java/cn/hutool/captcha/ (扩展)
+//! 中文说明: WAV 渲染器，向注入的语音 PCM 添加有界低幅度噪声
+
 use rand::Rng as _;
 
 use crate::{CaptchaError, CaptchaRenderer, RenderedCaptcha};
@@ -6,6 +10,9 @@ use super::audio_spec::AudioSpec;
 use super::audio_synthesizer::AudioSynthesizer;
 
 /// WAV renderer that adds bounded low-amplitude noise to injected speech PCM.
+///
+/// 对齐: Rust 扩展，Java Hutool 无直接音频渲染器
+/// 中文说明: WAV 音频渲染器，向注入的语音 PCM 添加有界低幅度噪声
 #[derive(Debug, Clone)]
 pub struct AudioRenderer<S> {
     synthesizer: S,

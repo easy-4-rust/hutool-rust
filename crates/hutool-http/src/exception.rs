@@ -1,4 +1,6 @@
-//! Hutool-aligned HTTP exception type (`cn.hutool.http.HttpException`).
+//! 对齐: `cn.hutool.http.HttpException`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/HttpException.java
+//! 中文说明: HTTP应用异常类型，用于API对齐时抛出带消息的异常
 
 use std::fmt;
 

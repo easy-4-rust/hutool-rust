@@ -1,4 +1,6 @@
-//! HTTP clients with bounded responses and Rustls TLS defaults.
+//! 对齐: `cn.hutool.http`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/
+//! 中文说明: Hutool HTTP模块，提供HTTP客户端、请求、响应、工具类等完整HTTP功能
 
 #![forbid(unsafe_code)]
 

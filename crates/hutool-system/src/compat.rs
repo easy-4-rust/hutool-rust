@@ -517,35 +517,37 @@ property_info!(JvmInfo {
     info
 });
 
-/// Java runtime path properties, retained only when explicitly configured.
+/// 对齐: `cn.hutool.system.JavaRuntimeInfo`
+/// 中文说明: Java 运行时路径属性，仅在显式配置时保留
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct JavaRuntimeInfo {
-    /// Runtime name.
+    /// 中文说明: 运行时名称
     pub name: Option<String>,
-    /// Runtime version.
+    /// 中文说明: 运行时版本
     pub version: Option<String>,
-    /// Java home.
+    /// 中文说明: Java 安装目录
     pub home_dir: Option<PathBuf>,
-    /// Class path.
+    /// 中文说明: 类路径
     pub class_path: Option<String>,
-    /// Native library path.
+    /// 中文说明: 原生库路径
     pub library_path: Option<String>,
-    /// Architecture data model.
+    /// 中文说明: 架构数据模型
     pub arch_data_model: Option<String>,
-    /// Boot class path when supplied.
+    /// 中文说明: 引导类路径（如提供）
     pub boot_class_path: Option<String>,
-    /// Extension directories when supplied.
+    /// 中文说明: 扩展目录（如提供）
     pub ext_dirs: Option<String>,
-    /// Endorsed directories when supplied.
+    /// 中文说明: 认可目录（如提供）
     pub endorsed_dirs: Option<String>,
-    /// Class-file version when supplied.
+    /// 中文说明: 类文件版本（如提供）
     pub class_version: Option<String>,
-    /// Protocol handler packages when supplied.
+    /// 中文说明: 协议处理器包（如提供）
     pub protocol_packages: Option<String>,
 }
 
 impl JavaRuntimeInfo {
-    /// Detects Java runtime environment variables without executing Java.
+    /// 中文说明: 检测 Java 运行时环境变量，无需执行 Java
+    /// 对齐 Java 方法: `JavaRuntimeInfo` 的静态检测逻辑
     #[must_use]
     pub fn detect() -> Self {
         Self {
@@ -563,13 +565,15 @@ impl JavaRuntimeInfo {
         }
     }
 
-    /// Splits class path using the host path separator.
+    /// 中文说明: 使用主机路径分隔符拆分类路径
+    /// 对齐 Java 方法: `JavaRuntimeInfo.getClassPathArray`
     #[must_use]
     pub fn class_path_array(&self) -> Vec<PathBuf> {
         split_paths(self.class_path.as_deref())
     }
 
-    /// Splits native library path using the host path separator.
+    /// 中文说明: 使用主机路径分隔符拆分原生库路径
+    /// 对齐 Java 方法: `JavaRuntimeInfo.getLibraryPathArray`
     #[must_use]
     pub fn library_path_array(&self) -> Vec<PathBuf> {
         split_paths(self.library_path.as_deref())
@@ -580,44 +584,49 @@ fn split_paths(value: Option<&str>) -> Vec<PathBuf> {
     value.map_or_else(Vec::new, |paths| env::split_paths(paths).collect())
 }
 
-/// Native Rust compiler/runtime information replacing JVM-only `MXBeans`.
+/// 对齐: `java.lang.management.RuntimeMXBean` (替代)
+/// 中文说明: 原生 Rust 编译器/运行时信息，替代 JVM 专有的 MXBeans
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct CompilationInfo {
-    /// Compiler family.
+    /// 中文说明: 编译器类型
     pub compiler: &'static str,
-    /// Target architecture.
+    /// 中文说明: 目标架构
     pub target_arch: &'static str,
-    /// Whether debug assertions are enabled.
+    /// 中文说明: 是否启用调试断言
     pub debug_assertions: bool,
 }
 
-/// Portable collection of native management information.
+/// 对齐: `java.lang.management.ManagementFactory` (替代)
+/// 中文说明: 便携式的原生管理信息集合，替代 JVM 的 ManagementFactory
 #[derive(Debug, Clone, PartialEq)]
 pub struct ManagementInfo {
-    /// Current process.
+    /// 中文说明: 当前进程信息
     pub process: Option<ProcessInfo>,
-    /// Host memory.
+    /// 中文说明: 主机内存信息
     pub memory: MemoryInfo,
-    /// OS properties.
+    /// 中文说明: 操作系统属性
     pub os: OsInfo,
-    /// Compilation properties.
+    /// 中文说明: 编译属性
     pub compilation: CompilationInfo,
-    /// Available parallelism as the portable thread-capacity measure.
+    /// 中文说明: 可用并行度，作为便携式的线程容量度量
     pub thread_capacity: usize,
 }
 
-/// Hutool-aligned static system facade.
+/// 对齐: `cn.hutool.system.SystemUtil`
+/// 中文说明: 与 Hutool 对齐的静态系统工具门面，提供系统属性、内存、进程等查询方法
 #[derive(Debug, Clone, Copy, Default)]
 pub struct SystemUtil;
 
 impl SystemUtil {
-    /// Returns the current process identifier.
+    /// 中文说明: 返回当前进程标识符
+    /// 对齐 Java 方法: `SystemUtil.getCurrentPID`
     #[must_use]
     pub fn current_pid() -> u32 {
         std::process::id()
     }
 
-    /// Collects native management information.
+    /// 中文说明: 采集原生管理信息
+    /// 对齐 Java 方法: `SystemUtil.getManagementInfo`
     #[must_use]
     pub fn management_info() -> ManagementInfo {
         ManagementInfo {
@@ -633,25 +642,29 @@ impl SystemUtil {
         }
     }
 
-    /// Returns JVM memory pools. Native Rust has no managed heap pools.
+    /// 中文说明: 返回 JVM 内存池列表（原生 Rust 无托管堆池，返回空）
+    /// 对齐 Java 方法: `SystemUtil.getMemoryPools`
     #[must_use]
     pub const fn memory_pools() -> &'static [&'static str] {
         &[]
     }
 
-    /// Returns JVM memory managers. Native Rust has no JVM managers.
+    /// 中文说明: 返回 JVM 内存管理器列表（原生 Rust 无 JVM 管理器，返回空）
+    /// 对齐 Java 方法: `SystemUtil.getMemoryManagers`
     #[must_use]
     pub const fn memory_managers() -> &'static [&'static str] {
         &[]
     }
 
-    /// Returns JVM garbage collectors. Native Rust has no JVM GC.
+    /// 中文说明: 返回 JVM 垃圾回收器列表（原生 Rust 无 JVM GC，返回空）
+    /// 对齐 Java 方法: `SystemUtil.getGarbageCollectors`
     #[must_use]
     pub const fn garbage_collectors() -> &'static [&'static str] {
         &[]
     }
 
-    /// Returns Java specification properties supplied by the environment.
+    /// 中文说明: 返回环境提供的 Java 规范属性
+    /// 对齐 Java 方法: `SystemUtil.getJavaSpecInfo`
     #[must_use]
     pub fn java_spec_info() -> JavaSpecInfo {
         JavaSpecInfo {
@@ -661,7 +674,8 @@ impl SystemUtil {
         }
     }
 
-    /// Returns JVM properties supplied by the environment.
+    /// 中文说明: 返回环境提供的 JVM 属性
+    /// 对齐 Java 方法: `SystemUtil.getJvmInfo`
     #[must_use]
     pub fn jvm_info() -> JvmInfo {
         JvmInfo {
@@ -672,7 +686,8 @@ impl SystemUtil {
         }
     }
 
-    /// Returns JVM specification properties supplied by the environment.
+    /// 中文说明: 返回环境提供的 JVM 规范属性
+    /// 对齐 Java 方法: `SystemUtil.getJvmSpecInfo`
     #[must_use]
     pub fn jvm_spec_info() -> JvmSpecInfo {
         JvmSpecInfo {
@@ -682,13 +697,15 @@ impl SystemUtil {
         }
     }
 
-    /// Returns Java installation properties.
+    /// 中文说明: 返回 Java 安装属性
+    /// 对齐 Java 方法: `SystemUtil.getJavaInfo`
     #[must_use]
     pub fn java_info() -> JavaInfo {
         JavaInfo::detect()
     }
 
-    /// Returns Java runtime path properties.
+    /// 中文说明: 返回 Java 运行时路径属性
+    /// 对齐 Java 方法: `SystemUtil.getJavaRuntimeInfo`
     #[must_use]
     pub fn java_runtime_info() -> JavaRuntimeInfo {
         JavaRuntimeInfo::detect()

@@ -1,7 +1,6 @@
-//! Cookie store helpers aligned with Hutool `cn.hutool.http.cookie`.
-//!
-//! Uses an opt-in thread-local jar (Hutool `ThreadLocalCookieStore`) rather than
-//! silently wiring cookies into every [`crate::HttpRequest`].
+//! 对齐: `cn.hutool.http.cookie`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/cookie/
+//! 中文说明: Cookie存储管理，线程本地Cookie jar实现，支持全局和线程级Cookie管理
 
 use crate::HttpCookie;
 use std::cell::RefCell;

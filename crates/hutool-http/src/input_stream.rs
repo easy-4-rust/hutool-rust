@@ -1,4 +1,6 @@
-//! Response body input stream aligned with Hutool `HttpInputStream`.
+//! 对齐: `cn.hutool.http.HttpInputStream`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/HttpInputStream.java
+//! 中文说明: 响应体输入流，提供可seek的响应体读取视图
 
 use crate::HttpResponse;
 use std::io::{self, Cursor, Read, Seek, SeekFrom};

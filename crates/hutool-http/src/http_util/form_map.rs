@@ -1,7 +1,6 @@
-//! Hutool-aligned HTTP utility helpers (`cn.hutool.http.HttpUtil`).
-//!
-//! Offline param/URL helpers plus network facades that delegate to
-//! [`crate::HttpRequest`] / [`crate::HttpClient`] with secure defaults.
+//! 对齐: `cn.hutool.http.FormMap`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/FormMap.java
+//! 中文说明: 表单参数映射，有序键值对集合，支持URL编码和表单提交
 
 use crate::progress::{NoopStreamProgress, StreamProgress};
 use crate::request::HttpRequest;

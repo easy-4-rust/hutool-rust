@@ -1,4 +1,6 @@
-//! Hutool-aligned HTTP configuration backed by Reqwest and Rustls.
+//! 对齐: `cn.hutool.http.HttpConfig` (TLS协议部分)
+//! 来源: hutool-http/src/main/java/cn/hutool/http/HttpConfig.java
+//! 中文说明: TLS协议版本枚举，支持TLS 1.2和TLS 1.3
 
 use reqwest::{Method, StatusCode, Url, header::HeaderMap, tls::Version};
 use std::{fmt, sync::Arc, time::Duration};

@@ -1,7 +1,6 @@
-//! Hutool-aligned HTTP utility helpers (`cn.hutool.http.HttpUtil`).
-//!
-//! Offline param/URL helpers plus network facades that delegate to
-//! [`crate::HttpRequest`] / [`crate::HttpClient`] with secure defaults.
+//! 对齐: `cn.hutool.http.HttpUtil`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/HttpUtil.java
+//! 中文说明: HTTP工具类，提供URL编码、参数拼接、下载等静态便捷方法
 
 use crate::progress::{NoopStreamProgress, StreamProgress};
 use crate::request::HttpRequest;
