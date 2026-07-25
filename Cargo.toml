@@ -6,7 +6,7 @@ exclude = ["fuzz"]
 [workspace.package]
 version = "0.1.0"
 edition = "2024"
-rust-version = "1.85"
+rust-version = "1.88"
 license = "Apache-2.0"
 authors = ["wandl <hiwepy@gmail.com>"]
 repository = "https://github.com/easy-4-rust/hutool-rust"
@@ -46,6 +46,7 @@ hmac = "0.12.1"
 md-5 = "0.10.6"
 pbkdf2 = "0.12.2"
 idna = "1.1.0"
+# 精确锁：0.25.x patch 版本间存在解码行为差异，captcha/图片处理要求结果可复现（基线例外，见 dependency-baseline.toml）
 image = { version = "=0.25.9", default-features = false, features = ["gif", "jpeg", "png", "webp"] }
 indexmap = { version = "2.14.0", features = ["serde"] }
 notify = "8.2.0"
@@ -53,29 +54,34 @@ num-bigint = "0.5.1"
 lettre = { version = "0.11.22", default-features = false, features = ["builder", "hostname", "pool", "smtp-transport", "tokio1-rustls-tls", "tracing"] }
 futures-core = "0.3.32"
 font8x8 = "0.3.1"
+# 精确锁：JWT 验签行为敏感，升级需单独评审（基线例外，见 dependency-baseline.toml）
 jsonwebtoken = { version = "=10.3.0", default-features = false, features = ["rust_crypto"] }
 metrics = "0.24.6"
 metrics-exporter-prometheus = { version = "0.18.3", default-features = false }
+# 精确锁：elliptic-curve 生态（p256/p384/sm2/signature）需整组联动升级，单点升级会类型不兼容（基线例外）
 p256 = { version = "=0.13.2", features = ["ecdsa", "ecdh", "pem"] }
 p384 = "=0.13.1"
 rand_core06 = { package = "rand_core", version = "0.6.4", features = ["getrandom"] }
+# 精确锁：与 signature/pkcs8 生态版本耦合，升级需单独评审（基线例外）
 rsa = { version = "=0.9.10", features = ["pem", "sha2", "std"] }
 sha1 = "0.10.6"
+# 精确锁：同 p256，elliptic-curve 生态整组联动（基线例外）
 sm2 = { version = "=0.13.3", features = ["dsa", "pem", "arithmetic"] }
 sm3 = "0.4.2"
 sm4 = "0.5.1"
 signature = "2.2.0"
 rc4 = "0.1.0"
 moka = { version = "0.12.15", features = ["sync"] }
+# 精确锁：0.0.x 每个 patch 都可能改 wire 格式，存储/传输兼容性要求锁死，见 docs/architecture.md（基线例外）
 musli = { version = "=0.0.149", default-features = false, features = ["alloc", "std"] }
 parking_lot = "0.12.5"
 percent-encoding = "2.3.2"
 pinyin = "0.11.0"
 proptest = "1.9.0"
-proc-macro2 = "1.0.106"
+proc-macro2 = "1.0.107"
 postcard = { version = "1.1.3", features = ["use-std"] }
 qrcode = { version = "0.14.1", default-features = false, features = ["svg"] }
-quote = "1.0.46"
+quote = "1.0.47"
 quick-xml = "0.41.0"
 regex = "1.13.1"
 fancy-regex = "0.14.0"
