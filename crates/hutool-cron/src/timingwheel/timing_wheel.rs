@@ -1,4 +1,6 @@
-//! Explicitly owned timer and timing-wheel primitives.
+//! 对齐: `cn.hutool.cron.timingwheel.TimingWheel`
+//! 来源: hutool-cron/src/main/java/cn/hutool/cron/timingwheel/TimingWheel.java
+//! 中文说明: 单级时间轮，超出其间隔的任务会被拒绝，调用者可转发至溢出轮。
 
 #![allow(clippy::missing_panics_doc)]
 
@@ -16,6 +18,9 @@ use crate::CronError;
 use super::timer_task::TimerTask;
 use super::timer_task_list::TimerTaskList;
 
+/// 对齐: `cn.hutool.cron.timingwheel.TimingWheel`
+/// 中文说明: 单级时间轮，超出其间隔的任务会被拒绝，调用者可转发至溢出轮。
+///
 /// A single-level timing wheel. Tasks beyond its interval are rejected so a
 /// caller can forward them to an overflow wheel or another bounded queue.
 pub struct TimingWheel {
@@ -39,7 +44,8 @@ impl fmt::Debug for TimingWheel {
 }
 
 impl TimingWheel {
-    /// Creates a wheel at the current system time.
+    /// 中文说明: 在当前系统时间创建时间轮。
+    /// 对齐 Java 方法: `new`
     pub fn new<F>(tick: Duration, wheel_size: usize, consumer: F) -> Result<Self, CronError>
     where
         F: Fn(&TimerTaskList) + Send + Sync + 'static,
@@ -47,7 +53,7 @@ impl TimingWheel {
         Self::with_current_time(tick, wheel_size, now_millis(), consumer)
     }
 
-    /// Creates a wheel at an explicit Unix-millisecond time.
+    /// 中文说明: 在指定的 Unix 毫秒时间创建时间轮。
     pub fn with_current_time<F>(
         tick: Duration,
         wheel_size: usize,
@@ -85,7 +91,8 @@ impl TimingWheel {
         })
     }
 
-    /// Adds a task when its deadline fits this wheel's current interval.
+    /// 中文说明: 当任务截止时间在当前时间轮间隔内时添加任务。
+    /// 对齐 Java 方法: `addTask`
     pub fn add_task(&mut self, task: TimerTask) -> bool {
         let deadline = task.deadline_ms();
         if deadline < self.current_time_ms.saturating_add(self.tick_ms)
@@ -104,7 +111,8 @@ impl TimingWheel {
         true
     }
 
-    /// Advances the wheel and flushes every elapsed bucket.
+    /// 中文说明: 推进时间轮并刷新所有已过期的桶。
+    /// 对齐 Java 方法: `advanceClock`
     pub fn advance_clock<F>(&mut self, timestamp_ms: i64, mut flush: F)
     where
         F: FnMut(TimerTask),

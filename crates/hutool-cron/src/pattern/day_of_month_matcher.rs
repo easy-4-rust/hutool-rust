@@ -1,5 +1,7 @@
 #![allow(clippy::missing_panics_doc)]
-//! Hutool-aligned cron patterns, builders, parsers, and matchers.
+//! 对齐: `cn.hutool.cron.pattern.matcher.DayOfMonthMatcher`
+//! 来源: hutool-cron/src/main/java/cn/hutool/cron/pattern/matcher/DayOfMonthMatcher.java
+//! 中文说明: 支持 Hutool `L` 哨兵值（32 表示月末）的日期匹配器。
 
 
 use std::{fmt, str::FromStr};
@@ -13,6 +15,9 @@ use super::bool_array_matcher::BoolArrayMatcher;
 use super::part::Part;
 use super::part_matcher::PartMatcher;
 
+/// 对齐: `cn.hutool.cron.pattern.matcher.DayOfMonthMatcher`
+/// 中文说明: 支持 Hutool `L` 哨兵值（32 表示月末）的日期匹配器。
+///
 /// Day-of-month matcher supporting Hutool's `L` sentinel (`32`).
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct DayOfMonthMatcher {
@@ -21,7 +26,8 @@ pub struct DayOfMonthMatcher {
 }
 
 impl DayOfMonthMatcher {
-    /// Creates a day matcher. Value `32` represents the last day.
+    /// 中文说明: 创建日期匹配器，值 `32` 表示月末。
+    /// 对齐 Java 方法: `new`
     pub fn new(values: impl IntoIterator<Item = i32>) -> Result<Self, CronError> {
         Self::from_values(values.into_iter().collect())
     }
@@ -46,13 +52,15 @@ impl DayOfMonthMatcher {
         })
     }
 
-    /// Returns whether the last-day sentinel is enabled.
+    /// 中文说明: 返回是否启用了月末哨兵。
+    /// 对齐 Java 方法: `isLast`
     #[must_use]
     pub const fn is_last(&self) -> bool {
         self.last
     }
 
-    /// Returns the number of days in a month.
+    /// 中文说明: 返回指定月份的天数。
+    /// 对齐 Java 方法: `getLastDay`
     #[must_use]
     pub const fn last_day(month: u32, leap_year: bool) -> u32 {
         match month {
@@ -63,14 +71,16 @@ impl DayOfMonthMatcher {
         }
     }
 
-    /// Matches a day with month/leap-year context.
+    /// 中文说明: 根据月份和闰年上下文匹配日期。
+    /// 对齐 Java 方法: `match`
     #[must_use]
     pub fn matches_day(&self, day: u32, month: u32, leap_year: bool) -> bool {
         self.values.matches(i32::try_from(day).unwrap_or(i32::MAX))
             || (self.last && day == Self::last_day(month, leap_year))
     }
 
-    /// Returns the next matching day within the month, or the minimum match.
+    /// 中文说明: 返回月份内的下一个匹配日期，或最小匹配值。
+    /// 对齐 Java 方法: `nextDay`
     #[must_use]
     pub fn next_day(&self, day: u32, month: u32, leap_year: bool) -> u32 {
         let last_day = Self::last_day(month, leap_year);
@@ -82,13 +92,15 @@ impl DayOfMonthMatcher {
             .unwrap_or(day)
     }
 
-    /// Returns the minimum concrete match for the month.
+    /// 中文说明: 返回月份内的最小具体匹配值。
+    /// 对齐 Java 方法: `getMinValue`
     #[must_use]
     pub fn min_value(&self, month: u32, leap_year: bool) -> u32 {
         self.next_day(1, month, leap_year)
     }
 
-    /// Returns the maximum concrete match for the month.
+    /// 中文说明: 返回月份内的最大具体匹配值。
+    /// 对齐 Java 方法: `getMaxValue`
     #[must_use]
     pub fn max_value(&self, month: u32, leap_year: bool) -> u32 {
         let last_day = Self::last_day(month, leap_year);

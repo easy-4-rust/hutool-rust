@@ -1,3 +1,7 @@
+//! 对齐: `cn.hutool.cron.timingwheel`
+//! 来源: hutool-cron/src/main/java/cn/hutool/cron/timingwheel/
+//! 中文说明: 显式拥有的定时器和时间轮原语，提供高效的延迟任务调度。
+//!
 //! Explicitly owned timer and timing-wheel primitives.
 
 #![allow(clippy::missing_panics_doc)]

@@ -1,5 +1,7 @@
 #![allow(clippy::missing_panics_doc)]
-//! Hutool-aligned cron patterns, builders, parsers, and matchers.
+//! 对齐: `cn.hutool.cron.pattern.PartParser`
+//! 来源: hutool-cron/src/main/java/cn/hutool/cron/pattern/PartParser.java
+//! 中文说明: 将单个 cron 字段解析为匹配器。
 
 
 use std::{fmt, str::FromStr};
@@ -16,6 +18,9 @@ use super::part::Part;
 use super::part_matcher::PartMatcher;
 use super::year_value_matcher::YearValueMatcher;
 
+/// 对齐: `cn.hutool.cron.pattern.PartParser`
+/// 中文说明: 将单个 cron 字段解析为匹配器。
+///
 /// Parses a single cron part into a matcher.
 #[derive(Debug, Clone, Copy)]
 pub struct PartParser {
@@ -23,13 +28,15 @@ pub struct PartParser {
 }
 
 impl PartParser {
-    /// Creates a parser for `part`.
+    /// 中文说明: 为指定字段创建解析器。
+    /// 对齐 Java 方法: `new`
     #[must_use]
     pub const fn new(part: Part) -> Self {
         Self { part }
     }
 
-    /// Parses wildcards, lists, ranges, steps, `L`, negatives, and wrapping ranges.
+    /// 中文说明: 解析通配符、列表、范围、步长、`L`、负数和回绕范围。
+    /// 对齐 Java 方法: `parse`
     pub fn parse(&self, value: &str) -> Result<Box<dyn PartMatcher>, CronError> {
         if matches!(value, "*" | "?") {
             return Ok(Box::new(AlwaysTrueMatcher));

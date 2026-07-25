@@ -1,4 +1,6 @@
-//! Explicitly owned timer and timing-wheel primitives.
+//! 对齐: `cn.hutool.cron.timingwheel.TimerTask`
+//! 来源: hutool-cron/src/main/java/cn/hutool/cron/timingwheel/TimerTask.java
+//! 中文说明: 具有相对延迟的一次性定时任务。
 
 #![allow(clippy::missing_panics_doc)]
 
@@ -13,12 +15,16 @@ use std::{
 
 use crate::CronError;
 
+/// 对齐: `cn.hutool.cron.timingwheel.TimerTask`
+/// 中文说明: 具有相对延迟的一次性定时任务。
+///
 /// A one-shot task with a relative delay.
 #[derive(Clone)]
 pub struct TimerTask(pub(crate) Arc<TimerTaskInner>);
 
 impl TimerTask {
-    /// Creates a delayed one-shot task.
+    /// 中文说明: 创建延迟的一次性任务。
+    /// 对齐 Java 方法: `new`
     pub fn new<F>(task: F, delay: Duration) -> Self
     where
         F: FnOnce() + Send + 'static,
@@ -32,13 +38,14 @@ impl TimerTask {
         }))
     }
 
-    /// Returns the configured relative delay.
+    /// 中文说明: 返回配置的相对延迟。
+    /// 对齐 Java 方法: `getDelay`
     #[must_use]
     pub fn delay(&self) -> Duration {
         Duration::from_millis(self.0.delay_ms)
     }
 
-    /// Returns the configured delay in milliseconds.
+    /// 中文说明: 返回配置的延迟毫秒数。
     #[must_use]
     pub fn delay_ms(&self) -> u64 {
         self.0.delay_ms
@@ -50,7 +57,8 @@ impl TimerTask {
         self.0.deadline_ms
     }
 
-    /// Executes the task at most once and reports whether it ran.
+    /// 中文说明: 最多执行一次任务，返回是否实际执行。
+    /// 对齐 Java 方法: `run`
     pub fn execute(&self) -> bool {
         let task = self
             .0

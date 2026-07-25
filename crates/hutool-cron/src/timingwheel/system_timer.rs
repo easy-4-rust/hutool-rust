@@ -1,4 +1,6 @@
-//! Explicitly owned timer and timing-wheel primitives.
+//! 对齐: `cn.hutool.cron.timingwheel.SystemTimer`
+//! 来源: hutool-cron/src/main/java/cn/hutool/cron/timingwheel/SystemTimer.java
+//! 中文说明: 显式启动和停止的一次性定时器服务。
 
 #![allow(clippy::missing_panics_doc)]
 
@@ -15,6 +17,9 @@ use crate::CronError;
 
 use super::timer_task::TimerTask;
 
+/// 对齐: `cn.hutool.cron.timingwheel.SystemTimer`
+/// 中文说明: 显式启动和停止的一次性定时器服务。
+///
 /// Explicitly started and stopped one-shot timer service.
 #[derive(Debug)]
 pub struct SystemTimer {
@@ -31,7 +36,8 @@ impl Default for SystemTimer {
 }
 
 impl SystemTimer {
-    /// Creates a stopped timer.
+    /// 中文说明: 创建已停止的定时器。
+    /// 对齐 Java 方法: `new`
     #[must_use]
     pub fn new() -> Self {
         Self {
@@ -42,7 +48,8 @@ impl SystemTimer {
         }
     }
 
-    /// Sets the maximum worker wake-up interval.
+    /// 中文说明: 设置工作线程的最大唤醒间隔。
+    /// 对齐 Java 方法: `setDelayQueueTimeout`
     pub fn set_delay_queue_timeout(&mut self, timeout: Duration) -> Result<&mut Self, CronError> {
         if timeout.is_zero() || self.sender.is_some() {
             return Err(CronError::InvalidTimerState);
@@ -51,7 +58,8 @@ impl SystemTimer {
         Ok(self)
     }
 
-    /// Starts the owned worker. Starting twice is rejected.
+    /// 中文说明: 启动拥有的工作线程，重复启动会被拒绝。
+    /// 对齐 Java 方法: `start`
     pub fn start(&mut self) -> Result<&mut Self, CronError> {
         self.start_with(|receiver, initial, timeout| {
             thread::Builder::new()
@@ -88,7 +96,8 @@ impl SystemTimer {
         Ok(self)
     }
 
-    /// Adds a task before or after start.
+    /// 中文说明: 在启动前或启动后添加任务。
+    /// 对齐 Java 方法: `addTask`
     pub fn add_task(&mut self, task: TimerTask) -> Result<(), CronError> {
         if let Some(sender) = &self.sender {
             sender
@@ -100,7 +109,8 @@ impl SystemTimer {
         }
     }
 
-    /// Stops the worker and waits for completion.
+    /// 中文说明: 停止工作线程并等待完成。
+    /// 对齐 Java 方法: `stop`
     pub fn stop(&mut self) {
         if let Some(sender) = self.sender.take() {
             let _ = sender.send(TimerCommand::Stop);
@@ -110,7 +120,8 @@ impl SystemTimer {
         }
     }
 
-    /// Returns whether the worker is running.
+    /// 中文说明: 返回工作线程是否正在运行。
+    /// 对齐 Java 方法: `isStarted`
     #[must_use]
     pub const fn is_started(&self) -> bool {
         self.sender.is_some()

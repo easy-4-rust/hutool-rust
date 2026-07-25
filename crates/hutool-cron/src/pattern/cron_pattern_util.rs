@@ -1,5 +1,7 @@
 #![allow(clippy::missing_panics_doc)]
-//! Hutool-aligned cron patterns, builders, parsers, and matchers.
+//! 对齐: `cn.hutool.cron.pattern.CronPatternUtil`
+//! 来源: hutool-cron/src/main/java/cn/hutool/cron/pattern/CronPatternUtil.java
+//! 中文说明: Cron 表达式匹配日期计算的辅助工具类。
 
 
 use std::{fmt, str::FromStr};
@@ -11,17 +13,22 @@ use crate::CronError;
 
 use super::cron_pattern::CronPattern;
 
+/// 对齐: `cn.hutool.cron.pattern.CronPatternUtil`
+/// 中文说明: Cron 表达式匹配日期计算的辅助工具类。
+///
 /// Helpers for calculating matching dates with explicit bounds.
 pub struct CronPatternUtil;
 
 impl CronPatternUtil {
-    /// Returns the next date after `start` using second matching.
+    /// 中文说明: 返回 `start` 之后的下一个匹配日期（秒级匹配）。
+    /// 对齐 Java 方法: `nextDateAfter`
     #[must_use]
     pub fn next_date_after(pattern: &CronPattern, start: DateTime<Utc>) -> Option<DateTime<Utc>> {
         pattern.next_match_after(start, true)
     }
 
-    /// Returns the next date after `start` using the requested precision.
+    /// 中文说明: 返回 `start` 之后的下一个匹配日期（可指定精度）。
+    /// 对齐 Java 方法: `nextDateAfter`
     #[must_use]
     pub fn next_date_after_with_precision(
         pattern: &CronPattern,
@@ -31,7 +38,8 @@ impl CronPatternUtil {
         pattern.next_match_after(start, match_second)
     }
 
-    /// Returns at most `count` matching dates in the inclusive time window.
+    /// 中文说明: 返回时间窗口内最多 `count` 个匹配日期。
+    /// 对齐 Java 方法: `matchedDates`
     pub fn matched_dates(
         pattern: &CronPattern,
         start: DateTime<Utc>,
@@ -57,7 +65,8 @@ impl CronPatternUtil {
         Ok(result)
     }
 
-    /// Hutool `matchedDates(pattern, start, count, matchSecond)` — end defaults to year-end.
+    /// 中文说明: Hutool `matchedDates(pattern, start, count, matchSecond)` —— 结束时间默认为年末。
+    /// 对齐 Java 方法: `matchedDates`
     pub fn matched_dates_count(
         pattern: &str,
         start: DateTime<Utc>,
@@ -69,7 +78,8 @@ impl CronPatternUtil {
         Self::matched_dates(&parsed, start, end, count, match_second)
     }
 
-    /// Hutool `matchedDates(pattern, start, end, count, matchSecond)`.
+    /// 中文说明: Hutool `matchedDates(pattern, start, end, count, matchSecond)`。
+    /// 对齐 Java 方法: `matchedDates`
     pub fn matched_dates_str(
         pattern: &str,
         start: DateTime<Utc>,

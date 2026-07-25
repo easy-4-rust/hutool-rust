@@ -1,5 +1,7 @@
 #![allow(clippy::missing_panics_doc)]
-//! Hutool-aligned cron patterns, builders, parsers, and matchers.
+//! 对齐: `cn.hutool.cron.pattern.matcher.YearValueMatcher`
+//! 来源: hutool-cron/src/main/java/cn/hutool/cron/pattern/matcher/YearValueMatcher.java
+//! 中文说明: 具有 Hutool 下限行为的年份匹配器。
 
 
 use std::{fmt, str::FromStr};
@@ -13,12 +15,16 @@ use super::bool_array_matcher::BoolArrayMatcher;
 use super::part::Part;
 use super::part_matcher::PartMatcher;
 
+/// 对齐: `cn.hutool.cron.pattern.matcher.YearValueMatcher`
+/// 中文说明: 具有 Hutool 下限行为的年份匹配器。
+///
 /// Year matcher with Hutool's lower-bound behavior.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct YearValueMatcher(BoolArrayMatcher);
 
 impl YearValueMatcher {
-    /// Creates a year matcher.
+    /// 中文说明: 创建年份匹配器。
+    /// 对齐 Java 方法: `new`
     pub fn new(values: impl IntoIterator<Item = i32>) -> Result<Self, CronError> {
         Self::from_values(values.into_iter().collect())
     }

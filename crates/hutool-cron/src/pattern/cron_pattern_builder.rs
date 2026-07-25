@@ -73,7 +73,8 @@ impl CronPatternBuilder {
         Ok(self)
     }
 
-    /// Builds the expression, omitting unset second/year like Hutool.
+    /// 中文说明: 构建表达式，未设置的秒/年字段如 Hutool 一样被忽略。
+    /// 对齐 Java 方法: `build`
     #[must_use]
     pub fn build(&self) -> String {
         let mut parts = self.parts.clone();
