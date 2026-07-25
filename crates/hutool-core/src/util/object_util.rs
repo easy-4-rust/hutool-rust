@@ -2,7 +2,7 @@
 //! 来源: hutool-core/src/main/java/cn/hutool/core/util/ObjectUtil.java
 //!
 //! Rust 版本按 idiomatic 风格对每个公开方法提供实现。
-//! 反射/序列化相关方法仍保留 `CoreError::PendingEngine` 桩。
+//! 序列化相关方法基于 `serde_json`，类型名称查询基于 `std::any::type_name`。
 
 #![allow(
     dead_code,
@@ -11,10 +11,12 @@
     non_snake_case
 )]
 
-use std::any::Any;
+use std::any::{Any, type_name};
 use std::collections::{BTreeMap, HashMap};
 use std::fmt::Display;
 use std::hash::Hash;
+
+use serde::{Serialize, de::DeserializeOwned};
 
 use crate::{CoreError, Result};
 
@@ -254,25 +256,33 @@ impl ObjectUtil {
     }
 
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    // 序列化（反射依赖，保留桩）
+    // 序列化（基于 serde_json）
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
     /// 对齐 Java: `ObjectUtil.cloneByStream(T)`
-    /// 需要 Java 序列化机制，Rust 中暂不可用。
-    pub fn cloneByStream<T>(obj: T) -> Result<T> {
-        Err(CoreError::PendingEngine("cloneByStream"))
+    /// 通过序列化再反序列化实现深拷贝（字节流往返）。
+    /// 类型须实现 `serde::Serialize` + `serde::de::DeserializeOwned`。
+    pub fn cloneByStream<T: Serialize + DeserializeOwned>(obj: &T) -> Result<T> {
+        let bytes = serde_json::to_vec(obj)
+            .map_err(|e| CoreError::Codec(format!("cloneByStream serialize: {e}")))?;
+        serde_json::from_slice(&bytes)
+            .map_err(|e| CoreError::Codec(format!("cloneByStream deserialize: {e}")))
     }
 
     /// 对齐 Java: `ObjectUtil.serialize(T)`
-    /// 需要 Java 序列化机制，Rust 中暂不可用。
-    pub fn serialize<T>(obj: T) -> Result<Vec<u8>> {
-        Err(CoreError::PendingEngine("serialize"))
+    /// 将对象序列化为 JSON 字节流。
+    /// 类型须实现 `serde::Serialize`。
+    pub fn serialize<T: Serialize>(obj: &T) -> Result<Vec<u8>> {
+        serde_json::to_vec(obj)
+            .map_err(|e| CoreError::Codec(format!("serialize: {e}")))
     }
 
     /// 对齐 Java: `ObjectUtil.deserialize(byte[], Class<?>...)`
-    /// 需要 Java 反序列化机制，Rust 中暂不可用。
-    pub fn deserialize<T>(bytes: &[u8]) -> Result<T> {
-        Err(CoreError::PendingEngine("deserialize"))
+    /// 从 JSON 字节流反序列化为指定类型。
+    /// 类型须实现 `serde::de::DeserializeOwned`。
+    pub fn deserialize<T: DeserializeOwned>(bytes: &[u8]) -> Result<T> {
+        serde_json::from_slice(bytes)
+            .map_err(|e| CoreError::Codec(format!("deserialize: {e}")))
     }
 
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -351,19 +361,25 @@ impl ObjectUtil {
     }
 
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    // 反射相关（保留桩）
+    // 反射相关（基于 std::any::type_name）
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
     /// 对齐 Java: `ObjectUtil.getTypeArgument(Object)`
-    /// 需要 Java 反射机制，Rust 中暂不可用。
-    pub fn getTypeArgument<T>(_obj: &T) -> Result<()> {
-        Err(CoreError::PendingEngine("getTypeArgument"))
+    /// 返回对象的完整类型名称（Rust 中使用 `std::any::type_name` 近似 Java 反射获取泛型参数）。
+    /// 返回的字符串格式为模块路径限定的完整类型名，如 `"alloc::string::String"`。
+    pub fn getTypeArgument<T: ?Sized>(_obj: &T) -> &'static str {
+        type_name::<T>()
     }
 
     /// 对齐 Java: `ObjectUtil.getTypeArgument(Object, int)`
-    /// 需要 Java 反射机制，Rust 中暂不可用。
-    pub fn getTypeArgument_2<T>(_obj: &T, index: usize) -> Result<()> {
-        Err(CoreError::PendingEngine("getTypeArgument"))
+    /// 返回对象的类型名称，并尝试按 `::` 分割取第 `index` 段。
+    /// 若 `index` 越界则返回完整类型名称。
+    pub fn getTypeArgument_2<T: ?Sized>(_obj: &T, index: usize) -> String {
+        let full = type_name::<T>();
+        full.split("::")
+            .nth(index)
+            .unwrap_or(full)
+            .to_string()
     }
 
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
