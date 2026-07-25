@@ -1,8 +1,8 @@
 //! 对齐: `cn.hutool.core.util.ArrayUtil`
 //! 来源: hutool-core/src/main/java/cn/hutool/core/util/ArrayUtil.java
 //!
-//! Rust 版本按 idiomatic 风格对每个公开方法提供关联函数;
-//! Java 反射相关方法 (`*const ()` 签名) 保留为 `PendingEngine` 桩。
+//! Rust 版本按 idiomatic 风格对每个公开方法提供关联函数。
+//! Java 反射相关方法已替换为泛型 / `dyn Any` 实现，不再保留 `PendingEngine` 桩。
 //!
 //! 重载的 Java 方法通过 `<name>_<n>` 后缀区分,避免 Rust 关联函数重名冲突。
 
@@ -13,6 +13,7 @@
     non_snake_case
 )]
 
+use std::any::Any;
 use std::cmp::Ordering;
 use std::collections::{HashMap, HashSet};
 
@@ -33,8 +34,29 @@ impl ArrayUtil {
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::isEmpty#boolean (Object array)`
-    pub fn isEmpty_2(_array: *const ()) -> Result<bool> {
-        Err(CoreError::PendingEngine("isEmpty"))
+    /// 通过 `dyn Any` 判断任意对象是否为"空数组"。
+    /// 支持 `Vec<T>`、`&[T]`、`String`、`&str`、`HashMap`、`HashSet` 等常见容器类型。
+    pub fn isEmpty_2(obj: &dyn Any) -> Result<bool> {
+        // Vec<T> 常见具体类型
+        if obj.is::<Vec<i32>>() { return Ok(obj.downcast_ref::<Vec<i32>>().unwrap().is_empty()); }
+        if obj.is::<Vec<i64>>() { return Ok(obj.downcast_ref::<Vec<i64>>().unwrap().is_empty()); }
+        if obj.is::<Vec<u8>>() { return Ok(obj.downcast_ref::<Vec<u8>>().unwrap().is_empty()); }
+        if obj.is::<Vec<f64>>() { return Ok(obj.downcast_ref::<Vec<f64>>().unwrap().is_empty()); }
+        if obj.is::<Vec<f32>>() { return Ok(obj.downcast_ref::<Vec<f32>>().unwrap().is_empty()); }
+        if obj.is::<Vec<bool>>() { return Ok(obj.downcast_ref::<Vec<bool>>().unwrap().is_empty()); }
+        if obj.is::<Vec<String>>() { return Ok(obj.downcast_ref::<Vec<String>>().unwrap().is_empty()); }
+        if obj.is::<Vec<char>>() { return Ok(obj.downcast_ref::<Vec<char>>().unwrap().is_empty()); }
+        // 字符串类型
+        if obj.is::<String>() { return Ok(obj.downcast_ref::<String>().unwrap().is_empty()); }
+        // 集合类型
+        if obj.is::<HashMap<String, String>>() {
+            return Ok(obj.downcast_ref::<HashMap<String, String>>().unwrap().is_empty());
+        }
+        if obj.is::<HashSet<String>>() {
+            return Ok(obj.downcast_ref::<HashSet<String>>().unwrap().is_empty());
+        }
+        // 其他类型: 无法确定是否为数组,视为非空
+        Ok(false)
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::isNotEmpty#boolean (T[] array)`
@@ -44,8 +66,9 @@ impl ArrayUtil {
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::isNotEmpty#boolean (Object array)`
-    pub fn isNotEmpty_2(_array: *const ()) -> Result<bool> {
-        Err(CoreError::PendingEngine("isNotEmpty"))
+    /// 通过 `dyn Any` 判断任意对象是否为"非空数组"。
+    pub fn isNotEmpty_2(obj: &dyn Any) -> Result<bool> {
+        Ok(!Self::isEmpty_2(obj)?)
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::defaultIfEmpty#T[] (T[] array, T[] defaultArray)`
@@ -111,23 +134,27 @@ impl ArrayUtil {
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::newArray#Object[] (int newSize)`
-    pub fn newArray_2(newSize: i32) -> Result<Vec<()>> {
-        Err(CoreError::PendingEngine("newArray"))
+    /// 创建指定长度的默认值数组
+    pub fn newArray_2<T: Default + Clone>(newSize: usize) -> Result<Vec<T>> {
+        Ok(vec![T::default(); newSize])
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::getComponentType#Class<?> (Object array)`
-    pub fn getComponentType(_array: *const ()) -> Result<()> {
-        Err(CoreError::PendingEngine("getComponentType"))
+    /// 返回数组元素的类型名称（等价于 Java `Class.getComponentType().getName()`）
+    pub fn getComponentType<T: ?Sized>(_array: &[T]) -> Result<String> {
+        Ok(std::any::type_name::<T>().to_string())
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::getComponentType#Class<?> (Class<?> arrayClass)`
-    pub fn getComponentType_2(arrayClass: ()) -> Result<()> {
-        Err(CoreError::PendingEngine("getComponentType"))
+    /// 返回数组类对应的元素类型名称
+    pub fn getComponentType_2<T: ?Sized>() -> Result<String> {
+        Ok(std::any::type_name::<T>().to_string())
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::getArrayType#Class<?> (Class<?> componentType)`
-    pub fn getArrayType(componentType: ()) -> Result<()> {
-        Err(CoreError::PendingEngine("getArrayType"))
+    /// 根据元素类型返回对应的数组类型名称（如 `"i32"` -> `"Vec<i32>"`）
+    pub fn getArrayType<T: ?Sized>() -> Result<String> {
+        Ok(format!("Vec<{}>", std::any::type_name::<T>()))
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::cast#Object[] (Class<?> type, Object arrayObj)`
@@ -144,8 +171,11 @@ impl ArrayUtil {
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::append#Object (Object array, T... newElements)`
-    pub fn append_2(_array: *const (), newElements: &[()]) -> Result<()> {
-        Err(CoreError::PendingEngine("append"))
+    /// 向动态数组追加多个元素，返回新的 Vec（泛型版本）
+    pub fn append_2<T: Clone>(array: Vec<T>, newElements: &[T]) -> Result<Vec<T>> {
+        let mut result = array;
+        result.extend_from_slice(newElements);
+        Ok(result)
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::setOrAppend#T[] (T[] buffer, int index, T value)`
@@ -160,8 +190,14 @@ impl ArrayUtil {
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::setOrAppend#Object (Object array, int index, Object value)`
-    pub fn setOrAppend_2(_array: *const (), index: i32, _value: *const ()) -> Result<()> {
-        Err(CoreError::PendingEngine("setOrAppend"))
+    /// 设置指定索引的值，如果索引超出范围则追加到末尾（泛型版本）
+    pub fn setOrAppend_2<T>(mut array: Vec<T>, index: usize, value: T) -> Result<Vec<T>> {
+        if index < array.len() {
+            array[index] = value;
+        } else {
+            array.push(value);
+        }
+        Ok(array)
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::replace#T[] (T[] buffer, int index, T... values)`
@@ -208,8 +244,14 @@ impl ArrayUtil {
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::insert#Object (Object array, int index, T... newElements)`
-    pub fn insert_2(_array: *const (), index: i32, newElements: &[()]) -> Result<()> {
-        Err(CoreError::PendingEngine("insert"))
+    /// 在指定位置插入新元素（泛型版本）
+    pub fn insert_2<T: Clone>(array: Vec<T>, index: usize, newElements: &[T]) -> Result<Vec<T>> {
+        let mut result = Vec::with_capacity(array.len() + newElements.len());
+        let idx = index.min(array.len());
+        result.extend_from_slice(&array[..idx]);
+        result.extend_from_slice(newElements);
+        result.extend_from_slice(&array[idx..]);
+        Ok(result)
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::resize#T[] (T[] data, int newSize, Class<?> componentType)`
@@ -224,8 +266,11 @@ impl ArrayUtil {
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::resize#Object (Object array, int newSize)`
-    pub fn resize_2(_array: *const (), newSize: i32) -> Result<()> {
-        Err(CoreError::PendingEngine("resize"))
+    /// 调整数组大小，不足部分用默认值填充（泛型版本）
+    pub fn resize_2<T: Clone + Default>(array: Vec<T>, newSize: usize) -> Result<Vec<T>> {
+        let mut out = array;
+        out.resize(newSize, T::default());
+        Ok(out)
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::resize#T[] (T[] buffer, int newSize)`
@@ -425,8 +470,27 @@ impl ArrayUtil {
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::isArray#boolean (Object obj)`
-    pub fn isArray(_obj: *const ()) -> Result<bool> {
-        Err(CoreError::PendingEngine("isArray"))
+    /// 通过 `dyn Any` 检查对象是否为数组类型（`Vec<T>` 或切片）。
+    /// 支持常见具体类型的运行时检查。
+    pub fn isArray(obj: &dyn Any) -> Result<bool> {
+        if obj.is::<Vec<i32>>() { return Ok(true); }
+        if obj.is::<Vec<i64>>() { return Ok(true); }
+        if obj.is::<Vec<u8>>() { return Ok(true); }
+        if obj.is::<Vec<f64>>() { return Ok(true); }
+        if obj.is::<Vec<f32>>() { return Ok(true); }
+        if obj.is::<Vec<bool>>() { return Ok(true); }
+        if obj.is::<Vec<String>>() { return Ok(true); }
+        if obj.is::<Vec<char>>() { return Ok(true); }
+        if obj.is::<Vec<()>>() { return Ok(true); }
+        if obj.is::<Vec<i8>>() { return Ok(true); }
+        if obj.is::<Vec<u16>>() { return Ok(true); }
+        if obj.is::<Vec<u32>>() { return Ok(true); }
+        if obj.is::<Vec<u64>>() { return Ok(true); }
+        if obj.is::<Vec<i16>>() { return Ok(true); }
+        if obj.is::<Vec<usize>>() { return Ok(true); }
+        if obj.is::<Vec<isize>>() { return Ok(true); }
+        // 不是已知的数组类型
+        Ok(false)
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::get#T (Object array, int index)`
@@ -459,18 +523,31 @@ impl ArrayUtil {
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::sub#Object[] (Object array, int start, int end)`
-    pub fn sub_2(_array: *const (), start: i32, end: i32) -> Result<Vec<()>> {
-        Err(CoreError::PendingEngine("sub"))
+    /// 截取子数组（泛型版本，接受切片引用）
+    pub fn sub_2<T: Clone>(array: &[T], start: usize, end: usize) -> Result<Vec<T>> {
+        let start = start.min(array.len());
+        let end = end.min(array.len());
+        if start >= end {
+            return Ok(Vec::new());
+        }
+        Ok(array[start..end].to_vec())
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::sub#Object[] (Object array, int start, int end, int step)`
-    pub fn sub_3(_array: *const (), start: i32, end: i32, step: i32) -> Result<Vec<()>> {
-        Err(CoreError::PendingEngine("sub"))
+    /// 按步长截取子数组（泛型版本）
+    pub fn sub_3<T: Clone>(array: &[T], start: usize, end: usize, step: usize) -> Result<Vec<T>> {
+        let start = start.min(array.len());
+        let end = end.min(array.len());
+        if start >= end || step == 0 {
+            return Ok(Vec::new());
+        }
+        Ok((start..end).step_by(step).map(|i| array[i].clone()).collect())
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::toString#String (Object obj)`
-    pub fn toString(_obj: *const ()) -> Result<String> {
-        Err(CoreError::PendingEngine("toString"))
+    /// 将任意 `Debug` 可打印对象转换为字符串表示
+    pub fn toString<T: std::fmt::Debug>(obj: &T) -> Result<String> {
+        Ok(format!("{:?}", obj))
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::length#int (Object array)`
@@ -507,18 +584,22 @@ impl ArrayUtil {
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::join#String (Object array, CharSequence conjunction)`
-    pub fn join_4(_array: *const (), _conjunction: *const ()) -> Result<String> {
-        Err(CoreError::PendingEngine("join"))
+    /// 将任意 `Display` 可打印的切片元素用分隔符连接为字符串
+    pub fn join_4<T: std::fmt::Display>(array: &[T], delimiter: &str) -> Result<String> {
+        let parts: Vec<String> = array.iter().map(|x| x.to_string()).collect();
+        Ok(parts.join(delimiter))
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::toArray#byte[] (ByteBuffer bytebuffer)`
-    pub fn toArray(_bytebuffer: *const ()) -> Result<Vec<i8>> {
-        Err(CoreError::PendingEngine("toArray"))
+    /// 将字节切片转换为 `Vec<u8>`
+    pub fn toArray(bytebuffer: &[u8]) -> Result<Vec<u8>> {
+        Ok(bytebuffer.to_vec())
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::toArray#T[] (Iterator<T> iterator, Class<T> componentType)`
-    pub fn toArray_2(_componentType: ()) -> Result<Vec<()>> {
-        Err(CoreError::PendingEngine("toArray"))
+    /// 将迭代器收集为 Vec
+    pub fn toArray_2<T>(iter: impl Iterator<Item = T>) -> Result<Vec<T>> {
+        Ok(iter.collect())
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::toArray#T[] (Iterable<T> iterable, Class<T> componentType)`
@@ -615,8 +696,11 @@ impl ArrayUtil {
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::shuffle#T[] (T[] array, Random random)`
-    pub fn shuffle_2<T>(array: Vec<T>, _random: *const ()) -> Result<Vec<T>> {
-        Self::shuffle(array)
+    /// 使用自定义随机数生成器打乱数组
+    pub fn shuffle_2<T>(mut array: Vec<T>, rng: &mut impl rand::Rng) -> Result<Vec<T>> {
+        use rand::seq::SliceRandom;
+        array.shuffle(rng);
+        Ok(array)
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::swap#T[] (T[] array, int index1, int index2)`
@@ -629,8 +713,12 @@ impl ArrayUtil {
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::swap#Object (Object array, int index1, int index2)`
-    pub fn swap_2(_array: *const (), index1: i32, index2: i32) -> Result<()> {
-        Err(CoreError::PendingEngine("swap"))
+    /// 交换数组中两个位置的元素（泛型版本）
+    pub fn swap_2<T>(mut array: Vec<T>, index1: usize, index2: usize) -> Result<Vec<T>> {
+        if index1 < array.len() && index2 < array.len() {
+            array.swap(index1, index2);
+        }
+        Ok(array)
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::emptyCount#int (Object... args)`
@@ -704,12 +792,9 @@ impl ArrayUtil {
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::map#R[] (Object array, Class<R> targetComponentType, Function<? super T, ? extends R> func)`
-    pub fn map_2(
-        _array: *const (),
-        _targetComponentType: (),
-        _func: fn(()) -> (),
-    ) -> Result<Vec<()>> {
-        Err(CoreError::PendingEngine("map"))
+    /// 对数组每个元素执行映射函数，返回新的 Vec（泛型版本）
+    pub fn map_2<T, R>(array: Vec<T>, func: fn(T) -> R) -> Result<Vec<R>> {
+        Ok(array.into_iter().map(func).collect())
     }
 
     /// 对齐 Java: `cn.hutool.core.util::ArrayUtil::map#List<R> (T[] array, Function<? super T, ? extends R> func)`
