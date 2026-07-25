@@ -739,31 +739,36 @@ impl SystemUtil {
         RuntimeInfo::collect()
     }
 
-    /// Returns total physical memory.
+    /// 中文说明: 返回总物理内存
+    /// 对齐 Java 方法: `SystemUtil.getTotalMemory`
     #[must_use]
     pub fn total_memory() -> u64 {
         OshiUtil::memory().total
     }
 
-    /// Returns available physical memory.
+    /// 中文说明: 返回可用物理内存
+    /// 对齐 Java 方法: `SystemUtil.getFreeMemory`
     #[must_use]
     pub fn free_memory() -> u64 {
         OshiUtil::memory().available
     }
 
-    /// Returns the native maximum memory boundary.
+    /// 中文说明: 返回原生最大内存边界
+    /// 对齐 Java 方法: `SystemUtil.getMaxMemory`
     #[must_use]
     pub fn max_memory() -> u64 {
         Self::total_memory()
     }
 
-    /// Returns portable thread execution capacity.
+    /// 中文说明: 返回便携式的线程执行容量
+    /// 对齐 Java 方法: `SystemUtil.getTotalThreadCount`
     #[must_use]
     pub fn total_thread_count() -> usize {
         std::thread::available_parallelism().map_or(1, usize::from)
     }
 
-    /// Produces a stable human-readable system dump.
+    /// 中文说明: 生成稳定的、人类可读的系统信息转储
+    /// 对齐 Java 方法: `SystemUtil.getSystemInfoDump`
     #[must_use]
     pub fn system_info_dump() -> String {
         let snapshot = SystemSnapshot::collect();
@@ -782,7 +787,8 @@ impl SystemUtil {
         output
     }
 
-    /// Writes a system dump to an injected writer.
+    /// 中文说明: 将系统信息转储写入注入的写入器
+    /// 对齐 Java 方法: `SystemUtil.dumpSystemInfo`
     pub fn dump_system_info(writer: &mut dyn io::Write) -> io::Result<()> {
         writer.write_all(Self::system_info_dump().as_bytes())
     }

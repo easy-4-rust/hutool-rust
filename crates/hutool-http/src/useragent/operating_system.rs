@@ -1,4 +1,6 @@
-//! Browser, rendering-engine, operating-system, and platform detection.
+//! 对齐: `cn.hutool.http.useragent.OperatingSystem`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/useragent/OperatingSystem.java
+//! 中文说明: 操作系统识别规则，通过正则匹配识别Windows、macOS、Linux等系统
 
 use regex::{Regex, RegexBuilder};
 use std::{

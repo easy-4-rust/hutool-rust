@@ -512,12 +512,14 @@ impl JSONObject {
         Ok(())
     }
 
-    /// Removes and returns a field.
+    /// 中文说明: 移除并返回指定字段。
+    /// 对齐 Java 方法: `remove`
     pub fn remove(&mut self, key: &str) -> Option<Value> {
         self.entries.remove(key)
     }
 
-    /// Iterates over fields in deterministic map order.
+    /// 中文说明: 按确定性映射顺序迭代字段。
+    /// 对齐 Java 方法: `entrySet`
     pub fn iter(&self) -> impl Iterator<Item = (&String, &Value)> {
         self.entries.iter()
     }
@@ -581,13 +583,15 @@ impl JSONArray {
     pub(crate) fn from_values(values: Vec<Value>, config: JSONConfig) -> Self {
         Self { values, config }
     }
-    /// Creates an empty array.
+    /// 中文说明: 创建空的 JSON 数组。
+    /// 对齐 Java 方法: `new JSONArray()`
     #[must_use]
     pub fn new() -> Self {
         Self::with_config(JSONConfig::default())
     }
 
-    /// Creates an empty array with explicit configuration.
+    /// 中文说明: 使用指定配置创建空的 JSON 数组。
+    /// 对齐 Java 方法: `new JSONArray(JSONConfig)`
     #[must_use]
     pub fn with_config(config: JSONConfig) -> Self {
         Self {
@@ -596,7 +600,8 @@ impl JSONArray {
         }
     }
 
-    /// Builds an array from a dynamic value.
+    /// 中文说明: 从动态值构建 JSON 数组。
+    /// 对齐 Java 方法: `new JSONArray(JSONTokener)`
     pub fn from_value(value: Value, config: JSONConfig) -> Result<Self> {
         match value {
             Value::Array(values) => Ok(Self { values, config }),
@@ -607,7 +612,8 @@ impl JSONArray {
         }
     }
 
-    /// Parses a JSON array.
+    /// 中文说明: 解析 JSON 文本为数组。
+    /// 对齐 Java 方法: `new JSONArray(String)`
     pub fn parse(input: &str) -> Result<Self> {
         Self::from_value(crate::parse(input)?, JSONConfig::default())
     }

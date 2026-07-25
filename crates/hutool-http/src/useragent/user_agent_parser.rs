@@ -1,4 +1,6 @@
-//! Browser, rendering-engine, operating-system, and platform detection.
+//! 对齐: `cn.hutool.http.useragent.UserAgentParser`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/useragent/UserAgentParser.java
+//! 中文说明: User-Agent解析器，组合浏览器、引擎、操作系统和平台规则进行解析
 
 use regex::{Regex, RegexBuilder};
 use std::{

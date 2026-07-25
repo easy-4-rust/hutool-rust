@@ -1,4 +1,6 @@
-//! Browser, rendering-engine, operating-system, and platform detection.
+//! 对齐: `cn.hutool.http.useragent.Engine`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/useragent/Engine.java
+//! 中文说明: 渲染引擎识别规则，通过正则匹配识别WebKit、Gecko等引擎
 
 use regex::{Regex, RegexBuilder};
 use std::{

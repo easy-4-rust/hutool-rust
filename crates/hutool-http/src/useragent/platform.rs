@@ -1,4 +1,6 @@
-//! Browser, rendering-engine, operating-system, and platform detection.
+//! 对齐: `cn.hutool.http.useragent.Platform`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/useragent/Platform.java
+//! 中文说明: 设备平台分类枚举，识别桌面、移动和平板设备类型
 
 use regex::{Regex, RegexBuilder};
 use std::{

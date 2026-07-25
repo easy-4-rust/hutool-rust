@@ -465,21 +465,24 @@ impl TaskListenerManager {
             .clone()
     }
 
-    /// Notifies start listeners.
+    /// 中文说明: 通知所有监听器任务即将开始。
+    /// 对齐 Java 方法: `notifyTaskStart`
     pub fn notify_task_start(&self, executor: &TaskExecutor) {
         for listener in self.snapshot() {
             listener.on_start(executor);
         }
     }
 
-    /// Notifies success listeners.
+    /// 中文说明: 通知所有监听器任务执行成功。
+    /// 对齐 Java 方法: `notifyTaskSucceeded`
     pub fn notify_task_succeeded(&self, executor: &TaskExecutor) {
         for listener in self.snapshot() {
             listener.on_succeeded(executor);
         }
     }
 
-    /// Notifies failure listeners.
+    /// 中文说明: 通知所有监听器任务执行失败。
+    /// 对齐 Java 方法: `notifyTaskFailed`
     pub fn notify_task_failed(&self, executor: &TaskExecutor, error: &CronError) {
         for listener in self.snapshot() {
             listener.on_failed(executor, error);
@@ -487,6 +490,9 @@ impl TaskListenerManager {
     }
 }
 
+/// 对齐: `cn.hutool.cron.TaskExecutor`
+/// 中文说明: 单次具体任务执行实例，负责触发监听器生命周期事件。
+///
 /// One concrete task execution.
 #[derive(Clone)]
 pub struct TaskExecutor {
@@ -504,7 +510,7 @@ impl fmt::Debug for TaskExecutor {
 }
 
 impl TaskExecutor {
-    /// Creates an execution with an explicit listener manager.
+    /// 中文说明: 使用指定的监听器管理器创建执行实例。
     #[must_use]
     pub fn new(cron_task: Arc<CronTask>, listeners: TaskListenerManager) -> Self {
         Self {
@@ -513,7 +519,7 @@ impl TaskExecutor {
         }
     }
 
-    /// Returns the raw task.
+    /// 中文说明: 返回底层任务。
     #[must_use]
     pub fn task(&self) -> Arc<dyn Task> {
         self.cron_task.raw()

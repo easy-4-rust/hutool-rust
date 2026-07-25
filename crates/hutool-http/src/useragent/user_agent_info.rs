@@ -1,4 +1,6 @@
-//! Browser, rendering-engine, operating-system, and platform detection.
+//! 对齐: `cn.hutool.http.useragent.UserAgentInfo`
+//! 来源: hutool-http/src/main/java/cn/hutool/http/useragent/UserAgentInfo.java
+//! 中文说明: User-Agent匹配规则，包含名称和正则表达式模式
 
 use regex::{Regex, RegexBuilder};
 use std::{
