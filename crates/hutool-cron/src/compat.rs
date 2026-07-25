@@ -433,7 +433,8 @@ impl fmt::Debug for TaskListenerManager {
 }
 
 impl TaskListenerManager {
-    /// Adds a listener.
+    /// 中文说明: 添加监听器。
+    /// 对齐 Java 方法: `addListener`
     pub fn add_listener(&self, listener: Arc<dyn TaskListener>) -> &Self {
         self.listeners
             .write()
@@ -442,7 +443,8 @@ impl TaskListenerManager {
         self
     }
 
-    /// Removes a listener by shared identity.
+    /// 中文说明: 按共享标识移除监听器。
+    /// 对齐 Java 方法: `removeListener`
     pub fn remove_listener(&self, listener: &Arc<dyn TaskListener>) -> bool {
         let mut listeners = self.listeners.write().expect("listener manager poisoned");
         if let Some(index) = listeners

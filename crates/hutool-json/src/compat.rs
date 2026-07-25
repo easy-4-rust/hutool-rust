@@ -477,7 +477,8 @@ impl JSONObject {
         Ok(self)
     }
 
-    /// Increments a numeric field, treating a missing field as zero.
+    /// 中文说明: 自增数值字段，缺失时视为零。
+    /// 对齐 Java 方法: `increment`
     pub fn increment(&mut self, key: &str) -> Result<&mut Self> {
         let next = match self.entries.get(key) {
             None => 1,
@@ -492,13 +493,15 @@ impl JSONObject {
         Ok(self)
     }
 
-    /// Borrows a nested value by path.
+    /// 中文说明: 通过路径借用嵌套值。
+    /// 对齐 Java 方法: `getByPath`
     #[must_use]
     pub fn get_by_path(&self, path: &str) -> Option<&Value> {
         get_object_path(self, path)
     }
 
-    /// Writes a nested value by path.
+    /// 中文说明: 通过路径写入嵌套值。
+    /// 对齐 Java 方法: `putByPath`
     pub fn put_by_path(&mut self, path: &str, value: Value) -> Result<()> {
         let mut root = self.to_value();
         put_by_path(&mut root, path, value)?;

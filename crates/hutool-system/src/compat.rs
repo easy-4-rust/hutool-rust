@@ -725,13 +725,15 @@ impl SystemUtil {
         UserInfo::collect()
     }
 
-    /// Returns host identity.
+    /// 中文说明: 返回主机身份信息
+    /// 对齐 Java 方法: `SystemUtil.getHostInfo`
     #[must_use]
     pub fn host_info() -> HostInfo {
         HostInfo::collect()
     }
 
-    /// Returns native runtime memory.
+    /// 中文说明: 返回原生运行时内存信息
+    /// 对齐 Java 方法: `SystemUtil.getRuntimeInfo`
     #[must_use]
     pub fn runtime_info() -> RuntimeInfo {
         RuntimeInfo::collect()
