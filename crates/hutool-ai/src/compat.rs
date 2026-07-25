@@ -1,6 +1,8 @@
-//! Hutool-compatible configuration, factory, and service facade.
-
 #![allow(clippy::missing_panics_doc)]
+
+//! Hutool-compatible configuration, factory, and service facade.
+/// 对齐: `cn.hutool.ai.AIConfig`
+/// AI 兼容层
 
 use crate::{AIResponse, Message, ModelName, Operation, ProviderError, StreamCallback};
 use async_trait::async_trait;

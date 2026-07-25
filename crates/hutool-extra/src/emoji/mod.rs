@@ -3,6 +3,9 @@
 //! Backed by the [`emojis`] crate (GitHub gemoji shortcodes) rather than
 //! emoji-java, with the same facade shapes Hutool callers expect.
 
+/// 对齐: `cn.hutool.extra.emoji.EmojiUtil`
+/// Emoji 工具类
+
 use std::collections::BTreeSet;
 
 mod fitzpatrick_action;

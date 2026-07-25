@@ -1,5 +1,8 @@
 //! Pinyin helpers aligned with Hutool `PinyinUtil`, backed by the `pinyin` crate.
 
+/// 对齐: `cn.hutool.extra.pinyin.PinyinUtil`
+/// 拼音工具类
+
 use pinyin::{ToPinyin, ToPinyinMulti};
 
 mod pinyin_exception;

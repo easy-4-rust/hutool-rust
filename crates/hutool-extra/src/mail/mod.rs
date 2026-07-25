@@ -1,5 +1,8 @@
 //! Explicit, injectable SMTP and MIME mail support.
 
+/// 对齐: `cn.hutool.extra.mail.MailUtil`
+/// 邮件工具类
+
 use std::{fmt, time::Duration};
 
 pub use lettre::message::Mailbox;
