@@ -21,7 +21,7 @@ aes-gcm = "0.10.3"
 argon2 = { version = "0.5.3", features = ["std", "zeroize"] }
 block-padding = "0.3.3"
 cbc = "0.1.2"
-chacha20 = "0.9.1"
+chacha20 = "0.10.1"
 cmac = "0.7.2"
 der = "0.7.10"
 des = "0.8.1"
@@ -33,7 +33,7 @@ chrono = { version = "0.4.45", default-features = false, features = ["clock", "s
 bincode = { version = "2.0.1", features = ["serde"] }
 config = { version = "0.15.25", default-features = false, features = ["json", "toml", "yaml"] }
 criterion = { version = "0.7.0", default-features = false, features = ["cargo_bench_support"] }
-cron = "0.15.0"
+cron = "0.17.0"
 crc32fast = "1.5.0"
 csv = "1.4.0"
 data-encoding = "2.11.0"
@@ -94,10 +94,10 @@ serde_json = { version = "1.0.150", features = ["preserve_order"] }
 serde_yaml_ng = "0.10.0"
 secrecy = "0.10.3"
 sha2 = "0.10.9"
-sqlx = { version = "0.8.6", default-features = false, features = ["runtime-tokio-rustls"] }
+sqlx = { version = "0.8.6", default-features = false, features = ["runtime-tokio-rustls"] }  # 0.9.0 需要 rustc 1.94，超出基线 1.88
 syn = { version = "2.0.119", features = ["full"] }
 thiserror = "2.0.18"
-sysinfo = "0.36.1"
+sysinfo = "0.38.4"
 tracing = "0.1.44"
 tracing-subscriber = { version = "0.3.23", features = ["env-filter", "fmt"] }
 console-subscriber = { version = "0.5.0", default-features = false, features = ["env-filter"] }
