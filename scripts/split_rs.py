@@ -104,6 +104,18 @@ def scan_file(content):
                         j -= 1
             # Check if struct/enum/trait has multi-line definition (e.g. with where clause)
             has_open = '{' in line
+            # Handle multi-line `pub type X = Arc<...>;` that doesn't end with `;`
+            if not has_open and kind == 'type' and not line.rstrip().endswith(';'):
+                j = i + 1
+                while j < n and not lines[j].rstrip().endswith(';'):
+                    j += 1
+                if j < n:
+                    items.append({'kind': f'pub_{kind}', 'name': name, 'start': attrs_start, 'end': j + 1})
+                    i = j + 1
+                else:
+                    items.append({'kind': f'pub_{kind}', 'name': name, 'start': attrs_start, 'end': n})
+                    i = n
+                continue
             if not has_open and kind in ('struct', 'enum', 'trait') and ('<' in line or '(' in line):
                 j = i + 1
                 found_brace = False
