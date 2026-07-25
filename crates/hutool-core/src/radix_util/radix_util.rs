@@ -5,6 +5,9 @@ use thiserror::Error;
 use super::radix_error::RadixError;
 
 /// Arbitrary-alphabet integer conversion compatible with Hutool's `RadixUtil`.
+
+/// 对齐: `cn.hutool.core.util.RadixUtil`
+/// 进制转换工具类
 #[derive(Debug, Clone, Copy, Default)]
 pub struct RadixUtil;
 

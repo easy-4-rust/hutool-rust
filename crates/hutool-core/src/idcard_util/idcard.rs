@@ -7,6 +7,9 @@ use super::idcard_error::IdcardError;
 use super::idcard_util::IdcardUtil;
 
 /// Owned identity-card information corresponding to Hutool's nested `Idcard` value.
+
+/// 对齐: `cn.hutool.core.util.IdcardUtil`
+/// 身份证
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Idcard {
     province_code: Option<String>,

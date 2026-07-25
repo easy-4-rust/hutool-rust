@@ -1,5 +1,8 @@
 //! Borrowed and streaming collection partitions aligned with Hutool.
 
+/// 对齐: `cn.hutool.core.collection.RandomAccessPartition`
+/// 随机访问分区
+
 use std::iter::Peekable;
 
 use crate::{CoreError, Result};

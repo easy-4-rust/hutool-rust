@@ -8,6 +8,9 @@ use super::idcard::Idcard;
 use super::idcard_error::IdcardError;
 
 /// Hutool-compatible identity-card facade backed by checked Rust algorithms.
+
+/// 对齐: `cn.hutool.core.util.IdcardUtil`
+/// 身份证工具类
 pub struct IdcardUtil;
 
 impl IdcardUtil {

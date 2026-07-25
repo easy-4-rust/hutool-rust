@@ -1,5 +1,8 @@
 /// Supported default masking strategies.
 
+/// 对齐: `cn.hutool.core.util.DesensitizedUtil`
+/// 脱敏工具类
+
 use super::desensitized_type::DesensitizedType;
 
 /// Unicode-safe Hutool-compatible masking facade.

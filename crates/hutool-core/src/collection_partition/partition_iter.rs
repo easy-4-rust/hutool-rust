@@ -1,5 +1,8 @@
 //! Borrowed and streaming collection partitions aligned with Hutool.
 
+/// 对齐: `cn.hutool.core.collection.PartitionIter`
+/// 分区迭代器
+
 use std::iter::Peekable;
 
 use crate::{CoreError, Result};

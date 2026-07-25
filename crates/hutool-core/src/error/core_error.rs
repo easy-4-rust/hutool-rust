@@ -1,6 +1,9 @@
 //! Error types for core utilities.
 
 /// Errors produced by `hutool-core`.
+
+/// 对齐: `cn.hutool.core.exceptions.CoreError`
+/// 核心错误
 #[derive(Debug, thiserror::Error)]
 #[non_exhaustive]
 pub enum CoreError {

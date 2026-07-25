@@ -1,5 +1,8 @@
 //! Hutool-aligned collection types with Rust-native ownership and concurrency.
 
+/// 对齐: `cn.hutool.core.collection.UniqueKeySet`
+/// 唯一键集合
+
 use std::{
     cmp::Ordering,
     collections::HashSet,

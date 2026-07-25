@@ -1,5 +1,8 @@
 //! Hutool-aligned collection types with Rust-native ownership and concurrency.
 
+/// 对齐: `cn.hutool.core.collection.BoundedPriorityQueue`
+/// 有界优先队列
+
 use std::{
     cmp::Ordering,
     collections::HashSet,

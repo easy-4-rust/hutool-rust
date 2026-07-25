@@ -1,6 +1,9 @@
 /// Supported default masking strategies.
 
 /// Supported default masking strategies.
+
+/// 对齐: `cn.hutool.core.util.DesensitizedUtil.DesensitizedType`
+/// 脱敏类型
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum DesensitizedType {
     /// Replace a user identifier with zero.

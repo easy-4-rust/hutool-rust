@@ -4,6 +4,9 @@ use chrono::{Datelike, Local, NaiveDate};
 use thiserror::Error;
 
 /// Parsed information returned for ten-character Taiwan, Macao, and Hong Kong cards.
+
+/// 对齐: `cn.hutool.core.util.IdcardUtil.Card10Info`
+/// 10位身份证信息
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Card10Info {
     pub(crate) region: &'static str,

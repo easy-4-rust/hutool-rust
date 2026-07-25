@@ -4,6 +4,9 @@ use std::hash::{Hash, Hasher};
 use super::coordinate_util::CoordinateUtil;
 
 /// A longitude/latitude pair used by Hutool-compatible coordinate conversions.
+
+/// 对齐: `cn.hutool.core.util.CoordinateUtil.Coordinate`
+/// 坐标
 #[derive(Debug, Clone, Copy, Default)]
 pub struct Coordinate {
     pub(crate) lng: f64,

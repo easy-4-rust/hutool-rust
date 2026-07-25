@@ -1,5 +1,8 @@
 //! Hutool-compatible codec facades whose configuration exceeds the small core helpers.
 
+/// 对齐: `cn.hutool.core.codec.PercentCodec`
+/// 百分号编码器
+
 use std::{
     collections::BTreeSet,
     io::{Read, Write},

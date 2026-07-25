@@ -1,6 +1,9 @@
 use rand::Rng;
 
 /// GB 32100-2015 unified social credit-code helpers.
+
+/// 对齐: `cn.hutool.core.util.CreditCodeUtil`
+/// 信用代码工具类
 #[derive(Debug, Clone, Copy, Default)]
 pub struct CreditCodeUtil;
 

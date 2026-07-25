@@ -4,6 +4,9 @@ use chrono::{Datelike, Local, NaiveDate};
 use thiserror::Error;
 
 /// Errors returned by identity-card accessors that Java Hutool exposes through exceptions.
+
+/// 对齐: `cn.hutool.core.util.IdcardUtil`
+/// 身份证错误
 #[derive(Debug, Clone, PartialEq, Eq, Error)]
 pub enum IdcardError {
     /// A required identity-card value was blank.

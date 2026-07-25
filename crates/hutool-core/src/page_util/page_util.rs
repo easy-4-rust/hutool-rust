@@ -5,6 +5,9 @@ use thiserror::Error;
 use super::page_error::PageError;
 
 /// Hutool-compatible pagination arithmetic with explicit, owned numbering state.
+
+/// 对齐: `cn.hutool.core.util.PageUtil`
+/// 分页工具类
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
 pub struct PageUtil {
     first_page_no: i32,

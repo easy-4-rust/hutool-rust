@@ -3,6 +3,9 @@ use std::cmp::Ordering;
 use thiserror::Error;
 
 /// Errors returned by Hutool-compatible version expression matching.
+
+/// 对齐: `cn.hutool.core.util.VersionUtil`
+/// 版本错误
 #[derive(Debug, Clone, PartialEq, Eq, Error)]
 pub enum VersionError {
     /// The expression separator is blank, a range marker, or a comparison operator.

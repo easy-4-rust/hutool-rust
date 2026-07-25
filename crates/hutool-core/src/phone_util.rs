@@ -1,3 +1,6 @@
+/// 对齐: `cn.hutool.core.util.PhoneUtil`
+/// 手机号工具类
+
 use std::sync::LazyLock;
 
 use regex::Regex;

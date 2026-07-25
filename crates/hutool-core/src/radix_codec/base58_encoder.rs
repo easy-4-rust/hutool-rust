@@ -1,5 +1,8 @@
 //! Configurable radix codecs and Rust-native stream/file overloads.
 
+/// 对齐: `cn.hutool.core.codec.Base58`
+/// Base58 编码器
+
 use std::{
     io::{Read, Write},
     path::Path,

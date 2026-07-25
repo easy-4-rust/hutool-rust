@@ -4,6 +4,9 @@ use std::hash::{Hash, Hasher};
 use super::coordinate::Coordinate;
 
 /// Hutool-compatible WGS84, GCJ-02, BD-09 and Web Mercator conversions.
+
+/// 对齐: `cn.hutool.core.util.CoordinateUtil`
+/// 坐标工具类
 pub struct CoordinateUtil;
 
 impl CoordinateUtil {

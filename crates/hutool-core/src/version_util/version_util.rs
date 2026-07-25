@@ -5,6 +5,9 @@ use thiserror::Error;
 use super::version_error::VersionError;
 
 /// Hutool-compatible matching for loose Java module-style version strings.
+
+/// 对齐: `cn.hutool.core.util.VersionUtil`
+/// 版本工具类
 pub struct VersionUtil;
 
 impl VersionUtil {

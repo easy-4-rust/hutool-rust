@@ -1,5 +1,8 @@
 //! Configurable radix codecs and Rust-native stream/file overloads.
 
+/// 对齐: `cn.hutool.core.codec.Base62`
+/// Base62 解码器
+
 use std::{
     io::{Read, Write},
     path::Path,

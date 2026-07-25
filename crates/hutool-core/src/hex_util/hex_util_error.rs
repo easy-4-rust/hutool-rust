@@ -1,5 +1,8 @@
 //! Convenient hexadecimal operations aligned with Hutool's `HexUtil` family.
 
+/// 对齐: `cn.hutool.core.util.HexUtil`
+/// 十六进制错误
+
 use std::num::ParseIntError;
 
 use encoding_rs::{Encoding, UTF_8, UTF_16BE, UTF_16LE};

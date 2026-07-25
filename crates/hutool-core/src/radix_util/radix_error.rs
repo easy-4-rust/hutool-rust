@@ -3,6 +3,9 @@ use std::collections::HashSet;
 use thiserror::Error;
 
 /// Errors returned by custom-radix conversion.
+
+/// 对齐: `cn.hutool.core.util.RadixUtil`
+/// 进制错误
 #[derive(Debug, Clone, PartialEq, Eq, Error)]
 pub enum RadixError {
     /// At least two alphabet characters are required.
