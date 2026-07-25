@@ -636,19 +636,24 @@ impl CronConfig {
         self.timezone
     }
 
-    /// Returns whether seconds are matched.
+    /// 中文说明: 返回是否匹配秒字段。
+    /// 对齐 Java 方法: `isMatchSecond`
     #[must_use]
     pub const fn is_match_second(&self) -> bool {
         self.match_second
     }
 
-    /// Sets second matching.
+    /// 中文说明: 设置是否匹配秒字段。
+    /// 对齐 Java 方法: `setMatchSecond`
     pub fn set_match_second(&mut self, match_second: bool) -> &mut Self {
         self.match_second = match_second;
         self
     }
 }
 
+/// 对齐: `cn.hutool.cron.Cron`
+/// 中文说明: 显式拥有的定时任务调度器，不创建隐藏的运行时或全局状态。
+///
 /// Explicitly owned scheduler; it never creates a hidden runtime or global.
 pub struct Scheduler {
     config: CronConfig,
@@ -660,14 +665,17 @@ pub struct Scheduler {
     next_id: u64,
 }
 
+/// 对齐: `cn.hutool.cron.CronSetting`
+/// 中文说明: 用于批量调度的已验证任务条目。
+///
 /// One validated task entry used for explicit batch scheduling.
 #[derive(Clone)]
 pub struct CronSettingEntry {
-    /// Stable task ID.
+    /// 中文说明: 稳定的任务 ID。
     pub id: String,
-    /// Parsed pattern.
+    /// 中文说明: 已解析的调度表达式。
     pub pattern: CronPattern,
-    /// Injected task implementation.
+    /// 中文说明: 注入的任务实现。
     pub task: Arc<dyn Task>,
 }
 
@@ -700,7 +708,8 @@ impl Default for Scheduler {
 }
 
 impl Scheduler {
-    /// Creates a stopped scheduler.
+    /// 中文说明: 创建已停止的调度器。
+    /// 对齐 Java 方法: `new`
     #[must_use]
     pub fn new() -> Self {
         Self {
@@ -714,31 +723,35 @@ impl Scheduler {
         }
     }
 
-    /// Sets the timezone used for configuration/reporting.
+    /// 中文说明: 设置用于配置和报告的时区。
+    /// 对齐 Java 方法: `setTimezone`
     pub fn set_timezone(&mut self, timezone: chrono::FixedOffset) -> &mut Self {
         self.config.set_timezone(timezone);
         self
     }
 
-    /// Returns the configured timezone.
+    /// 中文说明: 返回配置的时区。
+    /// 对齐 Java 方法: `getTimezone`
     #[must_use]
     pub const fn timezone(&self) -> chrono::FixedOffset {
         self.config.timezone()
     }
 
-    /// Sets daemon shutdown semantics metadata.
+    /// 中文说明: 设置守护进程关闭语义。
+    /// 对齐 Java 方法: `setDaemon`
     pub fn set_daemon(&mut self, daemon: bool) -> &mut Self {
         self.daemon = daemon;
         self
     }
 
-    /// Returns daemon mode.
+    /// 中文说明: 返回是否为守护模式。
+    /// 对齐 Java 方法: `isDaemon`
     #[must_use]
     pub const fn is_daemon(&self) -> bool {
         self.daemon
     }
 
-    /// Injects the Tokio runtime used for scheduling and blocking tasks.
+    /// 中文说明: 注入用于调度和阻塞任务的 Tokio 运行时。
     pub fn set_runtime(&mut self, runtime: tokio::runtime::Handle) -> Result<&mut Self, CronError> {
         if self.is_started() {
             return Err(CronError::SchedulerAlreadyStarted);
@@ -747,13 +760,15 @@ impl Scheduler {
         Ok(self)
     }
 
-    /// Returns whether seconds are matched.
+    /// 中文说明: 返回是否匹配秒字段。
+    /// 对齐 Java 方法: `isMatchSecond`
     #[must_use]
     pub const fn is_match_second(&self) -> bool {
         self.config.is_match_second()
     }
 
-    /// Sets second matching.
+    /// 中文说明: 设置是否匹配秒字段。
+    /// 对齐 Java 方法: `setMatchSecond`
     pub fn set_match_second(&mut self, value: bool) -> Result<&mut Self, CronError> {
         if self.is_started() {
             return Err(CronError::SchedulerAlreadyStarted);
@@ -762,18 +777,21 @@ impl Scheduler {
         Ok(self)
     }
 
-    /// Adds a listener.
+    /// 中文说明: 添加任务监听器。
+    /// 对齐 Java 方法: `addListener`
     pub fn add_listener(&self, listener: Arc<dyn TaskListener>) -> &Self {
         self.listeners.add_listener(listener);
         self
     }
 
-    /// Removes a listener.
+    /// 中文说明: 移除任务监听器。
+    /// 对齐 Java 方法: `removeListener`
     pub fn remove_listener(&self, listener: &Arc<dyn TaskListener>) -> bool {
         self.listeners.remove_listener(listener)
     }
 
-    /// Schedules an auto-ID task.
+    /// 中文说明: 调度一个自动分配 ID 的任务。
+    /// 对齐 Java 方法: `schedule`
     pub fn schedule<T>(&mut self, pattern: &str, task: T) -> Result<String, CronError>
     where
         T: Task,
@@ -788,7 +806,8 @@ impl Scheduler {
         Ok(id)
     }
 
-    /// Schedules an explicit-ID task.
+    /// 中文说明: 调度一个指定 ID 的任务。
+    /// 对齐 Java 方法: `schedule`
     pub fn schedule_with_id(
         &self,
         id: impl Into<String>,
@@ -811,7 +830,8 @@ impl Scheduler {
         Ok(self)
     }
 
-    /// Adds every entry from an explicitly parsed setting.
+    /// 中文说明: 批量添加已解析的调度设置。
+    /// 对齐 Java 方法: `scheduleSetting`
     pub fn schedule_setting(
         &self,
         entries: impl IntoIterator<Item = CronSettingEntry>,

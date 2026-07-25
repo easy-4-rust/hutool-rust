@@ -50,94 +50,111 @@ impl JSONUtil {
         JSONObject::parse(input)
     }
 
-    /// Converts a serializable value to an object.
+    /// 中文说明: 将可序列化的值转换为 JSON 对象。
+    /// 对齐 Java 方法: `toBean(JSONObject.class, ...)`
     pub fn object_from<T: Serialize + ?Sized>(value: &T, config: JSONConfig) -> Result<JSONObject> {
         JSONObject::from_value(serde_json::to_value(value)?, config)
     }
 
-    /// Parses an array.
+    /// 中文说明: 解析 JSON 文本为数组。
+    /// 对齐 Java 方法: `parseArray`
     pub fn parse_array(input: &str) -> Result<JSONArray> {
         JSONArray::parse(input)
     }
 
-    /// Converts a serializable value to an array.
+    /// 中文说明: 将可序列化的值转换为 JSON 数组。
+    /// 对齐 Java 方法: `toBean(JSONArray.class, ...)`
     pub fn array_from<T: Serialize + ?Sized>(value: &T, config: JSONConfig) -> Result<JSONArray> {
         JSONArray::from_value(serde_json::to_value(value)?, config)
     }
 
-    /// Parses any JSON value.
+    /// 中文说明: 解析任意 JSON 值。
+    /// 对齐 Java 方法: `parse`
     pub fn parse(input: &str) -> Result<Value> {
         crate::parse(input)
     }
 
-    /// Serializes a value compactly.
+    /// 中文说明: 将值序列化为紧凑 JSON 字符串。
+    /// 对齐 Java 方法: `toJsonStr`
     pub fn to_json_string<T: Serialize + ?Sized>(value: &T) -> Result<String> {
         crate::to_string(value)
     }
 
-    /// Serializes a value with indentation.
+    /// 中文说明: 将值序列化为带缩进的 JSON 字符串。
+    /// 对齐 Java 方法: `toJsonPrettyStr`
     pub fn to_pretty_string<T: Serialize + ?Sized>(value: &T) -> Result<String> {
         crate::to_string_pretty(value)
     }
 
-    /// Deserializes a typed Rust value.
+    /// 中文说明: 将 JSON 反序列化为指定类型的 Rust 值。
+    /// 对齐 Java 方法: `toBean`
     pub fn to_bean<T: DeserializeOwned>(input: &str) -> Result<T> {
         crate::from_str(input)
     }
 
-    /// Deserializes every array element to a typed Rust value.
+    /// 中文说明: 将 JSON 数组的每个元素反序列化为指定类型。
+    /// 对齐 Java 方法: `toList`
     pub fn to_list<T: DeserializeOwned>(array: &JSONArray) -> Result<Vec<T>> {
         Ok(serde_json::from_value(array.to_value())?)
     }
 
-    /// Borrows a value at a JSON path.
+    /// 中文说明: 通过 JSON 路径借用值。
+    /// 对齐 Java 方法: `getByPath`
     #[must_use]
     pub fn get_by_path<'a>(value: &'a Value, path: &str) -> Option<&'a Value> {
         get_by_path(value, path)
     }
 
-    /// Writes a value at a JSON path.
+    /// 中文说明: 通过 JSON 路径写入值。
+    /// 对齐 Java 方法: `putByPath`
     pub fn put_by_path(value: &mut Value, path: &str, replacement: Value) -> Result<()> {
         put_by_path(value, path, replacement)
     }
 
-    /// Quotes a JSON string.
+    /// 中文说明: 将字符串包装为 JSON 带引号格式。
+    /// 对齐 Java 方法: `quote`
     #[must_use]
     pub fn quote(value: &str) -> String {
         Value::String(value.to_owned()).to_string()
     }
 
-    /// Escapes a string without surrounding quotes.
+    /// 中文说明: 转义字符串（不带外层引号）。
+    /// 对齐 Java 方法: `escape`
     #[must_use]
     pub fn escape(value: &str) -> String {
         let quoted = Self::quote(value);
         quoted[1..quoted.len() - 1].to_owned()
     }
 
-    /// Formats valid JSON with indentation.
+    /// 中文说明: 将 JSON 文本格式化为带缩进的表示。
+    /// 对齐 Java 方法: `formatJsonStr`
     pub fn format_json_str(value: &str) -> Result<String> {
         crate::pretty(value)
     }
 
-    /// Returns whether the complete input is JSON.
+    /// 中文说明: 判断输入是否为合法的 JSON。
+    /// 对齐 Java 方法: `isJson`
     #[must_use]
     pub fn is_json(value: &str) -> bool {
         crate::is_valid(value)
     }
 
-    /// Returns whether the complete input is an object.
+    /// 中文说明: 判断输入是否为 JSON 对象。
+    /// 对齐 Java 方法: `isJsonObj`
     #[must_use]
     pub fn is_json_obj(value: &str) -> bool {
         crate::is_json_object(value)
     }
 
-    /// Returns whether the complete input is an array.
+    /// 中文说明: 判断输入是否为 JSON 数组。
+    /// 对齐 Java 方法: `isJsonArray`
     #[must_use]
     pub fn is_json_array(value: &str) -> bool {
         crate::is_json_array(value)
     }
 
-    /// Returns whether a dynamic value is JSON null.
+    /// 中文说明: 判断动态值是否为 JSON null。
+    /// 对齐 Java 方法: `isNull`
     #[must_use]
     pub fn is_null(value: &Value) -> bool {
         value.is_null()

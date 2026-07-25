@@ -8,29 +8,31 @@ use sysinfo::{Components, Disks, Networks, Pid, System};
 
 use super::cpu_ticks::CpuTicks;
 
-/// Portable CPU utilization view corresponding to Hutool's `CpuInfo`.
+/// 对齐: `cn.hutool.system.oshi.CpuInfo`
+/// 中文说明: 便携式的 CPU 利用率视图，对应 Hutool 的 `CpuInfo`
 #[derive(Debug, Clone, PartialEq)]
 pub struct CpuInfo {
-    /// Logical CPU count.
+    /// 中文说明: 逻辑 CPU 数量
     pub cpu_num: usize,
-    /// Total busy percentage.
+    /// 中文说明: 总繁忙百分比
     pub total: f32,
-    /// System percentage when available.
+    /// 中文说明: 系统百分比（可用时）
     pub system: f32,
-    /// User percentage when available.
+    /// 中文说明: 用户百分比（可用时）
     pub user: f32,
-    /// I/O wait percentage when available.
+    /// 中文说明: I/O 等待百分比（可用时）
     pub wait: f32,
-    /// Idle percentage.
+    /// 中文说明: 空闲百分比
     pub free: f32,
-    /// Processor brand/model.
+    /// 中文说明: 处理器品牌/型号
     pub cpu_model: String,
-    /// Raw tick snapshot when available.
+    /// 中文说明: 原始 tick 快照（可用时）
     pub ticks: CpuTicks,
 }
 
 impl CpuInfo {
-    /// Creates a normalized CPU snapshot.
+    /// 中文说明: 创建标准化的 CPU 快照
+    /// 对齐 Java 方法: `CpuInfo` 构造函数
     #[must_use]
     pub fn new(cpu_num: usize, used: f32, cpu_model: impl Into<String>, ticks: CpuTicks) -> Self {
         let total = used.clamp(0.0, 100.0);
@@ -46,7 +48,8 @@ impl CpuInfo {
         }
     }
 
-    /// Returns total used percentage.
+    /// 中文说明: 返回总使用率百分比
+    /// 对齐 Java 方法: `CpuInfo.getUsed`
     #[must_use]
     pub const fn used(&self) -> f32 {
         self.total

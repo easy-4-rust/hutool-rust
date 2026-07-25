@@ -7,14 +7,19 @@ use crate::{
     JSONArray, JSONConfig, JSONObject, JsonContainer, JsonError, Result, get_by_path, put_by_path,
 };
 
+/// 对齐: `cn.hutool.json.JSON`
+/// 中文说明: 混入应用类型的 Serde 支持 trait，提供解析和序列化方法。
+///
 /// Serde-backed support mixed into application types.
 pub trait JSONSupport: Serialize + DeserializeOwned + Sized {
-    /// Parses one instance.
+    /// 中文说明: 解析 JSON 文本为当前类型实例。
+    /// 对齐 Java 方法: `parse`
     fn parse(input: &str) -> Result<Self> {
         crate::from_str(input)
     }
 
-    /// Converts this value to a dynamic JSON value.
+    /// 中文说明: 将当前值转换为动态 JSON 值。
+    /// 对齐 Java 方法: `toJSON`
     fn to_json(&self) -> Result<Value> {
         Ok(serde_json::to_value(self)?)
     }

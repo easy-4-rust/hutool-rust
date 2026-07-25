@@ -1,14 +1,17 @@
-//! OSHI-aligned hardware and operating-system snapshots backed by `sysinfo`.
+//! 对齐: `cn.hutool.system.oshi.Sensors`
+//! 来源: hutool-system/src/main/java/cn/hutool/system/oshi/Sensors.java
+//! 中文说明: 硬件传感器快照，包含传感器标签和温度信息
 
 use std::{thread, time::Duration};
 
 use sysinfo::{Components, Disks, Networks, Pid, System};
 
-/// Hardware sensor snapshot.
+/// 对齐: `cn.hutool.system.oshi.Sensors`
+/// 中文说明: 硬件传感器快照，包含传感器标签和温度信息
 #[derive(Debug, Clone, PartialEq)]
 pub struct SensorInfo {
-    /// Sensor label.
+    /// 中文说明: 传感器标签
     pub label: String,
-    /// Temperature in Celsius, if reported.
+    /// 中文说明: 摄氏温度（如报告）
     pub temperature: Option<f32>,
 }
