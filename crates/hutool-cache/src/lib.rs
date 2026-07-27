@@ -9,6 +9,7 @@ mod compat;
 mod global_prune_timer;
 mod file_cache;
 mod cache_util;
+pub mod prelude;
 
 pub use compat::{
     CacheListener, ReentrantCache, FIFOCache,

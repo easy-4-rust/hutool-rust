@@ -11,6 +11,7 @@
 
 #![forbid(unsafe_code)]
 
+pub mod prelude;
 mod script_runtime_exception;
 mod script_util;
 pub mod javax_script;

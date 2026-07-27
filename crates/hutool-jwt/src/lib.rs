@@ -7,6 +7,7 @@ use jsonwebtoken::{DecodingKey, EncodingKey, decode, encode};
 use serde::{Serialize, de::DeserializeOwned};
 
 mod compat;
+pub mod prelude;
 
 pub use compat::{
     AlgorithmUtil, AsymmetricJWTSigner, Claims, EllipticCurveJWTSigner, HMacJWTSigner, JWT,

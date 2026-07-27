@@ -39,6 +39,7 @@
 pub mod excel;
 pub mod exceptions;
 pub mod ofd;
+pub mod prelude;
 pub mod word;
 
 // 顶层 POI 类

@@ -211,3 +211,12 @@ pub use net::rfc3986::Rfc3986;
 /// 对齐 `cn.hutool.core.util.StrUtil`（高阶便捷方法，委托 `crate::string`）。
 #[path = "util/str_util.rs"]
 pub mod str_util;
+
+/// 对齐 `cn.hutool.core.bean` 子包（Bean 描述 / 属性拷贝 / 动态 Bean 等）。
+pub mod bean;
+pub use bean::copier::{
+    AbsCopier, BeanCopier, BeanCopierException, BeanCopierFactory, BeanToBeanCopier,
+    BeanToMapCopier, CopyOptions, IJSONTypeConverter, MapToBeanCopier, MapToMapCopier, ValueKind,
+    ValueProvider, ValueProviderToBeanCopier,
+};
+pub use bean::{BeanException, BeanUtil};

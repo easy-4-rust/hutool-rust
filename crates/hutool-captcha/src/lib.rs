@@ -11,6 +11,8 @@ use std::fmt::Write as _;
 use std::time::{Duration, Instant};
 use thiserror::Error;
 
+pub mod prelude;
+
 #[cfg(feature = "audio")]
 mod audio;
 #[cfg(feature = "raster")]

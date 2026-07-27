@@ -17,6 +17,7 @@ mod core;
 mod message;
 mod models;
 mod operations;
+pub mod prelude;
 mod providers;
 
 pub use ai_exception::AIException;

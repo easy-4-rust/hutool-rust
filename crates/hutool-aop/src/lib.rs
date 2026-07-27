@@ -14,6 +14,7 @@ mod invocation;
 
 pub mod aspects;
 pub mod interceptor;
+pub mod prelude;
 pub mod proxy;
 
 pub use invocation::{HandlerProxy, InvocationHandler, Method};

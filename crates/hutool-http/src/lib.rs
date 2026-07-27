@@ -11,6 +11,7 @@ use std::{fmt, net::IpAddr, sync::Arc, time::Duration};
 use thiserror::Error;
 
 mod base;
+pub mod prelude;
 pub use base::{HTTP_1_0, HTTP_1_1, HttpBase, HttpBaseError};
 mod body;
 pub use body::{BytesBody, FormUrlEncodedBody, MultipartBody, MultipartOutputStream, RequestBody, ResourceBody};

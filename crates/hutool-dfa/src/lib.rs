@@ -3,6 +3,7 @@
 #![forbid(unsafe_code)]
 
 mod matcher;
+pub mod prelude;
 mod sensitive;
 mod sensitive_processor;
 mod stop_char;

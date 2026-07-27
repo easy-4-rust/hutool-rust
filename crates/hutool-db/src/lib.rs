@@ -16,6 +16,7 @@ pub mod meta;
 pub mod meta_types;
 pub mod nosql;
 pub mod page_result;
+pub mod prelude;
 pub mod runner;
 pub mod session;
 pub mod sql;

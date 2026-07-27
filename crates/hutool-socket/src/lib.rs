@@ -22,6 +22,7 @@ use tokio::{
 // 1:1 对齐的 Hutool 模块（cn.hutool.socket.*）
 mod channel_util;
 mod internal;
+pub mod prelude;
 mod socket_config;
 mod socket_runtime_exception;
 mod socket_util;

@@ -7,6 +7,7 @@ pub mod archive;
 pub mod exceptions;
 pub mod expression;
 pub mod ftp;
+pub mod prelude;
 #[cfg(feature = "image")]
 pub mod image;
 #[cfg(feature = "mail")]

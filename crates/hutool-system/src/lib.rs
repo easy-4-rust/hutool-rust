@@ -15,6 +15,7 @@ mod jvm_info;
 mod jvm_spec_info;
 mod management_info;
 mod os_info;
+pub mod prelude;
 mod runtime_info;
 mod system_props;
 mod system_util;

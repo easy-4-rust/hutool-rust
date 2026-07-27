@@ -24,6 +24,7 @@ mod log;
 mod log_factory;
 mod log_record;
 mod log_sink;
+pub mod prelude;
 mod static_log;
 mod tracing_log;
 mod tracing_sink;
