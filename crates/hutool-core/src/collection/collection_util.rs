@@ -1,20 +1,11 @@
-//! 对齐: `cn.hutool.core.collection.CollectionUtil`
-//! 来源: hutool-core/src/main/java/cn/hutool/core/collection/CollectionUtil.java
-//!
-//! 状态: 对齐桩,等待完整实现。
+//! Stateful and view-based collection adapters aligned with Hutool.
 
-#![allow(dead_code, unused_variables, clippy::new_without_default)]
+/// 对齐: `cn.hutool.core.collection.CollUtil`
+/// 集合适配器
 
-/// 对齐 Java 类: `cn.hutool.core.collection.CollectionUtil`
-///
-/// 静态工具类在 Rust 中通过零字节 ZST + 关联函数表达;
-/// 实例类按 Java 字段映射为 Rust struct 字段(待完整实现)。
-#[derive(Debug, Clone, Default)]
-pub struct CollectionUtil;
+use std::{io, io::BufRead, marker::PhantomData};
 
-impl CollectionUtil {
-    /// 对齐桩 sentinel,等待完整实现。
-    pub fn pending_alignment() -> &'static str {
-        "pending"
-    }
-}
+use crate::{ArrayIter, CollUtil};
+
+/// Legacy alias retained for Hutool's `CollectionUtil extends CollUtil` surface.
+pub type CollectionUtil = CollUtil;

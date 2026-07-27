@@ -1,13 +1,25 @@
+//! 对齐: `cn.hutool.script` 顶级包（无 Java 子包）
+//! 来源: hutool-script/src/main/java/cn/hutool/script/
+//!
+//! 中文说明: 按 `cn.hutool.script` 1:1 平铺到 `src/`：
+//! - `script_util.rs`（cn.hutool.script.ScriptUtil）
+//! - `script_runtime_exception.rs`（cn.hutool.script.ScriptRuntimeException）
+//! - `javax_script/`（对齐 Java `javax.script` 包，Rust 不属于 hutool-script 顶级包但需要 JSR-223 抽象）
+//!   - `javax_script/all.rs` 集中实现 Bindings/CompiledScript/ScriptContext/ScriptScope/ScriptLanguage/ScriptEngineFactory/FullSupportScriptEngine/ScriptInterface/JavaScriptEngine
+//!
 //! Sandboxed embedded scripting backed by Rhai.
 
 #![forbid(unsafe_code)]
 
-mod compat;
+mod script_runtime_exception;
+mod script_util;
+pub mod javax_script;
 
-pub use compat::{
+pub use script_runtime_exception::ScriptRuntimeException;
+pub use script_util::ScriptUtil;
+pub use javax_script::all::{
     Bindings, CompiledScript, FullSupportScriptEngine, JavaScriptEngine, ScriptContext,
-    ScriptEngineFactory, ScriptInterface, ScriptLanguage, ScriptRuntimeException, ScriptScope,
-    ScriptUtil,
+    ScriptEngineFactory, ScriptInterface, ScriptLanguage, ScriptScope,
 };
 use rhai::Engine;
 pub use rhai::{AST, CallFnOptions, Dynamic, EvalAltResult, ParseError, Scope};

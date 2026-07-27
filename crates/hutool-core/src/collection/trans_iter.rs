@@ -1,20 +1,46 @@
-//! 对齐: `cn.hutool.core.collection.TransIter`
-//! 来源: hutool-core/src/main/java/cn/hutool/core/collection/TransIter.java
-//!
-//! 状态: 对齐桩,等待完整实现。
+//! Hutool-aligned iterator adapters with Rust-native ownership semantics.
 
-#![allow(dead_code, unused_variables, clippy::new_without_default)]
+/// 对齐: `cn.hutool.core.collection.TransIter`
+/// 转换迭代器
 
-/// 对齐 Java 类: `cn.hutool.core.collection.TransIter`
-///
-/// 静态工具类在 Rust 中通过零字节 ZST + 关联函数表达;
-/// 实例类按 Java 字段映射为 Rust struct 字段(待完整实现)。
-#[derive(Debug, Clone, Default)]
-pub struct TransIter;
+use std::collections::VecDeque;
 
-impl TransIter {
-    /// 对齐桩 sentinel,等待完整实现。
-    pub fn pending_alignment() -> &'static str {
-        "pending"
+/// An iterator that transforms values lazily.
+pub struct TransIter<I, F>
+where
+    I: Iterator,
+{
+    source: std::iter::Peekable<I>,
+    transform: F,
+}
+
+impl<I, F> TransIter<I, F>
+where
+    I: Iterator,
+{
+    /// Creates a transforming iterator.
+    #[must_use]
+    pub fn new(source: I, transform: F) -> Self {
+        Self {
+            source: source.peekable(),
+            transform,
+        }
+    }
+
+    /// Reports whether another source value remains.
+    pub fn has_next(&mut self) -> bool {
+        self.source.peek().is_some()
+    }
+}
+
+impl<I, F, T> Iterator for TransIter<I, F>
+where
+    I: Iterator,
+    F: FnMut(I::Item) -> T,
+{
+    type Item = T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.source.next().map(&mut self.transform)
     }
 }

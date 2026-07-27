@@ -6,13 +6,36 @@
 
 use sysinfo::System;
 
-mod compat;
+mod compilation_info;
+mod host_info;
+mod java_info;
+mod java_runtime_info;
+mod java_spec_info;
+mod jvm_info;
+mod jvm_spec_info;
+mod management_info;
+mod os_info;
+mod runtime_info;
+mod system_props;
+mod system_util;
+mod user_info;
+
 pub mod oshi;
 
-pub use compat::{
-    CompilationInfo, HostInfo, JavaInfo, JavaRuntimeInfo, JavaSpecInfo, JvmInfo, JvmSpecInfo,
-    ManagementInfo, OsInfo, RuntimeInfo, SystemPropsKeys, SystemUtil, UserInfo,
-};
+pub use compilation_info::CompilationInfo;
+pub use host_info::HostInfo;
+pub use java_info::JavaInfo;
+pub use java_runtime_info::JavaRuntimeInfo;
+pub use java_spec_info::JavaSpecInfo;
+pub use jvm_info::JvmInfo;
+pub use jvm_spec_info::JvmSpecInfo;
+pub use management_info::ManagementInfo;
+pub use os_info::OsInfo;
+pub use runtime_info::RuntimeInfo;
+pub use system_props::SystemPropsKeys;
+pub use system_util::SystemUtil;
+pub use user_info::UserInfo;
+
 pub use oshi::{
     CpuInfo, CpuTicks, DiskInfo, HardwareInfo, MemoryInfo, NetworkInfo, OshiUtil, ProcessInfo,
     SensorInfo,

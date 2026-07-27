@@ -1,20 +1,71 @@
-//! 对齐: `cn.hutool.core.collection.FilterIter`
-//! 来源: hutool-core/src/main/java/cn/hutool/core/collection/FilterIter.java
-//!
-//! 状态: 对齐桩,等待完整实现。
+//! Hutool-aligned iterator adapters with Rust-native ownership semantics.
 
-#![allow(dead_code, unused_variables, clippy::new_without_default)]
+/// 对齐: `cn.hutool.core.collection.FilterIter`
+/// 过滤迭代器
 
-/// 对齐 Java 类: `cn.hutool.core.collection.FilterIter`
-///
-/// 静态工具类在 Rust 中通过零字节 ZST + 关联函数表达;
-/// 实例类按 Java 字段映射为 Rust struct 字段(待完整实现)。
-#[derive(Debug, Clone, Default)]
-pub struct FilterIter;
+use std::collections::VecDeque;
 
-impl FilterIter {
-    /// 对齐桩 sentinel,等待完整实现。
-    pub fn pending_alignment() -> &'static str {
-        "pending"
+/// A filtering iterator with non-consuming lookahead.
+pub struct FilterIter<I, P>
+where
+    I: Iterator,
+{
+    source: I,
+    filter: Option<P>,
+    next_item: Option<I::Item>,
+}
+
+impl<I, P> FilterIter<I, P>
+where
+    I: Iterator,
+    P: FnMut(&I::Item) -> bool,
+{
+    /// Creates a filtering adapter. `None` accepts every value.
+    #[must_use]
+    pub fn new(source: I, filter: Option<P>) -> Self {
+        Self {
+            source,
+            filter,
+            next_item: None,
+        }
+    }
+
+    /// Reports whether an accepted value remains without consuming it.
+    pub fn has_next(&mut self) -> bool {
+        self.next_item.is_some() || self.set_next_item()
+    }
+
+    /// Returns the wrapped iterator.
+    #[must_use]
+    pub const fn get_iterator(&self) -> &I {
+        &self.source
+    }
+
+    /// Returns the optional predicate.
+    #[must_use]
+    pub const fn get_filter(&self) -> Option<&P> {
+        self.filter.as_ref()
+    }
+
+    fn set_next_item(&mut self) -> bool {
+        self.next_item = self
+            .source
+            .find(|item| self.filter.as_mut().is_none_or(|filter| filter(item)));
+        self.next_item.is_some()
+    }
+}
+
+impl<I, P> Iterator for FilterIter<I, P>
+where
+    I: Iterator,
+    P: FnMut(&I::Item) -> bool,
+{
+    type Item = I::Item;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.next_item.take().or_else(|| {
+            self.set_next_item();
+            self.next_item.take()
+        })
     }
 }

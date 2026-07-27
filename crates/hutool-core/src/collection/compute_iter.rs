@@ -1,20 +1,72 @@
-//! 对齐: `cn.hutool.core.collection.ComputeIter`
-//! 来源: hutool-core/src/main/java/cn/hutool/core/collection/ComputeIter.java
-//!
-//! 状态: 对齐桩,等待完整实现。
+//! Stateful and view-based collection adapters aligned with Hutool.
 
-#![allow(dead_code, unused_variables, clippy::new_without_default)]
+/// 对齐: `cn.hutool.core.collection.ComputeIter`
+/// 计算迭代器
 
-/// 对齐 Java 类: `cn.hutool.core.collection.ComputeIter`
-///
-/// 静态工具类在 Rust 中通过零字节 ZST + 关联函数表达;
-/// 实例类按 Java 字段映射为 Rust struct 字段(待完整实现)。
-#[derive(Debug, Clone, Default)]
-pub struct ComputeIter;
+use std::{io, io::BufRead, marker::PhantomData};
 
-impl ComputeIter {
-    /// 对齐桩 sentinel,等待完整实现。
-    pub fn pending_alignment() -> &'static str {
-        "pending"
+use crate::{ArrayIter, CollUtil};
+
+/// An iterator whose next value is supplied by a stateful computation.
+pub struct ComputeIter<T, F>
+where
+    F: FnMut() -> Option<T>,
+{
+    compute_next: F,
+    next_item: Option<T>,
+    finished: bool,
+}
+
+impl<T, F> ComputeIter<T, F>
+where
+    F: FnMut() -> Option<T>,
+{
+    /// Creates a computed iterator.
+    #[must_use]
+    pub fn new(compute_next: F) -> Self {
+        Self {
+            compute_next,
+            next_item: None,
+            finished: false,
+        }
+    }
+
+    /// Reports whether another computed value is available without consuming it.
+    pub fn has_next(&mut self) -> bool {
+        if self.next_item.is_some() {
+            return true;
+        }
+        if self.finished {
+            return false;
+        }
+        self.next_item = (self.compute_next)();
+        if self.next_item.is_none() {
+            self.finished = true;
+            return false;
+        }
+        true
+    }
+
+    /// Manually finishes iteration and clears a cached value.
+    pub fn finish(&mut self) {
+        self.finished = true;
+        self.next_item = None;
+    }
+
+    /// Resets the finished/cache state; caller-owned computation state is unchanged.
+    pub fn reset_state(&mut self) {
+        self.finished = false;
+        self.next_item = None;
+    }
+}
+
+impl<T, F> Iterator for ComputeIter<T, F>
+where
+    F: FnMut() -> Option<T>,
+{
+    type Item = T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.has_next().then(|| self.next_item.take()).flatten()
     }
 }

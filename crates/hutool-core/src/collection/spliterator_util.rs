@@ -1,20 +1,25 @@
-//! 对齐: `cn.hutool.core.collection.SpliteratorUtil`
-//! 来源: hutool-core/src/main/java/cn/hutool/core/collection/SpliteratorUtil.java
-//!
-//! 状态: 对齐桩,等待完整实现。
+//! Stateful and view-based collection adapters aligned with Hutool.
 
-#![allow(dead_code, unused_variables, clippy::new_without_default)]
+/// 对齐: `cn.hutool.core.collection.SpliteratorUtil`
+/// 分割迭代器
 
-/// 对齐 Java 类: `cn.hutool.core.collection.SpliteratorUtil`
-///
-/// 静态工具类在 Rust 中通过零字节 ZST + 关联函数表达;
-/// 实例类按 Java 字段映射为 Rust struct 字段(待完整实现)。
-#[derive(Debug, Clone, Default)]
+use std::{io, io::BufRead, marker::PhantomData};
+
+use crate::{ArrayIter, CollUtil};
+
+use super::trans_spliterator::TransSpliterator;
+
+/// Factory for transformed spliterator/iterator views.
+#[derive(Debug, Clone, Copy, Default)]
 pub struct SpliteratorUtil;
 
 impl SpliteratorUtil {
-    /// 对齐桩 sentinel,等待完整实现。
-    pub fn pending_alignment() -> &'static str {
-        "pending"
+    /// Lazily transforms an iterator while preserving its size hint and splitting traits.
+    pub fn trans<I, F, U>(source: I, transform: F) -> TransSpliterator<I, F>
+    where
+        I: Iterator,
+        F: FnMut(I::Item) -> U,
+    {
+        source.map(transform)
     }
 }

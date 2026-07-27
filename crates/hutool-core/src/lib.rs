@@ -14,13 +14,7 @@ mod char_util;
 mod charset_util;
 mod clone_support;
 mod codec;
-mod coll_stream_util;
-mod coll_util;
 mod collection;
-mod collection_adapters;
-mod collection_iter;
-mod collection_partition;
-mod collection_types;
 mod compiler;
 mod compress;
 mod coordinate_util;
@@ -44,10 +38,11 @@ mod radix_codec;
 mod radix_util;
 pub mod serialize_util;
 mod stream;
+#[path = "text/str_util.rs"]
 mod string;
 #[cfg(feature = "swing")]
 pub mod swing;
-mod text;
+pub mod text;
 mod version_util;
 mod lang;
 mod net;
@@ -87,23 +82,14 @@ pub use codec::{
     base64_decode, base64_encode, base64_url_decode, base64_url_encode, hex_decode, hex_encode,
     percent_decode, percent_encode_component,
 };
-pub use coll_stream_util::CollStreamUtil;
-pub use coll_util::{BlockingQueue, CollUtil, CollectionKind, CreatedCollection};
-pub use collection::{distinct, group_by, partition};
-pub use collection_adapters::{
-    CollectionUtil, ComputeIter, LineIter, NodeListIter, SpliteratorUtil, TransCollection,
-    TransSpliterator,
-};
-pub use collection_iter::{
-    ArrayIter, CopiedIter, EnumerationIter, FilterIter, IterChain, IterableIter,
-    IteratorEnumeration, ResettableIter, TransIter,
-};
-pub use collection_partition::{
-    AvgPartition, Partition, PartitionIter, RandomAccessAvgPartition, RandomAccessPartition,
-};
-pub use collection_types::{
-    BoundedPriorityQueue, ConcurrentHashSet, UniqueKeySet, ring_next_for_len, ring_next_index,
-    ring_next_u64,
+pub use collection::{
+    ArrayIter, AvgPartition, BlockingQueue, BoundedPriorityQueue, CollStreamUtil, CollUtil,
+    CollectionKind, CollectionUtil, ComputeIter, ConcurrentHashSet, CopiedIter, CreatedCollection,
+    EnumerationIter, FilterIter, IterChain, IterableIter, IteratorEnumeration, LineIter,
+    NodeListIter, Partition, PartitionIter, RandomAccessAvgPartition,
+    RandomAccessPartition, ResettableIter, SpliteratorUtil, TransCollection, TransIter,
+    TransSpliterator, UniqueKeySet, distinct, group_by, partition, ring_next_for_len,
+    ring_next_index, ring_next_u64,
 };
 pub use compiler::{
     ClassFileManager, ClassFileObject, CompileOutput, CompilerException, DEFAULT_MAX_SOURCE_BYTES,
@@ -157,10 +143,12 @@ pub use stream::{CollectorCharacteristic, CollectorUtil, SimpleCollector, Stream
 pub use string::{
     StrExt, clean_blank, contains, contains_ignore_case, cut, end_with, equals,
     equals_ignore_case, fill, fill_after, fill_before, format_map, format_map_optional,
-    format_template, index_of_ignore_case, is_blank, last_index_of, last_index_of_ignore_case,
-    levenshtein_distance, length, lower_first, remove_all, remove_chars, repeat, replace,
-    reverse, reverse_by_code_point, similarity, similarity_str, split, start_with, str_or_empty,
-    strip, strip_ignore_case, truncate_by_byte_length, truncate_utf8, trim, upper_first,
+    format_template, index_of_ignore_case, indexed_format, is_blank, last_index_of,
+    last_index_of_ignore_case, levenshtein_distance, length, lower_first, remove_all,
+    remove_chars, repeat, replace, replace_by_code_point, reverse, reverse_by_code_point,
+    similarity, similarity_str, split, split_to_array, split_to_array_limit, start_with,
+    str_or_empty, strip, strip_ignore_case, sub_by_code_point, truncate_by_byte_length,
+    truncate_utf8, trim, upper_first,
 };
 pub use version_util::{VersionError, VersionUtil};
 

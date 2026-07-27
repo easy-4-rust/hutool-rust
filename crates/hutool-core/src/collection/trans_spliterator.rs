@@ -1,20 +1,11 @@
-//! 对齐: `cn.hutool.core.collection.TransSpliterator`
-//! 来源: hutool-core/src/main/java/cn/hutool/core/collection/TransSpliterator.java
-//!
-//! 状态: 对齐桩,等待完整实现。
+//! Stateful and view-based collection adapters aligned with Hutool.
 
-#![allow(dead_code, unused_variables, clippy::new_without_default)]
+/// 对齐: `cn.hutool.core.collection.TransSpliterator`
+/// 转换分割器
 
-/// 对齐 Java 类: `cn.hutool.core.collection.TransSpliterator`
-///
-/// 静态工具类在 Rust 中通过零字节 ZST + 关联函数表达;
-/// 实例类按 Java 字段映射为 Rust struct 字段(待完整实现)。
-#[derive(Debug, Clone, Default)]
-pub struct TransSpliterator;
+use std::{io, io::BufRead, marker::PhantomData};
 
-impl TransSpliterator {
-    /// 对齐桩 sentinel,等待完整实现。
-    pub fn pending_alignment() -> &'static str {
-        "pending"
-    }
-}
+use crate::{ArrayIter, CollUtil};
+
+/// Rust's lazy `Map` iterator is the counterpart of Hutool's spliterator view.
+pub type TransSpliterator<I, F> = std::iter::Map<I, F>;

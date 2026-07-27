@@ -1,20 +1,57 @@
-//! 对齐: `cn.hutool.core.collection.PartitionIter`
-//! 来源: hutool-core/src/main/java/cn/hutool/core/collection/PartitionIter.java
-//!
-//! 状态: 对齐桩,等待完整实现。
+//! Borrowed and streaming collection partitions aligned with Hutool.
 
-#![allow(dead_code, unused_variables, clippy::new_without_default)]
+/// 对齐: `cn.hutool.core.collection.PartitionIter`
+/// 分区迭代器
 
-/// 对齐 Java 类: `cn.hutool.core.collection.PartitionIter`
-///
-/// 静态工具类在 Rust 中通过零字节 ZST + 关联函数表达;
-/// 实例类按 Java 字段映射为 Rust struct 字段(待完整实现)。
-#[derive(Debug, Clone, Default)]
-pub struct PartitionIter;
+use std::iter::Peekable;
 
-impl PartitionIter {
-    /// 对齐桩 sentinel,等待完整实现。
-    pub fn pending_alignment() -> &'static str {
-        "pending"
+use crate::{CoreError, Result};
+
+/// An iterator adapter that collects source items into fixed-size vectors.
+pub struct PartitionIter<I>
+where
+    I: Iterator,
+{
+    source: Peekable<I>,
+    partition_size: usize,
+}
+
+impl<I> PartitionIter<I>
+where
+    I: Iterator,
+{
+    /// Creates a streaming partition adapter.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`CoreError::InvalidArgument`] when `partition_size` is zero.
+    pub fn new(source: I, partition_size: usize) -> Result<Self> {
+        validate_partition_size(partition_size)?;
+        Ok(Self {
+            source: source.peekable(),
+            partition_size,
+        })
+    }
+
+    /// Reports whether another partition is available without consuming it.
+    pub fn has_next(&mut self) -> bool {
+        self.source.peek().is_some()
     }
 }
+
+impl<I> Iterator for PartitionIter<I>
+where
+    I: Iterator,
+{
+    type Item = Vec<I::Item>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let first = self.source.next()?;
+        let mut partition = Vec::with_capacity(self.partition_size);
+        partition.push(first);
+        partition.extend(self.source.by_ref().take(self.partition_size - 1));
+        Some(partition)
+    }
+}
+
+use super::{validate_partition_size};

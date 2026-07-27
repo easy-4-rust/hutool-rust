@@ -1,12 +1,12 @@
-//! 对齐: `cn.hutool.core.collection.ResettableIter`
-//! 来源: hutool-core/src/main/java/cn/hutool/core/collection/ResettableIter.java
-//!
-//! 状态: 对齐桩,等待完整实现。
+//! Hutool-aligned iterator adapters with Rust-native ownership semantics.
 
-#![allow(dead_code, unused_variables, clippy::new_without_default)]
+/// 对齐: `cn.hutool.core.collection.ResettableIter`
+/// 可重置迭代器
 
-/// 对齐 Java interface: `cn.hutool.core.collection.ResettableIter`
-///
-/// Java 接口在 Rust 中通过 trait dispatch 表达。
-pub trait ResettableIter {
+use std::collections::VecDeque;
+
+/// An iterator that can return to its configured starting position.
+pub trait ResettableIter: Iterator {
+    /// Resets iteration state.
+    fn reset(&mut self);
 }

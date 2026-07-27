@@ -1,18 +1,34 @@
 //! Provider-neutral chat model APIs and an OpenAI-compatible implementation.
+//!
+//! 包结构对齐 Java `cn.hutool.ai.*`：
+//! - 顶级：`ai_exception / ai_service_factory / ai_util / models / message / base_config`
+//! - `core/` 子包：`AIConfig / AIConfigBuilder / AIService / AIServiceProvider / BaseConfig / ProviderService`
+//! - `operations/` 子包：`AIResponse / Operation / StreamCallback / VideoParameter`
+//! - `providers/` 子包：`openai`（active）+ 其他 6 家厂商 stub
 
 #![forbid(unsafe_code)]
 #![allow(async_fn_in_trait)]
 
-mod compat;
+mod ai_exception;
+mod ai_service_factory;
+mod ai_util;
+mod base_config;
+mod core;
+mod message;
 mod models;
 mod operations;
+mod providers;
 
-pub use compat::{
-    AIConfig, AIConfigBuilder, AIService, AIServiceFactory, AIServiceProvider, AIUtil, BaseConfig,
-    ProviderService,
+pub use ai_exception::AIException;
+pub use ai_service_factory::{registry as provider_registry, AIServiceFactory, ProviderRegistry};
+pub use ai_util::AIUtil;
+pub use core::{
+    AIConfig, AIConfigBuilder, AIService, AIServiceProvider, BaseConfig, ProviderService,
 };
+pub use message::{Message, Role};
 pub use models::*;
 pub use operations::{AIResponse, Operation, StreamCallback, VideoParameter};
+pub use providers::OpenAiCompatibleProvider;
 
 use futures_core::Stream;
 use hutool_http::{HttpClient, Method, Url};
@@ -20,58 +36,6 @@ use secrecy::{ExposeSecret, SecretString};
 use serde::{Deserialize, Serialize};
 use std::{fmt, pin::Pin, sync::Arc};
 use thiserror::Error;
-
-/// A chat message role.
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
-#[serde(rename_all = "lowercase")]
-pub enum Role {
-    /// System-level instructions.
-    System,
-    /// End-user content.
-    User,
-    /// Model-generated content.
-    Assistant,
-    /// Tool output supplied to the model.
-    Tool,
-}
-
-/// One chat message.
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
-pub struct Message {
-    /// Message role.
-    pub role: Role,
-    /// Text content.
-    pub content: String,
-}
-
-impl Message {
-    /// Creates a system message.
-    #[must_use]
-    pub fn system(content: &str) -> Self {
-        Self {
-            role: Role::System,
-            content: content.to_owned(),
-        }
-    }
-
-    /// Creates a user message.
-    #[must_use]
-    pub fn user(content: &str) -> Self {
-        Self {
-            role: Role::User,
-            content: content.to_owned(),
-        }
-    }
-
-    /// Creates an assistant message.
-    #[must_use]
-    pub fn assistant(content: &str) -> Self {
-        Self {
-            role: Role::Assistant,
-            content: content.to_owned(),
-        }
-    }
-}
 
 /// A provider-neutral chat request.
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -181,6 +145,12 @@ pub enum ProviderError {
     },
 }
 
+impl From<ProviderError> for AIException {
+    fn from(value: ProviderError) -> Self {
+        AIException::Message(value.to_string())
+    }
+}
+
 /// A provider-neutral asynchronous chat interface.
 pub trait ChatProvider: Send + Sync {
     /// Completes one chat request.
@@ -192,102 +162,21 @@ pub trait ChatProvider: Send + Sync {
     }
 }
 
-/// OpenAI-compatible `/chat/completions` provider.
-pub struct OpenAiCompatibleProvider {
-    client: HttpClient,
-    base_url: Url,
-    api_key: Arc<SecretString>,
-    default_model: String,
-}
+/// 防御性 SSE 事件上限（256 KiB）。
+pub const MAX_SSE_EVENT_BYTES: usize = 256 * 1024;
 
-impl fmt::Debug for OpenAiCompatibleProvider {
-    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
-        formatter
-            .debug_struct("OpenAiCompatibleProvider")
-            .field("base_url", &self.base_url)
-            .field("api_key", &"[REDACTED]")
-            .field("default_model", &self.default_model)
-            .finish_non_exhaustive()
-    }
-}
-
-impl OpenAiCompatibleProvider {
-    /// Creates an OpenAI-compatible provider.
-    pub fn new(
-        client: HttpClient,
-        base_url: impl AsRef<str>,
-        api_key: impl Into<String>,
-        default_model: impl Into<String>,
-    ) -> Result<Self, ProviderError> {
-        let mut base_url = Url::parse(base_url.as_ref())?;
-        if !base_url.path().ends_with('/') {
-            let path = format!("{}/", base_url.path());
-            base_url.set_path(&path);
-        }
-        Ok(Self {
-            client,
-            base_url,
-            api_key: Arc::new(SecretString::from(api_key.into())),
-            default_model: default_model.into(),
-        })
-    }
-}
-
-#[derive(Debug, Serialize)]
-struct OpenAiRequest<'a> {
-    model: &'a str,
-    messages: &'a [Message],
-    #[serde(skip_serializing_if = "Option::is_none")]
-    temperature: Option<f32>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    max_tokens: Option<u32>,
-    stream: bool,
-}
-
-#[derive(Debug, Deserialize)]
-struct OpenAiResponse {
-    id: String,
-    model: String,
-    choices: Vec<OpenAiChoice>,
-    #[serde(default)]
-    usage: Usage,
-}
-
-#[derive(Debug, Deserialize)]
-struct OpenAiChoice {
-    message: Message,
-    finish_reason: Option<String>,
-}
-
-#[derive(Debug, Deserialize)]
-struct OpenAiStreamResponse {
-    id: String,
-    choices: Vec<OpenAiStreamChoice>,
-}
-
-#[derive(Debug, Deserialize)]
-struct OpenAiStreamChoice {
-    #[serde(default)]
-    delta: OpenAiDelta,
-    finish_reason: Option<String>,
-}
-
-#[derive(Debug, Default, Deserialize)]
-struct OpenAiDelta {
-    content: Option<String>,
-}
-
-const MAX_SSE_EVENT_BYTES: usize = 256 * 1024;
-
+/// 复用 SSE 字节流分帧器，同时供 `providers/openai.rs` 与 `lib.rs` 单元测试使用。
 #[derive(Debug)]
-struct SseDecoder {
+pub struct SseDecoder {
     pending: Vec<u8>,
     data: Vec<u8>,
     max_event_bytes: usize,
 }
 
 impl SseDecoder {
-    fn new(max_event_bytes: usize) -> Self {
+    /// 创建 SSE 解码器，限定单事件最大字节数。
+    #[must_use]
+    pub fn new(max_event_bytes: usize) -> Self {
         Self {
             pending: Vec::new(),
             data: Vec::new(),
@@ -295,7 +184,8 @@ impl SseDecoder {
         }
     }
 
-    fn push(&mut self, chunk: &[u8]) -> Result<Vec<Vec<u8>>, ProviderError> {
+    /// 推入一段字节并解析出完整事件。
+    pub fn push(&mut self, chunk: &[u8]) -> Result<Vec<Vec<u8>>, ProviderError> {
         self.pending.extend_from_slice(chunk);
         let mut events = Vec::new();
         while let Some(newline) = self.pending.iter().position(|byte| *byte == b'\n') {
@@ -332,85 +222,22 @@ impl SseDecoder {
     }
 }
 
-impl ChatProvider for OpenAiCompatibleProvider {
-    async fn chat(&self, request: ChatRequest) -> Result<ChatResponse, ProviderError> {
-        let endpoint = self
-            .base_url
-            .join("chat/completions")
-            .expect("the fixed chat endpoint is a valid relative URL");
-        let model = request.model.as_deref().unwrap_or(&self.default_model);
-        let payload = OpenAiRequest {
-            model,
-            messages: &request.messages,
-            temperature: request.temperature,
-            max_tokens: request.max_tokens,
-            stream: false,
-        };
-        let response: OpenAiResponse = self
-            .client
-            .send_json(
-                self.client
-                    .request(Method::POST, endpoint)
-                    .bearer_auth(self.api_key.expose_secret())
-                    .json(&payload),
-            )
-            .await?;
-        let choice = response
-            .choices
-            .into_iter()
-            .next()
-            .ok_or(ProviderError::EmptyChoices)?;
-        Ok(ChatResponse {
-            id: response.id,
-            model: response.model,
-            message: choice.message,
-            finish_reason: choice.finish_reason,
-            usage: response.usage,
-        })
+/// 兼容访问器：旧调用方通过 `OpenAiCompatibleProvider.client/base_url/default_model` 访问。
+impl OpenAiCompatibleProvider {
+    /// 暴露内部 HTTP 客户端。
+    #[must_use]
+    pub fn http_client(&self) -> &HttpClient {
+        &self.client
     }
-
-    async fn stream(&self, request: ChatRequest) -> Result<ChatStream, ProviderError> {
-        let endpoint = self
-            .base_url
-            .join("chat/completions")
-            .expect("the fixed chat endpoint is a valid relative URL");
-        let model = request.model.as_deref().unwrap_or(&self.default_model);
-        let payload = OpenAiRequest {
-            model,
-            messages: &request.messages,
-            temperature: request.temperature,
-            max_tokens: request.max_tokens,
-            stream: true,
-        };
-        let mut response = self
-            .client
-            .send(
-                self.client
-                    .request(Method::POST, endpoint)
-                    .bearer_auth(self.api_key.expose_secret())
-                    .header("accept", "text/event-stream")
-                    .json(&payload),
-            )
-            .await?;
-
-        Ok(Box::pin(async_stream::try_stream! {
-            let mut decoder = SseDecoder::new(MAX_SSE_EVENT_BYTES);
-            'stream: while let Some(chunk) = response.chunk().await.map_err(hutool_http::HttpError::from)? {
-                for event in decoder.push(&chunk)? {
-                    if event == b"[DONE]" {
-                        break 'stream;
-                    }
-                    let response: OpenAiStreamResponse = serde_json::from_slice(&event)?;
-                    for choice in response.choices {
-                        yield ChatChunk {
-                            id: response.id.clone(),
-                            content: choice.delta.content,
-                            finish_reason: choice.finish_reason,
-                        };
-                    }
-                }
-            }
-        }))
+    /// 暴露 base URL。
+    #[must_use]
+    pub fn base_url(&self) -> &Url {
+        &self.base_url
+    }
+    /// 暴露默认模型。
+    #[must_use]
+    pub fn default_model(&self) -> &str {
+        &self.default_model
     }
 }
 
@@ -445,35 +272,13 @@ mod tests {
     }
 
     #[test]
-    fn provider_debug_redacts_api_key_and_normalizes_base_url() {
-        let client = HttpClient::new(&HttpConfig::default()).unwrap();
-        let provider =
-            OpenAiCompatibleProvider::new(client, "https://example.com/v1", "top-secret", "model")
-                .unwrap();
-        let debug = format!("{provider:?}");
-        assert!(debug.contains("[REDACTED]"));
-        assert!(!debug.contains("top-secret"));
-        assert_eq!(provider.base_url.as_str(), "https://example.com/v1/");
-        let client = HttpClient::new(&HttpConfig::default()).unwrap();
-        let provider =
-            OpenAiCompatibleProvider::new(client, "https://example.com/v1/", "secret", "model")
-                .unwrap();
-        assert_eq!(provider.base_url.as_str(), "https://example.com/v1/");
-        let client = HttpClient::new(&HttpConfig::default()).unwrap();
-        assert!(OpenAiCompatibleProvider::new(client, "bad url", "x", "m").is_err());
-    }
-
-    #[test]
     fn request_constructor_is_provider_neutral() {
         let request = ChatRequest::user("hello");
         assert_eq!(request.messages, [Message::user("hello")]);
         assert!(request.model.is_none());
         assert_eq!(Message::system("rules").role, Role::System);
         assert_eq!(Message::assistant("answer").role, Role::Assistant);
-        let tool = Message {
-            role: Role::Tool,
-            content: "result".into(),
-        };
+        let tool = Message::tool("result");
         assert_eq!(
             serde_json::from_str::<Message>(&serde_json::to_string(&tool).unwrap()).unwrap(),
             tool
@@ -567,70 +372,6 @@ mod tests {
                 .map(|error| error.to_string()),
             Some("provider does not support streaming".into())
         );
-    }
-
-    #[tokio::test]
-    async fn openai_provider_executes_chat_empty_choices_and_streams() {
-        let successful = br#"{"id":"one","model":"chosen","choices":[{"message":{"role":"assistant","content":"ok"},"finish_reason":"stop"}],"usage":{"prompt_tokens":1,"completion_tokens":2,"total_tokens":3}}"#.to_vec();
-        let empty = br#"{"id":"two","model":"default","choices":[]}"#.to_vec();
-        let sse = b"data:{\"id\":\"stream\",\"choices\":[{\"delta\":{\"content\":\"hi\"},\"finish_reason\":null},{\"delta\":{},\"finish_reason\":\"stop\"}]}\n\ndata: [DONE]\n\n".to_vec();
-        let (url, task) = server(vec![
-            ("application/json", successful),
-            ("application/json", empty),
-            ("application/json", b"not-json".to_vec()),
-            ("text/event-stream", sse),
-        ])
-        .await;
-        let client = HttpClient::new(&HttpConfig::default()).unwrap();
-        let provider = OpenAiCompatibleProvider::new(client, &url, "key", "default").unwrap();
-        let mut request = ChatRequest::user("hello");
-        request.model = Some("chosen".into());
-        request.temperature = Some(0.2);
-        request.max_tokens = Some(4);
-        let response = provider.chat(request).await.unwrap();
-        assert_eq!(response.message, Message::assistant("ok"));
-        assert_eq!(
-            provider
-                .chat(ChatRequest::user("empty"))
-                .await
-                .err()
-                .map(|error| error.to_string()),
-            Some("provider returned no chat choices".into())
-        );
-        assert!(
-            provider
-                .chat(ChatRequest::user("invalid-json"))
-                .await
-                .is_err()
-        );
-        let mut stream = provider.stream(ChatRequest::user("stream")).await.unwrap();
-        let first = std::future::poll_fn(|cx| stream.as_mut().poll_next(cx))
-            .await
-            .unwrap()
-            .unwrap();
-        let second = std::future::poll_fn(|cx| stream.as_mut().poll_next(cx))
-            .await
-            .unwrap()
-            .unwrap();
-        assert_eq!(first.content.as_deref(), Some("hi"));
-        assert_eq!(second.finish_reason.as_deref(), Some("stop"));
-        assert!(
-            std::future::poll_fn(|cx| stream.as_mut().poll_next(cx))
-                .await
-                .is_none()
-        );
-        task.await.unwrap();
-    }
-
-    #[tokio::test]
-    async fn openai_provider_propagates_transport_errors() {
-        let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
-        let url = format!("http://{}/v1/", listener.local_addr().unwrap());
-        drop(listener);
-        let client = HttpClient::new(&HttpConfig::default()).unwrap();
-        let provider = OpenAiCompatibleProvider::new(client, url, "key", "model").unwrap();
-        assert!(provider.chat(ChatRequest::user("x")).await.is_err());
-        assert!(provider.stream(ChatRequest::user("x")).await.is_err());
     }
 
     #[test]

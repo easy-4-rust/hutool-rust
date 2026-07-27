@@ -1,20 +1,9 @@
-//! 对齐: `cn.hutool.core.collection.IteratorEnumeration`
-//! 来源: hutool-core/src/main/java/cn/hutool/core/collection/IteratorEnumeration.java
-//!
-//! 状态: 对齐桩,等待完整实现。
+//! Hutool-aligned iterator adapters with Rust-native ownership semantics.
 
-#![allow(dead_code, unused_variables, clippy::new_without_default)]
+/// 对齐: `cn.hutool.core.collection.IteratorEnumeration`
+/// 迭代器枚举
 
-/// 对齐 Java 类: `cn.hutool.core.collection.IteratorEnumeration`
-///
-/// 静态工具类在 Rust 中通过零字节 ZST + 关联函数表达;
-/// 实例类按 Java 字段映射为 Rust struct 字段(待完整实现)。
-#[derive(Debug, Clone, Default)]
-pub struct IteratorEnumeration;
+use std::collections::VecDeque;
 
-impl IteratorEnumeration {
-    /// 对齐桩 sentinel,等待完整实现。
-    pub fn pending_alignment() -> &'static str {
-        "pending"
-    }
-}
+/// Converting a Rust iterator to an enumeration is a zero-cost identity.
+pub type IteratorEnumeration<I> = I;

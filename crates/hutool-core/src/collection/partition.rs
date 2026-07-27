@@ -1,20 +1,65 @@
-//! 对齐: `cn.hutool.core.collection.Partition`
-//! 来源: hutool-core/src/main/java/cn/hutool/core/collection/Partition.java
-//!
-//! 状态: 对齐桩,等待完整实现。
+//! Borrowed and streaming collection partitions aligned with Hutool.
 
-#![allow(dead_code, unused_variables, clippy::new_without_default)]
+/// 对齐: `cn.hutool.core.collection.Partition`
+/// 分区
 
-/// 对齐 Java 类: `cn.hutool.core.collection.Partition`
+use std::iter::Peekable;
+
+use crate::{CoreError, Result};
+
+use super::random_access_partition::RandomAccessPartition;
+
+/// A borrowed view that divides a slice into fixed-size partitions.
 ///
-/// 静态工具类在 Rust 中通过零字节 ZST + 关联函数表达;
-/// 实例类按 Java 字段映射为 Rust struct 字段(待完整实现)。
-#[derive(Debug, Clone, Default)]
-pub struct Partition;
+/// This is the Rust-native counterpart of Hutool's `Partition` and
+/// `RandomAccessPartition`: slices already provide constant-time random access.
+#[derive(Clone, Copy, Debug)]
+pub struct Partition<'a, T> {
+    items: &'a [T],
+    partition_size: usize,
+}
 
-impl Partition {
-    /// 对齐桩 sentinel,等待完整实现。
-    pub fn pending_alignment() -> &'static str {
-        "pending"
+impl<'a, T> Partition<'a, T> {
+    /// Creates a partition view.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`CoreError::InvalidArgument`] when `partition_size` is zero.
+    pub fn new(items: &'a [T], partition_size: usize) -> Result<Self> {
+        validate_partition_size(partition_size)?;
+        Ok(Self {
+            items,
+            partition_size,
+        })
+    }
+
+    /// Returns the number of partitions.
+    #[must_use]
+    pub fn len(&self) -> usize {
+        self.items.len().div_ceil(self.partition_size)
+    }
+
+    /// Returns whether this view has no partitions.
+    #[must_use]
+    pub fn is_empty(&self) -> bool {
+        self.items.is_empty()
+    }
+
+    /// Returns one partition by index.
+    #[must_use]
+    pub fn get(&self, index: usize) -> Option<&'a [T]> {
+        if index >= self.len() {
+            return None;
+        }
+        let start = index * self.partition_size;
+        let end = (start + self.partition_size).min(self.items.len());
+        Some(&self.items[start..end])
+    }
+
+    /// Iterates all partitions without allocating their elements.
+    pub fn iter(&self) -> impl DoubleEndedIterator<Item = &'a [T]> + ExactSizeIterator + '_ {
+        self.items.chunks(self.partition_size)
     }
 }
+
+use super::{validate_partition_size};

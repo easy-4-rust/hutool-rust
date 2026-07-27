@@ -1,12 +1,14 @@
-//! 对齐: `cn.hutool.core.collection.IterableIter`
-//! 来源: hutool-core/src/main/java/cn/hutool/core/collection/IterableIter.java
-//!
-//! 状态: 对齐桩,等待完整实现。
+//! Hutool-aligned iterator adapters with Rust-native ownership semantics.
 
-#![allow(dead_code, unused_variables, clippy::new_without_default)]
+/// 对齐: `cn.hutool.core.collection.IterableIter`
+/// 可迭代迭代器
 
-/// 对齐 Java interface: `cn.hutool.core.collection.IterableIter`
+use std::collections::VecDeque;
+
+/// Marker for iterators that are directly usable in `for` loops.
 ///
-/// Java 接口在 Rust 中通过 trait dispatch 表达。
-pub trait IterableIter {
-}
+/// Rust iterators already implement `IntoIterator`, so this is the zero-cost
+/// counterpart of Hutool's `IterableIter` interface.
+pub trait IterableIter: Iterator {}
+
+impl<I: Iterator> IterableIter for I {}
