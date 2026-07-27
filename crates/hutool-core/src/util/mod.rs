@@ -14,7 +14,6 @@ pub mod class_util;
 pub mod coordinate_util;
 pub mod credit_code_util;
 pub mod desensitized_util;
-pub mod enum_util;
 pub mod escape_util;
 pub mod hash_util;
 pub mod hex_util;

@@ -3,7 +3,6 @@
 //! 来源: hutool-cron/src/main/java/cn/hutool/cron/pattern/CronPatternBuilder.java
 //! 中文说明: 增量构建 Hutool 风格 cron 表达式的构建器。
 
-
 use std::{fmt, str::FromStr};
 
 use chrono::{DateTime, Datelike, Duration as ChronoDuration, TimeZone, Timelike, Utc};
@@ -80,7 +79,10 @@ impl CronPatternBuilder {
         let mut parts = self.parts.clone();
         // From minute through day-of-week, unset fields default to `*`.
         for index in Part::Minute.calendar_field()..Part::Year.calendar_field() {
-            if parts[index].as_ref().is_none_or(|value| value.trim().is_empty()) {
+            if parts[index]
+                .as_ref()
+                .is_none_or(|value| value.trim().is_empty())
+            {
                 parts[index] = Some("*".to_owned());
             }
         }
@@ -93,6 +95,12 @@ impl CronPatternBuilder {
     }
 }
 
-use super::{apply_negative, checked_schedule_value, convert_hutool_dow_field, convert_hutool_dow_token, end_of_year, expand_field, expand_range, field_needs_expand};
-use super::{fields, hutool_dow_to_quartz, is_last_day_of_month, next_after_filtered, normalize_expanded, pad_fields, parse_alias, schedule_max};
-use super::{split_numeric_range};
+use super::split_numeric_range;
+use super::{
+    apply_negative, checked_schedule_value, convert_hutool_dow_field, convert_hutool_dow_token,
+    end_of_year, expand_field, expand_range, field_needs_expand,
+};
+use super::{
+    fields, hutool_dow_to_quartz, is_last_day_of_month, next_after_filtered, normalize_expanded,
+    pad_fields, parse_alias, schedule_max,
+};

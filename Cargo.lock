@@ -2351,6 +2351,7 @@ name = "hutool"
 version = "0.1.0"
 dependencies = [
  "hutool-ai",
+ "hutool-annotation",
  "hutool-aop",
  "hutool-bloom-filter",
  "hutool-cache",
@@ -2366,7 +2367,6 @@ dependencies = [
  "hutool-json",
  "hutool-jwt",
  "hutool-log",
- "hutool-macro",
  "hutool-observability",
  "hutool-script",
  "hutool-setting",
@@ -2390,6 +2390,13 @@ dependencies = [
  "thiserror 2.0.19",
  "tokio",
  "url",
+]
+
+[[package]]
+name = "hutool-annotation"
+version = "0.1.0"
+dependencies = [
+ "hutool-macro",
 ]
 
 [[package]]

@@ -3,7 +3,6 @@
 //! 来源: hutool-cron/src/main/java/cn/hutool/cron/pattern/Part.java
 //! 中文说明: Cron 表达式字段枚举，定义秒、分、时、日、月、周、年各字段的取值范围。
 
-
 use std::{fmt, str::FromStr};
 
 use chrono::{DateTime, Datelike, Duration as ChronoDuration, TimeZone, Timelike, Utc};
@@ -67,7 +66,7 @@ impl Part {
         match self {
             Self::Second | Self::Minute => 59,
             Self::Hour => 23,
-            Self::DayOfMonth => 32,  // Hutool: 32 == last day ("L")
+            Self::DayOfMonth => 32, // Hutool: 32 == last day ("L")
             Self::Month => 12,
             Self::DayOfWeek => 7,
             Self::Year => 2099,
@@ -102,6 +101,12 @@ impl Part {
     }
 }
 
-use super::{apply_negative, checked_schedule_value, convert_hutool_dow_field, convert_hutool_dow_token, end_of_year, expand_field, expand_range, field_needs_expand};
-use super::{fields, hutool_dow_to_quartz, is_last_day_of_month, next_after_filtered, normalize_expanded, pad_fields, parse_alias, schedule_max};
-use super::{split_numeric_range};
+use super::split_numeric_range;
+use super::{
+    apply_negative, checked_schedule_value, convert_hutool_dow_field, convert_hutool_dow_token,
+    end_of_year, expand_field, expand_range, field_needs_expand,
+};
+use super::{
+    fields, hutool_dow_to_quartz, is_last_day_of_month, next_after_filtered, normalize_expanded,
+    pad_fields, parse_alias, schedule_max,
+};

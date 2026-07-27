@@ -149,4 +149,6 @@ impl Ord for ScheduledTask {
     }
 }
 
-use super::{ScheduledTask, TaskFn, TimerCommand, TimerTaskInner, bounded_wait, now_millis, run_timer};
+use super::{
+    ScheduledTask, TaskFn, TimerCommand, TimerTaskInner, bounded_wait, now_millis, run_timer,
+};

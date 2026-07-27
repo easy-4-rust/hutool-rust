@@ -11,10 +11,11 @@ mod file_cache;
 mod cache_util;
 
 pub use compat::{
-    CacheListener, ReentrantCache, FIFOCache, GlobalPruneTimer,
-    LFUCache, LRUCache, NoCache, PruneHandle, ScheduledTimedCache, StampedCache,
+    CacheListener, ReentrantCache, FIFOCache,
+    LFUCache, LRUCache, NoCache, ScheduledTimedCache, StampedCache,
     TimedCache, WeakCache,
 };
+pub use global_prune_timer::{GlobalPruneTimer, PruneHandle};
 pub use file_cache::{AbstractFileCache, LFUFileCache, LRUFileCache};
 pub use cache_util::CacheUtil;
 

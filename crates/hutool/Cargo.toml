@@ -35,8 +35,8 @@ workspace = true
 
 [features]
 default = ["core", "json"]
-core = ["dep:hutool-core", "dep:hutool-macro"]
-annotation = ["dep:hutool-macro"]
+core = ["dep:hutool-core", "dep:hutool-annotation"]
+annotation = ["dep:hutool-annotation"]
 serialization = ["core", "hutool-core/serialization"]
 xml-serde = ["core", "hutool-core/xml-serde"]
 xml-encoding = ["core", "hutool-core/xml-encoding"]
@@ -109,7 +109,7 @@ full = [
 
 [dependencies]
 hutool-ai = { workspace = true, optional = true }
-hutool-macro = { workspace = true, optional = true }
+hutool-annotation = { workspace = true, optional = true }
 hutool-aop = { workspace = true, optional = true }
 hutool-bloom-filter = { workspace = true, optional = true }
 hutool-cache = { workspace = true, optional = true }

@@ -17,15 +17,15 @@ use std::{
 
 use crate::CronError;
 
+mod system_timer;
 mod timer_task;
 mod timer_task_list;
 mod timing_wheel;
-mod system_timer;
 
+pub use system_timer::SystemTimer;
 pub use timer_task::TimerTask;
 pub use timer_task_list::TimerTaskList;
 pub use timing_wheel::TimingWheel;
-pub use system_timer::SystemTimer;
 
 type TaskFn = Box<dyn FnOnce() + Send + 'static>;
 

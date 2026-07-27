@@ -65,7 +65,7 @@ impl EnumUtil {
         variants
             .iter()
             .find(|v| matcher(v) == *value)
-            .map(|v| field(v))
+            .map(field)
     }
 
     /// 对齐 Java: `EnumUtil.likeValueOf(Class, Object)`
@@ -100,7 +100,7 @@ impl EnumUtil {
     where
         F: Fn(&E) -> String,
     {
-        variants.iter().map(|v| field(v)).collect()
+        variants.iter().map(field).collect()
     }
 
     /// 对齐 Java: `EnumUtil.getFieldValues` 递归初始化安全版本（fix issue#IDQYJK）

@@ -4,7 +4,6 @@
 //! 中文说明: Hutool 定时任务表达式解析模块，包含表达式构建器、
 //! 解析器、字段匹配器等核心组件。
 
-
 use std::{fmt, str::FromStr};
 
 use chrono::{DateTime, Datelike, Duration as ChronoDuration, TimeZone, Timelike, Utc};
@@ -12,31 +11,31 @@ use cron::Schedule;
 
 use crate::CronError;
 
-mod part;
-mod cron_pattern_builder;
-mod cron_pattern;
-mod cron_pattern_util;
-mod part_matcher;
 mod always_true_matcher;
 mod bool_array_matcher;
-mod year_value_matcher;
+mod cron_pattern;
+mod cron_pattern_builder;
+mod cron_pattern_util;
 mod day_of_month_matcher;
-mod pattern_matcher;
+mod part;
+mod part_matcher;
 mod part_parser;
+mod pattern_matcher;
 mod pattern_parser;
+mod year_value_matcher;
 
-pub use part::Part;
-pub use cron_pattern_builder::CronPatternBuilder;
-pub use cron_pattern::CronPattern;
-pub use cron_pattern_util::CronPatternUtil;
-pub use part_matcher::PartMatcher;
 pub use always_true_matcher::AlwaysTrueMatcher;
 pub use bool_array_matcher::BoolArrayMatcher;
-pub use year_value_matcher::YearValueMatcher;
+pub use cron_pattern::CronPattern;
+pub use cron_pattern_builder::CronPatternBuilder;
+pub use cron_pattern_util::CronPatternUtil;
 pub use day_of_month_matcher::DayOfMonthMatcher;
-pub use pattern_matcher::PatternMatcher;
+pub use part::Part;
+pub use part_matcher::PartMatcher;
 pub use part_parser::PartParser;
+pub use pattern_matcher::PatternMatcher;
 pub use pattern_parser::PatternParser;
+pub use year_value_matcher::YearValueMatcher;
 
 fn next_after_filtered(
     schedule: &Schedule,
@@ -102,9 +101,7 @@ fn field_needs_expand(field: &str) -> bool {
             return true;
         }
         // Lone negative number: `-4`
-        if base.starts_with('-')
-            && base.len() > 1
-            && base[1..].chars().all(|c| c.is_ascii_digit())
+        if base.starts_with('-') && base.len() > 1 && base[1..].chars().all(|c| c.is_ascii_digit())
         {
             return true;
         }
@@ -129,7 +126,9 @@ fn split_numeric_range(base: &str) -> Option<(i32, i32)> {
 fn convert_hutool_dow_field(field: &str) -> Result<String, CronError> {
     let mut out = Vec::new();
     for item in field.split(',') {
-        let (base, step) = item.split_once('/').map_or((item, None), |(b, s)| (b, Some(s)));
+        let (base, step) = item
+            .split_once('/')
+            .map_or((item, None), |(b, s)| (b, Some(s)));
         let converted = if let Some((begin, end)) = base
             .split_once('-')
             .filter(|(b, e)| !b.is_empty() && !e.is_empty())
@@ -168,7 +167,9 @@ fn expand_field(part: Part, field: &str) -> Result<(String, bool), CronError> {
     }
     // Preserve star-step forms (`*/5`) for the schedule engine.
     if let Some(rest) = field.strip_prefix("*/") {
-        let step: i32 = rest.parse().map_err(|_| CronError::InvalidPattern(field.to_owned()))?;
+        let step: i32 = rest
+            .parse()
+            .map_err(|_| CronError::InvalidPattern(field.to_owned()))?;
         if step <= 0 {
             return Err(CronError::InvalidPattern(field.to_owned()));
         }
@@ -193,7 +194,10 @@ fn expand_field(part: Part, field: &str) -> Result<(String, bool), CronError> {
         }
         let collected = if base == "*" {
             expand_range(part, part.min(), schedule_max(part), step)?
-        } else if let Some((begin, end)) = base.split_once('-').filter(|(b, e)| !b.is_empty() && !e.is_empty()) {
+        } else if let Some((begin, end)) = base
+            .split_once('-')
+            .filter(|(b, e)| !b.is_empty() && !e.is_empty())
+        {
             let begin = apply_negative(part, parse_alias(part, begin)?)?;
             let end = apply_negative(part, parse_alias(part, end)?)?;
             expand_range(part, begin, end, step)?

@@ -37,9 +37,7 @@ fn parse_local(s: &str) -> chrono::DateTime<Utc> {
             // Bare times in CronPatternTest use an arbitrary day; Hutool DateUtil.parse
             // resolves against "today". Use a fixed anchor day for determinism.
             if let Ok(time) = chrono::NaiveTime::parse_from_str(s, fmt) {
-                let naive = NaiveDate::from_ymd_opt(2016, 1, 1)
-                    .unwrap()
-                    .and_time(time);
+                let naive = NaiveDate::from_ymd_opt(2016, 1, 1).unwrap().and_time(time);
                 return Utc.from_utc_datetime(&naive);
             }
         }
@@ -119,11 +117,7 @@ fn cron_pattern_match_all_test() {
 fn cron_pattern_match_all_test2() {
     let pattern = CronPattern::of("* * * * *").unwrap();
     let now = Utc::now();
-    let begin_minute = now
-        .with_second(0)
-        .unwrap()
-        .with_nanosecond(0)
-        .unwrap();
+    let begin_minute = now.with_second(0).unwrap().with_nanosecond(0).unwrap();
     assert_match(&pattern, &fmt_local(begin_minute));
 }
 
@@ -180,20 +174,11 @@ fn cron_pattern_match_day_of_week_test() {
 #[test]
 fn cron_pattern_cron_pattern_test2() {
     let pattern = CronPattern::of("0/30 * * * *").unwrap();
-    assert!(
-        pattern
-            .matches(parse_local("2018-10-09 12:00:00"), false)
-    );
-    assert!(
-        pattern
-            .matches(parse_local("2018-10-09 12:30:00"), false)
-    );
+    assert!(pattern.matches(parse_local("2018-10-09 12:00:00"), false));
+    assert!(pattern.matches(parse_local("2018-10-09 12:30:00"), false));
 
     let pattern = CronPattern::of("32 * * * *").unwrap();
-    assert!(
-        pattern
-            .matches(parse_local("2018-10-09 12:32:00"), false)
-    );
+    assert!(pattern.matches(parse_local("2018-10-09 12:32:00"), false));
 }
 
 /// 对齐 Java: `CronPatternTest.patternTest()`
@@ -258,9 +243,7 @@ fn cron_pattern_range_year_test() {
 #[test]
 fn cron_pattern_next_match_all_after_test() {
     let pattern = CronPattern::of("* * * * * * *").unwrap();
-    let date = Utc::now()
-        .with_nanosecond(0)
-        .unwrap();
+    let date = Utc::now().with_nanosecond(0).unwrap();
     let calendar = pattern.next_match_after(date, true).unwrap();
     assert_eq!(calendar.timestamp_millis(), date.timestamp_millis() + 1000);
 
@@ -538,7 +521,8 @@ fn cron_pattern_util_issue4056_test() {
 #[test]
 fn cron_pattern_util_issue4056_test2() {
     let pattern = CronPattern::of("0 0 0 */5 * ? *").unwrap();
-    let next = CronPatternUtil::next_date_after(&pattern, parse_local("2025-02-27 23:59:59")).unwrap();
+    let next =
+        CronPatternUtil::next_date_after(&pattern, parse_local("2025-02-27 23:59:59")).unwrap();
     assert_eq!(fmt_local(next), "2025-03-01 00:00:00");
 }
 
@@ -711,8 +695,7 @@ fn issue_i7smp7_parse_test() {
 fn issue_i82csh_test() {
     let begin = parse_local("2023-09-20");
     let end = parse_local("2025-09-20");
-    let dates =
-        CronPatternUtil::matched_dates_str("0 0 1 3-3,9 *", begin, end, 20, false).unwrap();
+    let dates = CronPatternUtil::matched_dates_str("0 0 1 3-3,9 *", begin, end, 20, false).unwrap();
     assert_eq!(dates.len(), 4);
 }
 
@@ -767,7 +750,9 @@ fn task_table_to_string_test() {
 #[tokio::test]
 async fn cron_test_empty_schedule_test() {
     let mut scheduler = Scheduler::new();
-    scheduler.set_runtime(tokio::runtime::Handle::current()).unwrap();
+    scheduler
+        .set_runtime(tokio::runtime::Handle::current())
+        .unwrap();
     scheduler.set_match_second(true).unwrap();
     scheduler.start().unwrap();
     scheduler.stop(true);

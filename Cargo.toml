@@ -118,6 +118,7 @@ zip = { version = "7.2.0", default-features = false, features = ["deflate-flate2
 
 hutool = { version = "=0.1.0", path = "crates/hutool" }
 hutool-ai = { version = "=0.1.0", path = "crates/hutool-ai" }
+hutool-annotation = { version = "=0.1.0", path = "crates/hutool-annotation" }
 hutool-macro = { version = "=0.1.0", path = "crates/hutool-macro" }
 hutool-aop = { version = "=0.1.0", path = "crates/hutool-aop" }
 hutool-bloom-filter = { version = "=0.1.0", path = "crates/hutool-bloom-filter" }

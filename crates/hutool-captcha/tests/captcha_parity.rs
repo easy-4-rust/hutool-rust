@@ -27,8 +27,8 @@
 use std::io::Cursor;
 use std::sync::Arc;
 
-use hutool_captcha as hc;
 use hc::CodeGenerator;
+use hutool_captcha as hc;
 use image::ImageReader;
 
 /// 断言字节流可解码且宽高匹配（结构等价，非字节级对齐）。
@@ -56,10 +56,7 @@ fn alphanumeric_generator_test() {
 #[test]
 fn captcha_challenge_generate_test() {
     let generator = hc::AlphanumericGenerator::new(4);
-    let challenge = hc::CaptchaChallenge::generate(
-        &generator,
-        std::time::Duration::from_secs(300),
-    );
+    let challenge = hc::CaptchaChallenge::generate(&generator, std::time::Duration::from_secs(300));
     assert!(!challenge.code().is_empty(), "captcha code 不应为空");
 }
 
@@ -73,10 +70,7 @@ fn line_captcha_test1() {
     let mut line = hc::CaptchaUtil::create_line_captcha(200, 100).expect("create_line_captcha");
     let code = line.code().expect("code").to_owned();
     assert!(!code.is_empty(), "对齐 Java: getCode() not null/empty");
-    assert!(
-        line.verify(&code),
-        "对齐 Java: verify(getCode()) 应为 true"
-    );
+    assert!(line.verify(&code), "对齐 Java: verify(getCode()) 应为 true");
     let bytes = line.image_bytes().expect("png bytes");
     assert!(bytes.starts_with(b"\x89PNG"), "PNG magic");
     assert_raster_dims(bytes, 200, 100, "lineCaptchaTest1");
@@ -250,8 +244,7 @@ fn shear_captcha_test_with_size() {
 /// 对齐 Java: `CaptchaTest.GifCaptchaTest()`（Java `@Disabled`）
 #[test]
 fn gif_captcha_test() {
-    let mut captcha =
-        hc::CaptchaUtil::create_gif_captcha_with_count(200, 100, 4).expect("gif");
+    let mut captcha = hc::CaptchaUtil::create_gif_captcha_with_count(200, 100, 4).expect("gif");
     let code = captcha.code().expect("code").to_owned();
     assert!(
         captcha.verify(&code),
@@ -279,8 +272,7 @@ fn gif_captcha_test_with_size() {
 /// 对齐 Java: `CaptchaTest.bgTest()`（Java `@Disabled`）
 #[test]
 fn bg_test() {
-    let mut captcha =
-        hc::CaptchaUtil::create_line_captcha_with_count(200, 100, 4, 1).expect("bg");
+    let mut captcha = hc::CaptchaUtil::create_line_captcha_with_count(200, 100, 4, 1).expect("bg");
     captcha.set_background(hc::CaptchaColor([255, 255, 255, 255])); // Color.WHITE
     let code = captcha.code().expect("code").to_owned();
     assert!(captcha.verify(&code));
@@ -311,14 +303,10 @@ fn create_test() {
 #[test]
 fn draw_string_colourful_color_distance_test() {
     for i in 0..10 {
-        let mut line =
-            hc::LineCaptcha::with_code_count(200, 100, 5, 10).expect("color distance");
+        let mut line = hc::LineCaptcha::with_code_count(200, 100, 5, 10).expect("color distance");
         line.set_background(hc::CaptchaColor([255, 255, 255, 255]));
         let bytes = line.image_bytes().expect("png").to_vec();
-        assert!(
-            bytes.starts_with(b"\x89PNG"),
-            "iteration {i}: PNG magic"
-        );
+        assert!(bytes.starts_with(b"\x89PNG"), "iteration {i}: PNG magic");
         assert_raster_dims(&bytes, 200, 100, "drawStringColourfulColorDistance");
         let code = line.code().expect("code").to_owned();
         assert_eq!(code.chars().count(), 5);
@@ -330,8 +318,7 @@ fn draw_string_colourful_color_distance_test() {
 #[test]
 fn draw_string_colourful_default_color_distance_test() {
     for i in 0..10 {
-        let mut line =
-            hc::LineCaptcha::with_code_count(200, 100, 5, 10).expect("default distance");
+        let mut line = hc::LineCaptcha::with_code_count(200, 100, 5, 10).expect("default distance");
         line.set_background(hc::CaptchaColor([255, 255, 255, 255]));
         let bytes = line.image_bytes().expect("png").to_vec();
         assert!(bytes.starts_with(b"\x89PNG"), "iteration {i}");
@@ -379,11 +366,7 @@ fn test_set_quality() {
     assert_eq!(captcha.quality(), 20, "Quality 应该设置为 20");
 
     let captcha = captcha.set_quality(0); // <1 → 1
-    assert_eq!(
-        captcha.quality(),
-        1,
-        "Quality 应该设置为 1，如果小于 1"
-    );
+    assert_eq!(captcha.quality(), 1, "Quality 应该设置为 1，如果小于 1");
 }
 
 /// 对齐 Java: `GifCaptchaUtilTest.testSetRepeat()`
@@ -393,11 +376,7 @@ fn test_set_repeat() {
     assert_eq!(captcha.repeat(), 5, "Repeat 应该设置为 5");
 
     let captcha = captcha.set_repeat(-1);
-    assert_eq!(
-        captcha.repeat(),
-        0,
-        "Repeat 应该设置为 0，如果设置了负值"
-    );
+    assert_eq!(captcha.repeat(), 0, "Repeat 应该设置为 0，如果设置了负值");
 }
 
 /// 对齐 Java: `GifCaptchaUtilTest.testSetColorRange()`

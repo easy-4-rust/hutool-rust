@@ -31,7 +31,11 @@ struct CapturedRequest {
 async fn mock_once(
     content_type: &'static str,
     body: Vec<u8>,
-) -> (String, Arc<Mutex<CapturedRequest>>, tokio::task::JoinHandle<()>) {
+) -> (
+    String,
+    Arc<Mutex<CapturedRequest>>,
+    tokio::task::JoinHandle<()>,
+) {
     let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
     let address = listener.local_addr().unwrap();
     let captured = Arc::new(Mutex::new(CapturedRequest::default()));
@@ -314,13 +318,19 @@ async fn a_i_util_test_chat() {
 async fn deep_seek_service_chat() {
     let (value, cap) = assert_json_op(
         ModelName::DeepSeek,
-        Operation::Chat { messages: vec![Message::user("写一个疯狂星期四广告词")] },
+        Operation::Chat {
+            messages: vec![Message::user("写一个疯狂星期四广告词")],
+        },
         chat_json(),
         "/chat/completions",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -339,7 +349,9 @@ async fn deep_seek_service_chat() {
 async fn deep_seek_service_chat_stream() {
     let _cap = assert_stream_op(
         ModelName::DeepSeek,
-        Operation::Chat { messages: vec![Message::user("写一个疯狂星期四广告词")] },
+        Operation::Chat {
+            messages: vec![Message::user("写一个疯狂星期四广告词")],
+        },
         "/chat/completions",
         false,
     )
@@ -351,13 +363,22 @@ async fn deep_seek_service_chat_stream() {
 async fn deep_seek_service_test_chat() {
     let (value, cap) = assert_json_op(
         ModelName::DeepSeek,
-        Operation::Chat { messages: vec![Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"), Message::user("给我说一个笑话")] },
+        Operation::Chat {
+            messages: vec![
+                Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"),
+                Message::user("给我说一个笑话"),
+            ],
+        },
         chat_json(),
         "/chat/completions",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -376,13 +397,19 @@ async fn deep_seek_service_test_chat() {
 async fn deep_seek_service_beta() {
     let (value, cap) = assert_json_op(
         ModelName::DeepSeek,
-        Operation::Beta { prompt: "写一个疯狂星期四广告词".into() },
+        Operation::Beta {
+            prompt: "写一个疯狂星期四广告词".into(),
+        },
         chat_json(),
         "/beta/completions",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -401,7 +428,9 @@ async fn deep_seek_service_beta() {
 async fn deep_seek_service_beta_stream() {
     let _cap = assert_stream_op(
         ModelName::DeepSeek,
-        Operation::Beta { prompt: "写一个疯狂星期四广告词".into() },
+        Operation::Beta {
+            prompt: "写一个疯狂星期四广告词".into(),
+        },
         "/beta/completions",
         false,
     )
@@ -419,7 +448,11 @@ async fn deep_seek_service_models() {
         false,
     )
     .await;
-    assert!(value.get("data").is_some() || value.get("models").is_some() || value.get("object").is_some());
+    assert!(
+        value.get("data").is_some()
+            || value.get("models").is_some()
+            || value.get("object").is_some()
+    );
     let _ = (&value, &cap);
 }
 
@@ -443,13 +476,19 @@ async fn deep_seek_service_balance() {
 async fn doubao_service_chat() {
     let (value, cap) = assert_json_op(
         ModelName::Doubao,
-        Operation::Chat { messages: vec![Message::user("写一个疯狂星期四广告词")] },
+        Operation::Chat {
+            messages: vec![Message::user("写一个疯狂星期四广告词")],
+        },
         chat_json(),
         "/chat/completions",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -468,7 +507,9 @@ async fn doubao_service_chat() {
 async fn doubao_service_chat_stream() {
     let _cap = assert_stream_op(
         ModelName::Doubao,
-        Operation::Chat { messages: vec![Message::user("写一个疯狂星期四广告词")] },
+        Operation::Chat {
+            messages: vec![Message::user("写一个疯狂星期四广告词")],
+        },
         "/chat/completions",
         false,
     )
@@ -480,13 +521,22 @@ async fn doubao_service_chat_stream() {
 async fn doubao_service_test_chat() {
     let (value, cap) = assert_json_op(
         ModelName::Doubao,
-        Operation::Chat { messages: vec![Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"), Message::user("给我说一个笑话")] },
+        Operation::Chat {
+            messages: vec![
+                Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"),
+                Message::user("给我说一个笑话"),
+            ],
+        },
         chat_json(),
         "/chat/completions",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -505,13 +555,21 @@ async fn doubao_service_test_chat() {
 async fn doubao_service_chat_vision() {
     let (value, cap) = assert_json_op(
         ModelName::Doubao,
-        Operation::Vision { prompt: "图片上有些什么？".into(), images: vec!["https://img.example.com/a.jpg".into()], detail: "auto".into() },
+        Operation::Vision {
+            prompt: "图片上有些什么？".into(),
+            images: vec!["https://img.example.com/a.jpg".into()],
+            detail: "auto".into(),
+        },
         chat_json(),
         "/chat/completions",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -530,13 +588,21 @@ async fn doubao_service_chat_vision() {
 async fn doubao_service_test_chat_vision() {
     let (value, cap) = assert_json_op(
         ModelName::Doubao,
-        Operation::Vision { prompt: "图片上有些什么？".into(), images: vec!["https://img.example.com/a.jpg".into()], detail: "high".into() },
+        Operation::Vision {
+            prompt: "图片上有些什么？".into(),
+            images: vec!["https://img.example.com/a.jpg".into()],
+            detail: "high".into(),
+        },
         chat_json(),
         "/chat/completions",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -555,7 +621,11 @@ async fn doubao_service_test_chat_vision() {
 async fn doubao_service_test_chat_vision_stream() {
     let _cap = assert_stream_op(
         ModelName::Doubao,
-        Operation::Vision { prompt: "图片上有些什么？".into(), images: vec!["https://img.example.com/a.jpg".into()], detail: "auto".into() },
+        Operation::Vision {
+            prompt: "图片上有些什么？".into(),
+            images: vec!["https://img.example.com/a.jpg".into()],
+            detail: "auto".into(),
+        },
         "/chat/completions",
         false,
     )
@@ -567,13 +637,19 @@ async fn doubao_service_test_chat_vision_stream() {
 async fn doubao_service_video_tasks() {
     let (value, cap) = assert_json_op(
         ModelName::Doubao,
-        Operation::CreateVideo { text: "动画视频".into(), image: None, parameters: vec![VideoParameter::new("--dur", 5)] },
+        Operation::CreateVideo {
+            text: "动画视频".into(),
+            image: None,
+            parameters: vec![VideoParameter::new("--dur", 5)],
+        },
         video_json(),
         "/contents/generations/tasks",
         false,
     )
     .await;
-    assert!(value.get("id").is_some() || value.get("name").is_some() || value.get("status").is_some());
+    assert!(
+        value.get("id").is_some() || value.get("name").is_some() || value.get("status").is_some()
+    );
     let _ = (&value, &cap);
 }
 
@@ -582,13 +658,17 @@ async fn doubao_service_video_tasks() {
 async fn doubao_service_get_video_tasks_info() {
     let (value, cap) = assert_json_op(
         ModelName::Doubao,
-        Operation::GetVideo { id: "cgt-mock".into() },
+        Operation::GetVideo {
+            id: "cgt-mock".into(),
+        },
         video_json(),
         "/contents/generations/tasks/",
         false,
     )
     .await;
-    assert!(value.get("id").is_some() || value.get("name").is_some() || value.get("status").is_some());
+    assert!(
+        value.get("id").is_some() || value.get("name").is_some() || value.get("status").is_some()
+    );
     let _ = (&value, &cap);
 }
 
@@ -597,7 +677,9 @@ async fn doubao_service_get_video_tasks_info() {
 async fn doubao_service_embedding_text() {
     let (value, cap) = assert_json_op(
         ModelName::Doubao,
-        Operation::EmbedText { inputs: vec!["text".into()] },
+        Operation::EmbedText {
+            inputs: vec!["text".into()],
+        },
         embed_json(),
         "/embeddings",
         false,
@@ -613,7 +695,10 @@ async fn doubao_service_embedding_text() {
 async fn doubao_service_embedding_vision() {
     let (value, cap) = assert_json_op(
         ModelName::Doubao,
-        Operation::EmbedVision { text: "天空好难".into(), image: "https://img.example.com/a.jpg".into() },
+        Operation::EmbedVision {
+            text: "天空好难".into(),
+            image: "https://img.example.com/a.jpg".into(),
+        },
         embed_json(),
         "/embeddings/multimodal",
         false,
@@ -629,13 +714,22 @@ async fn doubao_service_embedding_vision() {
 async fn doubao_service_bots_chat() {
     let (value, cap) = assert_json_op(
         ModelName::Doubao,
-        Operation::BotChat { messages: vec![Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"), Message::user("给我说一个笑话")] },
+        Operation::BotChat {
+            messages: vec![
+                Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"),
+                Message::user("给我说一个笑话"),
+            ],
+        },
         chat_json(),
         "/chat/completions",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -654,7 +748,12 @@ async fn doubao_service_bots_chat() {
 async fn doubao_service_bots_chat_stream() {
     let _cap = assert_stream_op(
         ModelName::Doubao,
-        Operation::BotChat { messages: vec![Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"), Message::user("给我说一个笑话")] },
+        Operation::BotChat {
+            messages: vec![
+                Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"),
+                Message::user("给我说一个笑话"),
+            ],
+        },
         "/chat/completions",
         false,
     )
@@ -666,7 +765,9 @@ async fn doubao_service_bots_chat_stream() {
 async fn doubao_service_tokenization() {
     let (value, cap) = assert_json_op(
         ModelName::Doubao,
-        Operation::Tokenize { texts: vec!["hello".into()] },
+        Operation::Tokenize {
+            texts: vec!["hello".into()],
+        },
         tokenize_json(),
         "/tokenization",
         false,
@@ -681,13 +782,22 @@ async fn doubao_service_tokenization() {
 async fn doubao_service_batch_chat() {
     let (value, cap) = assert_json_op(
         ModelName::Doubao,
-        Operation::BatchChat { messages: vec![Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"), Message::user("给我说一个笑话")] },
+        Operation::BatchChat {
+            messages: vec![
+                Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"),
+                Message::user("给我说一个笑话"),
+            ],
+        },
         chat_json(),
         "/batch/chat/completions",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -706,13 +816,22 @@ async fn doubao_service_batch_chat() {
 async fn doubao_service_test_batch_chat() {
     let (value, cap) = assert_json_op(
         ModelName::Doubao,
-        Operation::BatchChat { messages: vec![Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"), Message::user("给我说一个笑话")] },
+        Operation::BatchChat {
+            messages: vec![
+                Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"),
+                Message::user("给我说一个笑话"),
+            ],
+        },
         chat_json(),
         "/batch/chat/completions",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -731,7 +850,13 @@ async fn doubao_service_test_batch_chat() {
 async fn doubao_service_create_context() {
     let (value, cap) = assert_json_op(
         ModelName::Doubao,
-        Operation::CreateContext { messages: vec![Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"), Message::user("给我说一个笑话")], mode: "session".into() },
+        Operation::CreateContext {
+            messages: vec![
+                Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"),
+                Message::user("给我说一个笑话"),
+            ],
+            mode: "session".into(),
+        },
         br#"{"id":"ctx-1"}"#.to_vec(),
         "/context/create",
         false,
@@ -746,7 +871,13 @@ async fn doubao_service_create_context() {
 async fn doubao_service_test_create_context() {
     let (value, cap) = assert_json_op(
         ModelName::Doubao,
-        Operation::CreateContext { messages: vec![Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"), Message::user("给我说一个笑话")], mode: "session".into() },
+        Operation::CreateContext {
+            messages: vec![
+                Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"),
+                Message::user("给我说一个笑话"),
+            ],
+            mode: "session".into(),
+        },
         br#"{"id":"ctx-1"}"#.to_vec(),
         "/context/create",
         false,
@@ -761,13 +892,20 @@ async fn doubao_service_test_create_context() {
 async fn doubao_service_chat_context() {
     let (value, cap) = assert_json_op(
         ModelName::Doubao,
-        Operation::ContextChat { messages: vec![Message::user("写一个疯狂星期四广告词")], context_id: "ctx-1".into() },
+        Operation::ContextChat {
+            messages: vec![Message::user("写一个疯狂星期四广告词")],
+            context_id: "ctx-1".into(),
+        },
         chat_json(),
         "/chat/completions",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -786,13 +924,20 @@ async fn doubao_service_chat_context() {
 async fn doubao_service_test_chat_context() {
     let (value, cap) = assert_json_op(
         ModelName::Doubao,
-        Operation::ContextChat { messages: vec![Message::user("写一个疯狂星期四广告词")], context_id: "ctx-1".into() },
+        Operation::ContextChat {
+            messages: vec![Message::user("写一个疯狂星期四广告词")],
+            context_id: "ctx-1".into(),
+        },
         chat_json(),
         "/chat/completions",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -811,7 +956,10 @@ async fn doubao_service_test_chat_context() {
 async fn doubao_service_test_chat_context_stream() {
     let _cap = assert_stream_op(
         ModelName::Doubao,
-        Operation::ContextChat { messages: vec![Message::user("写一个疯狂星期四广告词")], context_id: "ctx-1".into() },
+        Operation::ContextChat {
+            messages: vec![Message::user("写一个疯狂星期四广告词")],
+            context_id: "ctx-1".into(),
+        },
         "/chat/completions",
         false,
     )
@@ -823,7 +971,9 @@ async fn doubao_service_test_chat_context_stream() {
 async fn doubao_service_images_generations() {
     let (value, cap) = assert_json_op(
         ModelName::Doubao,
-        Operation::GenerateImage { prompt: "astronaut".into() },
+        Operation::GenerateImage {
+            prompt: "astronaut".into(),
+        },
         image_json(),
         "/images/generations",
         false,
@@ -838,13 +988,19 @@ async fn doubao_service_images_generations() {
 async fn gemini_service_chat() {
     let (value, cap) = assert_json_op(
         ModelName::Gemini,
-        Operation::Chat { messages: vec![Message::user("写一个疯狂星期四广告词")] },
+        Operation::Chat {
+            messages: vec![Message::user("写一个疯狂星期四广告词")],
+        },
         chat_json(),
         "generateContent",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -863,7 +1019,9 @@ async fn gemini_service_chat() {
 async fn gemini_service_chat_stream() {
     let _cap = assert_stream_op(
         ModelName::Gemini,
-        Operation::Chat { messages: vec![Message::user("写一个疯狂星期四广告词")] },
+        Operation::Chat {
+            messages: vec![Message::user("写一个疯狂星期四广告词")],
+        },
         "generateContent",
         false,
     )
@@ -875,7 +1033,9 @@ async fn gemini_service_chat_stream() {
 async fn gemini_service_test_upload() {
     let (value, cap) = assert_json_op(
         ModelName::Gemini,
-        Operation::UploadFile { file: PathBuf::from("clip.mov") },
+        Operation::UploadFile {
+            file: PathBuf::from("clip.mov"),
+        },
         upload_json(),
         "upload",
         false,
@@ -890,13 +1050,20 @@ async fn gemini_service_test_upload() {
 async fn gemini_service_chat_multimodal_image() {
     let (value, cap) = assert_json_op(
         ModelName::Gemini,
-        Operation::Multimodal { prompt: "图片上有些什么内容？".into(), media: vec!["https://example.com/files/mock".into()] },
+        Operation::Multimodal {
+            prompt: "图片上有些什么内容？".into(),
+            media: vec!["https://example.com/files/mock".into()],
+        },
         chat_json(),
         "generateContent",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -915,7 +1082,10 @@ async fn gemini_service_chat_multimodal_image() {
 async fn gemini_service_chat_multimodal_image_steam() {
     let _cap = assert_stream_op(
         ModelName::Gemini,
-        Operation::Multimodal { prompt: "图片上有些什么内容？".into(), media: vec!["https://example.com/files/mock".into()] },
+        Operation::Multimodal {
+            prompt: "图片上有些什么内容？".into(),
+            media: vec!["https://example.com/files/mock".into()],
+        },
         "generateContent",
         false,
     )
@@ -927,13 +1097,20 @@ async fn gemini_service_chat_multimodal_image_steam() {
 async fn gemini_service_chat_multimodal_video() {
     let (value, cap) = assert_json_op(
         ModelName::Gemini,
-        Operation::Multimodal { prompt: "图片上有些什么内容？".into(), media: vec!["https://example.com/files/mock".into()] },
+        Operation::Multimodal {
+            prompt: "图片上有些什么内容？".into(),
+            media: vec!["https://example.com/files/mock".into()],
+        },
         chat_json(),
         "generateContent",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -952,7 +1129,10 @@ async fn gemini_service_chat_multimodal_video() {
 async fn gemini_service_chat_multimodal_video_stream() {
     let _cap = assert_stream_op(
         ModelName::Gemini,
-        Operation::Multimodal { prompt: "图片上有些什么内容？".into(), media: vec!["https://example.com/files/mock".into()] },
+        Operation::Multimodal {
+            prompt: "图片上有些什么内容？".into(),
+            media: vec!["https://example.com/files/mock".into()],
+        },
         "generateContent",
         false,
     )
@@ -964,13 +1144,21 @@ async fn gemini_service_chat_multimodal_video_stream() {
 async fn gemini_service_chat_json() {
     let (value, cap) = assert_json_op(
         ModelName::Gemini,
-        Operation::JsonChat { messages: vec![Message::user("提取以下信息：张三，男，25岁。返回JSON格式。")] },
+        Operation::JsonChat {
+            messages: vec![Message::user(
+                "提取以下信息：张三，男，25岁。返回JSON格式。",
+            )],
+        },
         chat_json(),
         "generateContent",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -989,13 +1177,19 @@ async fn gemini_service_chat_json() {
 async fn gemini_service_chat_image() {
     let (value, cap) = assert_json_op(
         ModelName::Gemini,
-        Operation::Chat { messages: vec![Message::user("写一个疯狂星期四广告词")] },
+        Operation::Chat {
+            messages: vec![Message::user("写一个疯狂星期四广告词")],
+        },
         chat_json(),
         "generateContent",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -1014,7 +1208,9 @@ async fn gemini_service_chat_image() {
 async fn gemini_service_predict_image() {
     let (value, cap) = assert_json_op(
         ModelName::Gemini,
-        Operation::GenerateImage { prompt: "astronaut".into() },
+        Operation::GenerateImage {
+            prompt: "astronaut".into(),
+        },
         image_json(),
         "predict",
         false,
@@ -1029,7 +1225,9 @@ async fn gemini_service_predict_image() {
 async fn gemini_service_predict_image_and_save() {
     let (value, cap) = assert_json_op(
         ModelName::Gemini,
-        Operation::GenerateImage { prompt: "astronaut".into() },
+        Operation::GenerateImage {
+            prompt: "astronaut".into(),
+        },
         image_json(),
         "predict",
         false,
@@ -1044,13 +1242,19 @@ async fn gemini_service_predict_image_and_save() {
 async fn gemini_service_generate_video_test() {
     let (value, cap) = assert_json_op(
         ModelName::Gemini,
-        Operation::CreateVideo { text: "动画视频".into(), image: None, parameters: vec![VideoParameter::new("--dur", 5)] },
+        Operation::CreateVideo {
+            text: "动画视频".into(),
+            image: None,
+            parameters: vec![VideoParameter::new("--dur", 5)],
+        },
         video_json(),
         "predictLongRunning",
         false,
     )
     .await;
-    assert!(value.get("id").is_some() || value.get("name").is_some() || value.get("status").is_some());
+    assert!(
+        value.get("id").is_some() || value.get("name").is_some() || value.get("status").is_some()
+    );
     let _ = (&value, &cap);
 }
 
@@ -1059,13 +1263,17 @@ async fn gemini_service_generate_video_test() {
 async fn gemini_service_down_load_video() {
     let (value, cap) = assert_json_op(
         ModelName::Gemini,
-        Operation::GetVideo { id: "operations/mock".into() },
+        Operation::GetVideo {
+            id: "operations/mock".into(),
+        },
         video_json(),
         "operations",
         false,
     )
     .await;
-    assert!(value.get("id").is_some() || value.get("name").is_some() || value.get("status").is_some());
+    assert!(
+        value.get("id").is_some() || value.get("name").is_some() || value.get("status").is_some()
+    );
     let _ = (&value, &cap);
 }
 
@@ -1074,7 +1282,10 @@ async fn gemini_service_down_load_video() {
 async fn gemini_service_test_t_t_s_with_build_method() {
     let _cap = assert_bytes_op(
         ModelName::Gemini,
-        Operation::TextToSpeech { input: "hello".into(), voice: "nova".into() },
+        Operation::TextToSpeech {
+            input: "hello".into(),
+            voice: "nova".into(),
+        },
         b"RIFF....WAVEfmt ".to_vec(),
         "generateContent",
         false,
@@ -1087,13 +1298,19 @@ async fn gemini_service_test_t_t_s_with_build_method() {
 async fn grok_service_chat() {
     let (value, cap) = assert_json_op(
         ModelName::Grok,
-        Operation::Chat { messages: vec![Message::user("写一个疯狂星期四广告词")] },
+        Operation::Chat {
+            messages: vec![Message::user("写一个疯狂星期四广告词")],
+        },
         chat_json(),
         "/chat/completions",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -1112,7 +1329,9 @@ async fn grok_service_chat() {
 async fn grok_service_chat_stream() {
     let _cap = assert_stream_op(
         ModelName::Grok,
-        Operation::Chat { messages: vec![Message::user("写一个疯狂星期四广告词")] },
+        Operation::Chat {
+            messages: vec![Message::user("写一个疯狂星期四广告词")],
+        },
         "/chat/completions",
         false,
     )
@@ -1124,13 +1343,22 @@ async fn grok_service_chat_stream() {
 async fn grok_service_test_chat() {
     let (value, cap) = assert_json_op(
         ModelName::Grok,
-        Operation::Chat { messages: vec![Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"), Message::user("给我说一个笑话")] },
+        Operation::Chat {
+            messages: vec![
+                Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"),
+                Message::user("给我说一个笑话"),
+            ],
+        },
         chat_json(),
         "/chat/completions",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -1149,13 +1377,20 @@ async fn grok_service_test_chat() {
 async fn grok_service_message() {
     let (value, cap) = assert_json_op(
         ModelName::Grok,
-        Operation::Message { messages: vec![Message::user("写一个疯狂星期四广告词")], max_tokens: 4096 },
+        Operation::Message {
+            messages: vec![Message::user("写一个疯狂星期四广告词")],
+            max_tokens: 4096,
+        },
         chat_json(),
         "/chat/completions",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -1174,7 +1409,10 @@ async fn grok_service_message() {
 async fn grok_service_message_stream() {
     let _cap = assert_stream_op(
         ModelName::Grok,
-        Operation::Message { messages: vec![Message::user("写一个疯狂星期四广告词")], max_tokens: 4096 },
+        Operation::Message {
+            messages: vec![Message::user("写一个疯狂星期四广告词")],
+            max_tokens: 4096,
+        },
         "/chat/completions",
         false,
     )
@@ -1186,13 +1424,21 @@ async fn grok_service_message_stream() {
 async fn grok_service_chat_vision() {
     let (value, cap) = assert_json_op(
         ModelName::Grok,
-        Operation::Vision { prompt: "图片上有些什么？".into(), images: vec!["https://img.example.com/a.jpg".into()], detail: "auto".into() },
+        Operation::Vision {
+            prompt: "图片上有些什么？".into(),
+            images: vec!["https://img.example.com/a.jpg".into()],
+            detail: "auto".into(),
+        },
         chat_json(),
         "/chat/completions",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -1211,7 +1457,11 @@ async fn grok_service_chat_vision() {
 async fn grok_service_test_chat_vision_stream() {
     let _cap = assert_stream_op(
         ModelName::Grok,
-        Operation::Vision { prompt: "图片上有些什么？".into(), images: vec!["https://img.example.com/a.jpg".into()], detail: "auto".into() },
+        Operation::Vision {
+            prompt: "图片上有些什么？".into(),
+            images: vec!["https://img.example.com/a.jpg".into()],
+            detail: "auto".into(),
+        },
         "/chat/completions",
         false,
     )
@@ -1223,13 +1473,21 @@ async fn grok_service_test_chat_vision_stream() {
 async fn grok_service_test_chat_vision() {
     let (value, cap) = assert_json_op(
         ModelName::Grok,
-        Operation::Vision { prompt: "图片上有些什么？".into(), images: vec!["https://img.example.com/a.jpg".into()], detail: "high".into() },
+        Operation::Vision {
+            prompt: "图片上有些什么？".into(),
+            images: vec!["https://img.example.com/a.jpg".into()],
+            detail: "high".into(),
+        },
         chat_json(),
         "/chat/completions",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -1254,7 +1512,11 @@ async fn grok_service_models() {
         false,
     )
     .await;
-    assert!(value.get("data").is_some() || value.get("models").is_some() || value.get("object").is_some());
+    assert!(
+        value.get("data").is_some()
+            || value.get("models").is_some()
+            || value.get("object").is_some()
+    );
     let _ = (&value, &cap);
 }
 
@@ -1263,7 +1525,9 @@ async fn grok_service_models() {
 async fn grok_service_get_model() {
     let (value, cap) = assert_json_op(
         ModelName::Grok,
-        Operation::GetModel { id: "grok-2".into() },
+        Operation::GetModel {
+            id: "grok-2".into(),
+        },
         models_json(),
         "/models/",
         false,
@@ -1293,7 +1557,9 @@ async fn grok_service_language_models() {
 async fn grok_service_get_language_model() {
     let (value, cap) = assert_json_op(
         ModelName::Grok,
-        Operation::GetLanguageModel { id: "grok-2".into() },
+        Operation::GetLanguageModel {
+            id: "grok-2".into(),
+        },
         models_json(),
         "/language-models/",
         false,
@@ -1308,7 +1574,9 @@ async fn grok_service_get_language_model() {
 async fn grok_service_tokenize_text() {
     let (value, cap) = assert_json_op(
         ModelName::Grok,
-        Operation::Tokenize { texts: vec!["hello".into()] },
+        Operation::Tokenize {
+            texts: vec!["hello".into()],
+        },
         tokenize_json(),
         "/tokenization",
         false,
@@ -1323,7 +1591,9 @@ async fn grok_service_tokenize_text() {
 async fn grok_service_deferred_completion() {
     let (value, cap) = assert_json_op(
         ModelName::Grok,
-        Operation::DeferredCompletion { request_id: "req-1".into() },
+        Operation::DeferredCompletion {
+            request_id: "req-1".into(),
+        },
         chat_json(),
         "/chat/deferred-completion/",
         false,
@@ -1338,7 +1608,9 @@ async fn grok_service_deferred_completion() {
 async fn grok_service_images_generations() {
     let (value, cap) = assert_json_op(
         ModelName::Grok,
-        Operation::GenerateImage { prompt: "astronaut".into() },
+        Operation::GenerateImage {
+            prompt: "astronaut".into(),
+        },
         image_json(),
         "/images/generations",
         false,
@@ -1353,13 +1625,19 @@ async fn grok_service_images_generations() {
 async fn hutool_service_chat() {
     let (value, cap) = assert_json_op(
         ModelName::Hutool,
-        Operation::Chat { messages: vec![Message::user("写一个疯狂星期四广告词")] },
+        Operation::Chat {
+            messages: vec![Message::user("写一个疯狂星期四广告词")],
+        },
         chat_json(),
         "/chat/completions",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -1378,7 +1656,9 @@ async fn hutool_service_chat() {
 async fn hutool_service_chat_stream() {
     let _cap = assert_stream_op(
         ModelName::Hutool,
-        Operation::Chat { messages: vec![Message::user("写一个疯狂星期四广告词")] },
+        Operation::Chat {
+            messages: vec![Message::user("写一个疯狂星期四广告词")],
+        },
         "/chat/completions",
         false,
     )
@@ -1390,13 +1670,22 @@ async fn hutool_service_chat_stream() {
 async fn hutool_service_test_chat() {
     let (value, cap) = assert_json_op(
         ModelName::Hutool,
-        Operation::Chat { messages: vec![Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"), Message::user("给我说一个笑话")] },
+        Operation::Chat {
+            messages: vec![
+                Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"),
+                Message::user("给我说一个笑话"),
+            ],
+        },
         chat_json(),
         "/chat/completions",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -1415,13 +1704,21 @@ async fn hutool_service_test_chat() {
 async fn hutool_service_chat_vision() {
     let (value, cap) = assert_json_op(
         ModelName::Hutool,
-        Operation::Vision { prompt: "图片上有些什么？".into(), images: vec!["https://img.example.com/a.jpg".into()], detail: "auto".into() },
+        Operation::Vision {
+            prompt: "图片上有些什么？".into(),
+            images: vec!["https://img.example.com/a.jpg".into()],
+            detail: "auto".into(),
+        },
         chat_json(),
         "/chat/completions",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -1440,7 +1737,11 @@ async fn hutool_service_chat_vision() {
 async fn hutool_service_test_chat_vision_stream() {
     let _cap = assert_stream_op(
         ModelName::Hutool,
-        Operation::Vision { prompt: "图片上有些什么？".into(), images: vec!["https://img.example.com/a.jpg".into()], detail: "auto".into() },
+        Operation::Vision {
+            prompt: "图片上有些什么？".into(),
+            images: vec!["https://img.example.com/a.jpg".into()],
+            detail: "auto".into(),
+        },
         "/chat/completions",
         false,
     )
@@ -1452,13 +1753,21 @@ async fn hutool_service_test_chat_vision_stream() {
 async fn hutool_service_test_chat_vision() {
     let (value, cap) = assert_json_op(
         ModelName::Hutool,
-        Operation::Vision { prompt: "图片上有些什么？".into(), images: vec!["https://img.example.com/a.jpg".into()], detail: "high".into() },
+        Operation::Vision {
+            prompt: "图片上有些什么？".into(),
+            images: vec!["https://img.example.com/a.jpg".into()],
+            detail: "high".into(),
+        },
         chat_json(),
         "/chat/completions",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -1477,7 +1786,9 @@ async fn hutool_service_test_chat_vision() {
 async fn hutool_service_tokenize_text() {
     let (value, cap) = assert_json_op(
         ModelName::Hutool,
-        Operation::Tokenize { texts: vec!["hello".into()] },
+        Operation::Tokenize {
+            texts: vec!["hello".into()],
+        },
         tokenize_json(),
         "/tokenization",
         false,
@@ -1492,7 +1803,9 @@ async fn hutool_service_tokenize_text() {
 async fn hutool_service_images_generations() {
     let (value, cap) = assert_json_op(
         ModelName::Hutool,
-        Operation::GenerateImage { prompt: "astronaut".into() },
+        Operation::GenerateImage {
+            prompt: "astronaut".into(),
+        },
         image_json(),
         "/images/generations",
         false,
@@ -1507,7 +1820,10 @@ async fn hutool_service_images_generations() {
 async fn hutool_service_embedding_vision() {
     let (value, cap) = assert_json_op(
         ModelName::Hutool,
-        Operation::EmbedVision { text: "天空好难".into(), image: "https://img.example.com/a.jpg".into() },
+        Operation::EmbedVision {
+            text: "天空好难".into(),
+            image: "https://img.example.com/a.jpg".into(),
+        },
         embed_json(),
         "/embeddings/multimodal",
         false,
@@ -1523,7 +1839,10 @@ async fn hutool_service_embedding_vision() {
 async fn hutool_service_text_to_speech() {
     let _cap = assert_bytes_op(
         ModelName::Hutool,
-        Operation::TextToSpeech { input: "hello".into(), voice: "nova".into() },
+        Operation::TextToSpeech {
+            input: "hello".into(),
+            voice: "nova".into(),
+        },
         b"RIFF....WAVEfmt ".to_vec(),
         "/audio/speech",
         false,
@@ -1536,13 +1855,18 @@ async fn hutool_service_text_to_speech() {
 async fn hutool_service_speech_to_text() {
     let (value, cap) = assert_json_op(
         ModelName::Hutool,
-        Operation::SpeechToText { file: PathBuf::from("a.wav") },
+        Operation::SpeechToText {
+            file: PathBuf::from("a.wav"),
+        },
         stt_json(),
         "/audio/transcriptions",
         false,
     )
     .await;
-    assert_eq!(value.get("text").and_then(|v| v.as_str()), Some("hello world"));
+    assert_eq!(
+        value.get("text").and_then(|v| v.as_str()),
+        Some("hello world")
+    );
     let _ = (&value, &cap);
 }
 
@@ -1551,13 +1875,19 @@ async fn hutool_service_speech_to_text() {
 async fn hutool_service_video_tasks() {
     let (value, cap) = assert_json_op(
         ModelName::Hutool,
-        Operation::CreateVideo { text: "动画视频".into(), image: None, parameters: vec![VideoParameter::new("--dur", 5)] },
+        Operation::CreateVideo {
+            text: "动画视频".into(),
+            image: None,
+            parameters: vec![VideoParameter::new("--dur", 5)],
+        },
         video_json(),
         "/contents/generations/tasks",
         false,
     )
     .await;
-    assert!(value.get("id").is_some() || value.get("name").is_some() || value.get("status").is_some());
+    assert!(
+        value.get("id").is_some() || value.get("name").is_some() || value.get("status").is_some()
+    );
     let _ = (&value, &cap);
 }
 
@@ -1566,13 +1896,17 @@ async fn hutool_service_video_tasks() {
 async fn hutool_service_get_video_tasks_info() {
     let (value, cap) = assert_json_op(
         ModelName::Hutool,
-        Operation::GetVideo { id: "cgt-mock".into() },
+        Operation::GetVideo {
+            id: "cgt-mock".into(),
+        },
         video_json(),
         "/contents/generations/tasks/",
         false,
     )
     .await;
-    assert!(value.get("id").is_some() || value.get("name").is_some() || value.get("status").is_some());
+    assert!(
+        value.get("id").is_some() || value.get("name").is_some() || value.get("status").is_some()
+    );
     let _ = (&value, &cap);
 }
 
@@ -1581,13 +1915,19 @@ async fn hutool_service_get_video_tasks_info() {
 async fn ollama_service_test_simple() {
     let (value, cap) = assert_json_op(
         ModelName::Ollama,
-        Operation::Chat { messages: vec![Message::user("写一个疯狂星期四广告词")] },
+        Operation::Chat {
+            messages: vec![Message::user("写一个疯狂星期四广告词")],
+        },
         chat_json(),
         "/api/chat",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -1606,7 +1946,9 @@ async fn ollama_service_test_simple() {
 async fn ollama_service_test_stream() {
     let _cap = assert_stream_op(
         ModelName::Ollama,
-        Operation::Chat { messages: vec![Message::user("写一个疯狂星期四广告词")] },
+        Operation::Chat {
+            messages: vec![Message::user("写一个疯狂星期四广告词")],
+        },
         "/api/chat",
         false,
     )
@@ -1618,13 +1960,22 @@ async fn ollama_service_test_stream() {
 async fn ollama_service_test_simple_with_history() {
     let (value, cap) = assert_json_op(
         ModelName::Ollama,
-        Operation::Chat { messages: vec![Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"), Message::user("给我说一个笑话")] },
+        Operation::Chat {
+            messages: vec![
+                Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"),
+                Message::user("给我说一个笑话"),
+            ],
+        },
         chat_json(),
         "/api/chat",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -1643,7 +1994,12 @@ async fn ollama_service_test_simple_with_history() {
 async fn ollama_service_test_stream_with_history() {
     let _cap = assert_stream_op(
         ModelName::Ollama,
-        Operation::Chat { messages: vec![Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"), Message::user("给我说一个笑话")] },
+        Operation::Chat {
+            messages: vec![
+                Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"),
+                Message::user("给我说一个笑话"),
+            ],
+        },
         "/api/chat",
         false,
     )
@@ -1661,7 +2017,11 @@ async fn ollama_service_test_list_models() {
         false,
     )
     .await;
-    assert!(value.get("data").is_some() || value.get("models").is_some() || value.get("object").is_some());
+    assert!(
+        value.get("data").is_some()
+            || value.get("models").is_some()
+            || value.get("object").is_some()
+    );
     let _ = (&value, &cap);
 }
 
@@ -1670,7 +2030,9 @@ async fn ollama_service_test_list_models() {
 async fn ollama_service_test_pull_model() {
     let (value, cap) = assert_json_op(
         ModelName::Ollama,
-        Operation::PullModel { name: "qwen2.5:0.5b".into() },
+        Operation::PullModel {
+            name: "qwen2.5:0.5b".into(),
+        },
         pull_json(),
         "/api/pull",
         false,
@@ -1685,7 +2047,9 @@ async fn ollama_service_test_pull_model() {
 async fn ollama_service_test_delete_model() {
     let (value, cap) = assert_json_op(
         ModelName::Ollama,
-        Operation::DeleteModel { name: "qwen2.5:0.5b".into() },
+        Operation::DeleteModel {
+            name: "qwen2.5:0.5b".into(),
+        },
         pull_json(),
         "/api/delete",
         false,
@@ -1700,13 +2064,19 @@ async fn ollama_service_test_delete_model() {
 async fn openai_service_chat() {
     let (value, cap) = assert_json_op(
         ModelName::OpenAi,
-        Operation::Chat { messages: vec![Message::user("写一个疯狂星期四广告词")] },
+        Operation::Chat {
+            messages: vec![Message::user("写一个疯狂星期四广告词")],
+        },
         chat_json(),
         "/chat/completions",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -1725,7 +2095,9 @@ async fn openai_service_chat() {
 async fn openai_service_chat_stream() {
     let _cap = assert_stream_op(
         ModelName::OpenAi,
-        Operation::Chat { messages: vec![Message::user("写一个疯狂星期四广告词")] },
+        Operation::Chat {
+            messages: vec![Message::user("写一个疯狂星期四广告词")],
+        },
         "/chat/completions",
         false,
     )
@@ -1737,13 +2109,22 @@ async fn openai_service_chat_stream() {
 async fn openai_service_test_chat() {
     let (value, cap) = assert_json_op(
         ModelName::OpenAi,
-        Operation::Chat { messages: vec![Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"), Message::user("给我说一个笑话")] },
+        Operation::Chat {
+            messages: vec![
+                Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"),
+                Message::user("给我说一个笑话"),
+            ],
+        },
         chat_json(),
         "/chat/completions",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -1762,13 +2143,21 @@ async fn openai_service_test_chat() {
 async fn openai_service_chat_vision() {
     let (value, cap) = assert_json_op(
         ModelName::OpenAi,
-        Operation::Vision { prompt: "图片上有些什么？".into(), images: vec!["https://img.example.com/a.jpg".into()], detail: "auto".into() },
+        Operation::Vision {
+            prompt: "图片上有些什么？".into(),
+            images: vec!["https://img.example.com/a.jpg".into()],
+            detail: "auto".into(),
+        },
         chat_json(),
         "/chat/completions",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -1787,7 +2176,11 @@ async fn openai_service_chat_vision() {
 async fn openai_service_test_chat_vision_stream() {
     let _cap = assert_stream_op(
         ModelName::OpenAi,
-        Operation::Vision { prompt: "图片上有些什么？".into(), images: vec!["https://img.example.com/a.jpg".into()], detail: "auto".into() },
+        Operation::Vision {
+            prompt: "图片上有些什么？".into(),
+            images: vec!["https://img.example.com/a.jpg".into()],
+            detail: "auto".into(),
+        },
         "/chat/completions",
         false,
     )
@@ -1799,7 +2192,9 @@ async fn openai_service_test_chat_vision_stream() {
 async fn openai_service_images_generations() {
     let (value, cap) = assert_json_op(
         ModelName::OpenAi,
-        Operation::GenerateImage { prompt: "astronaut".into() },
+        Operation::GenerateImage {
+            prompt: "astronaut".into(),
+        },
         image_json(),
         "/images/generations",
         false,
@@ -1814,7 +2209,11 @@ async fn openai_service_images_generations() {
 async fn openai_service_images_edits() {
     let (value, cap) = assert_json_op(
         ModelName::OpenAi,
-        Operation::EditImage { prompt: "deer".into(), image: PathBuf::from("img.png"), mask: None },
+        Operation::EditImage {
+            prompt: "deer".into(),
+            image: PathBuf::from("img.png"),
+            mask: None,
+        },
         image_json(),
         "/images/edits",
         false,
@@ -1829,7 +2228,9 @@ async fn openai_service_images_edits() {
 async fn openai_service_images_variations() {
     let (value, cap) = assert_json_op(
         ModelName::OpenAi,
-        Operation::VaryImage { image: PathBuf::from("img.png") },
+        Operation::VaryImage {
+            image: PathBuf::from("img.png"),
+        },
         image_json(),
         "/images/variations",
         false,
@@ -1844,7 +2245,10 @@ async fn openai_service_images_variations() {
 async fn openai_service_text_to_speech() {
     let _cap = assert_bytes_op(
         ModelName::OpenAi,
-        Operation::TextToSpeech { input: "hello".into(), voice: "nova".into() },
+        Operation::TextToSpeech {
+            input: "hello".into(),
+            voice: "nova".into(),
+        },
         b"RIFF....WAVEfmt ".to_vec(),
         "/audio/speech",
         false,
@@ -1857,13 +2261,18 @@ async fn openai_service_text_to_speech() {
 async fn openai_service_speech_to_text() {
     let (value, cap) = assert_json_op(
         ModelName::OpenAi,
-        Operation::SpeechToText { file: PathBuf::from("a.wav") },
+        Operation::SpeechToText {
+            file: PathBuf::from("a.wav"),
+        },
         stt_json(),
         "/audio/transcriptions",
         false,
     )
     .await;
-    assert_eq!(value.get("text").and_then(|v| v.as_str()), Some("hello world"));
+    assert_eq!(
+        value.get("text").and_then(|v| v.as_str()),
+        Some("hello world")
+    );
     let _ = (&value, &cap);
 }
 
@@ -1872,7 +2281,9 @@ async fn openai_service_speech_to_text() {
 async fn openai_service_embedding_text() {
     let (value, cap) = assert_json_op(
         ModelName::OpenAi,
-        Operation::EmbedText { inputs: vec!["text".into()] },
+        Operation::EmbedText {
+            inputs: vec!["text".into()],
+        },
         embed_json(),
         "/embeddings",
         false,
@@ -1888,7 +2299,10 @@ async fn openai_service_embedding_text() {
 async fn openai_service_moderations() {
     let (value, cap) = assert_json_op(
         ModelName::OpenAi,
-        Operation::Moderate { text: "你要玩游戏".into(), image_url: Some("https://img.example.com/a.jpg".into()) },
+        Operation::Moderate {
+            text: "你要玩游戏".into(),
+            image_url: Some("https://img.example.com/a.jpg".into()),
+        },
         moderate_json(),
         "/moderations",
         false,
@@ -1903,13 +2317,22 @@ async fn openai_service_moderations() {
 async fn openai_service_chat_reasoning() {
     let (value, cap) = assert_json_op(
         ModelName::OpenAi,
-        Operation::Chat { messages: vec![Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"), Message::user("给我说一个笑话")] },
+        Operation::Chat {
+            messages: vec![
+                Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"),
+                Message::user("给我说一个笑话"),
+            ],
+        },
         chat_json(),
         "/chat/completions",
         false,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -1928,7 +2351,12 @@ async fn openai_service_chat_reasoning() {
 async fn openai_service_chat_reasoning_stream() {
     let _cap = assert_stream_op(
         ModelName::OpenAi,
-        Operation::Chat { messages: vec![Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"), Message::user("给我说一个笑话")] },
+        Operation::Chat {
+            messages: vec![
+                Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"),
+                Message::user("给我说一个笑话"),
+            ],
+        },
         "/chat/completions",
         false,
     )
@@ -1940,13 +2368,19 @@ async fn openai_service_chat_reasoning_stream() {
 async fn openai_proxy_service_chat() {
     let (value, cap) = assert_json_op(
         ModelName::OpenAi,
-        Operation::Chat { messages: vec![Message::user("写一个疯狂星期四广告词")] },
+        Operation::Chat {
+            messages: vec![Message::user("写一个疯狂星期四广告词")],
+        },
         chat_json(),
         "/chat/completions",
         true,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -1965,7 +2399,9 @@ async fn openai_proxy_service_chat() {
 async fn openai_proxy_service_chat_stream() {
     let _cap = assert_stream_op(
         ModelName::OpenAi,
-        Operation::Chat { messages: vec![Message::user("写一个疯狂星期四广告词")] },
+        Operation::Chat {
+            messages: vec![Message::user("写一个疯狂星期四广告词")],
+        },
         "/chat/completions",
         true,
     )
@@ -1977,13 +2413,22 @@ async fn openai_proxy_service_chat_stream() {
 async fn openai_proxy_service_test_chat() {
     let (value, cap) = assert_json_op(
         ModelName::OpenAi,
-        Operation::Chat { messages: vec![Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"), Message::user("给我说一个笑话")] },
+        Operation::Chat {
+            messages: vec![
+                Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"),
+                Message::user("给我说一个笑话"),
+            ],
+        },
         chat_json(),
         "/chat/completions",
         true,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -2002,13 +2447,21 @@ async fn openai_proxy_service_test_chat() {
 async fn openai_proxy_service_chat_vision() {
     let (value, cap) = assert_json_op(
         ModelName::OpenAi,
-        Operation::Vision { prompt: "图片上有些什么？".into(), images: vec!["https://img.example.com/a.jpg".into()], detail: "auto".into() },
+        Operation::Vision {
+            prompt: "图片上有些什么？".into(),
+            images: vec!["https://img.example.com/a.jpg".into()],
+            detail: "auto".into(),
+        },
         chat_json(),
         "/chat/completions",
         true,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -2027,7 +2480,11 @@ async fn openai_proxy_service_chat_vision() {
 async fn openai_proxy_service_test_chat_vision_stream() {
     let _cap = assert_stream_op(
         ModelName::OpenAi,
-        Operation::Vision { prompt: "图片上有些什么？".into(), images: vec!["https://img.example.com/a.jpg".into()], detail: "auto".into() },
+        Operation::Vision {
+            prompt: "图片上有些什么？".into(),
+            images: vec!["https://img.example.com/a.jpg".into()],
+            detail: "auto".into(),
+        },
         "/chat/completions",
         true,
     )
@@ -2039,7 +2496,9 @@ async fn openai_proxy_service_test_chat_vision_stream() {
 async fn openai_proxy_service_images_generations() {
     let (value, cap) = assert_json_op(
         ModelName::OpenAi,
-        Operation::GenerateImage { prompt: "astronaut".into() },
+        Operation::GenerateImage {
+            prompt: "astronaut".into(),
+        },
         image_json(),
         "/images/generations",
         true,
@@ -2054,7 +2513,11 @@ async fn openai_proxy_service_images_generations() {
 async fn openai_proxy_service_images_edits() {
     let (value, cap) = assert_json_op(
         ModelName::OpenAi,
-        Operation::EditImage { prompt: "deer".into(), image: PathBuf::from("img.png"), mask: None },
+        Operation::EditImage {
+            prompt: "deer".into(),
+            image: PathBuf::from("img.png"),
+            mask: None,
+        },
         image_json(),
         "/images/edits",
         true,
@@ -2069,7 +2532,9 @@ async fn openai_proxy_service_images_edits() {
 async fn openai_proxy_service_images_variations() {
     let (value, cap) = assert_json_op(
         ModelName::OpenAi,
-        Operation::VaryImage { image: PathBuf::from("img.png") },
+        Operation::VaryImage {
+            image: PathBuf::from("img.png"),
+        },
         image_json(),
         "/images/variations",
         true,
@@ -2084,7 +2549,10 @@ async fn openai_proxy_service_images_variations() {
 async fn openai_proxy_service_text_to_speech() {
     let _cap = assert_bytes_op(
         ModelName::OpenAi,
-        Operation::TextToSpeech { input: "hello".into(), voice: "nova".into() },
+        Operation::TextToSpeech {
+            input: "hello".into(),
+            voice: "nova".into(),
+        },
         b"RIFF....WAVEfmt ".to_vec(),
         "/audio/speech",
         true,
@@ -2097,13 +2565,18 @@ async fn openai_proxy_service_text_to_speech() {
 async fn openai_proxy_service_speech_to_text() {
     let (value, cap) = assert_json_op(
         ModelName::OpenAi,
-        Operation::SpeechToText { file: PathBuf::from("a.wav") },
+        Operation::SpeechToText {
+            file: PathBuf::from("a.wav"),
+        },
         stt_json(),
         "/audio/transcriptions",
         true,
     )
     .await;
-    assert_eq!(value.get("text").and_then(|v| v.as_str()), Some("hello world"));
+    assert_eq!(
+        value.get("text").and_then(|v| v.as_str()),
+        Some("hello world")
+    );
     let _ = (&value, &cap);
 }
 
@@ -2112,7 +2585,9 @@ async fn openai_proxy_service_speech_to_text() {
 async fn openai_proxy_service_embedding_text() {
     let (value, cap) = assert_json_op(
         ModelName::OpenAi,
-        Operation::EmbedText { inputs: vec!["text".into()] },
+        Operation::EmbedText {
+            inputs: vec!["text".into()],
+        },
         embed_json(),
         "/embeddings",
         true,
@@ -2128,7 +2603,10 @@ async fn openai_proxy_service_embedding_text() {
 async fn openai_proxy_service_moderations() {
     let (value, cap) = assert_json_op(
         ModelName::OpenAi,
-        Operation::Moderate { text: "你要玩游戏".into(), image_url: Some("https://img.example.com/a.jpg".into()) },
+        Operation::Moderate {
+            text: "你要玩游戏".into(),
+            image_url: Some("https://img.example.com/a.jpg".into()),
+        },
         moderate_json(),
         "/moderations",
         true,
@@ -2143,13 +2621,22 @@ async fn openai_proxy_service_moderations() {
 async fn openai_proxy_service_chat_reasoning() {
     let (value, cap) = assert_json_op(
         ModelName::OpenAi,
-        Operation::Chat { messages: vec![Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"), Message::user("给我说一个笑话")] },
+        Operation::Chat {
+            messages: vec![
+                Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"),
+                Message::user("给我说一个笑话"),
+            ],
+        },
         chat_json(),
         "/chat/completions",
         true,
     )
     .await;
-    assert!(value.get("choices").is_some() || value.get("candidates").is_some() || value.to_string().contains("ok"));
+    assert!(
+        value.get("choices").is_some()
+            || value.get("candidates").is_some()
+            || value.to_string().contains("ok")
+    );
     if !cap.body.is_empty() {
         assert!(
             cap.body.contains("model")
@@ -2168,10 +2655,14 @@ async fn openai_proxy_service_chat_reasoning() {
 async fn openai_proxy_service_chat_reasoning_stream() {
     let _cap = assert_stream_op(
         ModelName::OpenAi,
-        Operation::Chat { messages: vec![Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"), Message::user("给我说一个笑话")] },
+        Operation::Chat {
+            messages: vec![
+                Message::system("你是个抽象大师，会说很抽象的话，最擅长说抽象的笑话"),
+                Message::user("给我说一个笑话"),
+            ],
+        },
         "/chat/completions",
         true,
     )
     .await;
 }
-

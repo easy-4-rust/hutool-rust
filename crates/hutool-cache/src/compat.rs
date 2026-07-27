@@ -3,11 +3,11 @@ use std::fmt;
 use std::hash::Hash;
 use std::marker::PhantomData;
 use std::sync::atomic::{AtomicU64, Ordering};
-use std::sync::{Arc, Weak, mpsc};
-use std::thread::{self, JoinHandle};
+use std::sync::{Arc, Weak};
 use std::time::{Duration, Instant};
 
 use parking_lot::{Mutex, ReentrantMutex, RwLock};
+use crate::global_prune_timer::{GlobalPruneTimer, PruneHandle};
 
 /// Deterministic eviction policy used by Hutool-aligned caches.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -639,76 +639,6 @@ impl<K, V> std::ops::Deref for TimedCache<K, V> {
     }
 }
 
-/// Handle that stops and joins a prune worker when dropped.
-pub struct PruneHandle {
-    stop: Option<mpsc::Sender<()>>,
-    worker: Option<JoinHandle<()>>,
-}
-
-impl fmt::Debug for PruneHandle {
-    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
-        formatter
-            .debug_struct("PruneHandle")
-            .finish_non_exhaustive()
-    }
-}
-
-impl Drop for PruneHandle {
-    fn drop(&mut self) {
-        if let Some(stop) = self.stop.take() {
-            let _ = stop.send(());
-        }
-        if let Some(worker) = self.worker.take() {
-            let _ = worker.join();
-        }
-    }
-}
-
-/// Factory for explicit, per-cache prune workers.
-pub struct GlobalPruneTimer;
-
-impl GlobalPruneTimer {
-    /// Creates an explicit repeating worker.
-    pub fn schedule<F>(task: F, delay: Duration) -> PruneHandle
-    where
-        F: FnMut() + Send + 'static,
-    {
-        Self::schedule_boxed(Box::new(task), delay)
-    }
-
-    fn schedule_boxed(mut task: Box<dyn FnMut() + Send>, delay: Duration) -> PruneHandle {
-        let delay = if delay.is_zero() {
-            Duration::from_millis(1)
-        } else {
-            delay
-        };
-        let (stop, receiver) = mpsc::channel();
-        let worker = thread::spawn(move || {
-            loop {
-                match receiver.recv_timeout(delay) {
-                    Ok(()) | Err(mpsc::RecvTimeoutError::Disconnected) => break,
-                    Err(mpsc::RecvTimeoutError::Timeout) => task(),
-                }
-            }
-        });
-        PruneHandle {
-            stop: Some(stop),
-            worker: Some(worker),
-        }
-    }
-
-    /// No-op compatibility hook; workers are created explicitly by `schedule`.
-    pub const fn create() {}
-
-    /// No-op compatibility hook; dropping a `PruneHandle` performs shutdown.
-    pub const fn shutdown() {}
-
-    /// Returns no orphan tasks because workers are owned by handles.
-    pub fn shutdown_now() -> Vec<JoinHandle<()>> {
-        Vec::new()
-    }
-}
-
 struct WeakEntry<V> {
     value: Weak<V>,
     ttl: Option<Duration>,
@@ -965,104 +895,11 @@ where
     }
 }
 
-/// Hutool-named constructors.
-pub struct CacheUtil;
-
-impl CacheUtil {
-    /// Creates FIFO cache without expiration.
-    pub fn new_fifo_cache<K, V>(capacity: usize) -> FIFOCache<K, V>
-    where
-        K: Eq + Hash + Clone + Send + Sync + 'static,
-        V: Send + Sync + 'static,
-    {
-        FIFOCache::new(capacity)
-    }
-
-    /// Creates FIFO cache with expiration.
-    pub fn new_fifo_cache_with_timeout<K, V>(capacity: usize, timeout: Duration) -> FIFOCache<K, V>
-    where
-        K: Eq + Hash + Clone + Send + Sync + 'static,
-        V: Send + Sync + 'static,
-    {
-        FIFOCache::with_timeout(capacity, timeout)
-    }
-
-    /// Creates LFU cache without expiration.
-    pub fn new_lfu_cache<K, V>(capacity: usize) -> LFUCache<K, V>
-    where
-        K: Eq + Hash + Clone + Send + Sync + 'static,
-        V: Send + Sync + 'static,
-    {
-        LFUCache::new(capacity)
-    }
-
-    /// Creates LFU cache with expiration.
-    pub fn new_lfu_cache_with_timeout<K, V>(capacity: usize, timeout: Duration) -> LFUCache<K, V>
-    where
-        K: Eq + Hash + Clone + Send + Sync + 'static,
-        V: Send + Sync + 'static,
-    {
-        LFUCache::with_timeout(capacity, timeout)
-    }
-
-    /// Creates LRU cache without expiration.
-    pub fn new_lru_cache<K, V>(capacity: usize) -> LRUCache<K, V>
-    where
-        K: Eq + Hash + Clone + Send + Sync + 'static,
-        V: Send + Sync + 'static,
-    {
-        LRUCache::new(capacity)
-    }
-
-    /// Creates LRU cache with expiration.
-    pub fn new_lru_cache_with_timeout<K, V>(capacity: usize, timeout: Duration) -> LRUCache<K, V>
-    where
-        K: Eq + Hash + Clone + Send + Sync + 'static,
-        V: Send + Sync + 'static,
-    {
-        LRUCache::with_timeout(capacity, timeout)
-    }
-
-    /// Creates an unscheduled timed cache.
-    pub fn new_timed_cache<K, V>(timeout: Duration) -> TimedCache<K, V>
-    where
-        K: Eq + Hash + Clone + Send + Sync + 'static,
-        V: Send + Sync + 'static,
-    {
-        TimedCache::new(timeout)
-    }
-
-    /// Creates and schedules a timed cache.
-    pub fn new_scheduled_timed_cache<K, V>(
-        timeout: Duration,
-        delay: Duration,
-    ) -> Result<ScheduledTimedCache<K, V>, &'static str>
-    where
-        K: Eq + Hash + Clone + Send + Sync + 'static,
-        V: Send + Sync + 'static,
-    {
-        let cache = TimedCache::new(timeout);
-        cache.schedule_prune(delay)?;
-        Ok(ScheduledTimedCache { cache })
-    }
-
-    /// Creates a weak-value cache.
-    pub fn new_weak_cache<K, V>(timeout: Option<Duration>) -> WeakCache<K, V>
-    where
-        K: Eq + Hash + Clone,
-    {
-        WeakCache::new(timeout)
-    }
-
-    /// Creates a no-op cache.
-    pub const fn new_no_cache<K, V>() -> NoCache<K, V> {
-        NoCache::new()
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::cache_util::CacheUtil;
+    use crate::global_prune_timer::{GlobalPruneTimer, PruneHandle};
     use parking_lot::Mutex;
     use std::{
         sync::atomic::{AtomicUsize, Ordering},
@@ -1275,7 +1112,7 @@ mod tests {
         });
         GlobalPruneTimer::create();
         GlobalPruneTimer::shutdown();
-        GlobalPruneTimer::shutdown_now();
+        let _ = GlobalPruneTimer::shutdown_now();
     }
 
     #[test]

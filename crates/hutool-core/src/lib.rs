@@ -24,6 +24,7 @@ mod collection_types;
 mod compiler;
 mod compress;
 mod coordinate_util;
+#[path = "util/credit_code_util.rs"]
 mod credit_code_util;
 mod date;
 mod desensitized_util;
@@ -61,8 +62,8 @@ pub mod math;
 pub mod io;
 /// Hutool `cn.hutool.core.thread` 对齐（std::thread / 显式线程池构建；无 JVM ThreadLocal 全局）。
 pub mod thread;
-// annotation 模块已迁移到独立 crate hutool-macro
-// hutool-core 不再内嵌 annotation；facade crate (hutool) 负责 re-export
+// annotation 模块已迁移到独立 crate hutool-annotation。
+// 当前 workspace 仍由 hutool-macro 承载实现，facade crate (hutool) 负责统一 re-export。
 
 pub use advanced_codec::{
     HashIds, MorseCodec, base32_decode, base32_encode, base32_hex_decode, base32_hex_encode,

@@ -21,6 +21,7 @@ mod parser;
 mod serialize;
 mod xml;
 
+// 兼容层中的对象已开始按 Java 类逐步拆分到独立文件，这里继续保持顶层 API 不变。
 pub use compat::{
     JSONArray, JSONConfig, JSONNull, JSONObject, JsonContainer, PathError, get_by_path, put_by_path,
 };

@@ -14,19 +14,48 @@ use thiserror::Error;
 #[cfg(feature = "audio")]
 mod audio;
 #[cfg(feature = "raster")]
+mod abstract_captcha;
+#[cfg(feature = "raster")]
+mod captcha_util;
+#[cfg(feature = "raster")]
+mod circle_captcha;
+#[cfg(feature = "raster")]
 mod compat;
 #[cfg(feature = "raster")]
+mod generator;
+#[cfg(feature = "raster")]
+mod gif_captcha;
+#[cfg(feature = "raster")]
+mod icaptcha;
+#[cfg(feature = "raster")]
+mod line_captcha;
+#[cfg(feature = "raster")]
 mod raster;
+#[cfg(feature = "raster")]
+mod shear_captcha;
 
 #[cfg(feature = "audio")]
 pub use audio::{AudioRenderer, AudioSpec, AudioSynthesizer};
 #[cfg(feature = "raster")]
-pub use compat::{
-    AbstractCaptcha, AbstractGenerator, CaptchaColor, CaptchaFont, CaptchaStroke, CaptchaUtil,
-    CircleCaptcha, GifCaptcha, ICaptcha, LineCaptcha, MathGenerator, RandomGenerator, ShearCaptcha,
-};
+pub use abstract_captcha::AbstractCaptcha;
+#[cfg(feature = "raster")]
+pub use captcha_util::CaptchaUtil;
+#[cfg(feature = "raster")]
+pub use circle_captcha::CircleCaptcha;
+#[cfg(feature = "raster")]
+pub use gif_captcha::GifCaptcha;
+#[cfg(feature = "raster")]
+pub use compat::{CaptchaColor, CaptchaFont, CaptchaStroke};
+#[cfg(feature = "raster")]
+pub use generator::{AbstractGenerator, MathGenerator, RandomGenerator};
+#[cfg(feature = "raster")]
+pub use icaptcha::ICaptcha;
+#[cfg(feature = "raster")]
+pub use line_captcha::LineCaptcha;
 #[cfg(feature = "raster")]
 pub use raster::PngRenderer;
+#[cfg(feature = "raster")]
+pub use shear_captcha::ShearCaptcha;
 
 const DEFAULT_ALPHABET: &[u8] = b"23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
 
