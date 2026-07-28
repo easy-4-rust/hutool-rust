@@ -66,7 +66,7 @@
 | Unit tests | ✅ 2000+ | `cargo test --tests` 2347 passed / 0 failed |
 | hutool-crypto byte-level parity | ✅ 364 tests | `crypto_byte_level_parity.rs` + `sm_byte_level_parity.rs` |
 | 1:1 facade alignment | 🟡 POI excluded from implementation scope | `crates/hutool-poi/` is an API-only placeholder crate and is not exposed by the `hutool` facade |
-| MSRV CI | `1.85` | `rust-version = "1.85"` |
+| MSRV CI | `1.94` | `rust-version = "1.94"` |
 
 ## 2. Features and Maturity
 
@@ -140,7 +140,7 @@ If you need these capabilities, use dedicated Rust crates (e.g., `redis-rs`, `la
 
 | Item | Value | Source |
 |---|---|---|
-| MSRV | `1.85` | `rust-version = "1.85"` |
+| MSRV | `1.94` | `rust-version = "1.94"` |
 | Edition | `2024` | `edition = "2024"` |
 | Resolver | `3` | `[workspace]` |
 | rustfmt | stable | CI |

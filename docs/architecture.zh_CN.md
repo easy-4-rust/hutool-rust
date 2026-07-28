@@ -200,8 +200,8 @@ flowchart LR
 | 依赖 | 用途 | 版本 | 备注 |
 |---|---|---|---|
 | RustCrypto (aes, sha2, sm2/3/4) | 加密 | 最新 | 纯 Rust，无 FFI |
-| sqlx | 数据库 | 0.8 | 多方言异步 |
-| reqwest | HTTP 客户端 | 0.12 | 支持 rustls-tls |
+| sqlx | 数据库 | 0.9 | 多方言异步 |
+| reqwest | HTTP 客户端 | 0.13 | 支持 rustls |
 | serde / serde_json / serde_yaml_ng | 序列化 | 最新 | 标配 |
 | musli | 可选二进制序列化 | 0.0.149（精确锁定） | Wire/storage/packed/descriptive；MSRV 1.85 |
 | moka | 缓存 | 0.12 | 受 Caffeine 启发 |
@@ -214,7 +214,7 @@ flowchart LR
 | secrecy | 密钥保护 | 0.10 | 自动 Debug 脱敏 |
 | zeroize | 内存清零 | 1.9 | drop 时清零 |
 | flate2 + zip | 压缩 | 1.1 / 7.2 | — |
-| sqlx | 数据库 | 0.8 | 同步/异步 |
+| sqlx | 数据库 | 0.9 | 同步/异步 |
 
 ## 5. 当前态、目标态与差距
 

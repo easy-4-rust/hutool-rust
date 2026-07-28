@@ -6,7 +6,7 @@ use std::io::Cursor;
 
 use font8x8::{BASIC_FONTS, UnicodeFonts as _};
 use image::{DynamicImage, ImageFormat, Rgba, RgbaImage};
-use rand::Rng;
+use rand::{Rng, RngExt};
 
 use crate::{CaptchaError, CaptchaRenderer, RenderedCaptcha};
 

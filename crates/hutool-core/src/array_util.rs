@@ -435,7 +435,7 @@ impl ArrayUtil {
     /// 对齐 Java: `ArrayUtil.shuffle`
     pub fn shuffle<T>(array: &mut [T]) {
         use rand::seq::SliceRandom;
-        array.shuffle(&mut rand::thread_rng());
+        array.shuffle(&mut rand::rng());
     }
 
     /// 对齐 Java: `ArrayUtil.hasNull`

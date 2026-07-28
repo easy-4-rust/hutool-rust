@@ -91,7 +91,7 @@ pub fn rsa_public_key_from_cert_der(der: &[u8]) -> Result<RsaPublicKey, CryptoEr
     use x509_cert::der::Decode;
     use der::Encode;
     let cert = x509_cert::certificate::Certificate::from_der(der).map_err(|_| CryptoError::InvalidPem)?;
-    let spki = cert.tbs_certificate.subject_public_key_info;
+    let spki = cert.tbs_certificate().subject_public_key_info();
     let der = spki.to_der().map_err(|_| CryptoError::InvalidPem)?;
     RsaPublicKey::from_public_key_der(&der).map_err(|_| CryptoError::InvalidPem)
 }

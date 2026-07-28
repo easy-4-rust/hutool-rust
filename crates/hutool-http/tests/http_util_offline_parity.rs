@@ -61,6 +61,14 @@ fn extract_meta_charset(s: &str) -> Option<&str> {
 #[test]
 fn get_mime_type_test() {
     assert!(HttpUtil::get_mime_type("aaa.aaa").is_none());
+    assert_eq!(
+        HttpUtil::get_mime_type("assets/INDEX.HTML?version=1#main"),
+        Some("text/html")
+    );
+    assert_eq!(
+        HttpUtil::get_mime("api/data.JSON"),
+        Some(mime::APPLICATION_JSON)
+    );
 }
 
 /// 对齐 Java: `HttpUtilTest.decodeParamsTest()`

@@ -4,7 +4,7 @@
 //! 泛型切片实现覆盖 Java 各原始类型重载（isEmpty/reverse/shuffle/min/max 等）。
 
 use rand::seq::SliceRandom;
-use rand::thread_rng;
+use rand::rng;
 
 use crate::{CoreError, Result};
 
@@ -109,7 +109,7 @@ impl PrimitiveArrayUtil {
 
     /// 对齐 Java: `PrimitiveArrayUtil.shuffle(T[])`
     pub fn shuffle<T>(array: &mut [T]) {
-        array.shuffle(&mut thread_rng());
+        array.shuffle(&mut rng());
     }
 
     /// 对齐 Java: `PrimitiveArrayUtil.min(T...)`

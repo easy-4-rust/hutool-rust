@@ -41,7 +41,7 @@ method-for-method Hutool compatibility.
 | Supply-chain policy | complete | `cargo-deny` advisories, licenses, bans, and sources checks |
 | Default/no-default/all-feature tests | complete | CI quality job and local release gate |
 | Per-feature compilation | complete | `cargo hack --each-feature --locked` |
-| Stable, MSRV, Nightly, GNU/MUSL, macOS, Windows | complete | CI matrix; MSRV is Rust 1.85 |
+| Stable, MSRV, Nightly, GNU/MUSL, macOS, Windows | complete | CI matrix; MSRV is Rust 1.94 |
 | Property, compile-fail, fuzz and integration testing | complete for current parsers | codec properties; compile-fail docs; structured parser fuzz targets; real HTTP/database tests |
 | 100% test coverage | in progress | current all-feature baseline: lines 98.73% (29,302/29,680), regions 98.71% (48,418/49,051), functions 98.30% (4,048/4,118); the facade registry, JWT, cache, system, cron, setting, AI, log, JSON, and HTTP crates are each exactly 100%, `hutool-core/src/builder.rs`, `mutable.rs`, `boolean_util.rs`, `byte_util.rs`, `char_util.rs`, `charset_util.rs`, `coordinate_util.rs`, `credit_code_util.rs`, `desensitized_util.rs`, `hash_util.rs`, `hex_util.rs`, `idcard_util.rs`, `page_util.rs`, `phone_util.rs`, `radix_util.rs`, and `version_util.rs` are each exactly 100%, with the new identity-card module contributing 566 covered lines, 1,040 covered regions, and 59 covered functions; CI still requires 100% workspace-wide |
 | SemVer regression check | ready after first release | tag workflow runs `cargo-semver-checks`; no published baseline exists yet |
@@ -49,8 +49,8 @@ method-for-method Hutool compatibility.
 
 ## Optional binary serialization gate
 
-- Müsli is exactly pinned to `0.0.149`, whose declared MSRV matches Hutool-Rust's
-  Rust 1.85 baseline.
+- Müsli is exactly pinned to `0.0.149`, whose declared MSRV does not exceed
+  Hutool-Rust's Rust 1.94 baseline.
 - Müsli and every concrete format are additive, non-default Cargo features.
 - `full` intentionally does not activate a format or silently choose a wire
   compatibility contract.

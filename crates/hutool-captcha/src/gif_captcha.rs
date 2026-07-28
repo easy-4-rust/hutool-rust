@@ -8,7 +8,7 @@ use std::ops::{Deref, DerefMut};
 use std::sync::Arc;
 
 use image::DynamicImage;
-use rand::Rng;
+use rand::RngExt;
 
 use crate::compat::{CaptchaColor, CaptchaKind};
 use crate::generator::RandomGenerator;

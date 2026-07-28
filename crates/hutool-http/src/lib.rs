@@ -4,11 +4,13 @@
 
 #![forbid(unsafe_code)]
 
-use rand::Rng as _;
-pub use reqwest::{Method, StatusCode, Url, header};
+use rand::RngExt as _;
+pub use http::{Method, StatusCode, header};
+pub use mime::Mime;
 use serde::de::DeserializeOwned;
 use std::{fmt, net::IpAddr, sync::Arc, time::Duration};
 use thiserror::Error;
+pub use url::Url;
 
 mod base;
 pub mod prelude;

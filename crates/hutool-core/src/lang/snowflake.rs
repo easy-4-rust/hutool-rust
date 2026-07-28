@@ -2,7 +2,7 @@
 //! 来源: hutool-core/src/main/java/cn/hutool/core/lang/Snowflake.java
 
 use parking_lot::Mutex;
-use rand::Rng;
+use rand::RngExt;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 /// 默认起始时间（Thu, 04 Nov 2010 01:42:54 GMT）
@@ -109,7 +109,7 @@ impl Snowflake {
             }
             g.sequence = sequence;
         } else if self.random_sequence_limit > 1 {
-            g.sequence = rand::thread_rng().gen_range(0..self.random_sequence_limit);
+            g.sequence = rand::rng().random_range(0..self.random_sequence_limit);
         } else {
             g.sequence = 0;
         }

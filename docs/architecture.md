@@ -200,8 +200,8 @@ flowchart LR
 | Dependency | Purpose | Version | Notes |
 |---|---|---|---|
 | RustCrypto (aes, sha2, sm2/3/4) | Crypto | Latest | Pure Rust, no FFI |
-| sqlx | Database | 0.8 | Multi-dialect async |
-| reqwest | HTTP client | 0.12 | Supports rustls-tls |
+| sqlx | Database | 0.9 | Multi-dialect async |
+| reqwest | HTTP client | 0.13 | Supports rustls |
 | serde / serde_json / serde_yaml_ng | Serialization | Latest | Standard |
 | musli | Optional binary serialization | 0.0.149 (exact pin) | Wire/storage/packed/descriptive; MSRV 1.85 |
 | moka | Cache | 0.12 | Inspired by Caffeine |
@@ -214,7 +214,7 @@ flowchart LR
 | secrecy | Key protection | 0.10 | Auto Debug redaction |
 | zeroize | Memory zero | 1.9 | Clears on drop |
 | flate2 + zip | Compression | 1.1 / 7.2 | — |
-| sqlx | Database | 0.8 | Sync/async |
+| sqlx | Database | 0.9 | Sync/async |
 
 ## 5. Current State, Target State, and Gap
 

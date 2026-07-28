@@ -1,7 +1,7 @@
 //! 对齐: `cn.hutool.core.lang.WeightRandom` / 内部类 `WeightObj`
 //! 来源: hutool-core/src/main/java/cn/hutool/core/lang/WeightRandom.java
 
-use rand::Rng;
+use rand::RngExt;
 use std::hash::{Hash, Hasher};
 
 use super::weight_obj::WeightObj;
@@ -59,7 +59,7 @@ impl<T: Clone> WeightRandom<T> {
         if total <= 0.0 {
             return self.items.last().map(|w| w.obj.clone());
         }
-        let mut r = rand::thread_rng().gen_range(0.0..total);
+        let mut r = rand::rng().random_range(0.0..total);
         for w in &self.items {
             if r < w.weight {
                 return Some(w.obj.clone());

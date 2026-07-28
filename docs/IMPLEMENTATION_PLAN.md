@@ -2482,7 +2482,7 @@ members = ["crates/*"]
 
 [workspace.package]
 edition = "2024"
-rust-version = "1.85"
+rust-version = "1.94"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/hiwepy/hutool-rust"
 
@@ -2669,7 +2669,7 @@ docs/
 | Hutool-db 107 文件 → Rust 100 缺失类 | Phase 2.2 分 4~6 周补全 |
 | Hutool-extra 179 文件 → Rust 173 缺失类 | Phase 2.3 + 4.x 分阶段补全 |
 | Golden 测试依赖 Java 环境 | `scripts/java-golden-export/` 独立 Maven 子项目；CI 可选跳过 |
-| Rust 1.85 MSRV vs Hutool 5.x Java 8+ 基线 | 通过 `chrono`/`reqwest`/`sqlx` 等成熟 crate 避免 nightly 依赖 |
+| Rust 1.94 MSRV vs Hutool 5.x Java 8+ 基线 | 通过 `chrono`/`reqwest`/`sqlx` 等成熟 crate 避免 nightly 依赖 |
 | Hutool 的 `unsafe-to-copy` 区域（AWT/Servlet/JNDI/JDBC SPI/SSH/FTP） | 标记为 `planned`，不在 Phase 1~3 范围 |
 
 ---

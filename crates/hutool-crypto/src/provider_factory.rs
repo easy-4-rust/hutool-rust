@@ -2,6 +2,7 @@
 //! BouncyCastle Provider 工厂（Java-only；Rust 返回 Err）。
 
 use std::any::Any;
+
 use crate::CryptoError;
 
 /// Provider 工厂，对齐 `cn.hutool.crypto.ProviderFactory`。
@@ -24,6 +25,7 @@ impl ProviderFactory {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::{CipherWrapper, StubCipherWrapper};
 
     #[test]
     fn test_stub_cipher_wrapper_from_algorithm() {

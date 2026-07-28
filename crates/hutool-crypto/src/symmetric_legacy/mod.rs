@@ -1,13 +1,12 @@
 //! Legacy symmetric algorithms aligned with Hutool parity tests.
 
 use crate::CryptoError;
-use des::cipher::{BlockDecryptMut, BlockEncryptMut, KeyInit};
+use des::cipher::{BlockModeDecrypt, BlockModeEncrypt, KeyInit};
 use des::Des;
 use ecb::{Decryptor as EcbDecryptor, Encryptor as EcbEncryptor};
-use generic_array::{GenericArray, typenum::U16};
 use pbkdf2::pbkdf2_hmac;
 use sha1::Sha1;
-use sm4::cipher::{BlockDecrypt, BlockEncrypt, KeyInit as Sm4KeyInit};
+use sm4::cipher::{BlockCipherDecrypt, BlockCipherEncrypt, KeyInit as Sm4KeyInit};
 use sm4::Sm4;
 
 mod rc4;
@@ -105,7 +104,7 @@ pub fn des_ecb_encrypt(key: &[u8], plaintext: &[u8]) -> Result<Vec<u8>, CryptoEr
     buf[..plaintext.len()].copy_from_slice(plaintext);
     let mut cipher = DesEcbEnc::new_from_slice(key).map_err(|_| CryptoError::InvalidAesKey)?;
     let written = cipher
-        .encrypt_padded_mut::<aes::cipher::block_padding::Pkcs7>(&mut buf, plaintext.len())
+        .encrypt_padded::<aes::cipher::block_padding::Pkcs7>(&mut buf, plaintext.len())
         .map_err(|_| CryptoError::Aead)?;
     Ok(written.to_vec())
 }
@@ -117,7 +116,7 @@ pub fn des_ecb_decrypt(key: &[u8], ciphertext: &[u8]) -> Result<Vec<u8>, CryptoE
     let mut buf = ciphertext.to_vec();
     let mut cipher = DesEcbDec::new_from_slice(key).map_err(|_| CryptoError::InvalidAesKey)?;
     let plain = cipher
-        .decrypt_padded_mut::<aes::cipher::block_padding::Pkcs7>(&mut buf)
+        .decrypt_padded::<aes::cipher::block_padding::Pkcs7>(&mut buf)
         .map_err(|_| CryptoError::Aead)?;
     Ok(plain.to_vec())
 }
@@ -141,7 +140,6 @@ pub fn sm4_ecb_decrypt(key: &[u8], ciphertext: &[u8]) -> Result<Vec<u8>, CryptoE
 }
 
 fn sm4_ecb(key: &[u8], data: &[u8], encrypt: bool) -> Result<Vec<u8>, CryptoError> {
-    use generic_array::{GenericArray, typenum::U16};
     if key.len() != 16 {
         return Err(CryptoError::InvalidAesKey);
     }
@@ -153,13 +151,14 @@ fn sm4_ecb(key: &[u8], data: &[u8], encrypt: bool) -> Result<Vec<u8>, CryptoErro
     };
     let mut out = Vec::with_capacity(input.len());
     for chunk in input.chunks(16) {
-        let mut block = GenericArray::<u8, U16>::clone_from_slice(chunk);
+        let mut block = sm4::cipher::Block::<Sm4>::default();
+        block.copy_from_slice(chunk);
         if encrypt {
             cipher.encrypt_block(&mut block);
         } else {
             cipher.decrypt_block(&mut block);
         }
-        out.extend_from_slice(block.as_slice());
+        out.extend_from_slice(&block);
     }
     if encrypt {
         Ok(out)

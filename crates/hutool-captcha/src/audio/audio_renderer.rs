@@ -2,7 +2,7 @@
 //! 来源: hutool-captcha/src/main/java/cn/hutool/captcha/ (扩展)
 //! 中文说明: WAV 渲染器，向注入的语音 PCM 添加有界低幅度噪声
 
-use rand::Rng as _;
+use rand::RngExt as _;
 
 use crate::{CaptchaError, CaptchaRenderer, RenderedCaptcha};
 

@@ -421,7 +421,7 @@ impl FileUtil {
     pub fn checksum_sha256(path: &str) -> std::io::Result<String> {
         let bytes = fs::read(path)?;
         let digest = Sha256::digest(&bytes);
-        Ok(format!("{digest:x}"))
+        Ok(hex::encode(digest))
     }
 
     /// 对齐 Java: `FileUtil.checksumCRC32` — IEEE CRC32。

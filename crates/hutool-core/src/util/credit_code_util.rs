@@ -3,7 +3,7 @@
 //!
 //! GB 32100-2015 unified social credit-code helpers.
 
-use rand::Rng;
+use rand::{Rng, RngExt};
 
 /// 对齐 Java: `cn.hutool.core.util.CreditCodeUtil`
 /// 信用代码工具类

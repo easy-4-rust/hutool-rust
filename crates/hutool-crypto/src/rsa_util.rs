@@ -5,8 +5,8 @@
 use crate::CryptoError;
 use rsa::pkcs1::{DecodeRsaPrivateKey, EncodeRsaPrivateKey, EncodeRsaPublicKey};
 use rsa::pkcs8::{DecodePrivateKey, DecodePublicKey, EncodePrivateKey, EncodePublicKey};
+use rsa::sha2::Sha256;
 use rsa::{Oaep, Pkcs1v15Encrypt, RsaPrivateKey, RsaPublicKey};
-use sha2::Sha256;
 
 /// RSA key pair (private + public).
 pub struct RsaKeyPair {

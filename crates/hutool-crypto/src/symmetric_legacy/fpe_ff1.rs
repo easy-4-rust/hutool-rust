@@ -1,14 +1,6 @@
 //! Legacy symmetric algorithms aligned with Hutool parity tests.
 
 use crate::CryptoError;
-use des::cipher::{BlockDecryptMut, BlockEncryptMut, KeyInit};
-use des::Des;
-use ecb::{Decryptor as EcbDecryptor, Encryptor as EcbEncryptor};
-use generic_array::{GenericArray, typenum::U16};
-use pbkdf2::pbkdf2_hmac;
-use sha1::Sha1;
-use sm4::cipher::{BlockDecrypt, BlockEncrypt, KeyInit as Sm4KeyInit};
-use sm4::Sm4;
 
 /// FF1-style format-preserving encrypt/decrypt over a custom alphabet (Hutool `FPE.FF1`).
 pub struct FpeFf1 {

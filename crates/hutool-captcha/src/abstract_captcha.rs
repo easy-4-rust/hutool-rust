@@ -14,7 +14,7 @@ use base64::Engine as _;
 use font8x8::{BASIC_FONTS, UnicodeFonts as _};
 use image::codecs::gif::{GifEncoder, Repeat};
 use image::{Delay, DynamicImage, Frame, ImageFormat, Rgba, RgbaImage};
-use rand::Rng;
+use rand::{Rng, RngExt};
 
 use crate::compat::{
     CaptchaColor, CaptchaFont, CaptchaKind, CaptchaStroke, draw_circle, draw_glyph, draw_line,

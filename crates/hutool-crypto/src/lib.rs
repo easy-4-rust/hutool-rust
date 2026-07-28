@@ -30,8 +30,8 @@ pub use cipher_wrapper::{CipherWrapper, StubCipherWrapper};
 pub use provider_factory::ProviderFactory;
 
 use aes_gcm::{
-    Aes256Gcm, Nonce,
-    aead::{Aead, AeadCore, KeyInit, OsRng as AeadOsRng},
+    Aes256Gcm,
+    aead::{Aead, KeyInit, Nonce},
 };
 use argon2::{
     Argon2, PasswordHash, PasswordHasher, PasswordVerifier,
@@ -115,7 +115,9 @@ pub fn aes256_gcm_encrypt(key: &[u8], plaintext: &[u8]) -> Result<Vec<u8>, Crypt
         return Err(CryptoError::InvalidAesKey);
     }
     let cipher = Aes256Gcm::new_from_slice(key).map_err(|_| CryptoError::InvalidAesKey)?;
-    let nonce = Aes256Gcm::generate_nonce(&mut AeadOsRng);
+    let mut nonce_bytes = [0u8; GCM_NONCE_LENGTH];
+    rand::fill(&mut nonce_bytes);
+    let nonce = Nonce::<Aes256Gcm>::from(nonce_bytes);
     let encrypted = cipher
         .encrypt(&nonce, plaintext)
         .map_err(|_| CryptoError::Aead)?;
@@ -136,7 +138,10 @@ pub fn aes256_gcm_decrypt(key: &[u8], ciphertext: &[u8]) -> Result<Vec<u8>, Cryp
     let cipher = Aes256Gcm::new_from_slice(key).map_err(|_| CryptoError::InvalidAesKey)?;
     let (nonce, encrypted) = ciphertext.split_at(GCM_NONCE_LENGTH);
     cipher
-        .decrypt(Nonce::from_slice(nonce), encrypted)
+        .decrypt(
+            &Nonce::<Aes256Gcm>::try_from(nonce).map_err(|_| CryptoError::InvalidCiphertext)?,
+            encrypted,
+        )
         .map_err(|_| CryptoError::Aead)
 }
 

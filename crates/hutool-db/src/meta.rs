@@ -1,7 +1,7 @@
 //! 元数据工具 —— 对齐 Hutool `cn.hutool.db.meta.MetaUtil`（SQLite 子集）。
 
 use crate::db::{DbRuntimeError, DbResult};
-use sqlx::{Row, SqlitePool};
+use sqlx::{AssertSqlSafe, Row, SqlitePool};
 use std::collections::HashSet;
 
 pub use crate::meta_types::{Column, ColumnIndexInfo, IndexInfo, JdbcType, TableType};
@@ -42,7 +42,8 @@ pub async fn get_tables(pool: &SqlitePool) -> DbResult<Vec<String>> {
 
 /// 对齐 Java: `MetaUtil.getTableMeta(DataSource, String)`.
 pub async fn get_table_meta(pool: &SqlitePool, table: &str) -> DbResult<Table> {
-    let rows = sqlx::query(&format!("PRAGMA table_info(\"{table}\")"))
+    let table = table.replace('"', "\"\"");
+    let rows = sqlx::query(AssertSqlSafe(format!("PRAGMA table_info(\"{table}\")")))
         .fetch_all(pool)
         .await?;
     let mut pk_names = HashSet::new();
@@ -53,7 +54,7 @@ pub async fn get_table_meta(pool: &SqlitePool, table: &str) -> DbResult<Table> {
             pk_names.insert(name);
         }
     }
-    let indexes = sqlx::query(&format!("PRAGMA index_list(\"{table}\")"))
+    let indexes = sqlx::query(AssertSqlSafe(format!("PRAGMA index_list(\"{table}\")")))
         .fetch_all(pool)
         .await?;
     Ok(Table {
@@ -64,7 +65,8 @@ pub async fn get_table_meta(pool: &SqlitePool, table: &str) -> DbResult<Table> {
 
 /// 对齐 Java: `MetaUtil.getColumnNames(DataSource, String)`.
 pub async fn get_column_names(pool: &SqlitePool, table: &str) -> DbResult<Vec<String>> {
-    let rows = sqlx::query(&format!("PRAGMA table_info(\"{table}\")"))
+    let table = table.replace('"', "\"\"");
+    let rows = sqlx::query(AssertSqlSafe(format!("PRAGMA table_info(\"{table}\")")))
         .fetch_all(pool)
         .await?;
     Ok(rows.into_iter().map(|row| row.get::<String, _>(1)).collect())

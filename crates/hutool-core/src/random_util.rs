@@ -3,7 +3,7 @@
 
 use std::collections::HashSet;
 
-use rand::Rng;
+use rand::RngExt;
 use rust_decimal::Decimal;
 
 /// 对齐 Java: `cn.hutool.core.util.RandomUtil`

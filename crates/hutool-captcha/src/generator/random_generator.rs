@@ -4,7 +4,7 @@
 //! 来源: `hutool-captcha/src/main/java/cn/hutool/captcha/generator/RandomGenerator.java`
 //! 中文说明: Hutool 兼容的随机字符验证码生成器，复用 `AbstractGenerator` 的字符集和长度配置。
 
-use rand::Rng;
+use rand::RngExt;
 
 use crate::generator::AbstractGenerator;
 use crate::{CaptchaError, CodeGenerator, constant_time_ascii_case_eq};

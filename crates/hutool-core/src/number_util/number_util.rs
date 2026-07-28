@@ -4,7 +4,7 @@
 //! Rust 版本提供算术、比较、最值、解析与 BigDecimal（`rust_decimal::Decimal`）对齐实现。
 
 use crate::{CoreError, Result};
-use rand::Rng;
+use rand::RngExt;
 use rust_decimal::Decimal;
 use rust_decimal::RoundingStrategy;
 use std::collections::HashSet;
@@ -671,10 +671,10 @@ impl NumberUtil {
             });
         }
         let mut seed: Vec<i32> = (begin..end).collect();
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let mut ran = Vec::with_capacity(size);
         for i in 0..size {
-            let j = rng.gen_range(0..seed.len() - i);
+            let j = rng.random_range(0..seed.len() - i);
             ran.push(seed[j]);
             let last = seed.len() - 1 - i;
             seed[j] = seed[last];
@@ -695,9 +695,9 @@ impl NumberUtil {
             });
         }
         let mut set = HashSet::new();
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         while set.len() < size {
-            set.insert(rng.gen_range(begin..end));
+            set.insert(rng.random_range(begin..end));
         }
         Ok(set.into_iter().collect())
     }

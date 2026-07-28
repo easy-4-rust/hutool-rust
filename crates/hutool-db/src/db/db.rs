@@ -8,7 +8,7 @@ use crate::sql::named_sql::NamedSql;
 use crate::sql::sql_util::{build_conditions, build_like_value, remove_outer_order_by};
 use crate::sql::{Condition, SqlBuilder};
 use serde_json::Value;
-use sqlx::{Column, Row, SqlitePool, TypeInfo};
+use sqlx::{AssertSqlSafe, Column, Row, SqlitePool, TypeInfo};
 use std::collections::HashMap;
 
 use super::db_result::DbResult;
@@ -35,7 +35,7 @@ impl Db {
 
     /// 对齐 Java: `Db.query(String, Object...)`.
     pub async fn query(&self, sql: &str, params: &[Value]) -> DbResult<Vec<Entity>> {
-        let mut query = sqlx::query(sql);
+        let mut query = sqlx::query(AssertSqlSafe(sql));
         for param in params {
             query = bind_value(query, param);
         }
@@ -171,7 +171,7 @@ impl Db {
         let stripped = remove_outer_order_by(sql);
         let count_sql = format!("SELECT COUNT(*) AS c FROM ({stripped}) tmp_count");
         let row = {
-            let mut query = sqlx::query(&count_sql);
+            let mut query = sqlx::query(AssertSqlSafe(count_sql));
             for param in params {
                 query = bind_value(query, param);
             }
@@ -214,7 +214,7 @@ impl Db {
         builder.insert(entity);
         let sql = builder.build();
         let result = {
-            let mut query = sqlx::query(&sql);
+            let mut query = sqlx::query(AssertSqlSafe(sql));
             for param in builder.param_values() {
                 query = bind_value(query, param);
             }
@@ -239,7 +239,7 @@ impl Db {
         }
         let sql = builder.build();
         let result = {
-            let mut query = sqlx::query(&sql);
+            let mut query = sqlx::query(AssertSqlSafe(sql));
             for param in builder.param_values() {
                 query = bind_value(query, param);
             }
@@ -250,9 +250,12 @@ impl Db {
 
     /// 对齐 Java: `Db.del`.
     pub async fn del(&self, table: &str, field: &str, value: impl Into<Value>) -> DbResult<u64> {
+        // SQLx 0.9 要求动态 SQL 显式声明安全性；标识符先按 SQLite 规则转义双引号。
+        let table = table.replace('"', "\"\"");
+        let field = field.replace('"', "\"\"");
         let sql = format!("DELETE FROM \"{table}\" WHERE \"{field}\" = ?");
         let value = value.into();
-        let result = bind_value(sqlx::query(&sql), &value)
+        let result = bind_value(sqlx::query(AssertSqlSafe(sql)), &value)
             .execute(&self.pool)
             .await?;
         Ok(result.rows_affected())
@@ -263,10 +266,12 @@ impl Db {
         let table = entity
             .table_name()
             .ok_or_else(|| DbRuntimeError::Message("table name required".into()))?;
+        let table = table.replace('"', "\"\"");
         let mut cols = Vec::new();
         let mut placeholders = Vec::new();
         let mut params = Vec::new();
         for (field, value) in entity.iter() {
+            let field = field.replace('"', "\"\"");
             cols.push(format!("\"{field}\""));
             placeholders.push('?');
             params.push(value.clone());
@@ -280,7 +285,7 @@ impl Db {
                 .join(", ")
         );
         let _ = unique_field;
-        let mut query = sqlx::query(&sql);
+        let mut query = sqlx::query(AssertSqlSafe(sql));
         for param in &params {
             query = bind_value(query, param);
         }
@@ -300,7 +305,7 @@ impl Db {
 
     /// 对齐 Java: `Db.execute`.
     pub async fn execute(&self, sql: &str) -> DbResult<()> {
-        sqlx::query(sql).execute(&self.pool).await?;
+        sqlx::query(AssertSqlSafe(sql)).execute(&self.pool).await?;
         Ok(())
     }
 

@@ -3,7 +3,7 @@
 //! 中文说明: HMAC 消息认证码工具（MD5/SHA1/SHA256/SHA512/SM3），对齐 Hutool HMac
 
 use crate::CryptoError;
-use hmac::{Hmac, Mac};
+use hmac::{Hmac, KeyInit, Mac};
 use md5::Md5;
 use sha1::Sha1;
 use sha2::{Sha256, Sha512};

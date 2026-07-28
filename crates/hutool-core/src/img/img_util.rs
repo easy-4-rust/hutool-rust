@@ -267,8 +267,8 @@ impl ImgUtil {
 
     /// 对齐 Java: `ImgUtil.randomColor()`
     pub fn random_color() -> (u8, u8, u8) {
-        use rand::Rng;
-        let mut rng = rand::thread_rng();
+        use rand::RngExt;
+        let mut rng = rand::rng();
         (rng.random(), rng.random(), rng.random())
     }
 

@@ -42,7 +42,7 @@
 | `ai` | provider abstraction/OpenAI-compatible JSON and SSE client | high | HTTP/Tokio | API key redacted; HTTP and SSE event sizes are bounded |
 | `hutool-compat` | `StrUtil`/`JsonUtil` migration API | low | portable | isolated from idiomatic APIs |
 
-MSRV is Rust 1.85. Feature additions must not change semantics of already
+MSRV is Rust 1.94. Feature additions must not change semantics of already
 enabled functions. Database drivers and alternative blocking behavior remain
 explicit opt-ins.
 

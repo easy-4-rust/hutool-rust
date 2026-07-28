@@ -22,7 +22,9 @@ html = ["dep:fancy-regex"]
 [dependencies]
 encoding_rs.workspace = true
 hutool-core.workspace = true
+http.workspace = true
 indexmap.workspace = true
+mime.workspace = true
 rand.workspace = true
 regex = { workspace = true, optional = true }
 fancy-regex = { workspace = true, optional = true }

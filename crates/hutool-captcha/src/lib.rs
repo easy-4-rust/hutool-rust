@@ -6,7 +6,7 @@
 
 #![forbid(unsafe_code)]
 
-use rand::Rng;
+use rand::RngExt;
 use std::fmt::Write as _;
 use std::time::{Duration, Instant};
 use thiserror::Error;

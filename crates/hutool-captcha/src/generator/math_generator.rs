@@ -4,7 +4,7 @@
 //! 来源: `hutool-captcha/src/main/java/cn/hutool/captcha/generator/MathGenerator.java`
 //! 中文说明: Hutool 算术验证码生成器，负责构造加减乘表达式并校验用户输入结果。
 
-use rand::Rng;
+use rand::RngExt;
 
 use crate::{CaptchaError, CodeGenerator};
 
