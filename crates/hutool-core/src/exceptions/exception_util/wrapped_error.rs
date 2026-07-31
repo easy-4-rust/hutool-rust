@@ -5,7 +5,6 @@
 
 use std::error::Error;
 use std::fmt;
-use std::panic::Location;
 
 /// 可携带 cause 的运行时错误，对齐 Java checked → runtime 包装场景。
 #[derive(Debug)]

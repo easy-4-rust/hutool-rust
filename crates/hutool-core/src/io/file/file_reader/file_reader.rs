@@ -8,7 +8,6 @@ use std::fs::File;
 use std::io::{self, BufReader, Write};
 use std::path::{Path, PathBuf};
 
-use super::reader_handler::ReaderHandler;
 
 /// 对齐 Java 类: `cn.hutool.core.io.file.FileReader`
 #[derive(Debug, Clone)]

@@ -1,7 +1,4 @@
-use std::fmt;
-
 use chrono::{Datelike, Local, NaiveDate};
-use thiserror::Error;
 
 use super::card10_info::Card10Info;
 use super::idcard::Idcard;
@@ -353,5 +350,5 @@ impl IdcardUtil {
     }
 }
 
-use super::{CHECK_CODES, CHINA_ID_MAX_LENGTH, CHINA_ID_MIN_LENGTH, CITY_CODES, POWER, TW_FIRST_CODES, check_code_18, compact_parenthesized_card};
+use super::{CHINA_ID_MAX_LENGTH, CHINA_ID_MIN_LENGTH, check_code_18, compact_parenthesized_card};
 use super::{is_blank, parse_birth, parse_birth_component, parse_two_digits, prefix_for_supported_length, province_name, tw_first_code, weighted_check_code};

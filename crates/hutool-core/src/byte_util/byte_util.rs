@@ -5,11 +5,10 @@
 
 use std::{
     str::FromStr,
-    sync::atomic::{AtomicI32, AtomicI64, Ordering},
+    sync::atomic::{AtomicI32, AtomicI64},
 };
 
 use num_bigint::BigInt;
-use parking_lot::Mutex;
 use rust_decimal::Decimal;
 
 use super::byte_order::ByteOrder;
@@ -291,6 +290,7 @@ impl BytesToNumber for Decimal {
     }
 }
 
+#[allow(unused_macros)] // 对齐 Java 批量实现宏，暂未接线，预留
 macro_rules! impl_number_to_bytes {
     ($type:ty, $method:ident) => {
         impl NumberToBytes for $type {
@@ -301,6 +301,7 @@ macro_rules! impl_number_to_bytes {
     };
 }
 
+#[allow(unused_macros)] // 对齐 Java 批量实现宏，暂未接线，预留
 macro_rules! impl_bytes_to_number {
     ($type:ty, $method:ident) => {
         impl BytesToNumber for $type {

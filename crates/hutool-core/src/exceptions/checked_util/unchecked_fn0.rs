@@ -3,15 +3,10 @@
 //!
 //! 将可能失败的表达式包装为运行时错误，避免显式 try/catch。
 
-use std::panic::{catch_unwind, AssertUnwindSafe};
-use std::thread;
-use std::time::Duration;
 
-use super::checked_util::CheckedUtil;
 
 /// 对齐 Java: `CheckedUtil.Func0Rt`
 pub struct UncheckedFn0<R> {
     pub(crate) inner: Box<dyn Fn() -> R + Send + Sync>,
 }
 
-use super::{sleep_checked};

@@ -3,9 +3,6 @@
 //!
 //! 异常链处理与包装工具。
 
-use std::error::Error;
-use std::fmt;
-use std::panic::Location;
 
 /// 对齐 Java 类: `cn.hutool.core.exceptions.ExceptionUtil`
 #[derive(Debug, Clone, Copy, Default)]

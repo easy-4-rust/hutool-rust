@@ -3,11 +3,7 @@
 //!
 //! Rust 版本提供对象操作的 idiomatic 实现。
 
-use std::any::Any;
 use std::collections::{BTreeMap, HashMap};
-use std::hash::Hash;
-
-use super::object_util::ObjectUtil;
 
 /// 对齐 Java `ObjectUtil.length` 支持的长度探测目标。
 pub trait ObjectLength {

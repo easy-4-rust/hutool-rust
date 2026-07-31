@@ -3,12 +3,10 @@
 /// 对齐: `cn.hutool.core.util.HexUtil`
 /// 十六进制工具类
 
-use std::num::ParseIntError;
-
 use encoding_rs::{Encoding, UTF_8, UTF_16BE, UTF_16LE};
 use num_bigint::BigInt;
 
-use crate::{Base16Codec, CoreError};
+use crate::Base16Codec;
 
 use super::hex_util_error::HexUtilError;
 use super::rgb_color::RgbColor;

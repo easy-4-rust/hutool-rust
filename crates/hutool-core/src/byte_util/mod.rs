@@ -1,14 +1,5 @@
 //! Endian-aware numeric byte conversion aligned with Hutool's `ByteUtil` family.
 
-use std::{
-    str::FromStr,
-    sync::atomic::{AtomicI32, AtomicI64, Ordering},
-};
-
-use num_bigint::BigInt;
-use parking_lot::Mutex;
-use rust_decimal::Decimal;
-
 mod byte_order;
 mod byte_util_error;
 mod long_adder;
@@ -25,7 +16,10 @@ pub use number_to_bytes::NumberToBytes;
 pub use bytes_to_number::BytesToNumber;
 pub use byte_util::ByteUtil;
 
-fn read_array<const SIZE: usize>(bytes: &[u8], start: usize) -> Result<[u8; SIZE], ByteUtilError> {
+fn read_array<const SIZE: usize>(
+    bytes: &[u8],
+    start: usize,
+) -> std::result::Result<[u8; SIZE], ByteUtilError> {
     let available = bytes.len().saturating_sub(start);
     let source = bytes
         .get(start..)

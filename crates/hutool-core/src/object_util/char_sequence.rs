@@ -3,9 +3,6 @@
 //!
 //! Rust 版本提供对象操作的 idiomatic 实现。
 
-use std::any::Any;
-use std::collections::{BTreeMap, HashMap};
-use std::hash::Hash;
 
 /// 对齐 Java `CharSequence`：文本序列视图。
 pub trait CharSequence {

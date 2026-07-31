@@ -5,12 +5,8 @@
 
 use std::num::ParseIntError;
 
-use encoding_rs::{Encoding, UTF_8, UTF_16BE, UTF_16LE};
-use num_bigint::BigInt;
+use crate::CoreError;
 
-use crate::{Base16Codec, CoreError};
-
-use super::hex_util::HexUtil;
 
 /// Errors produced by [`HexUtil`] conversions.
 #[derive(Debug, thiserror::Error)]

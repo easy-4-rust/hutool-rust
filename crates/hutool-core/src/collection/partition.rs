@@ -6,6 +6,8 @@
 
 use crate::Result;
 
+use super::validate_partition_size;
+
 
 /// A borrowed view that divides a slice into fixed-size partitions.
 ///

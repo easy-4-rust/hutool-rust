@@ -5,7 +5,7 @@
 
 use std::iter::Peekable;
 
-
+use crate::Result;
 
 /// An iterator adapter that collects source items into fixed-size vectors.
 pub struct PartitionIter<I>

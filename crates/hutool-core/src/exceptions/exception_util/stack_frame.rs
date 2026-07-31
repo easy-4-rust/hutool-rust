@@ -4,7 +4,6 @@
 //! 异常链处理与包装工具。
 
 use std::error::Error;
-use std::fmt;
 use std::panic::Location;
 
 use super::exception_util::ExceptionUtil;

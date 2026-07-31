@@ -137,4 +137,3 @@ impl<K: fmt::Debug, V: fmt::Debug, F> fmt::Debug for UniqueKeySet<K, V, F> {
     }
 }
 
-use super::{Comparator};

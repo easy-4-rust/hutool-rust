@@ -1,7 +1,4 @@
-use std::fmt;
-
-use chrono::{Datelike, Local, NaiveDate};
-use thiserror::Error;
+use chrono::NaiveDate;
 
 mod idcard_error;
 mod card10_info;

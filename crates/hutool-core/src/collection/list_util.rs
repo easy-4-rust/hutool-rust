@@ -5,4 +5,6 @@
 //! （`src/list_util.rs`）。保留 `crate::collection::ListUtil` 路径，
 //! 1:1 镜像 Java 包结构。
 
+#![allow(unused_imports)] // 包路径镜像再导出，保留 crate::collection::ListUtil 路径
+
 pub use crate::ListUtil;

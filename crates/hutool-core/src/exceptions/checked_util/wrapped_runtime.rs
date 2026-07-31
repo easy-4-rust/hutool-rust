@@ -3,9 +3,6 @@
 //!
 //! 将可能失败的表达式包装为运行时错误，避免显式 try/catch。
 
-use std::panic::{catch_unwind, AssertUnwindSafe};
-use std::thread;
-use std::time::Duration;
 
 /// 运行时包装错误。
 #[derive(Debug, Clone)]
@@ -29,4 +26,3 @@ impl std::fmt::Display for WrappedRuntime {
     }
 }
 
-use super::{sleep_checked};

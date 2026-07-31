@@ -3,14 +3,7 @@
 /// 对齐: `cn.hutool.core.util.ByteUtil.DoubleAdder`
 /// 双精度累加器
 
-use std::{
-    str::FromStr,
-    sync::atomic::{AtomicI32, AtomicI64, Ordering},
-};
-
-use num_bigint::BigInt;
 use parking_lot::Mutex;
-use rust_decimal::Decimal;
 
 /// Concurrent floating-point adder equivalent to Java's `DoubleAdder` result branch.
 #[derive(Debug, Default)]
@@ -39,4 +32,3 @@ impl DoubleAdder {
     }
 }
 
-use super::{java_f32_bits, java_f64_bits, read_array};

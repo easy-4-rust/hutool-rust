@@ -3,15 +3,6 @@
 /// 对齐: `cn.hutool.core.util.ByteUtil`
 /// 字节工具错误
 
-use std::{
-    str::FromStr,
-    sync::atomic::{AtomicI32, AtomicI64, Ordering},
-};
-
-use num_bigint::BigInt;
-use parking_lot::Mutex;
-use rust_decimal::Decimal;
-
 /// Errors produced by checked byte conversions.
 #[derive(Debug, Clone, PartialEq, Eq, thiserror::Error)]
 #[non_exhaustive]
@@ -32,4 +23,3 @@ pub enum ByteUtilError {
     Decimal(String),
 }
 
-use super::{java_f32_bits, java_f64_bits, read_array};
