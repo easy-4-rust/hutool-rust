@@ -1,7 +1,6 @@
 //! Mutable Hutool-compatible word trie.
 
-use crate::StopChar;
-use std::{collections::HashMap, fmt, sync::Arc};
+use std::fmt;
 
 /// 单个匹配结果（UTF-8 字节偏移）。
 ///
@@ -72,5 +71,3 @@ impl fmt::Display for FoundWord {
         formatter.write_str(&self.source_match)
     }
 }
-
-use super::{CharFilter, Node};

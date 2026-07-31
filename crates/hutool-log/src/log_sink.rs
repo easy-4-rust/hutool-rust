@@ -2,12 +2,6 @@
 //! 来源: hutool-log/src/main/java/cn/hutool/log/
 //! 中文说明: 日志后端接收器 trait，所有兼容方言共享的可注入目标接口。
 
-use std::{
-    collections::HashMap,
-    fmt,
-    sync::{Arc, OnceLock, RwLock},
-};
-
 use crate::level::LogLevel;
 use crate::log_record::LogRecord;
 

@@ -3,8 +3,7 @@
 //!
 //! 以 `std::thread` 提供可移植子集；JVM `ThreadLocal` / `ThreadGroup` 全局语义保持 planned。
 
-use std::sync::atomic::{AtomicU64, Ordering};
-use std::sync::{Arc, Condvar, Mutex, OnceLock};
+use std::sync::{Arc, Condvar, Mutex};
 use std::thread::{self, JoinHandle, Thread, ThreadId};
 use std::time::{Duration, Instant};
 
@@ -342,5 +341,3 @@ impl ThreadUtil {
         )
     }
 }
-
-use super::{SCHEDULE_SEQ, SYNC_SLOT};

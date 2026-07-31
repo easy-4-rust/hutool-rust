@@ -1,11 +1,4 @@
-use std::{
-    collections::BTreeMap,
-    sync::{Arc, RwLock},
-    time::{SystemTime, UNIX_EPOCH},
-};
-
-use serde::Serialize;
-use thiserror::Error;
+use std::time::{SystemTime, UNIX_EPOCH};
 
 mod health_status;
 mod health_check;

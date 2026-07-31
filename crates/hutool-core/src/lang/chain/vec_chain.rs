@@ -1,6 +1,8 @@
 //! 对齐: `cn.hutool.core.lang.Chain`
 //! 来源: hutool-core/src/main/java/cn/hutool/core/lang/Chain.java
 
+#![allow(dead_code)] // 对齐 Java Chain，暂未接线，预留
+
 use super::chain::Chain;
 
 /// 基于 `Vec` 的简易责任链实现。

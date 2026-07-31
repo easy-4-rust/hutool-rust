@@ -2,11 +2,8 @@
 //! 来源: hutool-setting/src/main/java/cn/hutool/setting/Setting.java
 //! 中文说明: Hutool Setting 配置文档子模块，包含核心 Setting 结构体、自动重载句柄及文件监听机制。
 
-use crate::{DEFAULT_ENCODING, GroupedMap, Props, SettingError, SettingLoader, checked_path};
-use encoding_rs::Encoding;
-use indexmap::IndexMap;
+use crate::{GroupedMap, SettingLoader};
 use notify::{RecommendedWatcher, RecursiveMode, Watcher};
-use serde::de::DeserializeOwned;
 use std::{
     path::{Path, PathBuf},
     sync::{Arc, RwLock},
@@ -65,7 +62,7 @@ fn box_watcher(watcher: RecommendedWatcher) -> Box<dyn WatchOwner> {
     Box::new(watcher)
 }
 
-trait WatchOwner: Send {
+pub(crate) trait WatchOwner: Send {
     fn watch_path(&mut self, path: &Path) -> Result<(), notify::Error>;
 }
 

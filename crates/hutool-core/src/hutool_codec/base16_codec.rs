@@ -3,16 +3,7 @@
 /// 对齐: `cn.hutool.core.codec.Base16Codec`
 /// Base16 编码器
 
-use std::{
-    collections::BTreeSet,
-    io::{Read, Write},
-    path::Path,
-};
-
-use base64::Engine as _;
-use encoding_rs::Encoding;
-
-use crate::{CoreError, Result};
+use crate::Result;
 
 use super::decoder::Decoder;
 use super::encoder::Encoder;
@@ -91,5 +82,3 @@ impl Decoder<str, Vec<u8>> for Base16Codec {
         self.decode_text(input)
     }
 }
-
-use super::{base64_sextet};

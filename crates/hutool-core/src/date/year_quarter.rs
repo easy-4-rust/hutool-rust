@@ -2,7 +2,7 @@
 
 #![allow(dead_code)]
 
-use chrono::{Datelike, NaiveDate};
+use chrono::NaiveDate;
 
 use crate::date::date_time::DateTime;
 use crate::date::month::Month;
@@ -62,20 +62,25 @@ impl YearQuarter {
         Self::of_quarter(year, q)
     }
 
+    /// 年份。
     pub fn get_year(self) -> i32 {
         self.year
     }
+    /// 季度枚举。
     pub fn get_quarter(self) -> Quarter {
         self.quarter
     }
+    /// 季度值（1-4）。
     pub fn get_quarter_value(self) -> i32 {
         self.quarter.get_value()
     }
 
+    /// 季度首日。
     pub fn get_first_date(self) -> NaiveDate {
         let (m, d) = self.quarter.first_month_day();
         NaiveDate::from_ymd_opt(self.year, m, d).unwrap()
     }
+    /// 季度末日。
     pub fn get_last_date(self) -> NaiveDate {
         let (m, d) = self.quarter.last_month_day();
         // leap year Feb in Q1? Q1 last is Mar 31
@@ -91,53 +96,100 @@ impl YearQuarter {
         })
     }
 
+    /// 季度首月 `(year, month)`。
     pub fn first_year_month(self) -> (i32, u32) {
         (self.year, self.quarter.first_month_value() as u32)
     }
+    /// 季度末月 `(year, month)`。
     pub fn last_year_month(self) -> (i32, u32) {
         (self.year, self.quarter.last_month_value() as u32)
     }
+    /// 季度首月枚举。
     pub fn first_month(self) -> Month {
         self.quarter.first_month()
     }
+    /// 季度末月枚举。
     pub fn last_month(self) -> Month {
         self.quarter.last_month()
     }
 
+    /// 增加季度数。
+    ///
+    /// # Errors
+    ///
+    /// 计算结果超出范围时返回错误。
     pub fn plus_quarters(self, quarters: i64) -> Result<Self> {
         let total = self.year as i64 * 4 + (self.quarter.get_value() as i64 - 1) + quarters;
         let y = total.div_euclid(4) as i32;
         let q = (total.rem_euclid(4) + 1) as i32;
         Self::of(y, q)
     }
+    /// 减少季度数。
+    ///
+    /// # Errors
+    ///
+    /// 计算结果超出范围时返回错误。
     pub fn minus_quarters(self, quarters: i64) -> Result<Self> {
         self.plus_quarters(-quarters)
     }
+    /// 下一季度。
+    ///
+    /// # Errors
+    ///
+    /// 计算结果超出范围时返回错误。
     pub fn next_quarter(self) -> Result<Self> {
         self.plus_quarters(1)
     }
+    /// 上一季度。
+    ///
+    /// # Errors
+    ///
+    /// 计算结果超出范围时返回错误。
     pub fn last_quarter(self) -> Result<Self> {
         self.plus_quarters(-1)
     }
+    /// 增加年数。
+    ///
+    /// # Errors
+    ///
+    /// 计算结果超出范围时返回错误。
     pub fn plus_years(self, years: i64) -> Result<Self> {
         Self::of(self.year + years as i32, self.quarter.get_value())
     }
+    /// 减少年数。
+    ///
+    /// # Errors
+    ///
+    /// 计算结果超出范围时返回错误。
     pub fn minus_years(self, years: i64) -> Result<Self> {
         self.plus_years(-years)
     }
+    /// 下一年。
+    ///
+    /// # Errors
+    ///
+    /// 计算结果超出范围时返回错误。
     pub fn next_year(self) -> Result<Self> {
         self.plus_years(1)
     }
+    /// 上一年。
+    ///
+    /// # Errors
+    ///
+    /// 计算结果超出范围时返回错误。
     pub fn last_year(self) -> Result<Self> {
         self.plus_years(-1)
     }
 
+    /// 比较两季度。
     pub fn compare_to(self, other: Self) -> i32 {
         (self.year, self.quarter.get_value()).cmp(&(other.year, other.quarter.get_value())) as i32
     }
+    /// 是否早于。
     pub fn is_before(self, other: Self) -> bool {
         self.compare_to(other) < 0
     }
+    /// 是否晚于。
     pub fn is_after(self, other: Self) -> bool {
         self.compare_to(other) > 0
     }

@@ -5,13 +5,10 @@
 
 use std::{fmt, str::FromStr};
 
-use chrono::{DateTime, Datelike, Duration as ChronoDuration, TimeZone, Timelike, Utc};
+use chrono::{DateTime, Duration as ChronoDuration, TimeZone, Timelike, Utc};
 use cron::Schedule;
 
 use crate::CronError;
-
-use super::day_of_month_matcher::DayOfMonthMatcher;
-use super::part::Part;
 
 /// 对齐: `cn.hutool.cron.pattern.CronPattern`
 /// 中文说明: Hutool 风格的 cron 表达式，支持 `|` 分隔的多表达式备选。
@@ -139,12 +136,4 @@ impl fmt::Display for CronPattern {
     }
 }
 
-use super::split_numeric_range;
-use super::{
-    apply_negative, checked_schedule_value, convert_hutool_dow_field, convert_hutool_dow_token,
-    end_of_year, expand_field, expand_range, field_needs_expand,
-};
-use super::{
-    fields, hutool_dow_to_quartz, is_last_day_of_month, next_after_filtered, normalize_expanded,
-    pad_fields, parse_alias, schedule_max,
-};
+use super::{is_last_day_of_month, next_after_filtered, normalize_expanded};

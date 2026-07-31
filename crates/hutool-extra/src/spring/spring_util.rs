@@ -7,7 +7,7 @@
 use super::application_context_ext::ApplicationContextExt;
 use std::any::Any;
 use std::collections::HashMap;
-use std::sync::{Arc, OnceLock};
+use std::sync::Arc;
 
 use crate::HutoolException;
 
@@ -125,4 +125,4 @@ impl SpringUtil {
     }
 }
 
-use super::{APPLICATION_CONTEXT, enable_spring_util};
+use super::APPLICATION_CONTEXT;

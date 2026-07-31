@@ -2,13 +2,6 @@
 //! 来源: hutool-http/src/main/java/cn/hutool/http/HttpGlobalConfig.java
 //! 中文说明: 全局HTTP配置状态存储，管理超时、Cookie等进程级默认值
 
-use crate::cookie::{CookieManagerHandle, GlobalCookieManager};
-use crate::HostnameVerification;
-use std::sync::{Mutex, OnceLock};
-use std::time::Duration;
-
-use super::http_global_config::HttpGlobalConfig;
-
 /// Hutool-aligned global HTTP settings store.
 ///
 /// Java: `cn.hutool.http.HttpGlobalConfig`
@@ -44,4 +37,4 @@ impl Default for HttpGlobalConfigState {
     }
 }
 
-use super::{DEFAULT_BOUNDARY, state};
+use super::DEFAULT_BOUNDARY;

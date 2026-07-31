@@ -1,7 +1,5 @@
 //! 列/索引元数据 —— 对齐 Hutool `cn.hutool.db.meta.Column` / `IndexInfo`。
 
-use std::fmt;
-
 mod table_type;
 mod jdbc_type;
 mod column;

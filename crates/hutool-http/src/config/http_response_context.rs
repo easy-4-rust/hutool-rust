@@ -2,9 +2,7 @@
 //! 来源: hutool-http/src/main/java/cn/hutool/http/HttpResponseContext.java
 //! 中文说明: 响应拦截器上下文，暴露可变的响应状态码和头部信息
 
-use reqwest::{Method, StatusCode, Url, header::HeaderMap, tls::Version};
-use std::{fmt, sync::Arc, time::Duration};
-use thiserror::Error;
+use reqwest::{StatusCode, header::HeaderMap};
 
 /// Mutable response metadata exposed to application interceptors.
 #[derive(Debug, Clone)]
@@ -39,5 +37,3 @@ impl HttpResponseContext {
         self.headers
     }
 }
-
-use super::{duration};

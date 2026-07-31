@@ -2,10 +2,6 @@
 //! 来源: hutool-system/src/main/java/cn/hutool/system/oshi/CpuInfo.java
 //! 中文说明: CPU tick 计数器，不暴露计数器的平台保留为零
 
-use std::{thread, time::Duration};
-
-use sysinfo::{Components, Disks, Networks, Pid, System};
-
 /// 对齐: `cn.hutool.system.oshi.CpuInfo` (tick 部分)
 /// 中文说明: CPU tick 计数器，不暴露计数器的平台保留为零
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]

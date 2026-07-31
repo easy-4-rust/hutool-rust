@@ -4,6 +4,8 @@
 //! 异构元素用 `serde_json::Value` 承载，保留 Eq/Hash/Display；
 //! Java Stream/Spliterator 映射为迭代器与 `to_list`。
 
+#![allow(dead_code)] // 对齐 Java Tuple，暂未接线，预留
+
 use serde_json::Value;
 use std::hash::{Hash, Hasher};
 

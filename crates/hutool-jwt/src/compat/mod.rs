@@ -2,21 +2,20 @@
 //!
 //! 该模块继续承载 Hutool `cn.hutool.jwt` 兼容实现，已开始按 Java 对象逐步拆分文件。
 
-use std::fmt;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use base64::Engine as _;
 use base64::engine::general_purpose::{STANDARD, URL_SAFE, URL_SAFE_NO_PAD};
-use jsonwebtoken::crypto;
-use jsonwebtoken::{Algorithm, DecodingKey, EncodingKey};
-use p256::elliptic_curve::sec1::ToEncodedPoint as _;
-use rsa::pkcs1::{
-    DecodeRsaPrivateKey as _, DecodeRsaPublicKey as _, EncodeRsaPrivateKey as _,
-    EncodeRsaPublicKey as _,
-};
-use rsa::pkcs8::{DecodePrivateKey as _, DecodePublicKey as _, EncodePrivateKey as _};
 use serde_json::{Map, Value};
+
+// 仅测试构建需要的 PEM 密钥 trait 导入（lib 构建不编译 `#[cfg(test)]` 代码）。
+#[cfg(test)]
+use jsonwebtoken::Algorithm;
+#[cfg(test)]
+use rsa::pkcs1::{DecodeRsaPrivateKey as _, EncodeRsaPublicKey as _};
+#[cfg(test)]
+use rsa::pkcs8::{DecodePrivateKey as _, DecodePublicKey as _, EncodePrivateKey as _};
 
 // signers 子包模块声明
 pub mod signers;
@@ -24,10 +23,7 @@ pub mod signers;
 // 让 mod.rs 内的 #[cfg(test)] 可使用 signers 子包内的 helper 函数
 // （包括 signing_input/signing_result/verification_result/key_error/pem_text/rsa_private_der/...）
 #[cfg(test)]
-pub(crate) use signers::all::{
-    ec256_keys_from_pem, ec384_keys_from_pem, key_error, pem_text, rsa_private_der,
-    rsa_public_der, signing_input, signing_result, verification_result,
-};
+pub(crate) use signers::all::{pem_text, signing_result, verification_result};
 
 mod claims;
 mod jwt_exception;

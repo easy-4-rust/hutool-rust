@@ -1,5 +1,7 @@
 //! 对齐: `cn.hutool.core.lang.func.LambdaUtil`
 
+#![allow(dead_code)] // 对齐 Java LambdaUtil，暂未接线，预留
+
 /// 对齐 Java: `LambdaUtil` — Rust 无方法引用，提供可断言的名称解析辅助
 pub struct LambdaUtil;
 

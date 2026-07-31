@@ -90,7 +90,7 @@ impl AIConfigBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::ai_config::{AIConfig, AIConfigMut};
+    use crate::core::ai_config::AIConfig;
 
     #[test]
     fn builder_validates_unsupported_provider_and_chains_fields() {

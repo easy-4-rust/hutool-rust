@@ -7,16 +7,10 @@
 
 use std::time::Duration;
 
-use lettre::message::{Mailbox, Message};
-use lettre::transport::smtp::response::Response;
+use lettre::message::Mailbox;
 
-use crate::mail::{
-    MailAttachment, MailBody, MailLimits, MailMessage, SmtpClient, SmtpConfig, SmtpCredentials,
-    SmtpSecurity,
-};
-use crate::{ExtraError, Result};
-
-use super::mail::Mail;
+use crate::mail::{SmtpClient, SmtpConfig, SmtpCredentials, SmtpSecurity};
+use crate::Result;
 
 /// Hutool `MailAccount` — SMTP relay settings without a global singleton.
 ///
@@ -105,7 +99,7 @@ impl MailAccount {
         self
     }
 
-    /// Sets the From mailbox used by [`Mail`] builders.
+    /// Sets the From mailbox used by `Mail` builders.
     #[must_use]
     pub fn set_from(mut self, from: Mailbox) -> Self {
         self.from = Some(from);

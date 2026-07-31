@@ -4,7 +4,6 @@
 //! 具体实现依赖 `javax.net.ssl.SSLSocketFactory`，Rust 用 reqwest 内置 rustls 替代。
 
 use std::any::Any;
-use std::io;
 
 /// 信任任意主机名验证器，对齐 `cn.hutool.http.ssl.TrustAnyHostnameVerifier`。
 ///

@@ -1,7 +1,7 @@
 //! JSON 扩展 parity 测试 2
 //! 对齐: hutool-json 多个测试类
 
-use hutool_json::{parse, parse_object, parse_array, is_valid, minify, pretty, to_string, to_string_pretty, from_str};
+use hutool_json::{parse, parse_object, parse_array, is_valid, to_string, to_string_pretty, from_str};
 use hutool_json::{Value, json};
 
 // ── parse 扩展测试 (10 tests) ──

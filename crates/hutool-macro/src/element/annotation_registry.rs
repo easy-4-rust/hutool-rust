@@ -3,8 +3,6 @@
 use std::collections::HashMap;
 use std::sync::Arc;
 
-use parking_lot::RwLock;
-
 use crate::mirror::{AnnotationMirror, AnnotationSchema, AnnotationTypeName, AnnotationValue};
 
 pub use crate::mirror::ElementHandle;
@@ -143,5 +141,3 @@ impl AnnotationRegistry {
         chain
     }
 }
-
-use super::{GLOBAL_REGISTRY, global_registry};

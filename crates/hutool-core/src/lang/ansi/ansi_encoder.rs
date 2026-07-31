@@ -1,5 +1,7 @@
 //! 对齐: `cn.hutool.core.lang.ansi.AnsiEncoder`
 
+#![allow(dead_code)] // 对齐 Java AnsiEncoder，暂未接线，预留
+
 use crate::lang::ansi::ansi_color::AnsiColor;
 
 /// 对齐 Java: `AnsiEncoder`

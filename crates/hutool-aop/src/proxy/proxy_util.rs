@@ -3,11 +3,9 @@
 //! 中文说明: 代理工具类，提供创建代理实例的便捷静态方法。
 
 use crate::{
-    HandlerProxy, Method,
+    HandlerProxy,
     aspects::Aspect,
-    interceptor::{CglibInterceptor, JdkInterceptor, SpringCglibInterceptor},
 };
-use std::{fmt, sync::Arc};
 
 use super::proxy::Proxy;
 use super::proxy_factory::ProxyFactory;

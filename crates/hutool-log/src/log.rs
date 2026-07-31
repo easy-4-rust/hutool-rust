@@ -2,11 +2,7 @@
 //! 来源: hutool-log/src/main/java/cn/hutool/log/Log.java
 //! 中文说明: 面向对象安全的 Hutool 日志接口 trait，提供各级别日志记录方法。
 
-use std::{
-    collections::HashMap,
-    fmt,
-    sync::{Arc, OnceLock, RwLock},
-};
+use std::fmt;
 
 use crate::format_message::format_message;
 use crate::level::LogLevel;

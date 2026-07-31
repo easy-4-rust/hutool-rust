@@ -5,15 +5,10 @@
 #![allow(clippy::missing_panics_doc)]
 
 use std::{
-    cmp::Ordering,
-    collections::BinaryHeap,
     fmt,
-    sync::{Arc, Mutex, mpsc},
-    thread::{self, JoinHandle},
-    time::{Duration, SystemTime, UNIX_EPOCH},
+    sync::{Arc, Mutex},
+    time::Duration,
 };
-
-use crate::CronError;
 
 /// 对齐: `cn.hutool.cron.timingwheel.TimerTask`
 /// 中文说明: 具有相对延迟的一次性定时任务。
@@ -94,6 +89,4 @@ impl fmt::Debug for TimerTask {
     }
 }
 
-use super::{
-    ScheduledTask, TaskFn, TimerCommand, TimerTaskInner, bounded_wait, now_millis, run_timer,
-};
+use super::{TimerTaskInner, now_millis};

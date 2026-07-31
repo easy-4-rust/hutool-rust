@@ -105,33 +105,44 @@ impl LocalDateTimeUtil {
         Self::parse(s)
     }
 
+    /// 解析日期字符串。
+    ///
+    /// # Errors
+    ///
+    /// 格式不合法时返回解析错误。
     pub fn parse_date(date_str: &str) -> Result<NaiveDate> {
         NaiveDate::parse_from_str(date_str.trim(), "%Y-%m-%d").map_err(CoreError::from)
     }
 
+    /// 按格式格式化日期时间。
     pub fn format(dt: NaiveDateTime, pattern: &str) -> String {
         let chrono_pat = date_pattern::to_chrono_format(pattern);
         dt.format(&chrono_pat).to_string()
     }
 
+    /// 按默认格式格式化日期时间。
     pub fn format_normal(dt: NaiveDateTime) -> String {
         dt.format("%Y-%m-%dT%H:%M:%S").to_string()
     }
 
+    /// 按格式格式化日期。
     pub fn format_local_date(date: NaiveDate, pattern: &str) -> String {
         let chrono_pat = date_pattern::to_chrono_format(pattern);
         date.format(&chrono_pat).to_string()
     }
 
+    /// 当天开始时刻。
     pub fn begin_of_day(dt: NaiveDateTime) -> NaiveDateTime {
         dt.date().and_hms_opt(0, 0, 0).unwrap()
     }
+    /// 当天结束时刻。
     pub fn end_of_day(dt: NaiveDateTime) -> NaiveDateTime {
         dt.date()
             .and_hms_nano_opt(23, 59, 59, 999_000_000)
             .unwrap()
     }
 
+    /// 按单位偏移。
     pub fn offset(dt: NaiveDateTime, unit: DateUnit, offset: i64) -> NaiveDateTime {
         match unit {
             DateUnit::Day => dt + Duration::days(offset),
@@ -143,11 +154,13 @@ impl LocalDateTimeUtil {
         }
     }
 
+    /// 计算两时间在指定单位上的间隔。
     pub fn between(start: NaiveDateTime, end: NaiveDateTime, unit: DateUnit) -> i64 {
         let ms = (end - start).num_milliseconds();
         ms / unit.get_millis()
     }
 
+    /// 两区间是否重叠。
     pub fn is_overlap(
         start1: NaiveDateTime,
         end1: NaiveDateTime,
@@ -157,6 +170,7 @@ impl LocalDateTimeUtil {
         start1 <= end2 && start2 <= end1
     }
 
+    /// 一年中的周数。
     pub fn week_of_year(dt: NaiveDateTime) -> u32 {
         week_of_year_mon_min1(dt.date())
     }

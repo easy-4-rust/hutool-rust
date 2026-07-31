@@ -8,8 +8,8 @@ use std::{
 use encoding_rs::{Encoding, GBK};
 
 use crate::{
-    CoreError, Decoder, Encoder, Result,
-    advanced_codec::{convert_base, translate_digits},
+    CoreError, Result,
+    advanced_codec::{convert_base},
     base32_decode, base32_encode, base32_hex_decode, base32_hex_encode, base62_decode,
     base62_encode, base62_inverted_decode, base62_inverted_encode,
 };
@@ -41,6 +41,7 @@ const BASE62_GMP_BYTES: [u8; 62] =
 const BASE62_INVERTED_BYTES: [u8; 62] =
     *b"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+/// 按字符集编码后 Base32 编码。
 pub fn base32_encode_text(input: &str, encoding: &'static Encoding, use_hex: bool) -> String {
     let (bytes, _, _) = encoding.encode(input);
     if use_hex {
@@ -50,6 +51,11 @@ pub fn base32_encode_text(input: &str, encoding: &'static Encoding, use_hex: boo
     }
 }
 
+/// Base32 解码后按字符集解码为文本。
+///
+/// # Errors
+///
+/// 输入非法时返回 [`CoreError::Codec`]。
 pub fn base32_decode_text(
     input: &str,
     encoding: &'static Encoding,
@@ -63,6 +69,11 @@ pub fn base32_decode_text(
     Ok(encoding.decode(&bytes).0.into_owned())
 }
 
+/// 从 Reader 读取并 Base32 编码。
+///
+/// # Errors
+///
+/// 读取失败时返回 IO 错误。
 pub fn base32_encode_reader(mut reader: impl Read, use_hex: bool) -> Result<String> {
     let mut input = Vec::new();
     reader.read_to_end(&mut input)?;
@@ -73,10 +84,20 @@ pub fn base32_encode_reader(mut reader: impl Read, use_hex: bool) -> Result<Stri
     })
 }
 
+/// 从文件读取并 Base32 编码。
+///
+/// # Errors
+///
+/// 打开/读取文件失败时返回 IO 错误。
 pub fn base32_encode_file(path: impl AsRef<Path>, use_hex: bool) -> Result<String> {
     base32_encode_reader(std::fs::File::open(path)?, use_hex)
 }
 
+/// Base32 解码并写入 Writer。
+///
+/// # Errors
+///
+/// 解码或写入失败时返回错误。
 pub fn base32_decode_to_writer(
     input: &str,
     mut writer: impl Write,
@@ -91,10 +112,16 @@ pub fn base32_decode_to_writer(
     Ok(decoded.len())
 }
 
+/// Base32 解码并写入文件。
+///
+/// # Errors
+///
+/// 解码或写入失败时返回错误。
 pub fn base32_decode_to_file(input: &str, path: impl AsRef<Path>, use_hex: bool) -> Result<usize> {
     base32_decode_to_writer(input, std::fs::File::create(path)?, use_hex)
 }
 
+/// 按字符集编码后 Base62 编码。
 pub fn base62_encode_text(input: &str, encoding: &'static Encoding, inverted: bool) -> String {
     let (bytes, _, _) = encoding.encode(input);
     if inverted {
@@ -104,6 +131,11 @@ pub fn base62_encode_text(input: &str, encoding: &'static Encoding, inverted: bo
     }
 }
 
+/// Base62 解码后按字符集解码为文本。
+///
+/// # Errors
+///
+/// 输入非法时返回 [`CoreError::Codec`]。
 pub fn base62_decode_text(
     input: &str,
     encoding: &'static Encoding,
@@ -117,10 +149,20 @@ pub fn base62_decode_text(
     Ok(encoding.decode(&bytes).0.into_owned())
 }
 
+/// Base62 解码（GBK 字符集）。
+///
+/// # Errors
+///
+/// 输入非法时返回 [`CoreError::Codec`]。
 pub fn base62_decode_text_gbk(input: &str) -> Result<String> {
     base62_decode_text(input, GBK, false)
 }
 
+/// 从 Reader 读取并 Base62 编码。
+///
+/// # Errors
+///
+/// 读取失败时返回 IO 错误。
 pub fn base62_encode_reader(mut reader: impl Read, inverted: bool) -> Result<String> {
     let mut input = Vec::new();
     reader.read_to_end(&mut input)?;
@@ -131,10 +173,20 @@ pub fn base62_encode_reader(mut reader: impl Read, inverted: bool) -> Result<Str
     })
 }
 
+/// 从文件读取并 Base62 编码。
+///
+/// # Errors
+///
+/// 打开/读取文件失败时返回 IO 错误。
 pub fn base62_encode_file(path: impl AsRef<Path>, inverted: bool) -> Result<String> {
     base62_encode_reader(std::fs::File::open(path)?, inverted)
 }
 
+/// Base62 解码并写入 Writer。
+///
+/// # Errors
+///
+/// 解码或写入失败时返回错误。
 pub fn base62_decode_to_writer(
     input: &str,
     mut writer: impl Write,
@@ -149,10 +201,20 @@ pub fn base62_decode_to_writer(
     Ok(decoded.len())
 }
 
+/// Base62 解码并写入文件。
+///
+/// # Errors
+///
+/// 解码或写入失败时返回错误。
 pub fn base62_decode_to_file(input: &str, path: impl AsRef<Path>, inverted: bool) -> Result<usize> {
     base62_decode_to_writer(input, std::fs::File::create(path)?, inverted)
 }
 
+/// BCD 编码（取前 `length` 字节）。
+///
+/// # Errors
+///
+/// `length` 超出输入长度或含非十六进制字节时返回 [`CoreError::Codec`]。
 pub fn bcd_encode_ascii_prefix(input: &[u8], length: usize) -> Result<Vec<u8>> {
     if length > input.len() {
         return Err(CoreError::Codec("BCD prefix exceeds input length".into()));

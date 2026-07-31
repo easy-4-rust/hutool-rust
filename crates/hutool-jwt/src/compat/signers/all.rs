@@ -13,10 +13,7 @@
 // 共享 imports (与 crates/hutool-jwt/src/compat/mod.rs 头部相同)
 use std::fmt;
 use std::sync::Arc;
-use std::time::{SystemTime, UNIX_EPOCH};
 
-use base64::Engine as _;
-use base64::engine::general_purpose::{STANDARD, URL_SAFE, URL_SAFE_NO_PAD};
 use jsonwebtoken::crypto;
 use jsonwebtoken::{Algorithm, DecodingKey, EncodingKey};
 use p256::elliptic_curve::sec1::ToEncodedPoint as _;
@@ -25,12 +22,15 @@ use rsa::pkcs1::{
     EncodeRsaPublicKey as _,
 };
 use rsa::pkcs8::{DecodePrivateKey as _, DecodePublicKey as _, EncodePrivateKey as _};
-use serde_json::{Map, Value};
+use serde_json::Value;
 
 // 引用 compat 顶层模块的其他类型
 use crate::compat::jwt_exception::JWTException;
 use crate::compat::jwt_payload::JWTPayload;
-use crate::compat::jwt_header::JWTHeader;
+
+/// 注册声明（iss/sub/aud/exp/nbf/iat/jti）的便捷 setter。
+///
+/// 对齐 Java: `cn.hutool.jwt.signers.RegisteredPayload`
 pub trait RegisteredPayload {
     /// Sets a registered payload value.
     fn set_registered(&mut self, name: &'static str, value: Value) -> &mut Self;

@@ -6,8 +6,6 @@
 //!
 //! 这些 trait 让 hutool 的 JDBC API 在 Rust 端"有迹可循"，方便迁移用户理解 API 形状。
 
-use std::any::Any;
-
 mod statement_wrapper;
 mod connection_wraper;
 mod abstract_data_source;

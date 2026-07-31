@@ -1,8 +1,5 @@
 //! Immutable high-throughput matching backed by `aho-corasick`.
 
-use crate::DfaError;
-use aho_corasick::{AhoCorasick, AhoCorasickBuilder, MatchKind};
-
 mod pattern_match;
 mod dfa_matcher;
 

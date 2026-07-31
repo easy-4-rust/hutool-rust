@@ -3,15 +3,11 @@
 //! 对齐: `cn.hutool.core.img.ImgUtil`（extra 侧字节流语义）
 //! Hutool ImgUtil 在 core；本模块提供同名门面，委托有界 resize/crop/convert。
 
-use std::io::Cursor;
-
-use ::image::{DynamicImage, GenericImageView, ImageFormat, ImageReader, imageops::FilterType};
-
 use crate::{ExtraError, Result};
 
 use super::image_limits::ImageLimits;
 use super::output_format::OutputFormat;
-use super::resize_mode::ResizeMode;
+use super::resize_mode::{ResizeMode, crop, dimensions, resize};
 
 /// Hutool-named image facade over bounded byte-oriented helpers.
 ///
@@ -99,15 +95,6 @@ impl ImgUtil {
             ImageLimits::default(),
         )
     }
-}
-
-pub(crate) fn crop(
-
-pub(crate) fn resize(
-
-pub(crate) fn dimensions(bytes: &[u8], limits: ImageLimits) -> Result<(u32, u32)> {
-    let image = decode(bytes, limits)?;
-    Ok(image.dimensions())
 }
 
 fn output_from_name(format: &str, jpeg_quality: u8) -> Result<OutputFormat> {

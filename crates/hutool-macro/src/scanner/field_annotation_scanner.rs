@@ -2,7 +2,7 @@
 
 use std::sync::Arc;
 
-use super::annotation_scanner::{declared_annotations, accept_annotation, AnnotationScanner, ScanConsumer};
+use super::annotation_scanner::{AnnotationScanner, ScanConsumer};
 use super::element_annotation_scanner::ElementAnnotationScanner;
 use crate::element::{global_registry, ElementHandle, ElementKind};
 

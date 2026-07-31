@@ -2,12 +2,6 @@
 //! 来源: hutool-http/src/main/java/cn/hutool/http/base/HttpBaseError.java
 //! 中文说明: HTTP基础元数据错误类型，处理编码不支持等异常
 
-use crate::Header;
-use encoding_rs::{Encoding, UTF_8};
-use std::{
-    collections::{HashMap, hash_map::Entry},
-    fmt,
-};
 use thiserror::Error;
 
 /// Errors returned while configuring shared HTTP metadata.
@@ -17,5 +11,3 @@ pub enum HttpBaseError {
     #[error("unsupported HTTP character encoding: {0}")]
     UnsupportedCharset(String),
 }
-
-use super::{HTTP_1_0, HTTP_1_1};

@@ -3,19 +3,7 @@
 /// 对齐: `cn.hutool.core.codec.Base32`
 /// Base32 编码器
 
-use std::{
-    io::{Read, Write},
-    path::Path,
-};
-
-use encoding_rs::{Encoding, GBK};
-
-use crate::{
-    CoreError, Decoder, Encoder, Result,
-    advanced_codec::{convert_base, translate_digits},
-    base32_decode, base32_encode, base32_hex_decode, base32_hex_encode, base62_decode,
-    base62_encode, base62_inverted_decode, base62_inverted_encode,
-};
+use crate::{CoreError, Encoder, Result};
 
 /// Base32 encoder with a validated custom ASCII alphabet and optional pad.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -87,6 +75,4 @@ impl Encoder<[u8], String> for Base32Encoder {
     }
 }
 
-use super::{BASE32_HEX_BYTES, BASE32_STANDARD_BYTES, BASE58_BITCOIN_BYTES, BASE62_GMP_BYTES, BASE62_INVERTED_BYTES, base32_decode_text, base32_decode_to_file, base32_decode_to_writer};
-use super::{base32_encode_file, base32_encode_reader, base32_encode_text, base62_decode_text, base62_decode_text_gbk, base62_decode_to_file, base62_decode_to_writer, base62_encode_file};
-use super::{base62_encode_reader, base62_encode_text, bcd_encode_ascii_prefix, bcd_nibble, decode_alphabet, validate_alphabet};
+use super::{BASE32_HEX_BYTES, BASE32_STANDARD_BYTES, validate_alphabet};

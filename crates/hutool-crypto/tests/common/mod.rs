@@ -4,6 +4,7 @@ use hutool_crypto as hc;
 use std::fs;
 
 pub const RSA_PLAINTEXT: &str = "我是一段测试aaaa";
+#[allow(dead_code)] // 保留给后续长度/边界类 parity 测试使用
 pub const RSA_LONG_BASE: &str = "我是一段特别长的测试";
 
 /// Loads a PEM fixture from `tests/resources/`.
@@ -13,6 +14,7 @@ pub fn load_resource(name: &str) -> String {
 }
 
 /// AES-256-GCM round-trip helper.
+#[allow(dead_code)] // 保留给后续 AES parity 测试使用
 pub fn aes_gcm_round_trip(plaintext: &[u8]) {
     let key = [7u8; 32];
     let ct = hc::aes256_gcm_encrypt(&key, plaintext).expect("encrypt");
@@ -29,6 +31,7 @@ pub fn rsa_pub_enc_priv_dec(plaintext: &str) {
 }
 
 /// RSA OAEP round-trip.
+#[allow(dead_code)] // 保留给后续 RSA-OAEP parity 测试使用
 pub fn rsa_oaep_round_trip(plaintext: &str) {
     let pair = hc::generate_rsa_keypair().expect("keygen");
     let ct = hc::rsa_encrypt_oaep(&pair.public_key, plaintext.as_bytes()).expect("enc");

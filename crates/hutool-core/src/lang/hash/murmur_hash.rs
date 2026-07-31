@@ -1,6 +1,8 @@
 //! 对齐: `cn.hutool.core.lang.hash.MurmurHash`
 //! hash32 使用 murmur3 crate；hash64 忠实移植 Hutool 自有变体（128bit MSB）。
 
+#![allow(dead_code)] // 对齐 Java MurmurHash，暂未接线，预留
+
 use std::io::Cursor;
 
 const C1: u64 = 0x87c37b91114253d5;

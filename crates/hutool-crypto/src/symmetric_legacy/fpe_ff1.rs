@@ -49,6 +49,3 @@ impl FpeFf1 {
         Ok(out)
     }
 }
-
-use super::{DesEcbDec, DesEcbEnc, pkcs7_pad, pkcs7_unpad, read_u32_be, read_u32_key, sm4_ecb, tea_core};
-use super::{vigenere_map, write_u32_be};

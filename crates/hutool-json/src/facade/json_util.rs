@@ -2,13 +2,11 @@
 //! 来源: hutool-json/src/main/java/cn/hutool/json/JSONUtil.java
 //! 中文说明: JSON 工具类，提供创建、解析、序列化、判断等静态方法。
 
-use std::io::Write;
-
 use serde::{Serialize, de::DeserializeOwned};
 use serde_json::Value;
 
 use crate::{
-    JSONArray, JSONConfig, JSONObject, JsonContainer, JsonError, Result, get_by_path, put_by_path,
+    JSONArray, JSONConfig, JSONObject, JsonContainer, Result, get_by_path, put_by_path,
 };
 
 /// 对齐: `cn.hutool.json.JSONUtil`
@@ -160,5 +158,3 @@ impl JSONUtil {
         value.is_null()
     }
 }
-
-use super::{WriterMode, normalize_writer_value};

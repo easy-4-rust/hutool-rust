@@ -1,14 +1,10 @@
 //! 对齐: `cn.hutool.core.thread.ExecutorBuilder`
 //! 来源: hutool-core/src/main/java/cn/hutool/core/thread/ExecutorBuilder.java
 
-use crate::thread::named_thread_factory::NamedThreadFactory;
 use crate::thread::reject_policy::RejectPolicy;
-use std::sync::mpsc::{self, Receiver, Sender, SyncSender};
-use std::sync::{Arc, Mutex};
+use std::sync::mpsc;
+use std::sync::Mutex;
 use std::thread::{self, JoinHandle};
-use std::time::Duration;
-
-use super::executor_builder::ExecutorBuilder;
 
 /// 简易线程池（对齐 ExecutorBuilder 构建结果的可运行子集）
 pub struct SimpleExecutor {
@@ -79,4 +75,4 @@ impl Drop for SimpleExecutor {
     }
 }
 
-use super::{JobChannel, QueueKind};
+use super::JobChannel;

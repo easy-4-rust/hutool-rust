@@ -6,8 +6,6 @@
 
 use std::fmt;
 
-use crate::HutoolException;
-
 /// FTP 连接模式，对齐 `cn.hutool.extra.ftp.FtpMode`。
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
 pub enum FtpMode {

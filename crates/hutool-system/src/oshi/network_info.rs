@@ -2,10 +2,6 @@
 //! 来源: hutool-system/src/main/java/cn/hutool/system/oshi/NetworkIF.java
 //! 中文说明: 网络接口传输快照，包含接口名称、接收字节总数和发送字节总数
 
-use std::{thread, time::Duration};
-
-use sysinfo::{Components, Disks, Networks, Pid, System};
-
 /// 对齐: `cn.hutool.system.oshi.NetworkIF`
 /// 中文说明: 网络接口传输快照，包含接口名称、接收字节总数和发送字节总数
 #[derive(Debug, Clone, PartialEq, Eq)]

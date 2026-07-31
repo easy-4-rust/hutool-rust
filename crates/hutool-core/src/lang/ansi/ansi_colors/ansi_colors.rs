@@ -1,5 +1,7 @@
 //! 对齐: `cn.hutool.core.lang.ansi.AnsiColors`
 
+#![allow(dead_code)] // 对齐 Java AnsiColors，暂未接线，预留
+
 use super::bit_depth::BitDepth;
 use super::closest_color::ClosestColor;
 

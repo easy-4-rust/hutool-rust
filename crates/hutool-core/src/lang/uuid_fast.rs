@@ -1,6 +1,8 @@
 //! 对齐: `cn.hutool.core.lang.UUID`（fastUUID / randomUUID / fromString）
 //! 来源: hutool-core/src/main/java/cn/hutool/core/lang/UUID.java
 
+#![allow(dead_code)] // 对齐 Java UUID，暂未接线，预留
+
 use std::cmp::Ordering;
 use std::fmt;
 use uuid::Uuid;

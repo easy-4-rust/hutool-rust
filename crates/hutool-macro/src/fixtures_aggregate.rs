@@ -6,42 +6,59 @@ use std::sync::Arc;
 use super::alias_annotation_post_processor::ALIAS_TYPE;
 use super::element::{AnnotationRegistry, TypeBuilder};
 use super::link::LINK_TYPE;
-use super::mirror::{AnnotationMirror, AnnotationSchema, AnnotationValue, AttributeDef, ValueKind};
+use super::mirror::{AnnotationMirror, AnnotationSchema, AnnotationValue, AttributeDef};
 use super::relation_type::RelationType;
 
 const P: &str = "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest";
 
+/// GenericSynthesizedAggregateAnnotationTest 测试类型名。
 pub mod types {
+    /// GrandParent 注解全限定名。
     pub const GRAND_PARENT: &str =
         "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.GrandParentAnnotation";
+    /// Parent 注解全限定名。
     pub const PARENT: &str =
         "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.ParentAnnotation";
+    /// Child 注解全限定名。
     pub const CHILD: &str =
         "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.ChildAnnotation";
+    /// 镜像测试注解全限定名。
     pub const MIRROR: &str =
         "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.AnnotationForMirrorTest";
+    /// AliasFor 测试注解全限定名。
     pub const ALIAS_FOR: &str =
         "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.AnnotationForAliasForTest";
+    /// MetaAliasFor 测试注解全限定名。
     pub const META_ALIAS_FOR: &str =
         "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.MetaAnnotationForAliasForTest";
+    /// ForceAliasFor 测试注解全限定名。
     pub const FORCE_ALIAS: &str =
         "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.AnnotationForceForAliasForTest";
+    /// MetaForceAliasFor 测试注解全限定名。
     pub const META_FORCE_ALIAS: &str =
         "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.MetaAnnotationForForceAliasForTest";
+    /// Link 测试注解全限定名。
     pub const LINK_TEST: &str =
         "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.AnnotationForLinkTest";
+    /// MirrorThenAliasFor 测试注解全限定名。
     pub const MIRROR_THEN_ALIAS: &str =
         "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.AnnotationForMirrorThenAliasForTest";
+    /// MetaMirrorThenAliasFor 测试注解全限定名。
     pub const META_MIRROR_THEN_ALIAS: &str =
         "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.MetaAnnotationForMirrorThenAliasForTest";
+    /// MultiAliasFor 测试注解全限定名。
     pub const MULTI_ALIAS: &str =
         "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.AnnotationForMultiAliasForTest";
+    /// MetaMultiAliasFor1 测试注解全限定名。
     pub const META_MULTI1: &str =
         "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.MetaAnnotationForMultiAliasForTest1";
+    /// MetaMultiAliasFor2 测试注解全限定名。
     pub const META_MULTI2: &str =
         "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.MetaAnnotationForMultiAliasForTest2";
+    /// ImplicitAlias 测试注解全限定名。
     pub const IMPLICIT: &str =
         "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.AnnotationForImplicitAliasTest";
+    /// MetaImplicitAlias 测试注解全限定名。
     pub const META_IMPLICIT: &str =
         "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.MetaAnnotationForImplicitAliasTest";
 }

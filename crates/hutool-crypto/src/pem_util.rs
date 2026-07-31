@@ -3,7 +3,7 @@
 //! 中文说明: PEM 格式密钥读写工具，对齐 Hutool PemUtil
 
 use crate::CryptoError;
-use rsa::pkcs8::{DecodePrivateKey, EncodePrivateKey, LineEnding};
+use rsa::pkcs8::{EncodePrivateKey, LineEnding};
 use rsa::{RsaPrivateKey, RsaPublicKey};
 
 /// Parsed PEM object kind.
@@ -98,7 +98,6 @@ pub fn rsa_public_key_from_cert_der(der: &[u8]) -> Result<RsaPublicKey, CryptoEr
 
 /// Reads EC SEC1 private key PEM and returns raw scalar bytes (`PemUtil.readECPrivateKeyTest`).
 pub fn read_ec_private_key_pem(pem: &str) -> Result<Vec<u8>, CryptoError> {
-    use p256::pkcs8::DecodePrivateKey as _;
     let key = p256::SecretKey::from_sec1_pem(pem).map_err(|_| CryptoError::InvalidPem)?;
     Ok(key.to_bytes().to_vec())
 }

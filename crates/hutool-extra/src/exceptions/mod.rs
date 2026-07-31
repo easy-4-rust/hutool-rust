@@ -10,8 +10,6 @@
 //!
 //! 使用宏 `define_hutool_exception!` 批量实现，避免重复代码。
 
-use thiserror::Error;
-
 mod hutool_exception;
 mod mail_exception;
 mod qr_code_exception;

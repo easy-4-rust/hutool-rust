@@ -1,12 +1,10 @@
 //! 对齐: `cn.hutool.core.annotation.CacheableSynthesizedAnnotationAttributeProcessor`
 
 use std::collections::HashMap;
-use std::sync::{Arc, RwLock};
+use std::sync::Arc;
 
-use crate::hierarchical::default_hierarchical_cmp;
 use crate::mirror::{AnnotationValue, ValueKind};
 use crate::synthesized_annotation::SynthesizedAnnotation;
-use crate::synthesized_annotation_attribute_processor::SynthesizedAnnotationAttributeProcessor;
 
 /// 测试用合成注解（带值 map）。
 pub struct TestValueSynthesizedAnnotation {

@@ -1,5 +1,7 @@
 //! 对齐: `cn.hutool.core.lang.reflect.MethodHandleUtil`
 
+#![allow(dead_code)] // 对齐 Java MethodHandleUtil，暂未接线，预留
+
 /// 对齐 Java: `MethodHandleUtil` — 用函数指针近似
 pub struct MethodHandleUtil;
 

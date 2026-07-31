@@ -4,10 +4,6 @@
 //! 各具体引擎（Aviator/JEXL/JfireEL/Mvel/QLExpress/Rhino/SpEL）需要外部 Java crate，
 //! 属于 unsafe-to-copy，暂不在 hutool-extra 中实现。
 
-use std::collections::HashMap;
-
-use crate::HutoolException;
-
 mod expression_engine;
 mod expression_util;
 

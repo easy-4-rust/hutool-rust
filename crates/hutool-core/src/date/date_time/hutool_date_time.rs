@@ -6,10 +6,10 @@
 
 #![allow(dead_code)]
 
-use chrono::{Datelike, Duration, FixedOffset, NaiveDate, NaiveDateTime, Timelike, Weekday};
+use chrono::{Datelike, Duration, NaiveDate, NaiveDateTime, Timelike, Weekday};
 
 use crate::date::date_field::DateField;
-use crate::date::date_pattern::{self, NORM_DATETIME_MS_PATTERN, NORM_DATETIME_PATTERN};
+use crate::date::date_pattern::NORM_DATETIME_PATTERN;
 use crate::date::date_unit::DateUnit;
 use crate::date::month::Month;
 use crate::date::quarter::Quarter;

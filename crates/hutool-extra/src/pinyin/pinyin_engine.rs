@@ -1,7 +1,5 @@
 //! Pinyin helpers aligned with Hutool `PinyinUtil`, backed by the `pinyin` crate.
 
-use pinyin::{ToPinyin, ToPinyinMulti};
-
 /// Engine trait mirroring Hutool `PinyinEngine`.
 pub trait PinyinEngine: Send + Sync {
     /// Converts a single Chinese character.

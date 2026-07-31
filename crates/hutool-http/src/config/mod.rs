@@ -2,9 +2,7 @@
 //! 来源: hutool-http/src/main/java/cn/hutool/http/HttpConfig.java
 //! 中文说明: HTTP配置模块，包含TLS、拦截器、请求/响应上下文等配置组件
 
-use reqwest::{Method, StatusCode, Url, header::HeaderMap, tls::Version};
-use std::{fmt, sync::Arc, time::Duration};
-use thiserror::Error;
+use std::time::Duration;
 
 mod hostname_verification;
 mod tls_protocol;

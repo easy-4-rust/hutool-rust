@@ -19,6 +19,9 @@ pub use extraction_limits::ExtractionLimits;
 pub use compress_util::CompressUtil;
 pub use zip_util::ZipUtil;
 
+/// Creates an in-memory ZIP archive from named byte entries.
+///
+/// 对齐 Hutool `ZipUtil.zip`；条目名经过路径安全检查。
 pub fn create_zip(entries: &[(&str, &[u8])]) -> Result<Vec<u8>> {
     let mut writer = ZipWriter::new(Cursor::new(Vec::new()));
     let options = SimpleFileOptions::default()
@@ -32,6 +35,9 @@ pub fn create_zip(entries: &[(&str, &[u8])]) -> Result<Vec<u8>> {
     Ok(writer.finish()?.into_inner())
 }
 
+/// Safely extracts a ZIP archive beneath `destination`, enforcing resource limits.
+///
+/// 对齐 Hutool `ZipUtil.unzip`；拒绝符号链接、目录穿越与超限条目。
 pub fn extract_zip<R: Read + Seek>(
     reader: R,
     destination: impl AsRef<Path>,

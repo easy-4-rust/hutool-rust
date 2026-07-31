@@ -6,13 +6,13 @@
 //!
 //! 这些 trait 让 hutool 的 JDBC API 在 Rust 端"有迹可循"，方便迁移用户理解 API 形状。
 
-use std::any::Any;
-
 /// JDBC Wrapper 错误类型
 #[derive(Debug, thiserror::Error)]
 pub enum DbWrapperError {
+    /// JDBC SPI 在 Rust 端不可用。
     #[error("JDBC operation requires Java JDBC SPI; use SQLx in Rust instead")]
     JdbcSpiNotAvailable,
+    /// 其他 JDBC 操作失败。
     #[error("JDBC operation failed: {0}")]
     Other(String),
 }

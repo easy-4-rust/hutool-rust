@@ -1,6 +1,8 @@
 //! 对齐: `cn.hutool.core.lang.Matcher`
 //! 来源: hutool-core/src/main/java/cn/hutool/core/lang/Matcher.java
 
+#![allow(dead_code)] // 对齐 Java Matcher，暂未接线，预留
+
 /// 对齐 Java: `cn.hutool.core.lang.Matcher<T>`
 pub trait Matcher<T> {
     /// 对齐 Java: `Matcher.match(T)`

@@ -1,8 +1,6 @@
 //! 对齐: `cn.hutool.core.lang.intern.InternUtil`
 
-use parking_lot::Mutex;
-use std::collections::HashMap;
-use std::sync::Arc;
+#![allow(dead_code)] // 对齐 Java InternUtil，暂未接线，预留
 
 use super::weak_interner::WeakInterner;
 

@@ -2,7 +2,6 @@ use super::WatchOwner;
 use crate::{DEFAULT_ENCODING, GroupedMap, Props, SettingError, SettingLoader, checked_path};
 use encoding_rs::Encoding;
 use indexmap::IndexMap;
-use notify::{RecommendedWatcher, RecursiveMode, Watcher};
 use serde::de::DeserializeOwned;
 use std::{
     path::{Path, PathBuf},
@@ -395,4 +394,4 @@ impl notify::EventHandler for ReloadHandler {
 }
 
 
-use super::{ReloadHandler, box_watcher, create_recommended_watcher, fix_extension, reload_event};
+use super::{ReloadHandler, create_recommended_watcher, reload_event};

@@ -32,10 +32,9 @@ pub use operations::{AIResponse, Operation, StreamCallback, VideoParameter};
 pub use providers::OpenAiCompatibleProvider;
 
 use futures_core::Stream;
-use hutool_http::{HttpClient, Method, Url};
-use secrecy::{ExposeSecret, SecretString};
+use hutool_http::{HttpClient, Url};
 use serde::{Deserialize, Serialize};
-use std::{fmt, pin::Pin, sync::Arc};
+use std::pin::Pin;
 use thiserror::Error;
 
 /// A provider-neutral chat request.
@@ -245,32 +244,6 @@ impl OpenAiCompatibleProvider {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hutool_http::HttpConfig;
-    use tokio::{
-        io::{AsyncReadExt, AsyncWriteExt},
-        net::TcpListener,
-    };
-
-    async fn server(
-        responses: Vec<(&'static str, Vec<u8>)>,
-    ) -> (String, tokio::task::JoinHandle<()>) {
-        let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
-        let address = listener.local_addr().unwrap();
-        let task = tokio::spawn(async move {
-            for (content_type, body) in responses {
-                let (mut socket, _) = listener.accept().await.unwrap();
-                let mut request = vec![0; 8192];
-                let _ = socket.read(&mut request).await.unwrap();
-                let header = format!(
-                    "HTTP/1.1 200 OK\r\ncontent-type: {content_type}\r\ncontent-length: {}\r\nconnection: close\r\n\r\n",
-                    body.len()
-                );
-                socket.write_all(header.as_bytes()).await.unwrap();
-                socket.write_all(&body).await.unwrap();
-            }
-        });
-        (format!("http://{address}/v1/"), task)
-    }
 
     #[test]
     fn request_constructor_is_provider_neutral() {

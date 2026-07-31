@@ -1,8 +1,9 @@
 //! 对齐: `cn.hutool.core.lang.WeightRandom` / 内部类 `WeightObj`
 //! 来源: hutool-core/src/main/java/cn/hutool/core/lang/WeightRandom.java
 
+#![allow(dead_code)] // 对齐 Java WeightRandom，暂未接线，预留
+
 use rand::RngExt;
-use std::hash::{Hash, Hasher};
 
 use super::weight_obj::WeightObj;
 

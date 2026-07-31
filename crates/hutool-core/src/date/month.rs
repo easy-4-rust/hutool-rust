@@ -8,17 +8,29 @@ use crate::{CoreError, Result};
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[repr(i32)]
 pub enum Month {
+    /// 一月
     January = 0,
+    /// 二月
     February = 1,
+    /// 三月
     March = 2,
+    /// 四月
     April = 3,
+    /// 五月
     May = 4,
+    /// 六月
     June = 5,
+    /// 七月
     July = 6,
+    /// 八月
     August = 7,
+    /// 九月
     September = 8,
+    /// 十月
     October = 9,
+    /// 十一月
     November = 10,
+    /// 十二月
     December = 11,
     /// 十三月（农历专用）
     Undecimber = 12,

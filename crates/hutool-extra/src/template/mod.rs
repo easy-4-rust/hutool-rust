@@ -9,11 +9,6 @@
 //!   在各自的 `engine/<name>.rs` 子模块；本文件只提供配置 + facade。
 //! - 迁移状态：✅ 已实现（Phase 1.4 工作）
 
-use std::fmt;
-use std::path::Path;
-
-use thiserror::Error;
-
 mod template_exception;
 mod resource_mode;
 mod template_engine;
@@ -36,8 +31,10 @@ pub use abstract_template::AbstractTemplate;
 pub use template_util::TemplateUtil;
 pub use template_factory::TemplateFactory;
 
+/// 默认模板配置（进程级懒加载单例），对齐 hutool 的 `TemplateConfig` 默认实例。
 pub static DEFAULT_CONFIG: std::sync::OnceLock<TemplateConfig> = std::sync::OnceLock::new();
 
+/// 获取默认模板配置，首次调用时初始化。
 pub fn default_config() -> &'static TemplateConfig {
     DEFAULT_CONFIG.get_or_init(TemplateConfig::new)
 }

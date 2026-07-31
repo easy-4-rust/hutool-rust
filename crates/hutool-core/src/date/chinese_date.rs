@@ -123,39 +123,50 @@ impl ChineseDate {
         }
     }
 
+    /// 农历年份。
     pub fn get_chinese_year(&self) -> i32 {
         self.year
     }
+    /// 农历月份（闰月为 month+1）。
     pub fn get_month(&self) -> i32 {
         self.month
     }
+    /// 是否闰月。
     pub fn is_leap_month(&self) -> bool {
         self.is_leap_month
     }
+    /// 农历日。
     pub fn get_day(&self) -> i32 {
         self.day
     }
+    /// 公历年份。
     pub fn get_gregorian_year(&self) -> i32 {
         self.gyear
     }
+    /// 公历月份（1 为基准）。
     pub fn get_gregorian_month_base1(&self) -> i32 {
         self.gmonth_base1
     }
+    /// 公历日。
     pub fn get_gregorian_day(&self) -> i32 {
         self.gday
     }
 
+    /// 公历日期。
     pub fn get_gregorian_date(&self) -> DateTime {
         DateTime::of_ymd_hms(self.gyear, self.gmonth_base1 as u32, self.gday as u32, 0, 0, 0)
             .unwrap_or_else(|_| DateUtil::date())
     }
 
+    /// 农历月份（简体）。
     pub fn get_chinese_month(&self) -> String {
         self.get_chinese_month_trad(false)
     }
+    /// 农历月份名称（繁体）。
     pub fn get_chinese_month_name(&self) -> String {
         self.get_chinese_month_trad(true)
     }
+    /// 农历月份，按简体/繁体输出。
     pub fn get_chinese_month_trad(&self, is_traditional: bool) -> String {
         ChineseMonth::get_chinese_month_name(
             self.is_leap_month,
@@ -168,6 +179,7 @@ impl ChineseDate {
         )
     }
 
+    /// 农历日（中文）。
     pub fn get_chinese_day(&self) -> String {
         let day = self.day;
         let chinese_ten = ["初", "十", "廿", "卅"];
@@ -183,6 +195,7 @@ impl ChineseDate {
         }
     }
 
+    /// 农历节日。
     pub fn get_festivals(&self) -> String {
         LunarFestival::get_festivals(
             self.year,
@@ -195,14 +208,17 @@ impl ChineseDate {
         )
     }
 
+    /// 生肖。
     pub fn get_chinese_zodiac(&self) -> Option<&'static str> {
         Zodiac::get_chinese_zodiac(self.year)
     }
 
+    /// 干支（年）。
     pub fn get_cyclical(&self) -> String {
         GanZhi::get_ganzhi_of_year(self.year)
     }
 
+    /// 干支年月日。
     pub fn get_cyclical_ymd(&self) -> Option<String> {
         if self.gyear >= BASE_YEAR && self.gmonth_base1 > 0 && self.gday > 0 {
             Some(format!(
@@ -216,10 +232,12 @@ impl ChineseDate {
         }
     }
 
+    /// 节气。
     pub fn get_term(&self) -> String {
         SolarTerms::get_term(self.gyear, self.gmonth_base1, self.gday)
     }
 
+    /// 常规字符串表示。
     pub fn to_string_normal(&self) -> String {
         format!(
             "{:04}-{:02}-{:02}",

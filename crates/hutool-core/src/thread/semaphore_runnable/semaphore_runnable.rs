@@ -13,8 +13,6 @@
 
 use std::sync::Arc;
 
-use parking_lot::{Condvar, Mutex};
-
 use super::semaphore::Semaphore;
 
 /// 对齐 Java 类: `cn.hutool.core.thread.SemaphoreRunnable`
@@ -98,6 +96,7 @@ where
     }
 }
 
+#[allow(dead_code)] // 对齐 Java SemaphoreRunnable 许可守卫，暂未接线，预留
 struct PermitGuard<'a> {
     semaphore: &'a Semaphore,
 }

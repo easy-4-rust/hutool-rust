@@ -4,10 +4,6 @@
 //! 具体 FTP 协议操作（Ftp/SimpleFtpServer）需要外部 Java crate（Apache Commons Net /
 //! Apache FtpServer），属于 unsafe-to-copy。
 
-use std::fmt;
-
-use crate::HutoolException;
-
 /// FTP 配置 POJO，对齐 `cn.hutool.extra.ftp.FtpConfig`。
 ///
 /// 所有 setter 返回 `&mut Self` 以匹配 Java 的链式 API（`FtpConfig.setXxx` 返回 this）。
@@ -77,73 +73,91 @@ impl FtpConfig {
         }
     }
 
+    /// 对齐 `FtpConfig.getHost()`
     pub fn get_host(&self) -> Option<&str> {
         self.host.as_deref()
     }
+    /// 对齐 `FtpConfig.setHost(String)`
     pub fn set_host(&mut self, host: &str) -> &mut Self {
         self.host = Some(host.to_string());
         self
     }
 
+    /// 对齐 `FtpConfig.getPort()`
     pub fn get_port(&self) -> u16 {
         self.port
     }
+    /// 对齐 `FtpConfig.setPort(int)`
     pub fn set_port(&mut self, port: u16) -> &mut Self {
         self.port = port;
         self
     }
 
+    /// 对齐 `FtpConfig.getUser()`
     pub fn get_user(&self) -> Option<&str> {
         self.user.as_deref()
     }
+    /// 对齐 `FtpConfig.setUser(String)`
     pub fn set_user(&mut self, user: &str) -> &mut Self {
         self.user = Some(user.to_string());
         self
     }
 
+    /// 对齐 `FtpConfig.getPassword()`
     pub fn get_password(&self) -> Option<&str> {
         self.password.as_deref()
     }
+    /// 对齐 `FtpConfig.setPassword(String)`
     pub fn set_password(&mut self, password: &str) -> &mut Self {
         self.password = Some(password.to_string());
         self
     }
 
+    /// 对齐 `FtpConfig.getCharset()`
     pub fn get_charset(&self) -> Option<&str> {
         self.charset.as_deref()
     }
+    /// 对齐 `FtpConfig.setCharset(Charset)`
     pub fn set_charset(&mut self, charset: &str) -> &mut Self {
         self.charset = Some(charset.to_string());
         self
     }
 
+    /// 对齐 `FtpConfig.getConnectionTimeout()`
     pub fn get_connection_timeout(&self) -> i64 {
         self.connection_timeout
     }
+    /// 对齐 `FtpConfig.setConnectionTimeout(int)`
     pub fn set_connection_timeout(&mut self, timeout_ms: i64) -> &mut Self {
         self.connection_timeout = timeout_ms;
         self
     }
 
+    /// 对齐 `FtpConfig.getSoTimeout()`
     pub fn get_so_timeout(&self) -> i64 {
         self.so_timeout
     }
+    /// 对齐 `FtpConfig.setSoTimeout(int)`
     pub fn set_so_timeout(&mut self, timeout_ms: i64) -> &mut Self {
         self.so_timeout = timeout_ms;
         self
     }
 
+    /// 对齐 `FtpConfig.getServerLanguageCode()`
     pub fn get_server_language_code(&self) -> Option<&str> {
         self.server_language_code.as_deref()
     }
+    /// 对齐 `FtpConfig.setServerLanguageCode(String)`
     pub fn set_server_language_code(&mut self, code: &str) -> &mut Self {
         self.server_language_code = Some(code.to_string());
         self
     }
 
+    /// 对齐 `FtpConfig.getSystemKey()`
     pub fn get_system_key(&self) -> Option<&str> {
         self.system_key.as_deref()
     }
+    /// 对齐 `FtpConfig.setSystemKey(String)`
     pub fn set_system_key(&mut self, key: &str) -> &mut Self {
         self.system_key = Some(key.to_string());
         self

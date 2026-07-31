@@ -9,6 +9,7 @@
 pub struct CastUtil;
 
 impl CastUtil {
+    /// 兼容 sentinel。
     pub fn pending_alignment() -> &'static str {
         "pending"
     }

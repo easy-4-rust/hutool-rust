@@ -2,9 +2,7 @@
 
 #![allow(missing_docs, clippy::enum_glob_use, clippy::match_same_arms)]
 
-use crate::Message;
-use serde_json::{Map, Value, json};
-use std::{path::PathBuf, sync::Arc};
+use serde_json::Value;
 
 /// A video generation command-line style parameter.
 #[derive(Debug, Clone, PartialEq)]

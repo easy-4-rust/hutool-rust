@@ -24,34 +24,53 @@ const HASHIDS_ALPHABET: &str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUV
 
 const HASHIDS_SEPARATORS: &str = "cfhistuCFHISTU";
 
+/// Base32 编码。
 pub fn base32_encode(input: impl AsRef<[u8]>) -> String {
     BASE32.encode(input.as_ref())
 }
 
+/// Base32 解码。
+///
+/// # Errors
+///
+/// 输入非法时返回 [`CoreError::Codec`]。
 pub fn base32_decode(input: &str) -> Result<Vec<u8>> {
     BASE32
         .decode(input.to_ascii_uppercase().as_bytes())
         .map_err(|error| CoreError::Codec(error.to_string()))
 }
 
+/// Base32HEX 编码。
 pub fn base32_hex_encode(input: impl AsRef<[u8]>) -> String {
     BASE32HEX.encode(input.as_ref())
 }
 
+/// Base32HEX 解码。
+///
+/// # Errors
+///
+/// 输入非法时返回 [`CoreError::Codec`]。
 pub fn base32_hex_decode(input: &str) -> Result<Vec<u8>> {
     BASE32HEX
         .decode(input.to_ascii_uppercase().as_bytes())
         .map_err(|error| CoreError::Codec(error.to_string()))
 }
 
+/// Base58 编码。
 pub fn base58_encode(input: impl AsRef<[u8]>) -> String {
     translate_digits(&convert_base(input.as_ref(), 256, 58), BASE58_ALPHABET)
 }
 
+/// Base58 解码。
+///
+/// # Errors
+///
+/// 输入非法时返回 [`CoreError::Codec`]。
 pub fn base58_decode(input: &str) -> Result<Vec<u8>> {
     decode_radix(input, BASE58_ALPHABET, 58)
 }
 
+/// Base58Check 编码（可带版本前缀）。
 pub fn base58_encode_checked(version: Option<u8>, payload: &[u8]) -> String {
     let mut bytes = Vec::with_capacity(payload.len() + 5);
     if let Some(version) = version {
@@ -62,6 +81,11 @@ pub fn base58_encode_checked(version: Option<u8>, payload: &[u8]) -> String {
     base58_encode(bytes)
 }
 
+/// Base58Check 解码并校验。
+///
+/// # Errors
+///
+/// 校验失败或输入过短时返回 [`CoreError::Codec`]。
 pub fn base58_decode_checked(input: &str, with_version: bool) -> Result<Vec<u8>> {
     let decoded = base58_decode(input)?;
     let minimum = if with_version { 5 } else { 4 };
@@ -77,26 +101,44 @@ pub fn base58_decode_checked(input: &str, with_version: bool) -> Result<Vec<u8>>
     Ok(payload.to_vec())
 }
 
+/// Base58Check 自动解码（尝试带/不带版本前缀）。
+///
+/// # Errors
+///
+/// 校验失败时返回 [`CoreError::Codec`]。
 pub fn base58_decode_checked_auto(input: &str) -> Result<Vec<u8>> {
     base58_decode_checked(input, true).or_else(|_| base58_decode_checked(input, false))
 }
 
+/// Base62（GMP 字母表）编码。
 pub fn base62_encode(input: impl AsRef<[u8]>) -> String {
     base62_encode_with_alphabet(input.as_ref(), BASE62_GMP)
 }
 
+/// Base62 解码。
+///
+/// # Errors
+///
+/// 输入非法时返回 [`CoreError::Codec`]。
 pub fn base62_decode(input: &str) -> Result<Vec<u8>> {
     decode_radix(input, BASE62_GMP, 62)
 }
 
+/// Base62（反转字母表）编码。
 pub fn base62_inverted_encode(input: impl AsRef<[u8]>) -> String {
     base62_encode_with_alphabet(input.as_ref(), BASE62_INVERTED)
 }
 
+/// Base62（反转字母表）解码。
+///
+/// # Errors
+///
+/// 输入非法时返回 [`CoreError::Codec`]。
 pub fn base62_inverted_decode(input: &str) -> Result<Vec<u8>> {
     decode_radix(input, BASE62_INVERTED, 62)
 }
 
+/// ROT 旋转移位编码。
 pub fn rot_encode(input: &str, offset: i32, rotate_digits: bool) -> String {
     input
         .chars()
@@ -104,18 +146,26 @@ pub fn rot_encode(input: &str, offset: i32, rotate_digits: bool) -> String {
         .collect()
 }
 
+/// ROT 旋转移位解码。
 pub fn rot_decode(input: &str, offset: i32, rotate_digits: bool) -> String {
     rot_encode(input, -offset, rotate_digits)
 }
 
+/// 凯撒密码编码。
 pub fn caesar_encode(input: &str, offset: i32) -> String {
     caesar(input, offset)
 }
 
+/// 凯撒密码解码。
 pub fn caesar_decode(input: &str, offset: i32) -> String {
     caesar(input, -offset)
 }
 
+/// BCD 编码。
+///
+/// # Errors
+///
+/// 含非十六进制字符时返回 [`CoreError::Codec`]。
 pub fn bcd_encode(input: &str) -> Result<Vec<u8>> {
     let padded;
     let input = if input.len() % 2 == 0 {
@@ -135,6 +185,7 @@ pub fn bcd_encode(input: &str) -> Result<Vec<u8>> {
         .collect()
 }
 
+/// BCD 解码。
 pub fn bcd_decode(input: &[u8]) -> String {
     const HEX: &[u8] = b"0123456789ABCDEF";
     let mut output = String::with_capacity(input.len() * 2);
@@ -145,10 +196,20 @@ pub fn bcd_decode(input: &[u8]) -> String {
     output
 }
 
+/// Punycode 编码。
+///
+/// # Errors
+///
+/// 编码失败时返回 [`CoreError::Codec`]。
 pub fn punycode_encode(input: &str) -> Result<String> {
     punycode_encode_prefixed(input, false)
 }
 
+/// Punycode 编码（可选 `xn--` 前缀）。
+///
+/// # Errors
+///
+/// 编码失败时返回 [`CoreError::Codec`]。
 pub fn punycode_encode_prefixed(input: &str, with_prefix: bool) -> Result<String> {
     if input.is_ascii() {
         return Ok(input.to_owned());
@@ -162,6 +223,11 @@ pub fn punycode_encode_prefixed(input: &str, with_prefix: bool) -> Result<String
     })
 }
 
+/// Punycode 解码。
+///
+/// # Errors
+///
+/// 解码失败时返回 [`CoreError::Codec`]。
 pub fn punycode_decode(input: &str) -> Result<String> {
     let input = input
         .get(..4)
@@ -171,6 +237,11 @@ pub fn punycode_decode(input: &str) -> Result<String> {
         .ok_or_else(|| CoreError::Codec("Punycode decode failed".into()))
 }
 
+/// IDNA 域名编码。
+///
+/// # Errors
+///
+/// 任一标签编码失败时返回 [`CoreError::Codec`]。
 pub fn idna_encode_domain(input: &str) -> Result<String> {
     input
         .split('.')
@@ -179,6 +250,11 @@ pub fn idna_encode_domain(input: &str) -> Result<String> {
         .map(|labels| labels.join("."))
 }
 
+/// IDNA 域名解码。
+///
+/// # Errors
+///
+/// 任一标签解码失败时返回 [`CoreError::Codec`]。
 pub fn idna_decode_domain(input: &str) -> Result<String> {
     input
         .split('.')

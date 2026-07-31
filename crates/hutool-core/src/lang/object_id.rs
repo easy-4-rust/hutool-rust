@@ -22,6 +22,7 @@ impl ObjectId {
     }
 
     /// 对齐 `ObjectId.isValid`
+    #[allow(dead_code)] // 对齐 Java ObjectId.isValid，暂未接线，预留
     pub fn is_valid(s: &str) -> bool {
         let s: String = s.chars().filter(|c| *c != '-').collect();
         if s.len() != 24 {

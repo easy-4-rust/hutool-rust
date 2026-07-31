@@ -3,6 +3,8 @@
 //!
 //! Java 枚举接口映射为 Rust trait：提供 `name` / `text` / `int_val` 与按值查找。
 
+#![allow(dead_code)] // 对齐 Java EnumItem，暂未接线，预留
+
 /// 对齐 Java: `cn.hutool.core.lang.EnumItem<E>`
 pub trait EnumItem: Sized + Copy + 'static {
     /// 对齐 Java: `name()`

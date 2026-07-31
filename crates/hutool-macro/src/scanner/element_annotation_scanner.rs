@@ -1,7 +1,5 @@
 //! 对齐: `cn.hutool.core.annotation.scanner.ElementAnnotationScanner`
 
-use std::sync::Arc;
-
 use super::annotation_scanner::{accept_annotation, declared_annotations, element_exists, AnnotationScanner, ScanConsumer};
 use crate::element::{ElementHandle, ElementKind, global_registry};
 

@@ -1,6 +1,8 @@
 //! 对齐: `cn.hutool.core.lang.id.IdConstants`
 //! 来源: hutool-core/src/main/java/cn/hutool/core/lang/id/IdConstants.java
 
+#![allow(dead_code)] // 对齐 Java IdConstants，暂未接线，预留
+
 use crate::lang::snowflake::{Snowflake, MAX_DATA_CENTER_ID, MAX_WORKER_ID};
 use std::sync::OnceLock;
 

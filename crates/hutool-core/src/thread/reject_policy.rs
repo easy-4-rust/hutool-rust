@@ -3,6 +3,7 @@
 
 /// 对齐 Java enum: `cn.hutool.core.thread.RejectPolicy`
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[allow(non_camel_case_types)] // 对齐 Java 枚举常量名（DISCARD_OLDEST 等）
 pub enum RejectPolicy {
     /// 对齐 Java 枚举常量: `ABORT`
     ABORT,

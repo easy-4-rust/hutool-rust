@@ -4,16 +4,15 @@
 
 use std::collections::HashMap;
 use std::fmt;
-use std::sync::Arc;
 
 use super::annotation_schema::AnnotationSchema;
 use super::annotation_type_name::AnnotationTypeName;
 use super::annotation_value::AnnotationValue;
-use super::attribute_def::AttributeDef;
 
 /// 注解实例镜像。
 #[derive(Clone)]
 pub struct AnnotationMirror {
+    /// 注解类型名。
     pub type_name: AnnotationTypeName,
     values: HashMap<String, AnnotationValue>,
     synthesized: bool,

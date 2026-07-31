@@ -38,6 +38,7 @@ fn arr_parse_bean_list_test() {
 fn arr_to_list_test2() {
     let arr = hj::JSONArray::parse(r#"[{"name":"a"},{"name":"b"}]"#).unwrap();
     #[derive(serde::Deserialize, Debug)]
+    #[allow(dead_code)]
     struct U { name: String }
     let list: Vec<U> = hj::JSONUtil::to_list(&arr).unwrap();
     assert_eq!(list.len(), 2);

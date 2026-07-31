@@ -1,11 +1,6 @@
 //! 被注解元素注册表，对齐 Java `AnnotatedElement` 及其层级结构。
 
-use std::collections::HashMap;
-use std::sync::Arc;
-
 use parking_lot::RwLock;
-
-use crate::mirror::{AnnotationMirror, AnnotationSchema, AnnotationTypeName, AnnotationValue};
 
 pub use crate::mirror::ElementHandle;
 
@@ -31,6 +26,7 @@ pub use field_builder::FieldBuilder;
 
 static GLOBAL_REGISTRY: std::sync::OnceLock<RwLock<AnnotationRegistry>> = std::sync::OnceLock::new();
 
+/// 获取全局注册表（惰性初始化）。
 pub fn global_registry() -> &'static RwLock<AnnotationRegistry> {
     GLOBAL_REGISTRY.get_or_init(|| RwLock::new(AnnotationRegistry::new()))
 }

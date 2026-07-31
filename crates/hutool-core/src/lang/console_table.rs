@@ -1,5 +1,7 @@
 //! 对齐: `cn.hutool.core.lang.ConsoleTable`
 
+#![allow(dead_code)] // 对齐 Java ConsoleTable，暂未接线，预留
+
 /// 对齐 Java: `ConsoleTable`
 #[derive(Debug, Default)]
 pub struct ConsoleTable {

@@ -3,16 +3,8 @@
 /// 对齐: `cn.hutool.core.codec.PercentCodec`
 /// 百分号编码器
 
-use std::{
-    collections::BTreeSet,
-    io::{Read, Write},
-    path::Path,
-};
-
-use base64::Engine as _;
 use encoding_rs::Encoding;
-
-use crate::{CoreError, Result};
+use std::collections::BTreeSet;
 
 /// Configurable percent encoder matching Hutool's mutable safe-character model.
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
@@ -96,5 +88,3 @@ impl PercentCodec {
         output
     }
 }
-
-use super::{base64_sextet};

@@ -2,7 +2,7 @@
 
 use std::sync::Arc;
 
-use crate::element::{global_registry, AnnotatedElement, ElementHandle};
+use crate::element::{global_registry, ElementHandle};
 use crate::mirror::{is_not_jdk_meta_annotation, AnnotationMirror, AnnotationTypeName};
 
 /// 扫描回调。
@@ -11,7 +11,7 @@ pub type ScanConsumer<'a> = Box<dyn FnMut(i32, Arc<AnnotationMirror>) + 'a>;
 /// 对齐 Java interface: `cn.hutool.core.annotation.scanner.AnnotationScanner`
 pub trait AnnotationScanner: Send + Sync {
     /// 是否支持扫描该元素。
-    fn support(&self, element: ElementHandle) -> bool {
+    fn support(&self, _element: ElementHandle) -> bool {
         false
     }
 

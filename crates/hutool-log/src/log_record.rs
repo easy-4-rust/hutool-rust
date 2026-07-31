@@ -2,12 +2,6 @@
 //! 来源: hutool-log/src/main/java/cn/hutool/log/LogRecord.java
 //! 中文说明: 后端无关的日志事件记录，包含名称、级别、消息和可选的错误描述。
 
-use std::{
-    collections::HashMap,
-    fmt,
-    sync::{Arc, OnceLock, RwLock},
-};
-
 use crate::level::LogLevel;
 
 /// 后端无关的日志事件记录，对应 Hutool 的 `LogRecord`。

@@ -18,6 +18,7 @@ pub struct StubHttpConnection {
 }
 
 impl StubHttpConnection {
+    /// 创建指定 URL 的 Stub 连接，默认使用 GET 方法。
     pub fn new(url: &str) -> Self {
         Self {
             url: url.to_string(),

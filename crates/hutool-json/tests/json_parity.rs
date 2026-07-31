@@ -1,3 +1,6 @@
+//! JSON parity 测试
+//! 对齐: hutool-json JSONUtil 基础功能测试
+
 use hutool_json as hj;
 
 #[test] fn parse_test() { assert!(hj::JSONUtil::parse(r#"[{"a":"a\x]"#).is_err()); }

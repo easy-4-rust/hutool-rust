@@ -18,6 +18,7 @@ pub use nearest_and_newest_priority_selector::NearestAndNewestPrioritySelector;
 pub use farthest_and_oldest_priority_selector::FarthestAndOldestPrioritySelector;
 pub use farthest_and_newest_priority_selector::FarthestAndNewestPrioritySelector;
 
+/// 默认层级比较函数。
 pub fn default_hierarchical_cmp(a: &dyn Hierarchical, b: &dyn Hierarchical) -> Ordering {
     a.compare_hierarchical(b)
 }

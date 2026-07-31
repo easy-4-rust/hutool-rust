@@ -108,7 +108,7 @@ fn bcrypt_checkpw_test() {
 
 mod common;
 
-use common::{load_resource, rsa_oaep_round_trip, rsa_pub_enc_priv_dec, sm2_sign_verify_round_trip, RSA_PLAINTEXT};
+use common::{load_resource, rsa_pub_enc_priv_dec, sm2_sign_verify_round_trip, RSA_PLAINTEXT};
 
 // ===== Hutool parity — previously ignored, now enabled =====
 

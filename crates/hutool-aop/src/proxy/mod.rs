@@ -2,13 +2,6 @@
 //! 来源: hutool-aop/src/main/java/cn/hutool/aop/proxy/
 //! 中文说明: 代理工厂模块，提供 JDK/CGLIB/SpringCglib 多种代理策略及 ProxyUtil 便捷门面。
 
-use crate::{
-    HandlerProxy, Method,
-    aspects::Aspect,
-    interceptor::{CglibInterceptor, JdkInterceptor, SpringCglibInterceptor},
-};
-use std::{fmt, sync::Arc};
-
 mod proxy_backend;
 mod proxy;
 mod proxy_factory;

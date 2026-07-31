@@ -2,11 +2,8 @@
 
 use std::sync::Arc;
 
-use crate::hierarchical::{
-    ChooseSide, FarthestAndNewestPrioritySelector, FarthestAndOldestPrioritySelector,
-    Hierarchical, HierarchicalSelector, NearestAndNewestPrioritySelector,
-    NearestAndOldestPrioritySelector,
-};
+use crate::hierarchical::Hierarchical;
+
 use crate::synthesized_annotation::SynthesizedAnnotation;
 
 /// 测试用合成注解桩。
@@ -69,5 +66,3 @@ impl SynthesizedAnnotation for TestSynthesizedAnnotation {
         "test.Test"
     }
 }
-
-use super::{SelectorAdapter, wrap};

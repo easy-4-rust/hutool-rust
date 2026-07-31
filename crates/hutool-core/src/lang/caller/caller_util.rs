@@ -1,5 +1,7 @@
 //! 对齐: `cn.hutool.core.lang.caller.CallerUtil`
 
+#![allow(dead_code)] // 对齐 Java CallerUtil，暂未接线，预留
+
 /// 对齐 Java: `CallerUtil`
 pub struct CallerUtil;
 

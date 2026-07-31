@@ -1,7 +1,5 @@
 //! Pinyin helpers aligned with Hutool `PinyinUtil`, backed by the `pinyin` crate.
 
-use pinyin::{ToPinyin, ToPinyinMulti};
-
 use super::default_pinyin_engine::DefaultPinyinEngine;
 
 /// Factory returning the default engine (Hutool multi-engine SPI collapsed to one Rust crate).

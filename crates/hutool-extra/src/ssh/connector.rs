@@ -5,8 +5,6 @@
 
 use std::fmt;
 
-use crate::HutoolException;
-
 /// SSH 连接信息 POJO，对齐 `cn.hutool.extra.ssh.Connector`。
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct Connector {
@@ -18,9 +16,11 @@ pub struct Connector {
 }
 
 impl Connector {
+    /// 对齐 `Connector()` 默认构造
     pub fn new() -> Self {
         Self::default()
     }
+    /// 对齐 `Connector(String user, String password, String group)`
     pub fn with_credentials(user: &str, password: &str, group: &str) -> Self {
         Self {
             user: Some(user.to_string()),
@@ -29,6 +29,7 @@ impl Connector {
             ..Default::default()
         }
     }
+    /// 对齐 `Connector(String host, int port, String user, String password)`
     pub fn with_endpoint(host: &str, port: u16, user: &str, password: &str) -> Self {
         Self {
             host: Some(host.to_string()),
@@ -38,37 +39,47 @@ impl Connector {
             ..Default::default()
         }
     }
+    /// 对齐 `Connector.getHost()`
     pub fn get_host(&self) -> Option<&str> {
         self.host.as_deref()
     }
+    /// 对齐 `Connector.setHost(String)`
     pub fn set_host(&mut self, host: &str) -> &mut Self {
         self.host = Some(host.to_string());
         self
     }
+    /// 对齐 `Connector.getPort()`
     pub fn get_port(&self) -> Option<u16> {
         self.port
     }
+    /// 对齐 `Connector.setPort(int)`
     pub fn set_port(&mut self, port: u16) -> &mut Self {
         self.port = Some(port);
         self
     }
+    /// 对齐 `Connector.getUser()`
     pub fn get_user(&self) -> Option<&str> {
         self.user.as_deref()
     }
+    /// 对齐 `Connector.setUser(String)`
     pub fn set_user(&mut self, user: &str) -> &mut Self {
         self.user = Some(user.to_string());
         self
     }
+    /// 对齐 `Connector.getPassword()`
     pub fn get_password(&self) -> Option<&str> {
         self.password.as_deref()
     }
+    /// 对齐 `Connector.setPassword(String)`
     pub fn set_password(&mut self, password: &str) -> &mut Self {
         self.password = Some(password.to_string());
         self
     }
+    /// 对齐 `Connector.getGroup()`
     pub fn get_group(&self) -> Option<&str> {
         self.group.as_deref()
     }
+    /// 对齐 `Connector.setGroup(String)`
     pub fn set_group(&mut self, group: &str) -> &mut Self {
         self.group = Some(group.to_string());
         self

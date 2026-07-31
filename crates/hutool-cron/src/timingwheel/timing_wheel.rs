@@ -6,11 +6,9 @@
 
 use std::{
     cmp::Ordering,
-    collections::BinaryHeap,
     fmt,
-    sync::{Arc, Mutex, mpsc},
-    thread::{self, JoinHandle},
-    time::{Duration, SystemTime, UNIX_EPOCH},
+    sync::Arc,
+    time::Duration,
 };
 
 use crate::CronError;
@@ -149,6 +147,4 @@ impl Ord for ScheduledTask {
     }
 }
 
-use super::{
-    ScheduledTask, TaskFn, TimerCommand, TimerTaskInner, bounded_wait, now_millis, run_timer,
-};
+use super::{ScheduledTask, now_millis};

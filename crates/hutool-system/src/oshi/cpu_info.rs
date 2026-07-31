@@ -2,10 +2,6 @@
 //! 来源: hutool-system/src/main/java/cn/hutool/system/oshi/CpuInfo.java
 //! 中文说明: 便携式的 CPU 利用率视图，包含逻辑 CPU 数量、总使用率、系统/用户/等待/空闲百分比和处理器型号
 
-use std::{thread, time::Duration};
-
-use sysinfo::{Components, Disks, Networks, Pid, System};
-
 use super::cpu_ticks::CpuTicks;
 
 /// 对齐: `cn.hutool.system.oshi.CpuInfo`

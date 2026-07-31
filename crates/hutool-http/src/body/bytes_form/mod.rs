@@ -2,12 +2,6 @@
 //! 来源: hutool-http/src/main/java/cn/hutool/http/body/
 //! 中文说明: 请求体类型模块，包含字节体、表单体和资源体
 
-use crate::http_util::HttpUtil;
-use indexmap::IndexMap;
-use std::fmt;
-use std::io::Write;
-use std::path::{Path, PathBuf};
-
 mod request_body;
 mod bytes_body;
 mod form_url_encoded_body;

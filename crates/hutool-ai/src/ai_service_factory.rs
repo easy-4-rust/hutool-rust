@@ -97,6 +97,8 @@ impl AIServiceFactory {
 }
 
 /// 注册内置 `ProviderService`（OpenAI 兼容）作为兜底实现。
+/// 保留为 Java 镜像 API，仅在测试中使用。
+#[allow(dead_code)]
 pub fn register_builtin_provider() {
     #[derive(Debug)]
     struct BuiltinProvider;

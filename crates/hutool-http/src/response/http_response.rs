@@ -396,4 +396,4 @@ impl fmt::Display for HttpResponse {
     }
 }
 
-use super::{decode_rfc5987, filename_from_dispositions, from_hex, parse_set_cookie, percent_decode_lightweight, strip_quotes};
+use super::{decode_rfc5987, filename_from_dispositions, parse_set_cookie, percent_decode_lightweight, strip_quotes};

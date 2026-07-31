@@ -1,7 +1,7 @@
 //! Mutable Hutool-compatible word trie.
 
 use crate::StopChar;
-use std::{collections::HashMap, fmt, sync::Arc};
+use std::{fmt, sync::Arc};
 
 use super::found_word::FoundWord;
 use super::match_options::MatchOptions;

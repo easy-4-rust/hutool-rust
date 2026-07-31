@@ -12,9 +12,13 @@ use super::mirror::{
 
 /// 常用测试类型名。
 pub mod types {
+    /// `AnnotationForTest` 全限定名。
     pub const ANNOTATION_FOR_TEST: &str = "cn.hutool.core.annotation.AnnotationForTest";
+    /// `RepeatAnnotationForTest` 全限定名。
     pub const REPEAT_ANNOTATION_FOR_TEST: &str = "cn.hutool.core.annotation.RepeatAnnotationForTest";
+    /// `Alias` 全限定名。
     pub const ALIAS: &str = "cn.hutool.core.annotation.Alias";
+    /// `AnnotationForScannerTest` 全限定名。
     pub const ANNOTATION_FOR_SCANNER_TEST: &str =
         "cn.hutool.core.annotation.scanner.AnnotationForScannerTest";
 }

@@ -3,15 +3,6 @@
 //! 中文说明: 配置文件自动重载句柄，持有文件系统监听器，析构时停止自动重载。
 
 use super::WatchOwner;
-use crate::{DEFAULT_ENCODING, GroupedMap, Props, SettingError, SettingLoader, checked_path};
-use encoding_rs::Encoding;
-use indexmap::IndexMap;
-use notify::{RecommendedWatcher, RecursiveMode, Watcher};
-use serde::de::DeserializeOwned;
-use std::{
-    path::{Path, PathBuf},
-    sync::{Arc, RwLock},
-};
 
 /// 配置文件自动重载句柄，对应 Hutool `Setting.autoLoad()` 的返回值。
 ///
@@ -29,5 +20,3 @@ impl std::fmt::Debug for AutoLoadHandle {
         f.debug_struct("AutoLoadHandle").finish_non_exhaustive()
     }
 }
-
-use super::{ReloadHandler, box_watcher, create_recommended_watcher, fix_extension, reload_event};

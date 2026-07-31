@@ -11,13 +11,20 @@ use crate::byte_util::ByteUtil;
 
 use super::number_converter::NumberConverter;
 
+/// 数字转换目标类型。
 #[derive(Debug, Clone, Copy)]
 pub enum NumberTarget {
+    /// 通用数字
     Number,
+    /// 整数
     Integer,
+    /// 长整数
     Long,
+    /// 双精度浮点
     Double,
+    /// 单精度浮点
     Float,
+    /// 十进制
     Decimal,
 }
 
@@ -27,14 +34,17 @@ impl NumberConverter {
         "pending"
     }
 
+    /// 按目标类型构造转换器。
     pub fn new(target: NumberTarget) -> Self {
         Self { target }
     }
 
+    /// 构造 Double 目标转换器。
     pub fn for_double() -> Self {
         Self::new(NumberTarget::Double)
     }
 
+    /// 构造 Integer 目标转换器。
     pub fn for_integer() -> Self {
         Self::new(NumberTarget::Integer)
     }
@@ -60,6 +70,7 @@ impl NumberConverter {
         }
     }
 
+    /// 转换值到 i32。
     pub fn convert_i32(value: &ConvertValue) -> Option<i32> {
         match value {
             ConvertValue::Null => None,
@@ -77,6 +88,7 @@ impl NumberConverter {
         }
     }
 
+    /// 转换值到 i64。
     pub fn convert_i64(value: &ConvertValue) -> Option<i64> {
         match value {
             ConvertValue::Null => None,
@@ -91,6 +103,7 @@ impl NumberConverter {
         }
     }
 
+    /// 转换值到 i128。
     pub fn convert_i128(value: &ConvertValue) -> Option<i128> {
         match value {
             ConvertValue::Str(s) => s.trim().parse().ok(),
@@ -100,6 +113,7 @@ impl NumberConverter {
         }
     }
 
+    /// 转换值到 f64。
     pub fn convert_f64(value: &ConvertValue) -> Option<f64> {
         match value {
             ConvertValue::Null => None,
@@ -126,6 +140,7 @@ impl NumberConverter {
         }
     }
 
+    /// 转换值到 f32。
     pub fn convert_f32(value: &ConvertValue) -> Option<f32> {
         match value {
             ConvertValue::Bytes(b) => ByteUtil::bytes_to_f32(b).ok(),
@@ -135,6 +150,7 @@ impl NumberConverter {
         }
     }
 
+    /// 转换值到 Decimal。
     pub fn convert_decimal(value: &ConvertValue) -> Option<Decimal> {
         match value {
             ConvertValue::Decimal(d) => Some(*d),

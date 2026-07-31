@@ -5,12 +5,9 @@
 #![allow(clippy::missing_panics_doc)]
 
 use std::{
-    cmp::Ordering,
-    collections::BinaryHeap,
-    fmt,
-    sync::{Arc, Mutex, mpsc},
+    sync::mpsc,
     thread::{self, JoinHandle},
-    time::{Duration, SystemTime, UNIX_EPOCH},
+    time::Duration,
 };
 
 use crate::CronError;
@@ -134,6 +131,4 @@ impl Drop for SystemTimer {
     }
 }
 
-use super::{
-    ScheduledTask, TaskFn, TimerCommand, TimerTaskInner, bounded_wait, now_millis, run_timer,
-};
+use super::{TimerCommand, run_timer};

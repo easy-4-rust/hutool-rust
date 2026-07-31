@@ -1,21 +1,13 @@
 //! Explicit, injectable SMTP and MIME mail support.
 
-use std::{fmt, time::Duration};
+use std::fmt;
 
-pub use lettre::message::Mailbox;
-use lettre::{
-    AsyncSmtpTransport, AsyncTransport, Message, Tokio1Executor,
-    message::{Attachment, MultiPart, SinglePart, header::ContentType},
-    transport::smtp::{authentication::Credentials, response::Response},
-};
-use secrecy::{ExposeSecret, SecretString};
-
-use crate::{ExtraError, Result};
+use secrecy::SecretString;
 
 /// SMTP username and password stored in redacted containers.
 pub struct SmtpCredentials {
-    username: SecretString,
-    password: SecretString,
+    pub(crate) username: SecretString,
+    pub(crate) password: SecretString,
 }
 
 impl SmtpCredentials {

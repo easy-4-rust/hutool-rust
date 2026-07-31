@@ -6,15 +6,7 @@
 
 #![allow(dead_code)]
 
-use chrono::{Datelike, Duration, FixedOffset, NaiveDate, NaiveDateTime, Timelike, Weekday};
-
-use crate::date::date_field::DateField;
-use crate::date::date_pattern::{self, NORM_DATETIME_MS_PATTERN, NORM_DATETIME_PATTERN};
-use crate::date::date_unit::DateUnit;
-use crate::date::month::Month;
-use crate::date::quarter::Quarter;
 use crate::date::week::Week;
-use crate::{CoreError, Result};
 
 /// 对齐 Java: `cn.hutool.core.date.DateTime`
 #[derive(Debug, Clone, Copy)]
@@ -26,5 +18,3 @@ pub struct DateTime {
     /// 可变模式（Hutool mutable）
     pub(crate) mutable: bool,
 }
-
-use super::{between_unit, days_in_month, format_with_pattern, parity_zone, week_of_year_mon_min1};

@@ -7,6 +7,7 @@
 pub struct BasicType;
 
 impl BasicType {
+    /// 兼容 sentinel。
     pub fn pending_alignment() -> &'static str {
         "pending"
     }

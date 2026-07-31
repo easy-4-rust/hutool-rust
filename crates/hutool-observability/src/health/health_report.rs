@@ -1,11 +1,6 @@
-use std::{
-    collections::BTreeMap,
-    sync::{Arc, RwLock},
-    time::{SystemTime, UNIX_EPOCH},
-};
+use std::collections::BTreeMap;
 
 use serde::Serialize;
-use thiserror::Error;
 
 use super::health_check::HealthCheck;
 use super::health_status::HealthStatus;
@@ -22,5 +17,3 @@ pub struct HealthReport {
     /// Report creation time as milliseconds since the Unix epoch.
     pub generated_at_unix_ms: u64,
 }
-
-use super::{unix_time_ms};

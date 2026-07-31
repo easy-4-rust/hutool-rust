@@ -11,7 +11,7 @@ use hutool_crypto::{
     chacha20_decrypt, chacha20_encrypt,
     md5_hex, md5_hex16, md5_hex_repeat, md5_hex_with_salt, md5_hex_salt, md5_hex_salt_repeat,
     sha1_hex, sha256_hex, sha512_hex, sm3_hex,
-    hmac_md5_hex, hmac_sha1_hex, hmac_sha256, hmac_sha256_hex, hmac_sm3_hex,
+    hmac_md5_hex, hmac_sha1_hex, hmac_sha256, hmac_sm3_hex,
     verify_hmac_sha256,
     verify_password, hash_password, CryptoError,
     aes256_gcm_encrypt, aes256_gcm_decrypt,

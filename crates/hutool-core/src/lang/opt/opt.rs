@@ -3,6 +3,8 @@
 //!
 //! Hutool `Opt` 的 idiomatic Rust 实现：在 [`Option`] 之上附加可选异常上下文。
 
+#![allow(dead_code)] // 对齐 Java Opt，暂未接线，预留
+
 use crate::string::is_blank;
 use std::fmt;
 

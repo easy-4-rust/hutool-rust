@@ -11,10 +11,6 @@
 //! 线程模型一致。因此本模块用 `parking_lot::{Mutex, Condvar}` 实现同步
 //! [`Semaphore`], 而非 `tokio::sync::Semaphore`。
 
-use std::sync::Arc;
-
-use parking_lot::{Condvar, Mutex};
-
 mod semaphore;
 mod semaphore_runnable;
 

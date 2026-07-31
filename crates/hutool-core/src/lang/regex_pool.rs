@@ -6,6 +6,7 @@
 /// 对齐 Java: `cn.hutool.core.lang.RegexPool`
 pub struct RegexPool;
 
+#[allow(dead_code)] // 对齐 Java 常量池，暂未全部接线，预留
 impl RegexPool {
     /// 对齐 Java: `RegexPool.GENERAL`
     pub const GENERAL: &'static str = r"^\w+$";

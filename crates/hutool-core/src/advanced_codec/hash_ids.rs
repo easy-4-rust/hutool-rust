@@ -3,10 +3,6 @@
 /// 对齐: `cn.hutool.core.codec.Hashids`
 /// 哈希ID编码器
 
-use data_encoding::{BASE32, BASE32HEX};
-use idna::punycode;
-use sha2::{Digest as _, Sha256};
-
 use crate::{CoreError, Result};
 
 /// Hashids-compatible reversible identifier codec.
@@ -248,6 +244,4 @@ impl HashIds {
     }
 }
 
-use super::{BASE58_ALPHABET, BASE62_GMP, BASE62_INVERTED, CAESAR_TABLE, HASHIDS_ALPHABET, HASHIDS_SEPARATORS, base62_encode_with_alphabet, caesar};
-use super::{double_sha256, hashids_derive_alphabet, hashids_shuffle, hashids_translate, hashids_untranslate, hex_nibble, morse_bits, morse_character};
-use super::{rotate_ascii};
+use super::{HASHIDS_ALPHABET, HASHIDS_SEPARATORS, hashids_derive_alphabet, hashids_shuffle, hashids_translate, hashids_untranslate};

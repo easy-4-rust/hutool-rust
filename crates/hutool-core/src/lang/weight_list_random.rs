@@ -1,5 +1,7 @@
 //! 对齐: `cn.hutool.core.lang.WeightListRandom`
 
+#![allow(dead_code)] // 对齐 Java WeightListRandom，暂未接线，预留
+
 use crate::lang::weight_random::{WeightObj, WeightRandom};
 
 /// 对齐 Java: `WeightListRandom`（基于 WeightRandom）

@@ -2,7 +2,7 @@ use std::io::Read;
 
 use serde_json::Value;
 
-use crate::{JSONArray, JSONConfig, JSONObject, JsonError, Result};
+use crate::{JSONArray, JSONConfig, JsonError, Result};
 
 use super::parse_config::ParseConfig;
 

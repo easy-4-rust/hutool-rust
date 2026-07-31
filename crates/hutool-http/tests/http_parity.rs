@@ -50,7 +50,7 @@ fn status_code_test() {
 
 #[test]
 fn retry_policy_basic() {
-    let policy = hh::RetryPolicy::new(3).unwrap();
+    let _policy = hh::RetryPolicy::new(3).unwrap();
     // policy created successfully
 }
 

@@ -2,7 +2,6 @@
 //! 对齐: `cn.hutool.http.HttpUtilTest`, `Issue3536Test`, `IssueIBRVE4Test`, `IssueIBQIYQTest`, `MultipartBodyTest`
 
 use hutool_http::{form_map, HttpUtil, MultipartBody};
-use indexmap::IndexMap;
 use std::collections::HashMap;
 
 /// 对齐 Java: `HttpUtilTest.isHttpTest()`

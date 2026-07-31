@@ -1,7 +1,5 @@
 //! Pinyin helpers aligned with Hutool `PinyinUtil`, backed by the `pinyin` crate.
 
-use pinyin::{ToPinyin, ToPinyinMulti};
-
 /// Error type matching Hutool `PinyinException` messaging.
 #[derive(Debug, thiserror::Error, Clone, PartialEq, Eq)]
 #[error("{message}")]

@@ -1,9 +1,6 @@
 //! 对齐: `cn.hutool.core.date.StopWatch`
 //! 来源: hutool-core StopWatch（Spring Framework 风格秒表）
 
-use std::fmt;
-use std::time::{Duration, Instant};
-
 /// 时间单位（对齐 Java `TimeUnit` 的常用子集）。
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum TimeUnit {

@@ -7,15 +7,10 @@
 #![allow(clippy::missing_panics_doc)]
 
 use std::{
-    cmp::Ordering,
     collections::BinaryHeap,
-    fmt,
-    sync::{Arc, Mutex, mpsc},
-    thread::{self, JoinHandle},
+    sync::{Mutex, mpsc},
     time::{Duration, SystemTime, UNIX_EPOCH},
 };
-
-use crate::CronError;
 
 mod system_timer;
 mod timer_task;
@@ -39,7 +34,7 @@ fn now_millis() -> i64 {
     .unwrap_or(i64::MAX)
 }
 
-struct TimerTaskInner {
+pub(crate) struct TimerTaskInner {
     delay_ms: u64,
     deadline_ms: i64,
     task: Mutex<Option<TaskFn>>,

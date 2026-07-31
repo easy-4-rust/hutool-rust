@@ -1,16 +1,15 @@
 //! 条件对象 —— 对齐 Hutool `cn.hutool.db.sql.Condition`。
 
-use crate::sql::logical_operator::LogicalOperator;
-use rust_decimal::Decimal;
 use serde_json::Value;
-use std::fmt::Write as _;
 
 use super::condition::Condition;
 
 /// 条件值包装，用于 Entity 字段存储 Condition 或原始值。
 #[derive(Debug, Clone, PartialEq)]
 pub enum ConditionValue {
+    /// 原始值。
     Raw(Value),
+    /// 嵌套条件。
     Condition(Condition),
 }
 

@@ -2,10 +2,6 @@
 //! 来源: hutool-system/src/main/java/cn/hutool/system/oshi/GlobalMemory.java
 //! 中文说明: 物理内存快照，包含总内存、已用内存、可用内存和交换空间信息
 
-use std::{thread, time::Duration};
-
-use sysinfo::{Components, Disks, Networks, Pid, System};
-
 /// 对齐: `cn.hutool.system.oshi.GlobalMemory`
 /// 中文说明: 物理内存快照，包含总内存、已用内存、可用内存和交换空间信息
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

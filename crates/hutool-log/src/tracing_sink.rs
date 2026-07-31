@@ -2,12 +2,6 @@
 //! 来源: hutool-log/src/main/java/cn/hutool/log/
 //! 中文说明: 基于 Rust tracing 生产级后端的 LogSink 实现，将 Hutool 日志事件桥接到 tracing 宏。
 
-use std::{
-    collections::HashMap,
-    fmt,
-    sync::{Arc, OnceLock, RwLock},
-};
-
 use crate::level::LogLevel;
 use crate::log_record::LogRecord;
 use crate::log_sink::LogSink;

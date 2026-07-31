@@ -3,41 +3,47 @@
 
 #![allow(dead_code, clippy::too_many_arguments)]
 
-use crate::boolean_util::BooleanUtil;
-use crate::byte_util::ByteUtil;
-use crate::charset_util::CharsetUtil;
-use crate::hex_util::HexUtil;
 use rust_decimal::Decimal;
-use std::collections::{HashMap, HashSet};
-use std::str::FromStr;
-use std::time::Duration;
+use std::collections::HashMap;
 
-use crate::convert::basic_type::BasicType;
-use crate::convert::convert_exception::ConvertException;
-use crate::convert::number_chinese_formatter::NumberChineseFormatter;
 use crate::convert::number_with_format::NumberWithFormat;
-use crate::convert::number_word_formatter::NumberWordFormatter;
-use crate::convert::impl_::number_converter::NumberConverter;
 
 /// 动态值载体，对齐 Java `Object` 入参
 #[derive(Debug, Clone)]
 pub enum ConvertValue {
+    /// 空值
     Null,
+    /// 字符串
     Str(String),
+    /// 字符
     Char(char),
+    /// 布尔
     Bool(bool),
+    /// 整数
     I64(i64),
+    /// 浮点
     F64(f64),
+    /// 十进制
     Decimal(Decimal),
+    /// 字节数组
     Bytes(Vec<u8>),
+    /// 整数数组
     I64Array(Vec<i64>),
+    /// 字符串数组
     StrArray(Vec<String>),
+    /// 列表
     List(Vec<ConvertValue>),
+    /// 映射
     Map(HashMap<String, ConvertValue>),
+    /// 时间毫秒
     DateMs(i64),
+    /// 带格式数字
     NumberWithFormat(NumberWithFormat),
+    /// 枚举序号
     EnumOrdinal(i32),
+    /// 类名
     ClassName(String),
+    /// JSON 文本
     Json(String),
 }
 

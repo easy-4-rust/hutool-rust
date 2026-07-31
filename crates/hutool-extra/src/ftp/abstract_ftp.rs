@@ -4,8 +4,6 @@
 //! 具体 FTP 协议操作（Ftp/SimpleFtpServer）需要外部 Java crate（Apache Commons Net /
 //! Apache FtpServer），属于 unsafe-to-copy。
 
-use std::fmt;
-
 use crate::HutoolException;
 
 /// 抽象 FTP 操作 trait，对齐 `cn.hutool.extra.ftp.AbstractFtp`。

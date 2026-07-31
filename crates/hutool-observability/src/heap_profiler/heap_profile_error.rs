@@ -1,11 +1,6 @@
-use std::{
-    panic::{AssertUnwindSafe, catch_unwind},
-    sync::atomic::{AtomicBool, Ordering},
-};
-
 use thiserror::Error;
 
-use crate::{AuthorizationError, DiagnosticAction, DiagnosticPermit};
+use crate::AuthorizationError;
 
 /// Heap profiling failures.
 #[derive(Debug, Error)]

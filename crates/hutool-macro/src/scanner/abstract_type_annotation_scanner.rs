@@ -1,10 +1,9 @@
 //! 对齐: `cn.hutool.core.annotation.scanner.AbstractTypeAnnotationScanner`
 
 use std::collections::{HashSet, VecDeque};
-use std::sync::Arc;
 
-use super::annotation_scanner::{accept_annotation, declared_annotations, AnnotationScanner, ScanConsumer};
-use crate::element::{global_registry, ElementHandle, AnnotatedElement};
+use super::annotation_scanner::{accept_annotation, declared_annotations, ScanConsumer};
+use crate::element::{global_registry, AnnotatedElement, ElementHandle};
 
 /// 类型层级扫描基类。
 pub struct AbstractTypeAnnotationScanner {

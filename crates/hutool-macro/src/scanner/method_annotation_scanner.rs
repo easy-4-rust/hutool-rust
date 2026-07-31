@@ -1,13 +1,13 @@
 //! 对齐: `cn.hutool.core.annotation.scanner.MethodAnnotationScanner`
 
-use std::sync::Arc;
-
 use super::abstract_type_annotation_scanner::AbstractTypeAnnotationScanner;
 use super::annotation_scanner::{accept_annotation, declared_annotations, AnnotationScanner, ScanConsumer};
 use crate::element::{global_registry, AnnotatedElement, ElementHandle, ElementKind};
 
 /// 对齐 Java 类: `cn.hutool.core.annotation.scanner.MethodAnnotationScanner`
 pub struct MethodAnnotationScanner {
+    // 镜像 Java 类结构；当前实现直接走注册表方法覆盖链，未读取该字段。
+    #[allow(dead_code)]
     inner: AbstractTypeAnnotationScanner,
 }
 
@@ -31,7 +31,7 @@ impl AnnotationScanner for MethodAnnotationScanner {
 
     fn scan(&self, consumer: &mut ScanConsumer, element: ElementHandle) {
         let registry = global_registry().read();
-        let AnnotatedElement::Method(method) = registry.get(element).expect("method") else {
+        let AnnotatedElement::Method(_method) = registry.get(element).expect("method") else {
             return;
         };
         let chain = registry.method_override_chain(element);

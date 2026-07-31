@@ -3,9 +3,9 @@
 
 use crate::thread::named_thread_factory::NamedThreadFactory;
 use crate::thread::reject_policy::RejectPolicy;
-use std::sync::mpsc::{self, Receiver, Sender, SyncSender};
+use std::sync::mpsc::{self, Receiver};
 use std::sync::{Arc, Mutex};
-use std::thread::{self, JoinHandle};
+use std::thread;
 use std::time::Duration;
 
 use super::simple_executor::SimpleExecutor;

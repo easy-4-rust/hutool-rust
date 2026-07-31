@@ -8,7 +8,6 @@ use hutool_crypto::{
     sm4_ecb_encrypt, sm4_ecb_decrypt, generate_sm4_key,
     generate_sm2_keypair, sm2_sign, sm2_verify,
     sm2_sign_hex, sm2_public_hex_from_secret, sm2_private_scalar_len,
-    encrypt_ecies, decrypt_ecies,
     hmac_sm3_hex,
 };
 
@@ -183,7 +182,7 @@ fn sm4_deterministic() {
 
 #[test]
 fn sm2_generate_keypair() {
-    let (secret, public) = generate_sm2_keypair().unwrap();
+    let (_secret, _public) = generate_sm2_keypair().unwrap();
     // SM2 私钥应为 32 字节
     let scalar_len = sm2_private_scalar_len();
     assert_eq!(scalar_len, 32, "SM2 private scalar must be 32 bytes");

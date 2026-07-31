@@ -2,9 +2,7 @@
 //! 来源: hutool-http/src/main/java/cn/hutool/http/HttpConfig.java
 //! 中文说明: TLS协议版本枚举，支持TLS 1.2和TLS 1.3
 
-use reqwest::{Method, StatusCode, Url, header::HeaderMap, tls::Version};
-use std::{fmt, sync::Arc, time::Duration};
-use thiserror::Error;
+use reqwest::tls::Version;
 
 /// TLS protocol versions supported by the Rustls transport.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -23,5 +21,3 @@ impl TlsProtocol {
         }
     }
 }
-
-use super::{duration};

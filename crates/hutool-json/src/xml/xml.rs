@@ -1,7 +1,5 @@
-use std::fmt::Write as _;
-
 use quick_xml::{Reader, XmlVersion, events::Event};
-use serde_json::{Map, Number, Value};
+use serde_json::{Map, Value};
 
 use crate::{JSONConfig, JSONObject, JsonError, ParseConfig, Result};
 
@@ -130,4 +128,4 @@ impl Element {
     }
 }
 
-use super::{Element, attach, display_scalar, escape_name, escape_text, finish_element, scalar, write_value};
+use super::{Element, attach, finish_element, scalar, write_value};

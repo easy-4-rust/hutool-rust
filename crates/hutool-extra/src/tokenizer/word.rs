@@ -4,8 +4,6 @@
 //! 各具体分词引擎（Ansj/HanLP/IKAnalyzer/Jcseg/Jieba/MMSeg/MynNLP/Word/Analysis）
 //! 需要外部 Java crate，属于 unsafe-to-copy，暂不在 hutool-extra 中实现。
 
-use crate::HutoolException;
-
 /// 词接口，对齐 `cn.hutool.extra.tokenizer.Word`。
 pub trait Word: Send + Sync + std::fmt::Debug {
     /// 获取词文本

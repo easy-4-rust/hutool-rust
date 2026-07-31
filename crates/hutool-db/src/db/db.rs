@@ -8,7 +8,7 @@ use crate::sql::named_sql::NamedSql;
 use crate::sql::sql_util::{build_conditions, build_like_value, remove_outer_order_by};
 use crate::sql::{Condition, SqlBuilder};
 use serde_json::Value;
-use sqlx::{AssertSqlSafe, Column, Row, SqlitePool, TypeInfo};
+use sqlx::{AssertSqlSafe, Row, SqlitePool};
 use std::collections::HashMap;
 
 use super::db_result::DbResult;
@@ -316,4 +316,4 @@ impl Db {
     }
 }
 
-use super::{bind_value, memory_pool, row_to_entity, seed_hutool_user_fixture};
+use super::{bind_value, row_to_entity};

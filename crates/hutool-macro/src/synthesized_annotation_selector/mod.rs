@@ -2,12 +2,7 @@
 
 use std::sync::Arc;
 
-use crate::hierarchical::{
-    ChooseSide, FarthestAndNewestPrioritySelector, FarthestAndOldestPrioritySelector,
-    Hierarchical, HierarchicalSelector, NearestAndNewestPrioritySelector,
-    NearestAndOldestPrioritySelector,
-};
-use crate::synthesized_annotation::SynthesizedAnnotation;
+use crate::hierarchical::HierarchicalSelector;
 
 mod synthesized_annotation_selector;
 mod selectors;

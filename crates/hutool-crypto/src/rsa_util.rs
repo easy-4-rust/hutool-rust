@@ -3,7 +3,7 @@
 //! 中文说明: RSA 非对称加密/解密与签名工具，对齐 Hutool RSA
 
 use crate::CryptoError;
-use rsa::pkcs1::{DecodeRsaPrivateKey, EncodeRsaPrivateKey, EncodeRsaPublicKey};
+use rsa::pkcs1::DecodeRsaPrivateKey;
 use rsa::pkcs8::{DecodePrivateKey, DecodePublicKey, EncodePrivateKey, EncodePublicKey};
 use rsa::sha2::Sha256;
 use rsa::{Oaep, Pkcs1v15Encrypt, RsaPrivateKey, RsaPublicKey};
@@ -82,6 +82,7 @@ pub fn rsa_encrypt_nopadding(
     Ok(out)
 }
 
+/// PKCS#1 v1.5 public-key encrypt (Hutool `RSA("RSA/ECB/PKCS1Padding")`).
 pub fn rsa_encrypt_pkcs1v15(
     public_key: &RsaPublicKey,
     plaintext: &[u8],

@@ -4,11 +4,6 @@
 //! 具体实现依赖 `com.sun.net.httpserver.HttpExchange`（JDK 内置），Rust 用 hyper/axum 替代。
 
 use std::any::Any;
-use std::collections::HashMap;
-use std::io;
-use std::net::SocketAddr;
-
-use crate::HttpException;
 
 /// HttpExchange 包装器，对齐 `cn.hutool.http.server.HttpExchangeWrapper`。
 ///

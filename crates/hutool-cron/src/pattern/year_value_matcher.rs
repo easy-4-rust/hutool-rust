@@ -3,11 +3,6 @@
 //! 来源: hutool-cron/src/main/java/cn/hutool/cron/pattern/matcher/YearValueMatcher.java
 //! 中文说明: 具有 Hutool 下限行为的年份匹配器。
 
-use std::{fmt, str::FromStr};
-
-use chrono::{DateTime, Datelike, Duration as ChronoDuration, TimeZone, Timelike, Utc};
-use cron::Schedule;
-
 use crate::CronError;
 
 use super::bool_array_matcher::BoolArrayMatcher;
@@ -46,13 +41,3 @@ impl PartMatcher for YearValueMatcher {
         self.0.next_after(value)
     }
 }
-
-use super::split_numeric_range;
-use super::{
-    apply_negative, checked_schedule_value, convert_hutool_dow_field, convert_hutool_dow_token,
-    end_of_year, expand_field, expand_range, field_needs_expand,
-};
-use super::{
-    fields, hutool_dow_to_quartz, is_last_day_of_month, next_after_filtered, normalize_expanded,
-    pad_fields, parse_alias, schedule_max,
-};

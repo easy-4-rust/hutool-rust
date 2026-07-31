@@ -1,7 +1,7 @@
 //! JSON extended parity tests
 //! 对齐: hutool-json JSONUtilTest/JSONObjectTest/JSONArrayTest
 
-use hutool_json::{parse, parse_object, parse_array, is_valid, minify, pretty, to_string, to_string_pretty, from_str};
+use hutool_json::{parse, parse_object, parse_array, minify, pretty, to_string, to_string_pretty, from_str};
 use hutool_json::{Value, json};
 use serde::{Deserialize, Serialize};
 

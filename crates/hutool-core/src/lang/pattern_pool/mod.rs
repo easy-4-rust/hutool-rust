@@ -9,8 +9,6 @@ use std::sync::Arc;
 use parking_lot::Mutex;
 use regex::{Regex, RegexBuilder};
 
-use crate::lang::regex_pool::RegexPool;
-
 mod regex_with_flag;
 mod pattern_pool;
 

@@ -10,12 +10,19 @@ use crate::Result;
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[repr(i32)]
 pub enum Week {
+    /// 星期日
     Sunday = 1,
+    /// 星期一
     Monday = 2,
+    /// 星期二
     Tuesday = 3,
+    /// 星期三
     Wednesday = 4,
+    /// 星期四
     Thursday = 5,
+    /// 星期五
     Friday = 6,
+    /// 星期六
     Saturday = 7,
 }
 

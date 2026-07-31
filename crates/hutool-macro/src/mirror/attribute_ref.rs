@@ -2,16 +2,14 @@
 //!
 //! Rust 无 JVM 运行时注解，通过 [`AnnotationMirror`] + [`ElementHandle`] 表达注解实例与被注解元素。
 
-use std::collections::HashMap;
-use std::fmt;
-use std::sync::Arc;
-
 use super::annotation_type_name::AnnotationTypeName;
 
 /// 属性引用，对齐 Java `Method`（注解 attribute method）。
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct AttributeRef {
+    /// 注解类型名。
     pub annotation_type: AnnotationTypeName,
+    /// 属性名。
     pub name: String,
 }
 

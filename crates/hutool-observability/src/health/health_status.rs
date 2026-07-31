@@ -1,11 +1,4 @@
-use std::{
-    collections::BTreeMap,
-    sync::{Arc, RwLock},
-    time::{SystemTime, UNIX_EPOCH},
-};
-
 use serde::Serialize;
-use thiserror::Error;
 
 /// Health state ordered from best to worst.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize)]
@@ -29,5 +22,3 @@ impl HealthStatus {
         }
     }
 }
-
-use super::{unix_time_ms};

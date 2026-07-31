@@ -48,6 +48,8 @@ pub trait AIConfigMut: AIConfig {
     fn set_api_key(&mut self, value: impl Into<String>);
 
     /// 替换 API URL。
+    /// 注：`BaseConfig` 提供同名 inherent 方法，本 trait 方法作为 Java 镜像保留。
+    #[allow(dead_code)]
     fn set_api_url(&mut self, value: &str) -> Result<(), url::ParseError>;
 
     /// 替换具体模型。
@@ -63,8 +65,12 @@ pub trait AIConfigMut: AIConfig {
     fn set_read_timeout(&mut self, value: Duration);
 
     /// 配置代理。
+    /// 注：`BaseConfig` 提供同名 inherent 方法，本 trait 方法作为 Java 镜像保留。
+    #[allow(dead_code)]
     fn set_proxy(&mut self, proxy: &str) -> Result<(), url::ParseError>;
 
     /// 清除代理。
+    /// 注：`BaseConfig` 提供同名 inherent 方法，本 trait 方法作为 Java 镜像保留。
+    #[allow(dead_code)]
     fn clear_proxy(&mut self);
 }

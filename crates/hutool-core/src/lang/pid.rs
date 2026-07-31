@@ -4,6 +4,8 @@
 //! Java 通过 `ManagementFactory.getRuntimeMXBean().getName()` 解析 `pid@host`；
 //! Rust 直接使用 `std::process::id()`，语义等价于获取当前进程 PID。
 
+#![allow(dead_code)] // 对齐 Java Pid，暂未接线，预留
+
 use std::sync::OnceLock;
 
 /// 对齐 Java: `cn.hutool.core.lang.Pid`（单例枚举）

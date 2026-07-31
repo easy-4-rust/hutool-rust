@@ -192,11 +192,16 @@ impl ChatProvider for OpenAiCompatibleProvider {
 }
 
 /// Java `OpenaiCommon` 的 Rust 等价：reasoning/vision/speech 三组枚举已统一放入 `models.rs`。
+/// 以下别名保留 Java 命名，作为镜像占位，暂无调用方。
+#[allow(dead_code)]
 pub type OpenaiReasoning = crate::ReasoningEffort;
+#[allow(unused_imports)]
 pub use crate::models::VisionDetail as OpenaiVision;
+#[allow(unused_imports)]
 pub use crate::models::SpeechVoice as OpenaiSpeech;
 
 /// Java `OpenaiConfig` 的 Rust 类型别名：所有配置通过 `BaseConfig` 承载。
+#[allow(dead_code)]
 pub type OpenaiConfig = crate::core::BaseConfig;
 
 /// Java `OpenaiProvider` 的 Rust 入口（暂未启用）。
@@ -206,6 +211,7 @@ pub fn openai_service_name() -> crate::ModelName {
 }
 
 /// 类型别名，避免下游出现冗长路径。
+#[allow(dead_code)]
 pub type ChatStreamType =
     Pin<Box<dyn Stream<Item = Result<ChatChunk, ProviderError>> + Send + 'static>>;
 

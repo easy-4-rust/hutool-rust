@@ -164,6 +164,8 @@ impl AIService for ProviderService {
 }
 
 /// Java `AIService` 接口里的 `chat(List<Message>)` 缺省实现，Rust 端在 trait 中给出。
+/// 该函数保留为 Java 镜像占位，暂无调用方。
+#[allow(dead_code)]
 pub fn default_chat_prompt(prompt: &str) -> Vec<Message> {
     let mut messages = Vec::with_capacity(2);
     messages.push(Message::system("You are a helpful assistant"));
@@ -184,10 +186,8 @@ impl fmt::Display for ProviderService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::ai_config::AIConfig;
     use crate::core::ai_service::AIService;
     use hutool_http::HttpConfig;
-    use secrecy::ExposeSecret;
     use serde_json::json;
     use std::sync::{Arc, Mutex};
     use tokio::{
@@ -218,7 +218,6 @@ mod tests {
 
     #[test]
     fn requests_apply_method_auth_query_and_provider_paths() {
-        use super::super::ai_config::AIConfigMut;
         let openai =
             ProviderService::new(BaseConfig::with_api_key(ModelName::OpenAi, "key").unwrap())
                 .unwrap();
@@ -272,7 +271,6 @@ mod tests {
 
     #[tokio::test]
     async fn service_executes_json_binary_limits_and_sse() {
-        use super::super::ai_config::AIConfigMut;
         let sse = b"data: {\"delta\":\"one\"}\n\ndata: [DONE]\n\n".to_vec();
         let (url, task) = server(vec![
             ("application/json", br#"{"ok":true}"#.to_vec()),

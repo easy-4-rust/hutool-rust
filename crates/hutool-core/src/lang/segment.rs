@@ -1,6 +1,8 @@
 //! 对齐: `cn.hutool.core.lang.Segment`
 //! 来源: hutool-core/src/main/java/cn/hutool/core/lang/Segment.java
 
+#![allow(dead_code)] // 对齐 Java Segment，暂未接线，预留
+
 /// 对齐 Java: `cn.hutool.core.lang.Segment`
 pub trait Segment {
     /// 对齐 Java: `Segment.getStartIndex()`

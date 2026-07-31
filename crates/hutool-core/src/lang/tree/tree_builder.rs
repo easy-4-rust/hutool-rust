@@ -1,5 +1,7 @@
 //! 对齐: `cn.hutool.core.lang.tree.TreeBuilder`
 
+#![allow(dead_code)] // 对齐 Java TreeBuilder，暂未接线，预留
+
 use crate::lang::tree::tree::Tree;
 
 /// 对齐 Java: `TreeBuilder`

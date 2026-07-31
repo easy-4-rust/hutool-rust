@@ -3,11 +3,9 @@
 //!
 //! 编译正则缓存；flags 对齐 Java `Pattern` 位掩码的常用子集（CASE_INSENSITIVE=2）。
 
-use std::collections::HashMap;
 use std::sync::Arc;
 
-use parking_lot::Mutex;
-use regex::{Regex, RegexBuilder};
+use regex::Regex;
 
 use crate::lang::regex_pool::RegexPool;
 
@@ -16,6 +14,7 @@ use super::regex_with_flag::RegexWithFlag;
 /// 对齐 Java: `cn.hutool.core.lang.PatternPool`
 pub struct PatternPool;
 
+#[allow(dead_code)] // 对齐 Java PatternPool，部分方法暂未接线，预留
 impl PatternPool {
     /// 对齐 Java: `PatternPool.GENERAL` 等预编译访问（按需编译入池）。
     pub fn general() -> Arc<Regex> {
@@ -52,4 +51,4 @@ impl PatternPool {
     }
 }
 
-use super::{FLAG_CASE_INSENSITIVE, compile, pool};
+use super::{compile, pool};

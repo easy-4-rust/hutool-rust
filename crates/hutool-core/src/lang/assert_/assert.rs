@@ -16,6 +16,7 @@ use super::assert_result::AssertResult;
 #[derive(Debug, Clone, Copy, Default)]
 pub struct Assert;
 
+#[allow(dead_code)] // 对齐 Java Assert，暂未接线，预留
 impl Assert {
     fn fmt_msg(template: &str, params: &[&dyn Display]) -> String {
         format_template(template, params)

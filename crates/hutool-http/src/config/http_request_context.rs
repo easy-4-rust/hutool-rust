@@ -2,9 +2,7 @@
 //! 来源: hutool-http/src/main/java/cn/hutool/http/HttpRequestContext.java
 //! 中文说明: 请求拦截器上下文，暴露可变的请求方法、URL和头部信息
 
-use reqwest::{Method, StatusCode, Url, header::HeaderMap, tls::Version};
-use std::{fmt, sync::Arc, time::Duration};
-use thiserror::Error;
+use reqwest::{Method, Url, header::HeaderMap};
 
 /// Mutable request metadata exposed to application interceptors.
 #[derive(Debug, Clone)]
@@ -62,5 +60,3 @@ impl HttpRequestContext {
         (self.method, self.url, self.headers)
     }
 }
-
-use super::{duration};

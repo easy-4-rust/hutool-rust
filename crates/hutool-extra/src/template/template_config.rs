@@ -10,12 +10,8 @@
 //! - 迁移状态：✅ 已实现（Phase 1.4 工作）
 
 use std::fmt;
-use std::path::Path;
-
-use thiserror::Error;
 
 use super::resource_mode::ResourceMode;
-use super::template_engine::TemplateEngine;
 
 /// 模板配置，对齐 `cn.hutool.extra.template.TemplateConfig`。
 ///
@@ -164,5 +160,3 @@ impl fmt::Display for ResourceMode {
         }
     }
 }
-
-use super::{DEFAULT_CONFIG, default_config};

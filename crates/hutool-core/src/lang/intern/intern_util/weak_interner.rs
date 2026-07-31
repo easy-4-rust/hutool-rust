@@ -1,5 +1,7 @@
 //! 对齐: `cn.hutool.core.lang.intern.InternUtil`
 
+#![allow(dead_code)] // 对齐 Java InternUtil，暂未接线，预留
+
 use parking_lot::Mutex;
 use std::collections::HashMap;
 use std::sync::Arc;

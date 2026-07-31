@@ -4,7 +4,6 @@
 
 use crate::cookie::{CookieManagerHandle, GlobalCookieManager};
 use crate::HostnameVerification;
-use std::sync::{Mutex, OnceLock};
 use std::time::Duration;
 
 use super::http_global_config_state::HttpGlobalConfigState;
@@ -146,4 +145,4 @@ impl HttpGlobalConfig {
     }
 }
 
-use super::{DEFAULT_BOUNDARY, state};
+use super::state;

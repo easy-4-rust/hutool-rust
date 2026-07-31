@@ -1,5 +1,7 @@
 //! 对齐: `cn.hutool.core.lang.tree.TreeNodeConfig`
 
+#![allow(dead_code)] // 对齐 Java TreeNodeConfig，暂未接线，预留
+
 /// 对齐 Java: `TreeNodeConfig`
 #[derive(Debug, Clone)]
 pub struct TreeNodeConfig {

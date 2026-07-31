@@ -5,4 +5,3 @@ mod number128;
 mod metro_hash;
 
 pub use number128::Number128;
-pub use metro_hash::MetroHash;

@@ -1,5 +1,7 @@
 //! 对齐: `cn.hutool.core.lang.Range`
 
+#![allow(dead_code)] // 对齐 Java Range，暂未接线，预留
+
 /// 对齐 Java: `Range<T>` 步进迭代器
 pub struct Range<T> {
     current: Option<T>,

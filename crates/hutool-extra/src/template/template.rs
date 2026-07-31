@@ -9,11 +9,6 @@
 //!   在各自的 `engine/<name>.rs` 子模块；本文件只提供配置 + facade。
 //! - 迁移状态：✅ 已实现（Phase 1.4 工作）
 
-use std::fmt;
-use std::path::Path;
-
-use thiserror::Error;
-
 use super::template_binding::TemplateBinding;
 use super::template_exception::TemplateException;
 
@@ -29,5 +24,3 @@ pub trait Template: Send + Sync {
     /// 渲染模板并写入字节缓冲（对齐 `render(Map, File)` Java 重载）。
     fn render_to_bytes(&self, binding: &TemplateBinding) -> Result<Vec<u8>, TemplateException>;
 }
-
-use super::{DEFAULT_CONFIG, default_config};

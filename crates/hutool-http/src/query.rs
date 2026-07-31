@@ -121,6 +121,9 @@ impl QueryMap {
     }
 
     /// Inserts pairs from a string-keyed map (values use `Display`).
+    ///
+    /// 对齐 Java `QueryString` 批量插入的脚手架方法，当前未被直接调用。
+    #[allow(dead_code)]
     pub fn add_all<I, V>(mut self, params: I) -> Self
     where
         I: IntoIterator<Item = (String, V)>,

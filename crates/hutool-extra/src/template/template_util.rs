@@ -9,11 +9,7 @@
 //!   在各自的 `engine/<name>.rs` 子模块；本文件只提供配置 + facade。
 //! - 迁移状态：✅ 已实现（Phase 1.4 工作）
 
-use std::fmt;
-use std::path::Path;
-
-use thiserror::Error;
-
+use super::default_config;
 use super::template_config::TemplateConfig;
 use super::template_engine::TemplateEngine;
 use super::template_exception::TemplateException;
@@ -31,7 +27,7 @@ impl TemplateUtil {
     ///
     /// Rust 用 `dyn TemplateEngine` trait object 而非 Java `Class<? extends TemplateEngine>` 反射。
     pub fn create_engine_with_config(
-        config: &TemplateConfig,
+        _config: &TemplateConfig,
     ) -> Result<Box<dyn TemplateEngine>, TemplateException> {
         // Phase 1.4 子任务：根据 config.custom_engine 选择具体引擎
         // 当前返回 Err 直到具体 engine 实现到位
@@ -40,5 +36,3 @@ impl TemplateUtil {
         ))
     }
 }
-
-use super::{DEFAULT_CONFIG, default_config};

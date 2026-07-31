@@ -1,14 +1,7 @@
 //! Explicit, injectable SMTP and MIME mail support.
 
-use std::{fmt, time::Duration};
-
-pub use lettre::message::Mailbox;
-use lettre::{
-    AsyncSmtpTransport, AsyncTransport, Message, Tokio1Executor,
-    message::{Attachment, MultiPart, SinglePart, header::ContentType},
-    transport::smtp::{authentication::Credentials, response::Response},
-};
-use secrecy::{ExposeSecret, SecretString};
+use lettre::message::{Attachment, Mailbox, MultiPart, SinglePart, header::ContentType};
+use lettre::Message;
 
 use crate::{ExtraError, Result};
 

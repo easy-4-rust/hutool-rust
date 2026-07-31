@@ -54,7 +54,7 @@ impl MetaAnnotationScanner {
     /// 扫描元注解内部实现。
     pub fn scan_meta_impl(&self, annotation_type: AnnotationTypeName, consumer: &mut ScanConsumer<'_>) {
         let registry = global_registry().read();
-        let Some(schema) = registry.schema(annotation_type) else {
+        let Some(_schema) = registry.schema(annotation_type) else {
             return;
         };
         let mut accessed = HashSet::new();

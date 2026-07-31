@@ -7,6 +7,7 @@
 
 /// 对齐 Java enum: `cn.hutool.core.lang.ansi.AnsiColor`
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[allow(non_camel_case_types)] // 对齐 Java 枚举常量名（BRIGHT_BLACK 等）
 pub enum AnsiColor {
     /// 对齐 Java 枚举常量: `DEFAULT`
     DEFAULT,

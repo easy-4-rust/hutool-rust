@@ -22,7 +22,6 @@ use hutool_crypto::{
     tea_decrypt, tea_encrypt,
     aes256_gcm_decrypt, aes256_gcm_encrypt,
     aes128_cbc_decrypt, aes128_cbc_encrypt,
-    CryptoError,
 };
 
 /// One parsed entry from `crypto_test_vectors.txt`:

@@ -17,6 +17,9 @@ use super::synthesized_annotation_post_processor::SynthesizedAnnotationPostProce
 use super::synthesized_annotation_selector::SynthesizedAnnotationSelector;
 
 /// 对齐 Java 类: `cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotation`
+///
+/// 部分字段仅用于镜像 Java 类结构（parity 对照），当前实现未读取。
+#[allow(dead_code)]
 pub struct GenericSynthesizedAggregateAnnotation {
     root: Arc<AnnotationMirror>,
     source: Vec<Arc<AnnotationMirror>>,

@@ -39,6 +39,8 @@ pub fn format_message(template: &str, arguments: &[&dyn fmt::Display]) -> String
 /// 进程级 `LogFactory` 单例槽。
 ///
 /// 对应 Java `cn.hutool.log.StaticLogFactory` 静态字段。
+/// 保留为 Java 镜像 helper，暂无调用方。
+#[allow(dead_code)]
 pub(crate) fn global_slot() -> &'static RwLock<LogFactory> {
     static FACTORY: OnceLock<RwLock<LogFactory>> = OnceLock::new();
     FACTORY.get_or_init(|| RwLock::new(LogFactory::default()))

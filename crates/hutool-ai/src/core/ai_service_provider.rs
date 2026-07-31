@@ -25,4 +25,6 @@ pub trait AIServiceProvider: fmt::Debug + Send + Sync {
 ///
 /// Java 端通过 `ServiceLoaderUtil.load(AIConfig.class)` 反射注册；
 /// Rust 端直接复用 `AIServiceFactory::registry()`，避免重复状态。
+/// 该别名保留 Java 命名，作为镜像占位，暂无调用方。
+#[allow(dead_code)]
 pub type AIConfigRegistry = crate::ai_service_factory::ProviderRegistry;

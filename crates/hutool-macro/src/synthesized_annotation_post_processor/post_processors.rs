@@ -2,9 +2,6 @@
 
 use std::sync::Arc;
 
-use crate::annotation_synthesizer::AnnotationSynthesizer;
-use crate::synthesized_annotation::SynthesizedAnnotation;
-
 use crate::synthesized_annotation_post_processor::SynthesizedAnnotationPostProcessor;
 
 /// 预置后置处理器工厂。

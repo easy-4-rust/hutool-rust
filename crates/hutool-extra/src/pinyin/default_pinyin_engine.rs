@@ -1,7 +1,5 @@
 //! Pinyin helpers aligned with Hutool `PinyinUtil`, backed by the `pinyin` crate.
 
-use pinyin::{ToPinyin, ToPinyinMulti};
-
 use super::pinyin_engine::PinyinEngine;
 use super::pinyin_util::PinyinUtil;
 

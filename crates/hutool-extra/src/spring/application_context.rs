@@ -6,9 +6,7 @@
 
 use std::any::Any;
 use std::collections::HashMap;
-use std::sync::{Arc, OnceLock};
-
-use crate::HutoolException;
+use std::sync::Arc;
 
 /// Spring 应用上下文 trait，对齐 `org.springframework.context.ApplicationContext`。
 ///
@@ -39,5 +37,3 @@ pub trait ApplicationContext: Send + Sync {
     /// 对齐 `ApplicationContext.publishEvent(Object)`：发布事件
     fn publish_event(&self, event: Arc<dyn Any + Send + Sync>);
 }
-
-use super::{APPLICATION_CONTEXT, enable_spring_util};

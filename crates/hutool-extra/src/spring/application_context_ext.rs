@@ -4,12 +4,6 @@
 //! 是 Java-only，属于 unsafe-to-copy。Rust 用户应使用依赖注入框架（如 axum::Extension、
 //! shaku、self-rs 等）替代。
 
-use std::any::Any;
-use std::collections::HashMap;
-use std::sync::{Arc, OnceLock};
-
-use crate::HutoolException;
-
 use super::application_context::ApplicationContext;
 
 /// ApplicationContext 扩展 trait，提供 hutool-rs 独有的便捷方法。
@@ -23,5 +17,3 @@ pub trait ApplicationContextExt: ApplicationContext {
 }
 
 impl<T: ApplicationContext + ?Sized> ApplicationContextExt for T {}
-
-use super::{APPLICATION_CONTEXT, enable_spring_util};

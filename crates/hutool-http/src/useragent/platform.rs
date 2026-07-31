@@ -2,16 +2,11 @@
 //! 来源: hutool-http/src/main/java/cn/hutool/http/useragent/Platform.java
 //! 中文说明: 设备平台分类枚举，识别桌面、移动和平板设备类型
 
-use regex::{Regex, RegexBuilder};
-use std::{
-    fmt,
-    hash::{Hash, Hasher},
-    sync::{OnceLock, RwLock},
-};
-use woothee::parser::Parser as WootheeParser;
+use std::fmt;
 
 use super::rule_error::RuleError;
 use super::user_agent_info::UserAgentInfo;
+use super::is_mobile_platform_name;
 
 /// Device platform classification.
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -84,7 +79,3 @@ impl fmt::Display for Platform {
         self.info.fmt(formatter)
     }
 }
-
-use super::{UNKNOWN_NAME, built_in_browsers, built_in_engines, built_in_operating_systems, built_in_platforms, capture, case_insensitive_regex, custom_browsers};
-use super::{custom_operating_systems, engine_version, find_browser, find_engine, find_operating_system, find_platform, is_mobile_browser_name, is_mobile_platform_name};
-use super::{read_rules, unknown_browser, unknown_engine, unknown_operating_system, unknown_platform, woothee_browser, woothee_operating_system, write_rules};

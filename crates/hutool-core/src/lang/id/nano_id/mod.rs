@@ -1,13 +1,10 @@
 //! 对齐: `cn.hutool.core.lang.id.NanoId`
 //! 来源: hutool-core/src/main/java/cn/hutool/core/lang/id/NanoId.java
 
-use rand::Rng;
+#![allow(dead_code)] // 对齐 Java NanoId，暂未接线，预留
 
 mod nano_id;
 mod java_random;
-
-pub use nano_id::NanoId;
-pub use java_random::JavaRandom;
 
 pub const DEFAULT_SIZE: usize = 21;
 

@@ -2,10 +2,6 @@
 //! 来源: hutool-system/src/main/java/cn/hutool/system/oshi/*.java
 //! 中文说明: 提供与 OSHI 对齐的硬件和操作系统快照，基于 `sysinfo` 库实现，涵盖 CPU、内存、磁盘、网络、传感器和进程信息
 
-use std::{thread, time::Duration};
-
-use sysinfo::{Components, Disks, Networks, Pid, System};
-
 mod cpu_ticks;
 mod cpu_info;
 mod process_info;

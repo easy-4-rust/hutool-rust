@@ -2,17 +2,18 @@
 
 #![allow(dead_code)]
 
-use crate::date::date_unit::DateUnit;
-
-use super::between_formatter::BetweenFormatter;
-
 /// 对齐 Java: `BetweenFormatter.Level`
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Level {
+    /// 天
     Day = 0,
+    /// 小时
     Hour = 1,
+    /// 分钟
     Minute = 2,
+    /// 秒
     Second = 3,
+    /// 毫秒
     Millisecond = 4,
 }
 

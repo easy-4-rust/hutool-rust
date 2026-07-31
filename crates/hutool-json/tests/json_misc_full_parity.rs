@@ -94,6 +94,7 @@ fn conv_test_bean2_json() {
 #[test]
 fn conv_test_json2_bean() {
     #[derive(serde::Deserialize, Debug)]
+    #[allow(dead_code)]
     struct Bean { name: String, age: u32 }
     let b: Bean = hj::JSONUtil::to_bean(r#"{"name":"张三","age":18}"#).unwrap();
     assert_eq!(b.age, 18);
@@ -229,6 +230,7 @@ fn fmt_format_test4() {
 fn support_parse_test() {
     #[derive(serde::Deserialize, Debug)]
     #[serde(rename_all = "camelCase")]
+    #[allow(dead_code)]
     struct TestBean {
         location: String,
         message: String,
@@ -270,6 +272,7 @@ fn transient_bean_without_transient_test() {
 #[test]
 fn transient_bean_with_transient_test() {
     #[derive(serde::Serialize)]
+    #[allow(dead_code)]
     struct Bill {
         #[serde(skip_serializing)] id: String,
         #[serde(rename = "bizNo")] biz_no: String,
@@ -285,6 +288,7 @@ fn transient_bean_with_transient_test() {
 #[test]
 fn transient_bean_without_transient_to_bean_test() {
     #[derive(serde::Deserialize, Debug)]
+    #[allow(dead_code)]
     struct Bill { id: String, #[serde(rename = "bizNo")] biz_no: String }
     let b: Bill = hj::JSONUtil::to_bean(r#"{"id":"3243","bizNo":"bizNo"}"#).unwrap();
     assert_eq!(b.id, "3243");

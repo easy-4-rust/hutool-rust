@@ -1,8 +1,4 @@
-use std::io::Read;
-
-use serde_json::Value;
-
-use crate::{JSONArray, JSONConfig, JSONObject, JsonError, Result};
+use crate::{JSONArray, JSONObject, Result};
 
 use super::json_tokener::JSONTokener;
 

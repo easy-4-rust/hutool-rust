@@ -8,13 +8,8 @@
 /// HMAC 摘要
 
 use crate::{
-    aes128_cbc_decrypt, aes128_cbc_encrypt, aes128_ecb_decrypt, aes128_ecb_encrypt,
-    aes256_gcm_decrypt, aes256_gcm_encrypt, hotp, hmac_md5_hex, hmac_sha1_hex, hmac_sha256,
-    hmac_sha256_hex, hmac_sm3_hex, md5_hex, md5_hex16, md5_hex_repeat, md5_hex_salt,
-    md5_hex_salt_repeat, md5_hex_with_salt, sha1_hex, sha256_hex, sha512_hex, sm3_hex,
-    sm4_ecb_decrypt, sm4_ecb_encrypt, totp, totp_validate, CryptoError, OtpAlgorithm,
+    hmac_md5_hex, hmac_sha1_hex, hmac_sha256, hmac_sha256_hex, hmac_sm3_hex, CryptoError,
 };
-use secrecy::SecretString;
 
 /// Hutool `HMac` facade over typed HMAC helpers.
 #[derive(Debug, Clone)]

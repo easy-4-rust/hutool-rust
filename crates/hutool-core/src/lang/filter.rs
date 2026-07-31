@@ -1,6 +1,8 @@
 //! 对齐: `cn.hutool.core.lang.Filter`
 //! 来源: hutool-core/src/main/java/cn/hutool/core/lang/Filter.java
 
+#![allow(dead_code)] // 对齐 Java Filter，暂未接线，预留
+
 /// 对齐 Java: `cn.hutool.core.lang.Filter`
 pub trait Filter<T> {
     /// 对齐 Java: `Filter.accept(T)`

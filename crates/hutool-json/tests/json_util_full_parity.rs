@@ -72,6 +72,7 @@ fn util_to_bean_test() {
 #[test]
 fn util_to_bean_test2() {
     #[derive(serde::Deserialize, Debug)]
+    #[allow(dead_code)]
     struct User { name: Option<String>, age: Option<u32> }
     let u: User = hj::JSONUtil::to_bean(r#"{"name":null}"#).unwrap();
     assert!(u.name.is_none());

@@ -8,9 +8,9 @@ use std::{
     collections::{HashMap, hash_map::Entry},
     fmt,
 };
-use thiserror::Error;
 
 use super::http_base_error::HttpBaseError;
+use super::HTTP_1_1;
 
 /// Shared, explicitly owned metadata for Hutool-style requests and responses.
 #[derive(Debug, Clone)]
@@ -262,5 +262,3 @@ impl fmt::Display for HttpBase {
         formatter.write_str("\r\n")
     }
 }
-
-use super::{HTTP_1_0, HTTP_1_1};

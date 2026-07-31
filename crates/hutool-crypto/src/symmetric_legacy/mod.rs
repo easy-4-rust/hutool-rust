@@ -1,7 +1,7 @@
 //! Legacy symmetric algorithms aligned with Hutool parity tests.
 
 use crate::CryptoError;
-use des::cipher::{BlockModeDecrypt, BlockModeEncrypt, KeyInit};
+use des::cipher::{BlockModeDecrypt, BlockModeEncrypt};
 use des::Des;
 use ecb::{Decryptor as EcbDecryptor, Encryptor as EcbEncryptor};
 use pbkdf2::pbkdf2_hmac;
@@ -19,10 +19,12 @@ type DesEcbEnc = EcbEncryptor<Des>;
 
 type DesEcbDec = EcbDecryptor<Des>;
 
+/// TEA 加密（零填充，对齐 Hutool `SymmetricCrypto`）。
 pub fn tea_encrypt(key: &[u8], plaintext: &[u8]) -> Result<Vec<u8>, CryptoError> {
     tea_core(key, plaintext, false)
 }
 
+/// TEA 解密（自动去除零填充）。
 pub fn tea_decrypt(key: &[u8], ciphertext: &[u8]) -> Result<Vec<u8>, CryptoError> {
     tea_core(key, ciphertext, true)
 }
@@ -49,19 +51,23 @@ fn tea_core(key: &[u8], data: &[u8], decrypt: bool) -> Result<Vec<u8>, CryptoErr
         for _ in 0..32 {
             if decrypt {
                 v1 = v1.wrapping_sub(
-                    (((v0 << 4).wrapping_add(k[2])) ^ (v0.wrapping_add(sum)).wrapping_add((v0 >> 5).wrapping_add(k[3]))),
+                    ((v0 << 4).wrapping_add(k[2]))
+                        ^ (v0.wrapping_add(sum)).wrapping_add((v0 >> 5).wrapping_add(k[3])),
                 );
                 v0 = v0.wrapping_sub(
-                    (((v1 << 4).wrapping_add(k[0])) ^ (v1.wrapping_add(sum)).wrapping_add((v1 >> 5).wrapping_add(k[1]))),
+                    ((v1 << 4).wrapping_add(k[0]))
+                        ^ (v1.wrapping_add(sum)).wrapping_add((v1 >> 5).wrapping_add(k[1])),
                 );
                 sum = sum.wrapping_sub(delta);
             } else {
                 sum = sum.wrapping_add(delta);
                 v0 = v0.wrapping_add(
-                    (((v1 << 4).wrapping_add(k[0])) ^ (v1.wrapping_add(sum)).wrapping_add((v1 >> 5).wrapping_add(k[1]))),
+                    ((v1 << 4).wrapping_add(k[0]))
+                        ^ (v1.wrapping_add(sum)).wrapping_add((v1 >> 5).wrapping_add(k[1])),
                 );
                 v1 = v1.wrapping_add(
-                    (((v0 << 4).wrapping_add(k[2])) ^ (v0.wrapping_add(sum)).wrapping_add((v0 >> 5).wrapping_add(k[3]))),
+                    ((v0 << 4).wrapping_add(k[2]))
+                        ^ (v0.wrapping_add(sum)).wrapping_add((v0 >> 5).wrapping_add(k[3])),
                 );
             }
         }
@@ -96,45 +102,51 @@ fn write_u32_be(out: &mut Vec<u8>, v: u32) {
     out.extend_from_slice(&v.to_be_bytes());
 }
 
+/// DES-ECB 加密（PKCS7 填充）。
 pub fn des_ecb_encrypt(key: &[u8], plaintext: &[u8]) -> Result<Vec<u8>, CryptoError> {
     if key.len() != 8 {
         return Err(CryptoError::InvalidAesKey);
     }
     let mut buf = vec![0u8; plaintext.len() + 8];
     buf[..plaintext.len()].copy_from_slice(plaintext);
-    let mut cipher = DesEcbEnc::new_from_slice(key).map_err(|_| CryptoError::InvalidAesKey)?;
+    let cipher = DesEcbEnc::new_from_slice(key).map_err(|_| CryptoError::InvalidAesKey)?;
     let written = cipher
         .encrypt_padded::<aes::cipher::block_padding::Pkcs7>(&mut buf, plaintext.len())
         .map_err(|_| CryptoError::Aead)?;
     Ok(written.to_vec())
 }
 
+/// DES-ECB 解密（PKCS7 去填充）。
 pub fn des_ecb_decrypt(key: &[u8], ciphertext: &[u8]) -> Result<Vec<u8>, CryptoError> {
     if key.len() != 8 {
         return Err(CryptoError::InvalidAesKey);
     }
     let mut buf = ciphertext.to_vec();
-    let mut cipher = DesEcbDec::new_from_slice(key).map_err(|_| CryptoError::InvalidAesKey)?;
+    let cipher = DesEcbDec::new_from_slice(key).map_err(|_| CryptoError::InvalidAesKey)?;
     let plain = cipher
         .decrypt_padded::<aes::cipher::block_padding::Pkcs7>(&mut buf)
         .map_err(|_| CryptoError::Aead)?;
     Ok(plain.to_vec())
 }
 
+/// PBKDF2-HMAC-SHA1（1000 轮）输出十六进制串。
 pub fn pbkdf2_sha1_hex(password: &[u8], salt: &[u8]) -> String {
     let mut out = [0u8; 64];
     pbkdf2_hmac::<Sha1>(password, salt, 1000, &mut out);
     hex::encode(out)
 }
 
+/// SM4-ECB 加密，输出十六进制串。
 pub fn sm4_ecb_encrypt_hex(key: &[u8], plaintext: &[u8]) -> Result<String, CryptoError> {
     Ok(hex::encode(sm4_ecb_encrypt(key, plaintext)?))
 }
 
+/// SM4-ECB 加密。
 pub fn sm4_ecb_encrypt(key: &[u8], plaintext: &[u8]) -> Result<Vec<u8>, CryptoError> {
     sm4_ecb(key, plaintext, true)
 }
 
+/// SM4-ECB 解密。
 pub fn sm4_ecb_decrypt(key: &[u8], ciphertext: &[u8]) -> Result<Vec<u8>, CryptoError> {
     sm4_ecb(key, ciphertext, false)
 }
@@ -182,6 +194,7 @@ fn pkcs7_unpad(data: &[u8]) -> Result<&[u8], CryptoError> {
     Ok(&data[..data.len() - pad])
 }
 
+/// 生成 SM4 密钥（128/256 位）。
 pub fn generate_sm4_key(bits: usize) -> Result<Vec<u8>, CryptoError> {
     let len = bits / 8;
     if len != 16 && len != 32 {
@@ -193,10 +206,12 @@ pub fn generate_sm4_key(bits: usize) -> Result<Vec<u8>, CryptoError> {
     Ok(key)
 }
 
+/// 维吉尼亚密码加密。
 pub fn vigenere_encrypt(content: &str, key: &str) -> String {
     vigenere_map(content, key, true)
 }
 
+/// 维吉尼亚密码解密。
 pub fn vigenere_decrypt(content: &str, key: &str) -> String {
     vigenere_map(content, key, false)
 }

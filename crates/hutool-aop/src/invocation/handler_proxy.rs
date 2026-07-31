@@ -2,7 +2,7 @@
 //! 来源: hutool-aop/src/main/java/cn/hutool/aop/
 //! 中文说明: 处理器代理，基于 InvocationHandler 的显式类型化代理实现。
 
-use std::{borrow::Cow, fmt};
+use std::fmt;
 
 use super::invocation_handler::InvocationHandler;
 use super::method::Method;

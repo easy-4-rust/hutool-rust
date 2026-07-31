@@ -3,4 +3,3 @@ pub mod atomic_loader;
 pub mod lazy_fun_loader;
 pub mod lazy_loader;
 pub mod loader;
-pub use lazy_fun_loader::LazyFunLoader;

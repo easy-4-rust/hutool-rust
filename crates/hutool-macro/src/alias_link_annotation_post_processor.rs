@@ -4,7 +4,6 @@ use std::sync::Arc;
 
 use super::abstract_link_annotation_post_processor::AbstractLinkAnnotationPostProcessor;
 use super::aliased_annotation_attribute::AliasedAnnotationAttribute;
-use super::annotation_attribute::AnnotationAttribute;
 use super::force_aliased_annotation_attribute::ForceAliasedAnnotationAttribute;
 use super::relation_type::RelationType;
 use super::synthesized_annotation::SynthesizedAnnotation;

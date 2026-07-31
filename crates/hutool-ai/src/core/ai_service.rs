@@ -49,6 +49,8 @@ pub trait AIService: fmt::Debug + Send + Sync {
 ///
 /// 对齐 Java 来源: `cn.hutool.ai.core.BaseAIService`
 /// Rust 端没有继承，统一通过 `AIService` trait + `ProviderService` 实现来表达。
+/// 该 trait 为 Java 镜像占位，暂无实现方。
+#[allow(dead_code)]
 pub trait BaseAIService: AIService {
     /// 持有的 `ProviderService`。
     fn provider(&self) -> &ProviderService;

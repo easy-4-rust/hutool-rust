@@ -1,15 +1,8 @@
 //! Db 门面 —— 对齐 Hutool `cn.hutool.db.Db`（SQLx SQLite 实现）。
 
 use crate::entity::Entity;
-use crate::hutool_page::HutoolPage;
-use crate::page_result::PageResult;
-use crate::sql::condition::LikeType;
-use crate::sql::named_sql::NamedSql;
-use crate::sql::sql_util::{build_conditions, build_like_value, remove_outer_order_by};
-use crate::sql::{Condition, SqlBuilder};
 use serde_json::Value;
 use sqlx::{Column, Row, SqlitePool, TypeInfo};
-use std::collections::HashMap;
 
 mod db_runtime_error;
 mod db_result;
@@ -59,6 +52,7 @@ fn row_to_entity(row: sqlx::sqlite::SqliteRow) -> Entity {
     entity
 }
 
+/// 初始化 hutool 测试用 `user` / `user_1` 表与数据（对齐 Hutool 测试夹具）。
 pub async fn seed_hutool_user_fixture(pool: &SqlitePool) -> DbResult<()> {
     sqlx::query(
         "CREATE TABLE IF NOT EXISTS \"user\" (
@@ -111,6 +105,7 @@ pub async fn seed_hutool_user_fixture(pool: &SqlitePool) -> DbResult<()> {
     Ok(())
 }
 
+/// 创建内存 `SQLite` 连接池并灌入测试夹具数据。
 pub async fn memory_pool() -> DbResult<SqlitePool> {
     let pool = crate::sqlite::connect(
         "sqlite::memory:",

@@ -3,8 +3,6 @@
 /// 对齐: `cn.hutool.extra.pinyin.PinyinUtil`
 /// 拼音工具类
 
-use pinyin::{ToPinyin, ToPinyinMulti};
-
 mod pinyin_exception;
 mod pinyin_engine;
 mod default_pinyin_engine;

@@ -1,8 +1,3 @@
-use pprof::{ProfilerGuard, ProfilerGuardBuilder, protos::Message};
-use thiserror::Error;
-
-use crate::{AuthorizationError, DiagnosticAction, DiagnosticPermit};
-
 /// CPU sampling configuration.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct CpuProfileConfig {

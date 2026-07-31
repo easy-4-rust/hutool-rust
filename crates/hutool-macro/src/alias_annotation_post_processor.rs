@@ -3,7 +3,6 @@
 use std::collections::HashMap;
 use std::sync::Arc;
 
-use super::annotation_attribute::AnnotationAttribute;
 use super::force_aliased_annotation_attribute::ForceAliasedAnnotationAttribute;
 use super::mirror::AnnotationTypeName;
 use super::synthesized_annotation::SynthesizedAnnotation;
@@ -48,8 +47,7 @@ impl SynthesizedAnnotationPostProcessor for AliasAnnotationPostProcessor {
             let Some(resolved) = attribute_map.get(&resolved_name).cloned() else {
                 continue;
             };
-            if attribute.as_ref() as *const dyn AnnotationAttribute != resolved.as_ref() as *const dyn AnnotationAttribute
-            {
+            if !std::ptr::eq(attribute.as_ref(), resolved.as_ref()) {
                 attribute_map.insert(
                     attribute_name,
                     ForceAliasedAnnotationAttribute::new(attribute, resolved),

@@ -2,9 +2,7 @@
 //! 来源: hutool-http/src/main/java/cn/hutool/http/HttpConfig.java
 //! 中文说明: HTTP客户端配置，管理超时、代理、TLS、拦截器等设置
 
-use reqwest::{Method, StatusCode, Url, header::HeaderMap, tls::Version};
 use std::{fmt, sync::Arc, time::Duration};
-use thiserror::Error;
 
 use super::hostname_verification::HostnameVerification;
 use super::http_config_error::HttpConfigError;

@@ -2,12 +2,7 @@
 //! 来源: hutool-aop/src/main/java/cn/hutool/aop/proxy/JdkProxyFactory.java
 //! 中文说明: JDK 风格代理工厂，使用 JDK 回调顺序创建代理。
 
-use crate::{
-    HandlerProxy, Method,
-    aspects::Aspect,
-    interceptor::{CglibInterceptor, JdkInterceptor, SpringCglibInterceptor},
-};
-use std::{fmt, sync::Arc};
+use crate::aspects::Aspect;
 
 use super::proxy::Proxy;
 use super::proxy_backend::ProxyBackend;

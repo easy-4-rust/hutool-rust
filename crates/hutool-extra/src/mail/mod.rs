@@ -1,19 +1,9 @@
 //! Explicit, injectable SMTP and MIME mail support.
-
-/// 对齐: `cn.hutool.extra.mail.MailUtil`
-/// 邮件工具类
-
-use std::{fmt, time::Duration};
+//!
+//! 对齐: `cn.hutool.extra.mail.MailUtil`
+//! 邮件工具类
 
 pub use lettre::message::Mailbox;
-use lettre::{
-    AsyncSmtpTransport, AsyncTransport, Message, Tokio1Executor,
-    message::{Attachment, MultiPart, SinglePart, header::ContentType},
-    transport::smtp::{authentication::Credentials, response::Response},
-};
-use secrecy::{ExposeSecret, SecretString};
-
-use crate::{ExtraError, Result};
 
 mod smtp_security;
 mod smtp_credentials;

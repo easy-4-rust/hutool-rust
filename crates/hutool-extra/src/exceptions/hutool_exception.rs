@@ -12,9 +12,6 @@
 
 use thiserror::Error;
 
-use super::mail_exception::MailException;
-use super::qr_code_exception::QrCodeException;
-
 /// 通用 hutool Exception 错误枚举，对齐 `cn.hutool.extra.X.XxxException` 的 6 构造器模式。
 ///
 /// 各具体 Exception 类型（MailException、QrCodeException 等）都是这个 enum 的 re-export 别名。
@@ -23,7 +20,9 @@ pub enum HutoolException {
     /// 对齐 `(Throwable e)`
     #[error("{message}")]
     FromCause {
+        /// 错误消息文本
         message: String,
+        /// 底层错误来源
         #[source]
         source: Box<dyn std::error::Error + Send + Sync>,
     },
@@ -34,12 +33,17 @@ pub enum HutoolException {
 
     /// 对齐 `(String messageTemplate, Object... params)`
     #[error("{message}")]
-    Formatted { message: String },
+    Formatted {
+        /// 格式化后的消息文本
+        message: String,
+    },
 
     /// 对齐 `(String message, Throwable throwable)`
     #[error("{message}")]
     WithThrowable {
+        /// 错误消息文本
         message: String,
+        /// 底层错误来源
         #[source]
         source: Box<dyn std::error::Error + Send + Sync>,
     },
@@ -48,7 +52,9 @@ pub enum HutoolException {
     /// Rust 没有 suppression/writableStackTrace 直接对应，使用 Box 包装
     #[error("{message}")]
     Full {
+        /// 错误消息文本
         message: String,
+        /// 底层错误来源
         #[source]
         source: Box<dyn std::error::Error + Send + Sync>,
     },
@@ -56,7 +62,9 @@ pub enum HutoolException {
     /// 对齐 `(Throwable throwable, String messageTemplate, Object... params)`
     #[error("{message}")]
     FormattedWithCause {
+        /// 格式化后的消息文本
         message: String,
+        /// 底层错误来源
         #[source]
         source: Box<dyn std::error::Error + Send + Sync>,
     },

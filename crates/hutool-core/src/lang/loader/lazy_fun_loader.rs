@@ -1,5 +1,7 @@
 //! 对齐: `cn.hutool.core.lang.loader.LazyFunLoader`
 
+#![allow(dead_code)] // 对齐 Java LazyFunLoader，暂未接线，预留
+
 use parking_lot::Mutex;
 use std::sync::Arc;
 

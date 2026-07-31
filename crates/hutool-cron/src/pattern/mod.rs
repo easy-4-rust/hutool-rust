@@ -4,9 +4,7 @@
 //! 中文说明: Hutool 定时任务表达式解析模块，包含表达式构建器、
 //! 解析器、字段匹配器等核心组件。
 
-use std::{fmt, str::FromStr};
-
-use chrono::{DateTime, Datelike, Duration as ChronoDuration, TimeZone, Timelike, Utc};
+use chrono::{DateTime, Datelike, TimeZone, Timelike, Utc};
 use cron::Schedule;
 
 use crate::CronError;
@@ -390,6 +388,11 @@ fn pad_fields(expression: &str, match_second: bool) -> Result<[String; 7], CronE
     ])
 }
 
+/// 中文说明: 提取时刻的七字段数组 `[秒, 分, 时, 日, 月, 周, 年]`，
+/// 与 Hutool `CronPatternUtil.matchedDates` 的字段提取逻辑对应。
+///
+/// Builds a seven-field `[sec, min, hour, day, month, weekday, year]` array
+/// from a timestamp.
 pub fn fields<Tz: TimeZone>(value: &DateTime<Tz>, match_second: bool) -> [i32; 7] {
     [
         if match_second {

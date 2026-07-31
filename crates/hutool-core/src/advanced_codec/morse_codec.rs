@@ -3,11 +3,9 @@
 /// 对齐: `cn.hutool.core.codec.Morse`
 /// 摩尔斯电码
 
-use data_encoding::{BASE32, BASE32HEX};
-use idna::punycode;
-use sha2::{Digest as _, Sha256};
-
 use crate::{CoreError, Result};
+
+use super::{morse_bits, morse_character};
 
 /// Configurable Morse encoder compatible with Hutool's binary dictionary.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -84,7 +82,3 @@ impl Default for MorseCodec {
         }
     }
 }
-
-use super::{BASE58_ALPHABET, BASE62_GMP, BASE62_INVERTED, CAESAR_TABLE, HASHIDS_ALPHABET, HASHIDS_SEPARATORS, base62_encode_with_alphabet, caesar};
-use super::{double_sha256, hashids_derive_alphabet, hashids_shuffle, hashids_translate, hashids_untranslate, hex_nibble, morse_bits, morse_character};
-use super::{rotate_ascii};

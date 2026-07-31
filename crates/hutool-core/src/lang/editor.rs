@@ -3,6 +3,8 @@
 //!
 //! Java 函数式接口在 Rust 中映射为 [`FnMut`] trait alias 语义：`edit` 返回 `None` 表示丢弃。
 
+#![allow(dead_code)] // 对齐 Java Editor，暂未接线，预留
+
 /// 对齐 Java: `cn.hutool.core.lang.Editor`
 pub trait Editor<T> {
     /// 对齐 Java: `Editor.edit(T)` — 返回 `None` 表示过滤掉该元素。

@@ -2,11 +2,7 @@
 //! 来源: hutool-log/src/main/java/cn/hutool/log/AbstractLog.java
 //! 中文说明: 日志的抽象基类，持有日志名称和后端接收器（LogSink），提供各级别启用状态查询。
 
-use std::{
-    collections::HashMap,
-    fmt,
-    sync::{Arc, OnceLock, RwLock},
-};
+use std::{fmt, sync::Arc};
 
 use crate::log::Log;
 use crate::level::LogLevel;

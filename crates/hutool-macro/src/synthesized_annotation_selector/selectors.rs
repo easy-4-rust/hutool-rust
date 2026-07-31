@@ -3,11 +3,9 @@
 use std::sync::Arc;
 
 use crate::hierarchical::{
-    ChooseSide, FarthestAndNewestPrioritySelector, FarthestAndOldestPrioritySelector,
-    Hierarchical, HierarchicalSelector, NearestAndNewestPrioritySelector,
-    NearestAndOldestPrioritySelector,
+    FarthestAndNewestPrioritySelector, FarthestAndOldestPrioritySelector,
+    NearestAndNewestPrioritySelector, NearestAndOldestPrioritySelector,
 };
-use crate::synthesized_annotation::SynthesizedAnnotation;
 
 use crate::synthesized_annotation_selector::SynthesizedAnnotationSelector;
 
@@ -36,4 +34,4 @@ impl Selectors {
     }
 }
 
-use super::{SelectorAdapter, wrap};
+use super::wrap;

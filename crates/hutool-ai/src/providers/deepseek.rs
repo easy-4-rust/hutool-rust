@@ -21,4 +21,6 @@ pub fn deepseek_create(_config: BaseConfig) -> Result<Arc<()>, ProviderError> {
 }
 
 /// 🚫 占位：DeepSeek 推理模型枚举已统一放入 `models.rs` 的 `DeepSeekModel`。
+/// 保留 Java 命名作为镜像别名，暂无调用方。
+#[allow(unused_imports)]
 pub use crate::models::DeepSeekModel as DeepSeekReasoning;

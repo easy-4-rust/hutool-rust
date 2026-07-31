@@ -9,13 +9,10 @@ use crate::charset_util::CharsetUtil;
 use crate::hex_util::HexUtil;
 use rust_decimal::Decimal;
 use std::collections::{HashMap, HashSet};
-use std::str::FromStr;
-use std::time::Duration;
 
 use crate::convert::basic_type::BasicType;
 use crate::convert::convert_exception::ConvertException;
 use crate::convert::number_chinese_formatter::NumberChineseFormatter;
-use crate::convert::number_with_format::NumberWithFormat;
 use crate::convert::number_word_formatter::NumberWordFormatter;
 use crate::convert::impl_::number_converter::NumberConverter;
 
@@ -116,6 +113,7 @@ impl Convert {
         Self::to_long_or(value, None)
     }
 
+    /// 转为 Long，可带默认值。
     pub fn to_long_or(value: &ConvertValue, default: Option<i64>) -> Option<i64> {
         NumberConverter::convert_i64(value).or(default)
     }
@@ -144,6 +142,7 @@ impl Convert {
         Self::to_bool_or(value, None)
     }
 
+    /// 转为 Bool，可带默认值。
     pub fn to_bool_or(value: &ConvertValue, default: Option<bool>) -> Option<bool> {
         match value {
             ConvertValue::Null => default,
@@ -260,6 +259,7 @@ impl Convert {
         Self::to_list_i32(value)
     }
 
+    /// 转为 i64 数组。
     pub fn to_i64_array(value: &ConvertValue) -> Vec<i64> {
         Self::split_to_strs(value)
             .into_iter()
@@ -267,6 +267,7 @@ impl Convert {
             .collect()
     }
 
+    /// 转为 f64 数组。
     pub fn to_f64_array(value: &ConvertValue) -> Vec<f64> {
         Self::split_to_strs(value)
             .into_iter()
@@ -296,6 +297,7 @@ impl Convert {
         serde_json::to_vec(map).unwrap_or_default()
     }
 
+    /// 从 JSON bytes 恢复 Map。
     pub fn map_from_bytes(bytes: &[u8]) -> HashMap<String, String> {
         serde_json::from_slice(bytes).unwrap_or_default()
     }
@@ -305,6 +307,7 @@ impl Convert {
         Self::to_i32_array(value)
     }
 
+    /// 转为 AtomicIntegerArray（Vec 表示）。
     pub fn to_atomic_i64_array(value: &ConvertValue) -> Vec<i64> {
         Self::to_i64_array(value)
     }
@@ -362,6 +365,7 @@ impl Convert {
         input.map(|s| Self::to_sbc_str(s))
     }
 
+    /// 半角转全角。
     pub fn to_sbc_str(input: &str) -> String {
         let mut out = String::with_capacity(input.len());
         for c in input.chars() {
@@ -381,6 +385,7 @@ impl Convert {
         input.map(|s| Self::to_dbc_str(s))
     }
 
+    /// 全角转半角。
     pub fn to_dbc_str(input: &str) -> String {
         if input.trim().is_empty() && input.is_empty() {
             // isBlank empty
@@ -404,14 +409,25 @@ impl Convert {
         HexUtil::encode_hex_utf8(str)
     }
 
+    /// 字节转十六进制字符串。
     pub fn to_hex_bytes(bytes: &[u8]) -> String {
         HexUtil::encode_hex(bytes)
     }
 
+    /// 十六进制字符串转字节。
+    ///
+    /// # Errors
+    ///
+    /// 非法十六进制时返回转换异常。
     pub fn hex_to_bytes(src: &str) -> Result<Vec<u8>, ConvertException> {
         HexUtil::decode_hex(src).map_err(|e| ConvertException::new(e.to_string()))
     }
 
+    /// 十六进制字符串转文本。
+    ///
+    /// # Errors
+    ///
+    /// 非法十六进制时返回转换异常。
     pub fn hex_to_str(hex_str: &str, _charset: &str) -> Result<String, ConvertException> {
         HexUtil::decode_hex_text(hex_str).map_err(|e| ConvertException::new(e.to_string()))
     }
@@ -475,68 +491,84 @@ impl Convert {
         }
     }
 
+    /// 基本类型包装类名。
     pub fn wrap(type_name: &str) -> &'static str {
         BasicType::wrap(type_name)
     }
 
+    /// 包装类名还原为基本类型。
     pub fn un_wrap(type_name: &str) -> &'static str {
         BasicType::un_wrap(type_name)
     }
 
+    /// 数字转英文单词。
     pub fn number_to_word(number: &str) -> String {
         NumberWordFormatter::format(Some(number))
     }
 
+    /// 数字转简易英文表达。
     pub fn number_to_simple(number: i64) -> String {
         NumberWordFormatter::format_simple(number)
     }
 
+    /// 数字转中文大写/小写。
     pub fn number_to_chinese(number: f64, is_use_traditional: bool) -> String {
         NumberChineseFormatter::format(number, is_use_traditional)
     }
 
+    /// 中文数字转阿拉伯数字。
     pub fn chinese_to_number(number: &str) -> i32 {
         NumberChineseFormatter::chinese_to_number(number)
     }
 
+    /// 数字转中文金额表达。
     pub fn digit_to_chinese(n: Option<f64>) -> String {
         NumberChineseFormatter::format_money(n.unwrap_or(0.0), true, true)
     }
 
+    /// 中文金额转数字。
     pub fn chinese_money_to_number(s: &str) -> Option<Decimal> {
         NumberChineseFormatter::chinese_money_to_number(s)
     }
 
     // ===== byte 工具委托 =====
 
+    /// int 转 byte。
     pub fn int_to_byte(int_value: i32) -> i8 {
         int_value as i8
     }
 
+    /// byte 转无符号 int。
     pub fn byte_to_unsigned_int(byte_value: i8) -> i32 {
         (byte_value as u8) as i32
     }
 
+    /// short 转字节数组。
     pub fn short_to_bytes(v: i16) -> [u8; 2] {
         ByteUtil::i16_to_bytes(v)
     }
 
+    /// 字节数组转 short。
     pub fn bytes_to_short(bytes: &[u8]) -> i16 {
         ByteUtil::bytes_to_i16(bytes).unwrap_or(0)
     }
 
+    /// int 转字节数组。
     pub fn int_to_bytes(v: i32) -> [u8; 4] {
         ByteUtil::i32_to_bytes(v)
     }
 
+    /// 字节数组转 int。
     pub fn bytes_to_int(bytes: &[u8]) -> i32 {
         ByteUtil::bytes_to_i32(bytes).unwrap_or(0)
     }
 
+    /// long 转字节数组。
     pub fn long_to_bytes(v: i64) -> [u8; 8] {
         ByteUtil::i64_to_bytes(v)
     }
 
+    /// 字节数组转 long。
     pub fn bytes_to_long(bytes: &[u8]) -> i64 {
         ByteUtil::bytes_to_i64(bytes).unwrap_or(0)
     }
@@ -579,6 +611,7 @@ impl Convert {
         bean.clone()
     }
 
+    /// Map 转 Bean 表示（恒等拷贝）。
     pub fn map_to_bean(map: &HashMap<String, String>) -> HashMap<String, String> {
         map.clone()
     }

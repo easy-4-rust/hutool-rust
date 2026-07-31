@@ -4,11 +4,7 @@
 //! 是 Java-only，属于 unsafe-to-copy。Rust 用户应使用依赖注入框架（如 axum::Extension、
 //! shaku、self-rs 等）替代。
 
-use std::any::Any;
-use std::collections::HashMap;
 use std::sync::{Arc, OnceLock};
-
-use crate::HutoolException;
 
 mod application_context;
 mod configurable_bean_factory;
@@ -22,6 +18,7 @@ pub use application_context_ext::ApplicationContextExt;
 
 static APPLICATION_CONTEXT: OnceLock<Arc<dyn ApplicationContext>> = OnceLock::new();
 
+/// 启用 SpringUtil（占位）：Rust 中用户须显式调用 [`SpringUtil::set_application_context`]。
 pub fn enable_spring_util() {
     // 占位函数：在 Spring 中由 @EnableSpringUtil 注解触发，
     // 在 Rust 中用户必须显式 set_application_context。

@@ -6,7 +6,7 @@
 
 #![allow(dead_code, clippy::too_many_arguments)]
 
-use chrono::{Datelike, Duration, NaiveDate, NaiveDateTime, NaiveTime, Timelike, Weekday};
+use chrono::{Datelike, Duration, NaiveDate, NaiveDateTime, NaiveTime, Timelike};
 
 use crate::date::between_formatter::{BetweenFormatter, Level as BetweenLevel};
 use crate::date::date_between::DateBetween;
@@ -16,7 +16,7 @@ use crate::date::date_pattern::{
     self, NORM_DATE_PATTERN, NORM_DATETIME_MS_PATTERN, NORM_DATETIME_PATTERN, NORM_TIME_PATTERN,
 };
 use crate::date::date_range::DateRange;
-use crate::date::date_time::{week_of_year_mon_min1, DateTime, parity_zone};
+use crate::date::date_time::{DateTime, parity_zone};
 use crate::date::date_unit::DateUnit;
 use crate::date::local_date_time_util::LocalDateTimeUtil;
 use crate::date::month::Month;
@@ -79,58 +79,76 @@ impl DateUtil {
 
     // ---- field accessors ----
 
+    /// 年份。
     pub fn year(date: DateTime) -> i32 {
         date.year()
     }
+    /// 月份（1-12）。
     pub fn month(date: DateTime) -> i32 {
         date.month()
     }
+    /// 月份枚举。
     pub fn month_enum(date: DateTime) -> Month {
         date.month_enum()
     }
+    /// 季度（1-4）。
     pub fn quarter(date: DateTime) -> i32 {
         date.quarter()
     }
+    /// 季度枚举。
     pub fn quarter_enum(date: DateTime) -> Quarter {
         date.quarter_enum()
     }
+    /// 月内日。
     pub fn day_of_month(date: DateTime) -> i32 {
         date.day_of_month()
     }
+    /// 年内日。
     pub fn day_of_year(date: DateTime) -> i32 {
         date.day_of_year()
     }
+    /// 周内日（数字）。
     pub fn day_of_week(date: DateTime) -> i32 {
         date.day_of_week()
     }
+    /// 星期枚举。
     pub fn day_of_week_enum(date: DateTime) -> Week {
         date.day_of_week_enum()
     }
+    /// 是否周末。
     pub fn is_weekend(date: DateTime) -> bool {
         date.is_weekend()
     }
+    /// 小时（`is_24` 为 false 时取 12 小时制）。
     pub fn hour(date: DateTime, is_24: bool) -> i32 {
         date.hour(is_24)
     }
+    /// 分钟。
     pub fn minute(date: DateTime) -> i32 {
         date.minute()
     }
+    /// 秒。
     pub fn second(date: DateTime) -> i32 {
         date.second()
     }
+    /// 毫秒。
     pub fn millisecond(date: DateTime) -> i32 {
         date.millisecond()
     }
+    /// 年内周数。
     pub fn week_of_year(date: DateTime) -> u32 {
         date.week_of_year()
     }
+    /// 是否上午。
     pub fn is_am(date: DateTime) -> bool {
         date.hour(true) < 12
     }
+    /// 是否下午。
     pub fn is_pm(date: DateTime) -> bool {
         !Self::is_am(date)
     }
 
+    /// 年份与季度拼接（如 `20241`）。
     pub fn year_and_quarter(date: DateTime) -> String {
         format!("{}{}", date.year(), date.quarter())
     }
@@ -152,18 +170,23 @@ impl DateUtil {
 
     // ---- format ----
 
+    /// 按指定格式格式化日期。
     pub fn format(date: DateTime, pattern: &str) -> String {
         date.format(pattern)
     }
+    /// 格式化日期时间 `yyyy-MM-dd HH:mm:ss`。
     pub fn format_datetime(date: DateTime) -> String {
         date.format(NORM_DATETIME_PATTERN)
     }
+    /// 格式化日期 `yyyy-MM-dd`。
     pub fn format_date(date: DateTime) -> String {
         date.format(NORM_DATE_PATTERN)
     }
+    /// 格式化时间 `HH:mm:ss`。
     pub fn format_time(date: DateTime) -> String {
         date.format(NORM_TIME_PATTERN)
     }
+    /// 格式化 HTTP 日期。
     pub fn format_http_date(date: DateTime) -> String {
         date.format("EEE, dd MMM yyyy HH:mm:ss z")
     }
@@ -246,17 +269,32 @@ impl DateUtil {
         })
     }
 
+    /// 解析日期字符串为当天开始时刻。
+    ///
+    /// # Errors
+    ///
+    /// 无法识别格式时返回 [`CoreError::InvalidArgument`]。
     pub fn parse_date(date_str: &str) -> Result<DateTime> {
         Self::parse_with_format(date_str.trim(), NORM_DATE_PATTERN)
             .or_else(|_| Self::parse(date_str))
             .map(|d| Self::begin_of_day(d))
     }
 
+    /// 解析日期时间字符串。
+    ///
+    /// # Errors
+    ///
+    /// 无法识别格式时返回 [`CoreError::InvalidArgument`]。
     pub fn parse_datetime(date_str: &str) -> Result<DateTime> {
         Self::parse_with_format(date_str.trim(), NORM_DATETIME_PATTERN)
             .or_else(|_| Self::parse(date_str))
     }
 
+    /// 解析时间字符串为当日时刻。
+    ///
+    /// # Errors
+    ///
+    /// 格式不合法时返回解析错误。
     pub fn parse_time(time_str: &str) -> Result<DateTime> {
         let t = NaiveTime::parse_from_str(time_str.trim(), "%H:%M:%S").map_err(CoreError::from)?;
         let today = chrono::Utc::now()
@@ -265,6 +303,11 @@ impl DateUtil {
         Ok(DateTime::of_naive(today.and_time(t)))
     }
 
+    /// 按指定格式解析日期。
+    ///
+    /// # Errors
+    ///
+    /// 解析失败时返回 [`CoreError::InvalidArgument`]。
     pub fn parse_with_format(date_str: &str, format: &str) -> Result<DateTime> {
         let s = date_str.trim();
         if format == "#sss" {
@@ -319,6 +362,11 @@ impl DateUtil {
         })
     }
 
+    /// 解析 UTC 字符串。
+    ///
+    /// # Errors
+    ///
+    /// 格式不合法时返回 [`CoreError::InvalidArgument`]。
     pub fn parse_utc(utc: &str) -> Result<DateTime> {
         let s = utc.trim().replace('Z', "+00:00");
         // 2019-09-17T13:26:17.000Z or with offset
@@ -341,6 +389,11 @@ impl DateUtil {
         })
     }
 
+    /// 解析 ISO8601 字符串。
+    ///
+    /// # Errors
+    ///
+    /// 格式不合法时返回 [`CoreError::InvalidArgument`]。
     pub fn parse_iso8601(iso: &str) -> Result<DateTime> {
         Self::parse_utc(iso).or_else(|_| {
             let s = iso.trim();
@@ -357,10 +410,20 @@ impl DateUtil {
         })
     }
 
+    /// 解析 RFC2822 字符串。
+    ///
+    /// # Errors
+    ///
+    /// 格式不合法时返回解析错误。
     pub fn parse_rfc2822(source: &str) -> Result<DateTime> {
         parse_http_like(source.trim())
     }
 
+    /// 解析 CST 字符串。
+    ///
+    /// # Errors
+    ///
+    /// 格式不合法时返回解析错误。
     pub fn parse_cst(cst: &str) -> Result<DateTime> {
         // CST often means China Standard Time in Hutool context when parsing JDK strings
         parse_http_like(cst.trim()).or_else(|_| Self::parse(cst))
@@ -368,48 +431,62 @@ impl DateUtil {
 
     // ---- begin / end ----
 
+    /// 当天开始时刻（00:00:00）。
     pub fn begin_of_day(date: DateTime) -> DateTime {
         DateModifier::truncate(date, DateField::DayOfMonth)
     }
+    /// 当天结束时刻（23:59:59）。
     pub fn end_of_day(date: DateTime) -> DateTime {
         // Hutool endOfDay defaults to 23:59:59.000 (ms truncated in toString)
         DateModifier::ceiling(date, DateField::DayOfMonth, true)
     }
+    /// 小时开始时刻。
     pub fn begin_of_hour(date: DateTime) -> DateTime {
         DateModifier::truncate(date, DateField::HourOfDay)
     }
+    /// 小时结束时刻。
     pub fn end_of_hour(date: DateTime) -> DateTime {
         DateModifier::ceiling(date, DateField::HourOfDay, true)
     }
+    /// 分钟开始时刻。
     pub fn begin_of_minute(date: DateTime) -> DateTime {
         DateModifier::truncate(date, DateField::Minute)
     }
+    /// 分钟结束时刻。
     pub fn end_of_minute(date: DateTime) -> DateTime {
         DateModifier::ceiling(date, DateField::Minute, true)
     }
+    /// 秒开始时刻。
     pub fn begin_of_second(date: DateTime) -> DateTime {
         DateModifier::truncate(date, DateField::Second)
     }
+    /// 秒结束时刻。
     pub fn end_of_second(date: DateTime) -> DateTime {
         DateModifier::ceiling(date, DateField::Second, true)
     }
+    /// 月初。
     pub fn begin_of_month(date: DateTime) -> DateTime {
         DateModifier::truncate(date, DateField::Month)
     }
+    /// 月末。
     pub fn end_of_month(date: DateTime) -> DateTime {
         DateModifier::ceiling(date, DateField::Month, true)
     }
+    /// 年初。
     pub fn begin_of_year(date: DateTime) -> DateTime {
         DateModifier::truncate(date, DateField::Year)
     }
+    /// 年末。
     pub fn end_of_year(date: DateTime) -> DateTime {
         DateModifier::ceiling(date, DateField::Year, true)
     }
+    /// 季初。
     pub fn begin_of_quarter(date: DateTime) -> DateTime {
         let q = date.quarter();
         let month = (q - 1) * 3 + 1;
         DateTime::of_ymd_hms(date.year(), month as u32, 1, 0, 0, 0).unwrap_or(date)
     }
+    /// 季末。
     pub fn end_of_quarter(date: DateTime) -> DateTime {
         let q = date.quarter_enum();
         let (m, d) = q.last_month_day();
@@ -444,102 +521,129 @@ impl DateUtil {
         dt
     }
 
+    /// 周结束（默认周一为一周开始）。
     pub fn end_of_week(date: DateTime) -> DateTime {
         Self::end_of_week_with(date, true)
     }
 
+    /// `is_monday_as_first`：true 从周一开始的周结束。
     pub fn end_of_week_with(date: DateTime, is_monday_as_first: bool) -> DateTime {
         let begin = Self::begin_of_week_with(date, is_monday_as_first);
         let end = begin.naive_local().date() + Duration::days(6);
         DateTime::of_naive(end.and_hms_opt(23, 59, 59).unwrap())
     }
 
+    /// 截断到指定字段。
     pub fn truncate(date: DateTime, field: DateField) -> DateTime {
         DateModifier::truncate(date, field)
     }
+    /// 向上取整到指定字段。
     pub fn ceiling(date: DateTime, field: DateField) -> DateTime {
         DateModifier::ceiling(date, field, false)
     }
+    /// 向上取整，可选截断毫秒。
     pub fn ceiling_ms(date: DateTime, field: DateField, truncate_ms: bool) -> DateTime {
         DateModifier::ceiling(date, field, truncate_ms)
     }
+    /// 四舍五入到指定字段。
     pub fn round(date: DateTime, field: DateField) -> DateTime {
         DateModifier::round(date, field)
     }
 
     // ---- offset ----
 
+    /// 按字段偏移。
     pub fn offset(date: DateTime, field: DateField, offset: i64) -> DateTime {
         date.offset(field, offset)
     }
+    /// 按天偏移。
     pub fn offset_day(date: DateTime, offset: i64) -> DateTime {
         date.offset(DateField::DayOfMonth, offset)
     }
+    /// 按小时偏移。
     pub fn offset_hour(date: DateTime, offset: i64) -> DateTime {
         date.offset(DateField::HourOfDay, offset)
     }
+    /// 按分钟偏移。
     pub fn offset_minute(date: DateTime, offset: i64) -> DateTime {
         date.offset(DateField::Minute, offset)
     }
+    /// 按月偏移。
     pub fn offset_month(date: DateTime, offset: i64) -> DateTime {
         date.offset(DateField::Month, offset)
     }
+    /// 按周偏移。
     pub fn offset_week(date: DateTime, offset: i64) -> DateTime {
         date.offset(DateField::WeekOfYear, offset)
     }
 
     // ---- between ----
 
+    /// 计算两时间在指定单位上的间隔。
     pub fn between(begin: DateTime, end: DateTime, unit: DateUnit) -> i64 {
         DateBetween::new(begin, end, true).between(unit)
     }
+    /// 间隔毫秒数。
     pub fn between_ms(begin: DateTime, end: DateTime) -> i64 {
         (end.get_time() - begin.get_time()).abs()
     }
+    /// 间隔天数。
     pub fn between_day(begin: DateTime, end: DateTime, is_reset: bool) -> i64 {
         DateBetween::new(begin, end, true).between_day(is_reset)
     }
+    /// 间隔周数。
     pub fn between_week(begin: DateTime, end: DateTime, is_reset: bool) -> i64 {
         DateBetween::new(begin, end, true).between_week(is_reset)
     }
+    /// 间隔月数。
     pub fn between_month(begin: DateTime, end: DateTime, is_reset: bool) -> i64 {
         DateBetween::new(begin, end, true).between_month(is_reset)
     }
+    /// 间隔年数。
     pub fn between_year(begin: DateTime, end: DateTime, is_reset: bool) -> i64 {
         DateBetween::new(begin, end, true).between_year(is_reset)
     }
 
+    /// 格式化两时间间隔。
     pub fn format_between(begin: DateTime, end: DateTime) -> String {
         BetweenFormatter::new(Self::between_ms(begin, end), BetweenLevel::Millisecond, 3).format()
     }
+    /// 按指定级别格式化间隔。
     pub fn format_between_level(begin: DateTime, end: DateTime, level: BetweenLevel) -> String {
         BetweenFormatter::new(Self::between_ms(begin, end), level, 1).format()
     }
+    /// 格式化毫秒间隔。
     pub fn format_between_ms(between_ms: i64, level: BetweenLevel) -> String {
         BetweenFormatter::new(between_ms, level, 3).format()
     }
 
     // ---- compare / same ----
 
+    /// 比较两时间（d1 < d2 为负，相等为 0）。
     pub fn compare(d1: DateTime, d2: DateTime) -> i32 {
         d1.get_time().cmp(&d2.get_time()) as i32
     }
+    /// 是否同一天。
     pub fn is_same_day(d1: DateTime, d2: DateTime) -> bool {
         d1.naive_local().date() == d2.naive_local().date()
     }
+    /// 是否同一月。
     pub fn is_same_month(d1: DateTime, d2: DateTime) -> bool {
         let a = d1.naive_local();
         let b = d2.naive_local();
         a.year() == b.year() && a.month() == b.month()
     }
+    /// 是否同一周。
     pub fn is_same_week(d1: DateTime, d2: DateTime, is_monday_as_first: bool) -> bool {
         let b1 = Self::begin_of_week_with(d1, is_monday_as_first);
         let b2 = Self::begin_of_week_with(d2, is_monday_as_first);
         b1.naive_local().date() == b2.naive_local().date()
     }
+    /// 是否在区间内（含端点）。
     pub fn is_in(date: DateTime, begin: DateTime, end: DateTime) -> bool {
         date >= begin && date <= end
     }
+    /// 两区间是否重叠。
     pub fn is_overlap(
         start1: DateTime,
         end1: DateTime,
@@ -548,9 +652,11 @@ impl DateUtil {
     ) -> bool {
         start1 <= end2 && start2 <= end1
     }
+    /// 是否已过期。
     pub fn is_expired(start: DateTime, end: DateTime) -> bool {
         end < start
     }
+    /// 是否当月最后一天。
     pub fn is_last_day_of_month(date: DateTime) -> bool {
         let n = date.naive_local();
         let tomorrow = n.date() + Duration::days(1);
@@ -559,6 +665,7 @@ impl DateUtil {
 
     // ---- age / time ----
 
+    /// 计算年龄（周岁）。
     pub fn age(birthday: DateTime, date_to_compare: DateTime) -> i32 {
         let b = birthday.naive_local().date();
         let c = date_to_compare.naive_local().date();
@@ -569,11 +676,13 @@ impl DateUtil {
         age.max(0)
     }
 
+    /// 时间字符串 `HH:mm:ss` 转为当日秒数。
     pub fn time_to_second(time: &str) -> i64 {
         let t = NaiveTime::parse_from_str(time, "%H:%M:%S").expect("HH:mm:ss");
         i64::from(t.num_seconds_from_midnight())
     }
 
+    /// 秒数转为 `HH:mm:ss` 字符串。
     pub fn second_to_time(seconds: i64) -> String {
         let h = seconds / 3600;
         let m = (seconds % 3600) / 60;
@@ -581,6 +690,7 @@ impl DateUtil {
         format!("{h:02}:{m:02}:{s:02}")
     }
 
+    /// 转为 UTC 时间。
     pub fn to_instant(date: DateTime) -> chrono::DateTime<chrono::Utc> {
         chrono::DateTime::from_timestamp_millis(date.get_time())
             .unwrap_or(chrono::DateTime::UNIX_EPOCH)

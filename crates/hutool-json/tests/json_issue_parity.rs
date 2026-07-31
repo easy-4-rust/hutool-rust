@@ -260,6 +260,7 @@ fn i_3274_to_bean_test() {
     config.set_ignore_error(true);
     let obj = hj::JSONObject::from_value(hj::JSONUtil::parse(raw).unwrap(), config).unwrap();
     #[derive(Deserialize)]
+    #[allow(dead_code)]
     struct LarkCoreHrPersonal {
         id: String,
         age: i32,
@@ -331,8 +332,10 @@ fn i_488_to_bean_test() {
 fn i_488_to_collction_bean_test() {
     let raw = include_str!("fixtures/issue488Array.json");
     #[derive(Deserialize)]
+    #[allow(dead_code)]
     struct EmailAddress { name: String, address: String }
     #[derive(Deserialize)]
+    #[allow(dead_code)]
     struct ResultSuccess<T> { context: String, value: T }
     let list: Vec<ResultSuccess<Vec<EmailAddress>>> = hj::JSONUtil::to_bean(raw).unwrap();
     assert_eq!(list[0].value[0].name, "会议室101");
@@ -389,6 +392,7 @@ fn i1au86_to_list_test() {
         arr.push(hj::JSONUtil::parse(item).unwrap());
     }
     #[derive(Deserialize)]
+    #[allow(dead_code)]
     struct Vcc { id: i64, code: String, name: String }
     let list: Vec<Vcc> = hj::JSONUtil::to_list(&arr).unwrap();
     assert_eq!(list.len(), 2);

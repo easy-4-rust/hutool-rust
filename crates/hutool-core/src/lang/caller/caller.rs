@@ -1,5 +1,7 @@
 //! 对齐: `cn.hutool.core.lang.caller.Caller`
 
+#![allow(dead_code)] // 对齐 Java Caller，暂未接线，预留
+
 /// 对齐 Java: `Caller` — Rust 侧返回类型名字符串
 pub struct Caller;
 

@@ -14,8 +14,12 @@ use super::db_wrapper_error::DbWrapperError;
 ///
 /// Java 实现 `javax.sql.DataSource`；Rust 用 trait 提供形状。
 pub trait AbstractDataSource: Send + Sync {
+    /// 设置登录超时（秒）。
     fn set_login_timeout(&self, seconds: i32) -> Result<(), DbWrapperError>;
+    /// 读取登录超时（秒）。
     fn get_login_timeout(&self) -> Result<i32, DbWrapperError>;
+    /// 解开包装返回底层对象。
     fn unwrap(&self) -> Option<Box<dyn Any>>;
+    /// 是否可包装为指定类型。
     fn is_wrapper_for(&self) -> bool;
 }

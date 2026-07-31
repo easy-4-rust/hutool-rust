@@ -6,8 +6,6 @@
 /// 对齐: `cn.hutool.extra.emoji.EmojiUtil`
 /// Emoji 工具类
 
-use std::collections::BTreeSet;
-
 mod fitzpatrick_action;
 mod emoji;
 mod emoji_util;

@@ -5,8 +5,6 @@
 
 use std::fmt;
 
-use crate::HutoolException;
-
 /// SSH 通道类型枚举，对齐 `cn.hutool.extra.ssh.ChannelType`。
 ///
 /// Java 是 enum + getValue()；Rust 用 enum + `as_str()` 方法。

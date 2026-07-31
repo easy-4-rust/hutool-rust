@@ -11,11 +11,7 @@
 //! 线程模型一致。因此本模块用 `parking_lot::{Mutex, Condvar}` 实现同步
 //! [`Semaphore`], 而非 `tokio::sync::Semaphore`。
 
-use std::sync::Arc;
-
 use parking_lot::{Condvar, Mutex};
-
-use super::semaphore_runnable::SemaphoreRunnable;
 
 /// 同步计数信号量, 对齐 Java `java.util.concurrent.Semaphore` 的核心语义。
 ///
@@ -90,6 +86,7 @@ impl Drop for PermitGuard<'_> {
     }
 }
 
+#[allow(dead_code)] // 对齐 Java Semaphore 许可守卫，暂未接线，预留
 struct PermitGuard<'a> {
     semaphore: &'a Semaphore,
 }

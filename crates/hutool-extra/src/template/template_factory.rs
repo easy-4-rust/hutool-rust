@@ -9,11 +9,7 @@
 //!   在各自的 `engine/<name>.rs` 子模块；本文件只提供配置 + facade。
 //! - 迁移状态：✅ 已实现（Phase 1.4 工作）
 
-use std::fmt;
-use std::path::Path;
-
-use thiserror::Error;
-
+use super::default_config;
 use super::template_config::TemplateConfig;
 use super::template_engine::TemplateEngine;
 use super::template_exception::TemplateException;
@@ -33,5 +29,3 @@ impl TemplateFactory {
         TemplateUtil::create_engine_with_config(default_config())
     }
 }
-
-use super::{DEFAULT_CONFIG, default_config};

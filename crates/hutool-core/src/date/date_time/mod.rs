@@ -6,15 +6,10 @@
 
 #![allow(dead_code)]
 
-use chrono::{Datelike, Duration, FixedOffset, NaiveDate, NaiveDateTime, Timelike, Weekday};
+use chrono::{Datelike, FixedOffset, NaiveDate, Timelike};
 
-use crate::date::date_field::DateField;
-use crate::date::date_pattern::{self, NORM_DATETIME_MS_PATTERN, NORM_DATETIME_PATTERN};
+use crate::date::date_pattern::{self, NORM_DATETIME_MS_PATTERN};
 use crate::date::date_unit::DateUnit;
-use crate::date::month::Month;
-use crate::date::quarter::Quarter;
-use crate::date::week::Week;
-use crate::{CoreError, Result};
 
 mod date_time;
 mod hutool_date_time;
@@ -22,10 +17,12 @@ mod hutool_date_time;
 pub use date_time::DateTime;
 pub use hutool_date_time::HutoolDateTime;
 
+/// 对齐 Java 固定 +08:00 时区。
 pub fn parity_zone() -> FixedOffset {
     FixedOffset::east_opt(8 * 3600).expect("fixed +08:00")
 }
 
+/// 一年中的周数（周一为一周开始）。
 pub fn week_of_year_mon_min1(date: NaiveDate) -> u32 {
     let jan1 = NaiveDate::from_ymd_opt(date.year(), 1, 1).unwrap();
     let jan1_from_mon = jan1.weekday().num_days_from_monday();
@@ -41,6 +38,7 @@ fn days_in_month(year: i32, month: u32) -> u32 {
         .day()
 }
 
+/// 按 Hutool 格式字符串格式化。
 pub fn format_with_pattern(dt: DateTime, pattern: &str) -> String {
     if pattern == "#sss" {
         return (dt.get_time() / 1000).to_string();
@@ -68,6 +66,7 @@ pub fn format_with_pattern(dt: DateTime, pattern: &str) -> String {
     naive.format(&chrono_pat).to_string()
 }
 
+/// 按单位计算两时间间隔。
 pub fn between_unit(begin: DateTime, end: DateTime, unit: DateUnit) -> i64 {
     (end.get_time() - begin.get_time()) / unit.get_millis()
 }

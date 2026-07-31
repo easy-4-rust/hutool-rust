@@ -4,7 +4,7 @@
 
 use crate::Message;
 use serde_json::{Map, Value, json};
-use std::{path::PathBuf, sync::Arc};
+use std::path::PathBuf;
 
 use super::video_parameter::VideoParameter;
 

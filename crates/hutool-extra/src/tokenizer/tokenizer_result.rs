@@ -4,8 +4,6 @@
 //! 各具体分词引擎（Ansj/HanLP/IKAnalyzer/Jcseg/Jieba/MMSeg/MynNLP/Word/Analysis）
 //! 需要外部 Java crate，属于 unsafe-to-copy，暂不在 hutool-extra 中实现。
 
-use crate::HutoolException;
-
 use super::word::Word;
 
 /// 分词结果接口，对齐 `cn.hutool.extra.tokenizer.Result`。
