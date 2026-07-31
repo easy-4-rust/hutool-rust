@@ -2,6 +2,7 @@
 //! 对齐 Hutool hutool-json JSONObjectTest
 
 use hutool_json as hj;
+use hutool_json::JsonContainer;
 
 /// 对齐 Java: `JSONArrayTest.createJSONArrayFromJSONObjectTest()`
 #[test]

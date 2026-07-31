@@ -2,6 +2,7 @@
 //! 对齐 Hutool hutool-json misc tests
 
 use hutool_json as hj;
+use hutool_json::JsonContainer;
 
 /// 对齐 Java: `BeanToJsonTest.toJsonStrTest()`
 #[test]

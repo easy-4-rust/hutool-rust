@@ -1,6 +1,6 @@
 //! AnnotationUtil 缺口 parity 测试。
 
-use hutool_core::annotation::{fixtures, global_registry, AnnotationUtil, AnnotationValue};
+use hutool_annotation::{fixtures, global_registry, AnnotationUtil, AnnotationValue};
 
 use crate::annotation_common::*;
 

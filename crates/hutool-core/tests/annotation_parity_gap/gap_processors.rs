@@ -2,30 +2,30 @@
 
 use std::sync::Arc;
 
-use hutool_core::annotation::{
+use hutool_annotation::{
     fixtures, global_registry, AliasAnnotationPostProcessor, AnnotationAttribute,
     AnnotationSynthesizer, AnnotationTypeName, ForceAliasedAnnotationAttribute,
     GenericSynthesizedAggregateAnnotation, GenericSynthesizedAnnotation,
     SynthesizedAnnotation, SynthesizedAnnotationPostProcessor, WrappedAnnotationAttribute,
 };
-use hutool_core::annotation::fixtures_aggregate::{self, types as agg};
+use hutool_annotation::fixtures_aggregate::{self, types as agg};
 
 use crate::annotation_common::*;
 
 struct NoOpSynthesizer;
 
 impl AnnotationSynthesizer for NoOpSynthesizer {
-    fn get_source(&self) -> Vec<Arc<hutool_core::annotation::AnnotationMirror>> {
+    fn get_source(&self) -> Vec<Arc<hutool_annotation::AnnotationMirror>> {
         vec![]
     }
     fn get_annotation_selector(
         &self,
-    ) -> Arc<dyn hutool_core::annotation::SynthesizedAnnotationSelector> {
+    ) -> Arc<dyn hutool_annotation::SynthesizedAnnotationSelector> {
         nearest_selector()
     }
     fn get_annotation_attribute_processor(
         &self,
-    ) -> Arc<dyn hutool_core::annotation::SynthesizedAnnotationAttributeProcessor> {
+    ) -> Arc<dyn hutool_annotation::SynthesizedAnnotationAttributeProcessor> {
         Arc::new(processor_cache())
     }
     fn get_annotation_post_processors(
@@ -47,14 +47,14 @@ impl AnnotationSynthesizer for NoOpSynthesizer {
     fn synthesize(
         &self,
         _annotation_type: AnnotationTypeName,
-    ) -> Option<Arc<hutool_core::annotation::AnnotationMirror>> {
+    ) -> Option<Arc<hutool_annotation::AnnotationMirror>> {
         None
     }
     fn get_attribute_value(
         &self,
         _attribute_name: &str,
-        _attribute_type: hutool_core::annotation::ValueKind,
-    ) -> Option<hutool_core::annotation::AnnotationValue> {
+        _attribute_type: hutool_annotation::ValueKind,
+    ) -> Option<hutool_annotation::AnnotationValue> {
         None
     }
 }

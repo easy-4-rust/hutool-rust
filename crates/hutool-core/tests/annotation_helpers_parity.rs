@@ -1,7 +1,7 @@
 //! Wave-2 非反射 annotation helper 冒烟测试
 //! 对齐: Alias / AliasFor / ForceAliasFor / MirrorFor / PropIgnore / RelationType
 
-use hutool_core::annotation::{
+use hutool_annotation::{
     Alias, AliasFor, ForceAliasFor, MirrorFor, PropIgnore, RelationType, ALIAS_TYPE_NAME,
 };
 

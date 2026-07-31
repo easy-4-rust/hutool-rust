@@ -2,7 +2,7 @@
 
 use std::sync::Arc;
 
-use hutool_core::annotation::{
+use hutool_annotation::{
     fixtures, global_registry, AbstractWrappedAnnotationAttribute, AliasedAnnotationAttribute,
     AnnotationAttribute, CacheableAnnotationAttribute, ForceAliasedAnnotationAttribute,
     MirroredAnnotationAttribute, ValueKind, WrappedAnnotationAttribute, ALIAS_TYPE,

@@ -53,7 +53,7 @@ struct Car {
 fn clone_test_clone_test() {
     // 实现 Cloneable（Rust Clone）方式
     let cat = Cat::new();
-    let cat2: Cat = Cloneable::clone(&cat);
+    let cat2: Cat = cat.clone();
     assert_eq!(cat, cat2);
 }
 

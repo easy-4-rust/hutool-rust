@@ -7,10 +7,10 @@ use std::hash::Hash;
 /// 对齐 Java 接口: `cn.hutool.core.map.TreeEntry`
 #[derive(Debug, Clone)]
 pub struct TreeEntry<K, V> {
-    key: K,
-    value: V,
-    parent: Option<K>,
-    children: Vec<K>,
+    pub(crate) key: K,
+    pub(crate) value: V,
+    pub(crate) parent: Option<K>,
+    pub(crate) children: Vec<K>,
 }
 
 impl<K: Clone + Eq + Hash, V: Clone> TreeEntry<K, V> {

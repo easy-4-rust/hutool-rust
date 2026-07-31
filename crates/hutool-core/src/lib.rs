@@ -20,7 +20,7 @@ mod compress;
 mod coordinate_util;
 #[path = "util/credit_code_util.rs"]
 mod credit_code_util;
-mod date;
+pub mod date;
 mod desensitized_util;
 mod error;
 mod getter;
@@ -220,3 +220,63 @@ pub use bean::copier::{
     ValueProvider, ValueProviderToBeanCopier,
 };
 pub use bean::{BeanException, BeanUtil};
+
+// ── 补齐 1:1 API re-export（修复下游 crate 的 E0432 解析失败）──────────────
+mod map;
+pub use map::{
+    AbsEntry, BiMap, CamelCaseLinkedMap, CamelCaseMap, CaseInsensitiveLinkedMap,
+    CaseInsensitiveMap, CaseInsensitiveTreeMap, CustomKeyMap, FixedLinkedHashMap, FuncKeyMap,
+    FuncMap, LinkedForestMap, ListValueMap, MapBuilder, MapWrapper, RowKeyTable,
+    SafeConcurrentHashMap, SetValueMap, TableMap, TolerantMap, TransMap,
+};
+pub use map::custom_key_map;
+pub mod convert;
+mod clone;
+pub use clone::cloneable::Cloneable;
+mod zip_util;
+pub use zip_util::ZipUtil;
+mod runtime_util;
+pub use runtime_util::RuntimeUtil;
+mod primitive_array_util;
+pub use primitive_array_util::PrimitiveArrayUtil;
+pub use map_util::{CreateMapKind, EmptyMapKind, LinkedOrHashMap, NestedMapValue};
+pub use object_util::CharSequenceElement;
+pub use comparator::CompareUtil;
+pub use date::between_formatter::{BetweenFormatter, Level as BetweenFormatterLevel};
+pub use date::date_between::DateBetween;
+pub use date::date_field::DateField;
+pub use date::date_pattern::DatePattern;
+pub use date::date_range::DateRange;
+pub use date::date_time::DateTime;
+pub use date::date_unit::DateUnit;
+pub use date::group_time_interval::GroupTimeInterval;
+pub use date::local_date_time_util::LocalDateTimeUtil;
+pub use date::month::Month;
+pub use date::quarter::Quarter;
+pub use date::stop_watch::StopWatch;
+pub use date::temporal_accessor_util::TemporalAccessorUtil;
+pub use date::temporal_util::TemporalUtil;
+pub use date::time_interval::TimeInterval;
+pub use date::week::Week;
+pub use date::year_quarter::YearQuarter;
+pub use date::zodiac::Zodiac;
+pub use net::ipv4_util::Ipv4Util;
+pub use net::local_port_generater::LocalPortGenerater;
+pub use net::net_util::NetUtil;
+pub use net::url::url_builder::UrlBuilder;
+pub use net::url_decoder::UrlDecoder;
+pub use net::url_encode_util::UrlEncodeUtil;
+pub use net::url_encoder::UrlEncoder;
+pub use io::buffer_util::BufferUtil;
+pub use io::fast_byte_array_output_stream::FastByteArrayOutputStream;
+pub use io::fast_byte_buffer::FastByteBuffer;
+pub use io::io_runtime_exception::IORuntimeException;
+pub use io::null_output_stream::NullOutputStream;
+pub use io::unit::data_size::DataSize;
+pub use io::unit::data_size_util::DataSizeUtil;
+pub use io::unit::data_unit::DataUnit;
+pub use io::file::file_name_util::FileNameUtil;
+pub use io::file::file_reader::FileReader;
+pub use io::file::file_writer::FileWriter;
+pub use io::file::line_separator::LineSeparator;
+pub use io::file::path_util::PathUtil;

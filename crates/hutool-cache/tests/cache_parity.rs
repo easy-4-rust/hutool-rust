@@ -343,7 +343,7 @@ fn lru_cache_put_test() {
         handles.push(thread::spawn(move || {
             let key: String = (0..5)
                 .map(|_| {
-                    let idx = (i.wrapping_mul(31).wrapping_add(rand::random::<usize>())) % 26;
+                    let idx = (i.wrapping_mul(31).wrapping_add(rand::random::<u64>() as usize)) % 26;
                     (b'a' + idx as u8) as char
                 })
                 .collect();

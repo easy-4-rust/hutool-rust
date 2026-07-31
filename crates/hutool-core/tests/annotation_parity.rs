@@ -3,7 +3,7 @@
 
 use std::sync::Arc;
 
-use hutool_core::annotation::{
+use hutool_annotation::{
     fixtures, global_registry, AnnotationUtil, AnnotationValue, ElementHandle,
 };
 

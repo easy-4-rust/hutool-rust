@@ -28,7 +28,7 @@ mime.workspace = true
 rand.workspace = true
 regex = { workspace = true, optional = true }
 fancy-regex = { workspace = true, optional = true }
-reqwest = { workspace = true, features = ["cookies", "multipart"] }
+reqwest = { workspace = true, features = ["cookies", "multipart", "query"] }
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true

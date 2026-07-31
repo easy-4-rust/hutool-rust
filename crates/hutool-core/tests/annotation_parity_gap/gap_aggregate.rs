@@ -3,7 +3,7 @@
 use std::collections::HashMap;
 use std::sync::Arc;
 
-use hutool_core::annotation::{
+use hutool_annotation::{
     fixtures_aggregate::{self, types as agg},
     global_registry, mirror_string, AnnotationSynthesizer, CacheableSynthesizedAnnotationAttributeProcessor,
     GenericSynthesizedAggregateAnnotation, GENERIC_SYNTHESIZED_AGGREGATE_TYPE, SynthesizedAggregateAnnotation,
@@ -86,7 +86,7 @@ fn generic_synthesized_aggregate_annotation_synthetic_annotation_test() {
         child_syn
             .get_raw("grandParentType")
             .map(|v| match v {
-                hutool_core::annotation::AnnotationValue::Class(c) => c.clone(),
+                hutool_annotation::AnnotationValue::Class(c) => c.clone(),
                 _ => String::new(),
             })
             .unwrap()
@@ -171,7 +171,7 @@ fn generic_synthesized_aggregate_annotation_alias_for_test() {
         agg::ALIAS_FOR,
         HashMap::from([(
             "value".to_string(),
-            hutool_core::annotation::AnnotationValue::String("Foo".into()),
+            hutool_annotation::AnnotationValue::String("Foo".into()),
         )]),
     );
     let aggregate2 = GenericSynthesizedAggregateAnnotation::new(ann2);
@@ -208,7 +208,7 @@ fn generic_synthesized_aggregate_annotation_force_alias_for_test() {
         agg::FORCE_ALIAS,
         HashMap::from([(
             "value".to_string(),
-            hutool_core::annotation::AnnotationValue::String("Foo".into()),
+            hutool_annotation::AnnotationValue::String("Foo".into()),
         )]),
     );
     let aggregate2 = GenericSynthesizedAggregateAnnotation::new(ann2);
@@ -233,7 +233,7 @@ fn generic_synthesized_aggregate_annotation_alias_for_and_mirror_test() {
         agg::MIRROR_THEN_ALIAS,
         HashMap::from([(
             "childValue".to_string(),
-            hutool_core::annotation::AnnotationValue::String("test".into()),
+            hutool_annotation::AnnotationValue::String("test".into()),
         )]),
     );
     let aggregate = GenericSynthesizedAggregateAnnotation::new(ann);
@@ -252,7 +252,7 @@ fn generic_synthesized_aggregate_annotation_multi_alias_for_test() {
         agg::MULTI_ALIAS,
         HashMap::from([(
             "value3".to_string(),
-            hutool_core::annotation::AnnotationValue::String("test".into()),
+            hutool_annotation::AnnotationValue::String("test".into()),
         )]),
     );
     let aggregate = GenericSynthesizedAggregateAnnotation::new(ann);
@@ -286,7 +286,7 @@ fn generic_synthesized_aggregate_annotation_implicit_alias_test() {
         agg::IMPLICIT,
         HashMap::from([(
             "value".to_string(),
-            hutool_core::annotation::AnnotationValue::String("Foo".into()),
+            hutool_annotation::AnnotationValue::String("Foo".into()),
         )]),
     );
     let aggregate = GenericSynthesizedAggregateAnnotation::new(ann);
@@ -298,38 +298,38 @@ fn generic_synthesized_aggregate_annotation_implicit_alias_test() {
 /// 对齐 Java: `CacheableSynthesizedAnnotationAttributeProcessorTest.getAttributeValueTest()`
 #[test]
 fn cacheable_synthesized_annotation_attribute_processor_get_attribute_value_test() {
-    use hutool_core::annotation::TestValueSynthesizedAnnotation;
+    use hutool_annotation::TestValueSynthesizedAnnotation;
 
-    use hutool_core::annotation::SynthesizedAnnotationAttributeProcessor;
+    use hutool_annotation::SynthesizedAnnotationAttributeProcessor;
 
     let processor = CacheableSynthesizedAnnotationAttributeProcessor::new();
-    let a1: Arc<dyn hutool_core::annotation::SynthesizedAnnotation> =
+    let a1: Arc<dyn hutool_annotation::SynthesizedAnnotation> =
         TestValueSynthesizedAnnotation::new(
         1,
         0,
         HashMap::from([
             (
                 "name".to_string(),
-                hutool_core::annotation::AnnotationValue::String("name1".into()),
+                hutool_annotation::AnnotationValue::String("name1".into()),
             ),
             (
                 "value".to_string(),
-                hutool_core::annotation::AnnotationValue::I32(111),
+                hutool_annotation::AnnotationValue::I32(111),
             ),
         ]),
     );
-    let a2: Arc<dyn hutool_core::annotation::SynthesizedAnnotation> =
+    let a2: Arc<dyn hutool_annotation::SynthesizedAnnotation> =
         TestValueSynthesizedAnnotation::new(
         0,
         0,
         HashMap::from([
             (
                 "name".to_string(),
-                hutool_core::annotation::AnnotationValue::String("name2".into()),
+                hutool_annotation::AnnotationValue::String("name2".into()),
             ),
             (
                 "value".to_string(),
-                hutool_core::annotation::AnnotationValue::String("value2".into()),
+                hutool_annotation::AnnotationValue::String("value2".into()),
             ),
         ]),
     );
@@ -346,7 +346,7 @@ fn cacheable_synthesized_annotation_attribute_processor_get_attribute_value_test
         processor
             .get_attribute_value("value", ValueKind::I32, &list)
             .and_then(|v| match v {
-                hutool_core::annotation::AnnotationValue::I32(i) => Some(i),
+                hutool_annotation::AnnotationValue::I32(i) => Some(i),
                 _ => None,
             })
             .unwrap()

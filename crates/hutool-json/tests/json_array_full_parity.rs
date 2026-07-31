@@ -2,6 +2,7 @@
 //! 对齐 Hutool hutool-json JSONArrayTest
 
 use hutool_json as hj;
+use hutool_json::JsonContainer;
 
 /// 对齐 Java: `JSONArrayTest.parseWithNullTest()`
 #[test]

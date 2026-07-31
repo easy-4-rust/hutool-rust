@@ -90,6 +90,7 @@ image = { workspace = true, optional = true }
 url = { workspace = true, optional = true }
 
 [dev-dependencies]
+hutool-annotation = { path = "../hutool-annotation" }
 bincode.workspace = true
 chrono.workspace = true
 criterion.workspace = true
