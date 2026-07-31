@@ -8,5 +8,5 @@ pub mod row_key_table;
 pub mod set_value_map;
 pub mod table;
 
-pub use abs_coll_value_map::{AbsCollValueMap, CollectionValueMap, ListValueMap, SetValueMap};
-pub use abs_table::{AbsTable, RowKeyTable, Table, TableCell};
+pub use abs_coll_value_map::{ListValueMap, SetValueMap};
+pub use abs_table::RowKeyTable;

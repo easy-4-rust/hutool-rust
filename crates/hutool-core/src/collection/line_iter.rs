@@ -3,9 +3,7 @@
 /// 对齐: `cn.hutool.core.collection.LineIter`
 /// 行迭代器
 
-use std::{io, io::BufRead, marker::PhantomData};
 
-use crate::{ArrayIter, CollUtil};
 
 /// A buffered reader exposed as a fallible line iterator.
 pub struct LineIter<'a> {

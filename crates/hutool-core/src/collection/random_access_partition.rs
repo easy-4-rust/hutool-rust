@@ -5,7 +5,7 @@
 
 use std::iter::Peekable;
 
-use crate::{CoreError, Result};
+use crate::{ Result};
 
 use super::partition::Partition;
 

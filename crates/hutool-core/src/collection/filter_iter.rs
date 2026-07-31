@@ -3,7 +3,6 @@
 /// 对齐: `cn.hutool.core.collection.FilterIter`
 /// 过滤迭代器
 
-use std::collections::VecDeque;
 
 /// A filtering iterator with non-consuming lookahead.
 pub struct FilterIter<I, P>

@@ -10,7 +10,7 @@ use std::{
     hash::Hash,
     sync::{
         Arc,
-        mpsc::{Receiver, RecvError, SendError, SyncSender, sync_channel},
+        mpsc::sync_channel,
     },
 };
 

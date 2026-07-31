@@ -4,20 +4,11 @@
 /// 并发哈希集合
 
 use std::{
-    cmp::Ordering,
     collections::HashSet,
-    fmt,
     hash::Hash,
-    sync::{
-        Arc,
-        atomic::{AtomicU64, AtomicUsize, Ordering as AtomicOrdering},
-    },
 };
 
-use indexmap::IndexMap;
 use parking_lot::RwLock;
-
-use crate::{CoreError, Result};
 
 /// A shareable concurrent hash set.
 #[derive(Debug, Default)]
@@ -93,4 +84,3 @@ impl<T: Eq + Hash> FromIterator<T> for ConcurrentHashSet<T> {
     }
 }
 
-use super::{Comparator};

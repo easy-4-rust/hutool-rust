@@ -3,9 +3,9 @@
 /// 对齐: `cn.hutool.core.collection.SpliteratorUtil`
 /// 分割迭代器
 
-use std::{io, io::BufRead, marker::PhantomData};
+use std::{io};
 
-use crate::{ArrayIter, CollUtil};
+use crate::{ CollUtil};
 
 use super::trans_spliterator::TransSpliterator;
 

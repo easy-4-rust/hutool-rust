@@ -4,20 +4,11 @@
 /// 唯一键集合
 
 use std::{
-    cmp::Ordering,
-    collections::HashSet,
     fmt,
     hash::Hash,
-    sync::{
-        Arc,
-        atomic::{AtomicU64, AtomicUsize, Ordering as AtomicOrdering},
-    },
 };
 
 use indexmap::IndexMap;
-use parking_lot::RwLock;
-
-use crate::{CoreError, Result};
 
 /// A set whose uniqueness is determined by a caller-provided key function.
 pub struct UniqueKeySet<K, V, F> {

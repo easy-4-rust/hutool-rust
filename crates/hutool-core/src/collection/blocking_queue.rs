@@ -3,21 +3,9 @@
 /// 对齐: `cn.hutool.core.collection.CollUtil`
 /// 阻塞队列
 
-use std::{
-    cmp::Ordering,
-    collections::{BTreeMap, BTreeSet, HashMap, HashSet, VecDeque},
-    fmt::Display,
-    hash::Hash,
-    sync::{
-        Arc,
-        mpsc::{Receiver, RecvError, SendError, SyncSender, sync_channel},
-    },
-};
+use std::sync::mpsc::{Receiver, RecvError, SendError, SyncSender};
 
-use indexmap::{IndexMap, IndexSet};
 use parking_lot::Mutex;
-
-use crate::{CoreError, IterUtil, ListUtil, Result};
 
 /// A bounded multi-producer queue with blocking send and receive operations.
 #[derive(Debug)]

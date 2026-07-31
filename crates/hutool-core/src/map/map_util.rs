@@ -2,9 +2,7 @@
 //!
 //! 委托到 crate 根 [`crate::MapUtil`]。
 
-pub use crate::map_util::{
-    CreateMapKind, EmptyMapKind, LinkedOrHashMap, MapBuilderGate, MapUtil, NestedMapValue,
-};
+pub use crate::map_util::LinkedOrHashMap;
 
 /// 历史别名：有序/无序 Map 联合体。
 #[allow(dead_code)] // 对齐 Java MapUtil 历史别名，暂未接线，预留

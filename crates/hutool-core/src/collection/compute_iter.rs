@@ -3,9 +3,7 @@
 /// 对齐: `cn.hutool.core.collection.ComputeIter`
 /// 计算迭代器
 
-use std::{io, io::BufRead, marker::PhantomData};
 
-use crate::{ArrayIter, CollUtil};
 
 /// An iterator whose next value is supplied by a stateful computation.
 pub struct ComputeIter<T, F>

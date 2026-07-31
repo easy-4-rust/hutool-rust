@@ -3,7 +3,6 @@
 /// 对齐: `cn.hutool.core.collection.ArrayIter`
 /// 数组迭代器
 
-use std::collections::VecDeque;
 
 use super::resettable_iter::ResettableIter;
 

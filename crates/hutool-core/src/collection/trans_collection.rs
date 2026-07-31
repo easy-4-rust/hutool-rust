@@ -3,9 +3,9 @@
 /// 对齐: `cn.hutool.core.collection.TransCollection`
 /// 转换集合
 
-use std::{io, io::BufRead, marker::PhantomData};
+use std::{io,  marker::PhantomData};
 
-use crate::{ArrayIter, CollUtil};
+use crate::{ CollUtil};
 
 /// A mutable collection view that transforms values only when observed.
 pub struct TransCollection<'a, T, U, F>

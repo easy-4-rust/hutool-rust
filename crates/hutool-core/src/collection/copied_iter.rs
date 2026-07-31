@@ -3,8 +3,6 @@
 /// 对齐: `cn.hutool.core.collection.CopiedIter`
 /// 复制迭代器
 
-use std::collections::VecDeque;
-
 /// An owned snapshot of another iterator.
 #[derive(Debug)]
 pub struct CopiedIter<T> {

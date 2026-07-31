@@ -3,23 +3,10 @@
 /// 对齐: `cn.hutool.core.collection.CollUtil`
 /// 创建集合
 
-use std::{
-    cmp::Ordering,
-    collections::{BTreeMap, BTreeSet, HashMap, HashSet, VecDeque},
-    fmt::Display,
-    hash::Hash,
-    sync::{
-        Arc,
-        mpsc::{Receiver, RecvError, SendError, SyncSender, sync_channel},
-    },
-};
+use std::collections::{BTreeSet, HashSet, VecDeque};
 
-use indexmap::{IndexMap, IndexSet};
-use parking_lot::Mutex;
+use indexmap::IndexSet;
 
-use crate::{CoreError, IterUtil, ListUtil, Result};
-
-use super::coll_util::CollUtil;
 
 /// A statically typed result for [`CollUtil::create`].
 #[derive(Debug, Clone)]

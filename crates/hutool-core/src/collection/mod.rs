@@ -13,11 +13,7 @@
 use std::cmp::Ordering;
 use std::collections::{HashMap, HashSet};
 use std::hash::Hash;
-use std::iter::Peekable;
 use std::sync::atomic::{AtomicU64, AtomicUsize, Ordering as AtomicOrdering};
-
-use indexmap::IndexMap;
-use parking_lot::RwLock;
 
 use crate::{CoreError, Result};
 

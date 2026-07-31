@@ -5,5 +5,4 @@
 mod weak_concurrent_map;
 mod reference_concurrent_map;
 
-pub use weak_concurrent_map::WeakConcurrentMap;
 pub use reference_concurrent_map::ReferenceConcurrentMap;

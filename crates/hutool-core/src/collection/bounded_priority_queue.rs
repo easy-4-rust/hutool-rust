@@ -5,17 +5,9 @@
 
 use std::{
     cmp::Ordering,
-    collections::HashSet,
     fmt,
-    hash::Hash,
-    sync::{
-        Arc,
-        atomic::{AtomicU64, AtomicUsize, Ordering as AtomicOrdering},
-    },
+    sync::Arc,
 };
-
-use indexmap::IndexMap;
-use parking_lot::RwLock;
 
 use crate::{CoreError, Result};
 

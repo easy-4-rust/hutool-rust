@@ -3,7 +3,6 @@
 /// 对齐: `cn.hutool.core.collection.AvgPartition`
 /// 平均分区
 
-use std::iter::Peekable;
 
 use crate::{CoreError, Result};
 
@@ -70,5 +69,3 @@ impl<'a, T> AvgPartition<'a, T> {
         })
     }
 }
-
-use super::{validate_partition_size};

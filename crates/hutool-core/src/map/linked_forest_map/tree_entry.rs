@@ -1,7 +1,6 @@
 //! 对齐: `cn.hutool.core.map.TreeEntry` / `ForestMap` / `LinkedForestMap`
 //! 来源: hutool-core/.../LinkedForestMap.java（简化可运行实现）
 
-use std::collections::HashMap;
 use std::hash::Hash;
 
 /// 对齐 Java 接口: `cn.hutool.core.map.TreeEntry`

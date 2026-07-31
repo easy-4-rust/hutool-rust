@@ -3,22 +3,6 @@
 /// 对齐: `cn.hutool.core.collection.CollUtil`
 /// 集合类型
 
-use std::{
-    cmp::Ordering,
-    collections::{BTreeMap, BTreeSet, HashMap, HashSet, VecDeque},
-    fmt::Display,
-    hash::Hash,
-    sync::{
-        Arc,
-        mpsc::{Receiver, RecvError, SendError, SyncSender, sync_channel},
-    },
-};
-
-use indexmap::{IndexMap, IndexSet};
-use parking_lot::Mutex;
-
-use crate::{CoreError, IterUtil, ListUtil, Result};
-
 /// Concrete collection kinds replacing Java's reflective `Class<?>` factory.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum CollectionKind {
