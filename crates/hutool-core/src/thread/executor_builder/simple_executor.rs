@@ -19,7 +19,7 @@ impl SimpleExecutor {
     where
         F: FnOnce() + Send + 'static,
     {
-        let mut guard = self.tx.lock().unwrap();
+        let guard = self.tx.lock().unwrap();
         if let Some(tx) = guard.as_ref() {
             if let Err(job) = tx.try_send(Box::new(f)) {
                 Self::reject_job(self.reject, job);

@@ -11,9 +11,7 @@ use std::{
 
 use indexmap::IndexMap;
 use quick_xml::{
-    escape::escape,
-    events::{BytesDecl, BytesEnd, BytesStart, BytesText, Event},
-    name::QName,
+    events::{BytesDecl, Event},
 };
 use serde::de::DeserializeOwned;
 use serde::Serialize;
@@ -613,4 +611,4 @@ impl XmlNode {
     }
 }
 
-use super::{WriteFrame, append_text, attach_node, input_or_xml_error, local_part, name_matches, write_dom_iterative};
+use super::{append_text, attach_node, input_or_xml_error, name_matches, write_dom_iterative};

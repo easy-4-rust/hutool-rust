@@ -3,16 +3,11 @@
 /// 对齐: `cn.hutool.core.xml.XmlStream`
 /// XML事件写入器
 
-use std::{
-    io::{BufRead, Read, Take, Write},
-    ops::ControlFlow,
-};
+use std::io::Write;
 
-use indexmap::IndexMap;
 use quick_xml::{
-    escape::resolve_predefined_entity,
-    events::{BytesEnd, BytesRef, BytesStart, Event},
-    Reader, Writer, XmlVersion,
+    events::Event,
+    Writer,
 };
 
 use crate::{CoreError, Result};
@@ -65,5 +60,3 @@ impl<W: Write> XmlEventWriter<W> {
         self.writer.into_inner()
     }
 }
-
-use super::{ParseState, begin_element, decode_name, validate_attributes, validate_event, validate_text};

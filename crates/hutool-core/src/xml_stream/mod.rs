@@ -4,7 +4,7 @@
 /// XML 流解析
 
 use std::{
-    io::{BufRead, Read, Take, Write},
+    io::{BufRead, Read, Write},
     ops::ControlFlow,
 };
 
@@ -12,7 +12,7 @@ use indexmap::IndexMap;
 use quick_xml::{
     escape::resolve_predefined_entity,
     events::{BytesEnd, BytesRef, BytesStart, Event},
-    Reader, Writer, XmlVersion,
+    XmlVersion,
 };
 
 use crate::{CoreError, Result};
@@ -38,6 +38,11 @@ struct ParseState {
     version: XmlVersion,
 }
 
+/// 流式访问 XML 事件。
+///
+/// # Errors
+///
+/// 解析出错时返回 [`CoreError`]。
 pub fn visit_xml<R, B, F>(
     source: R,
     options: XmlParseOptions,
@@ -59,6 +64,11 @@ where
     }
 }
 
+/// 流式转换 XML 事件到 Writer。
+///
+/// # Errors
+///
+/// 解析或写出出错时返回 [`CoreError`]。
 pub fn transform_xml<R, W, F>(
     source: R,
     target: W,

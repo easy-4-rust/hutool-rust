@@ -3,19 +3,7 @@
 /// 对齐: `cn.hutool.core.xml.XmlStream`
 /// XML解析选项
 
-use std::{
-    io::{BufRead, Read, Take, Write},
-    ops::ControlFlow,
-};
-
-use indexmap::IndexMap;
-use quick_xml::{
-    escape::resolve_predefined_entity,
-    events::{BytesEnd, BytesRef, BytesStart, Event},
-    Reader, Writer, XmlVersion,
-};
-
-use crate::{CoreError, Result};
+use quick_xml::XmlVersion;
 
 use super::namespace_mode::NamespaceMode;
 
@@ -79,4 +67,4 @@ impl Default for ParseState {
     }
 }
 
-use super::{ParseState, begin_element, decode_name, validate_attributes, validate_event, validate_text};
+use super::ParseState;

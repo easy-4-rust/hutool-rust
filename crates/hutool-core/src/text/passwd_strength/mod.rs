@@ -3,8 +3,6 @@
 //!
 //! 密码强度检测。
 
-use crate::Result;
-
 mod passwd_level;
 mod char_type;
 mod passwd_strength;

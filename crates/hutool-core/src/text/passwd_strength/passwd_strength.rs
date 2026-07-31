@@ -231,4 +231,4 @@ impl PasswdStrength {
     }
 }
 
-use super::{DICTIONARY, SIZE_TABLE, check_character_type, count_letter, is_char_equals, is_numeric, size_of_int};
+use super::{DICTIONARY, count_letter, is_char_equals, is_numeric, size_of_int};

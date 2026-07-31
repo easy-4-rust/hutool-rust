@@ -5,9 +5,6 @@ pub mod soft_concurrent_map;
 pub mod weak_key_concurrent_map;
 pub mod weak_key_value_concurrent_map;
 
-pub use crate::map::ReferenceConcurrentMap;
-pub use soft_concurrent_map::SoftConcurrentMap;
-pub use weak_key_concurrent_map::WeakKeyConcurrentMap;
 pub use weak_key_value_concurrent_map::WeakKeyValueConcurrentMap;
 
 use crate::{CoreError, Result};

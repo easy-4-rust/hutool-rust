@@ -2,6 +2,8 @@
 //!
 //! JVM 动态代理无安全 1:1 映射；保留类型占位并标记 planned。
 
+#![allow(dead_code)] // 对齐 Java MapProxy，暂未接线，预留
+
 use std::collections::HashMap;
 use std::hash::Hash;
 

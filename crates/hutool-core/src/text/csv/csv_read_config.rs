@@ -6,13 +6,21 @@ use indexmap::IndexMap;
 /// 对齐 Java: `CsvReadConfig#`
 #[derive(Debug, Clone)]
 pub struct CsvReadConfig {
+    /// 公共配置。
     pub base: CsvConfig,
+    /// 起始行号。
     pub begin_line_no: i64,
+    /// 结束行号。
     pub end_line_no: i64,
+    /// 表头行号。
     pub header_line_no: i64,
+    /// 是否跳过空行。
     pub skip_empty_rows: bool,
+    /// 字段数不一致时报错。
     pub error_on_different_field_count: bool,
+    /// 是否去除字段空白。
     pub trim_field: bool,
+    /// 表头别名映射。
     pub header_alias: IndexMap<String, String>,
 }
 
