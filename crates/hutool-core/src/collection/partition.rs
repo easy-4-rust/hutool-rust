@@ -3,11 +3,9 @@
 /// 对齐: `cn.hutool.core.collection.Partition`
 /// 分区
 
-use std::iter::Peekable;
 
-use crate::{CoreError, Result};
+use crate::Result;
 
-use super::random_access_partition::RandomAccessPartition;
 
 /// A borrowed view that divides a slice into fixed-size partitions.
 ///
@@ -62,4 +60,3 @@ impl<'a, T> Partition<'a, T> {
     }
 }
 
-use super::{validate_partition_size};
