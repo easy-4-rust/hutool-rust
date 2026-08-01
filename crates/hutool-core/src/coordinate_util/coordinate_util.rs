@@ -1,6 +1,3 @@
-use std::fmt;
-use std::hash::{Hash, Hasher};
-
 use super::coordinate::Coordinate;
 
 /// Hutool-compatible WGS84, GCJ-02, BD-09 and Web Mercator conversions.
@@ -91,4 +88,4 @@ impl CoordinateUtil {
     }
 }
 
-use super::{JavaDouble, double_hash_code, java_double_bits, offset, trans_lat, trans_lng};
+use super::offset;

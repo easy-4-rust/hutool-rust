@@ -21,13 +21,6 @@
 //! - Java 静态方法 → Rust ZST + 关联函数,enigo 句柄通过
 //!   `thread_local!` 或每次 new 创建(简化起见用每次 new)。
 
-use crate::swing::screen_util::{ScreenRect, ScreenUtil};
-use crate::swing::{Result, SwingError};
-use enigo::{Direction, Enigo, Key, Keyboard, Mouse, Settings};
-use image::RgbaImage;
-use std::path::Path;
-use std::time::Duration;
-
 mod mouse_button;
 mod robot_util;
 mod robot_error;

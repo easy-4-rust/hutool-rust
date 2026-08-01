@@ -7,7 +7,6 @@ use std::{
     any::type_name,
     error::Error,
     fmt::{self, Debug, Display},
-    ops::{Deref, DerefMut},
 };
 
 use crate::format_template;

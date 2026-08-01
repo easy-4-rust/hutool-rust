@@ -1,6 +1,8 @@
 //! Date package type/util parity
 //! 对齐: hutool-core date types (Month/Week/Quarter/YearQuarter/Zodiac/DateTime/...)
 
+#![allow(non_snake_case)] // 对齐 Java 测试方法名（带 _2 后缀的 Java 风格命名）
+
 use chrono::{Month as ChronoMonth, Timelike, Weekday};
 use hutool_core::{
     BetweenFormatter, BetweenFormatterLevel, DateBetween, DateField, DatePattern, DateRange,
@@ -796,7 +798,7 @@ fn wave2_stop_watch_parity() {
     assert_eq!(sw.get_id(), "demo");
     assert_eq!(sw.get_task_count(), 2);
     assert!(!sw.is_running());
-    assert!(sw.get_total_time_nanos() >= 0);
+    let _ = sw.get_total_time_nanos();
     assert!(!sw.pretty_print().is_empty());
     assert_eq!(sw.get_task_info().len(), 2);
     assert_eq!(sw.get_last_task_name(), "b");

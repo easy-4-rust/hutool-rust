@@ -1,8 +1,6 @@
 use std::fmt;
 use std::hash::{Hash, Hasher};
 
-use super::coordinate_util::CoordinateUtil;
-
 /// A longitude/latitude pair used by Hutool-compatible coordinate conversions.
 
 /// 对齐: `cn.hutool.core.util.CoordinateUtil.Coordinate`
@@ -121,4 +119,4 @@ impl fmt::Display for JavaDouble {
     }
 }
 
-use super::{JavaDouble, double_hash_code, java_double_bits, offset, trans_lat, trans_lng};
+use super::{JavaDouble, double_hash_code, java_double_bits};

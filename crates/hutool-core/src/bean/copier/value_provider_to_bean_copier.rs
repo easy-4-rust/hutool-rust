@@ -5,7 +5,7 @@
 //! 从 ValueProvider 中按目标 Bean 的字段名逐个获取值，
 //! 经过 CopyOptions 规则处理后写入目标 Bean。
 
-use std::collections::{HashMap, HashSet};
+use std::collections::HashSet;
 
 use serde::de::DeserializeOwned;
 use serde::Serialize;
@@ -187,6 +187,7 @@ where
 mod tests {
     use super::*;
     use serde::{Deserialize, Serialize};
+    use std::collections::HashMap;
 
     #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
     struct User {
@@ -354,7 +355,7 @@ mod tests {
         // 但我们的 ValueProvider 遍历的是 provider 的 key
         // 所以这里直接用 provider 的 key 来匹配
         let opts = CopyOptions::create();
-        let result = copy_provider_to_bean(provider, target, opts);
+        let _result = copy_provider_to_bean(provider, target, opts);
         // Provider key "full_name" 不匹配目标字段 "name"
         // Provider key "years" 不匹配目标字段 "age"
         // 所以目标保持默认值

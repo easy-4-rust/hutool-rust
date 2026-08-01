@@ -8,7 +8,7 @@
 
 #![cfg(feature = "img")]
 
-use hutool_core::{ColorUtil, ImgUtil};
+use hutool_core::img::{color_util::ColorUtil, img_util::ImgUtil};
 use image::GenericImageView;
 use tempfile::tempdir;
 

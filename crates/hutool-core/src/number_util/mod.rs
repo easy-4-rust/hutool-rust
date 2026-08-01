@@ -3,18 +3,13 @@
 //!
 //! Rust 版本提供算术、比较、最值、解析与 BigDecimal（`rust_decimal::Decimal`）对齐实现。
 
-use crate::{CoreError, Result};
-use rand::Rng;
 use rust_decimal::Decimal;
 use rust_decimal::RoundingStrategy;
-use std::collections::HashSet;
-use std::str::FromStr;
 
 mod number_util;
 mod parsed_number;
 
 pub use number_util::NumberUtil;
-pub use parsed_number::ParsedNumber;
 
 fn decimal_to_f64(d: Decimal) -> f64 {
     d.to_string().parse().unwrap_or(0.0)

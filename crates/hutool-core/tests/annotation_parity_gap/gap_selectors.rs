@@ -2,7 +2,7 @@
 
 use std::sync::Arc;
 
-use hutool_annotation::{Selectors, SynthesizedAnnotation, SynthesizedAnnotationSelector, TestSynthesizedAnnotation};
+use hutool_annotation::{Selectors, SynthesizedAnnotation, TestSynthesizedAnnotation};
 
 /// 对齐 Java: `SynthesizedAnnotationSelectorTest.chooseTest()`
 #[test]

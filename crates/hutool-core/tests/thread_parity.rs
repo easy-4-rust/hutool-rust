@@ -102,7 +102,7 @@ fn executor_builder_test() {
 fn concurrency_tester_test() {
     let mut ct = ConcurrencyTester::new(3);
     ct.test(|| thread::sleep(Duration::from_millis(1)));
-    assert!(ct.get_interval() >= 0);
+    let _ = ct.get_interval();
 }
 
 /// 对齐 Java: `SyncFinisherTest` (多线程同步完成器)

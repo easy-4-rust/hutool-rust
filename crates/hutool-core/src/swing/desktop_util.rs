@@ -106,8 +106,6 @@ impl DesktopUtil {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-
     #[test]
     fn mail_prepends_mailto_prefix() {
         // 仅验证 URL 拼接逻辑,不实际触发系统调用

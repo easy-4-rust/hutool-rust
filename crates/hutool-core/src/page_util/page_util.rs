@@ -1,7 +1,5 @@
 use std::ops::Range;
 
-use thiserror::Error;
-
 use super::page_error::PageError;
 
 /// Hutool-compatible pagination arithmetic with explicit, owned numbering state.

@@ -3,7 +3,7 @@
 //! 对齐: `cn.hutool.core.clone.CloneTest` / `DefaultCloneTest`
 //! 基于 hutool-core `CloneSupport` / `DefaultCloneable` / `Cloneable` 真实实现。
 
-use hutool_core::{CloneSupport, Cloneable, DefaultCloneable};
+use hutool_core::{CloneSupport, DefaultCloneable};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 struct Cat {

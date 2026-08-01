@@ -166,6 +166,6 @@ fn issue_idfmxj_test_stop_watch_negative_time_test_2() {
     let mut sw = StopWatch::new();
     sw.start();
     sw.stop();
-    // 不应 panic；总时间为非负
-    assert!(sw.get_total_time_nanos() >= 0);
+    // 不应 panic；总时间为非负（u64 恒满足）
+    let _ = sw.get_total_time_nanos();
 }

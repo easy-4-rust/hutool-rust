@@ -4,8 +4,8 @@ use std::sync::Arc;
 
 use hutool_annotation::{
     fixtures, global_registry, AbstractWrappedAnnotationAttribute, AliasedAnnotationAttribute,
-    AnnotationAttribute, CacheableAnnotationAttribute, ForceAliasedAnnotationAttribute,
-    MirroredAnnotationAttribute, ValueKind, WrappedAnnotationAttribute, ALIAS_TYPE,
+    AnnotationAttribute, ForceAliasedAnnotationAttribute,
+    MirroredAnnotationAttribute, ValueKind, ALIAS_TYPE,
 };
 
 use crate::annotation_common::*;

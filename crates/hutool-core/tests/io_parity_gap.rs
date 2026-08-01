@@ -4,6 +4,8 @@
 //!
 //! 对齐: `cn.hutool.core.io.*` / `cn.hutool.core.compress.*`
 
+#![allow(non_snake_case)] // 对齐 Java 测试方法名（file_util_is_sub__* 风格命名）
+
 use hutool_core::{DataSizeUtil, DataUnit, FileUtil, IoUtil, PathUtil, ZipReader, ZipWriter};
 use std::fs;
 use std::io::Cursor;

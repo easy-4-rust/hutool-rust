@@ -7,7 +7,6 @@
 
 use crate::lang::hash::{CityHash, Number128};
 use crate::IdKey;
-use thiserror::Error;
 
 use super::hash_error::HashError;
 

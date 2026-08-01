@@ -6,7 +6,7 @@ use std::sync::Arc;
 use hutool_annotation::{
     fixtures_aggregate::{self, types as agg},
     global_registry, mirror_string, AnnotationSynthesizer, CacheableSynthesizedAnnotationAttributeProcessor,
-    GenericSynthesizedAggregateAnnotation, GENERIC_SYNTHESIZED_AGGREGATE_TYPE, SynthesizedAggregateAnnotation,
+    GenericSynthesizedAggregateAnnotation, SynthesizedAggregateAnnotation,
     ValueKind,
 };
 

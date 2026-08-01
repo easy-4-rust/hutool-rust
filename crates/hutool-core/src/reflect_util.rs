@@ -241,9 +241,13 @@ impl ReflectUtil {
 
     /// 对齐 Java: `ReflectUtil.getDefaultValue(Class)`
     pub fn default_value_i32() -> i32 { 0 }
+    /// i64 默认值。
     pub fn default_value_i64() -> i64 { 0 }
+    /// f64 默认值。
     pub fn default_value_f64() -> f64 { 0.0 }
+    /// bool 默认值。
     pub fn default_value_bool() -> bool { false }
+    /// String 默认值。
     pub fn default_value_string() -> String { String::new() }
 
     // ── 泛型工具 ──

@@ -1,10 +1,6 @@
-use std::{
-    fmt, fs,
-    io::{self, Read},
-    path::{Path, PathBuf},
-};
 
-use encoding_rs::{Encoding, GBK, UTF_8};
+use std::io;
+
 use thiserror::Error;
 
 /// Errors returned by charset resolution and bounded I/O operations.
@@ -24,4 +20,3 @@ pub enum CharsetError {
     Io(#[from] io::Error),
 }
 
-use super::{DEFAULT_BUFFER_SIZE, convert_file_with_writer, decode_utf16, default_detection_charsets, identify_utf16, is_ascii_label, is_iso_8859_1_label};

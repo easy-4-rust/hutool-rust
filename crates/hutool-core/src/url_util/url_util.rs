@@ -6,7 +6,7 @@
 use crate::net::rfc3986::Rfc3986;
 use crate::net::url_decoder::UrlDecoder;
 use crate::string::{is_blank, trim};
-use crate::{CoreError, Result};
+use crate::Result;
 
 use super::hit_uri::HitUri;
 
@@ -224,4 +224,5 @@ impl UrlUtil {
     }
 }
 
-use super::{collapse_slashes, extract_path, resolve_path, split_domain_and_path, split_protocol, split_query, trim_leading_slashes, validate_uri};
+use super::{collapse_slashes, split_domain_and_path, split_protocol, split_query, trim_leading_slashes, validate_uri};
+

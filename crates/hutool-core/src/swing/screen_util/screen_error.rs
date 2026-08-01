@@ -19,9 +19,7 @@
 //! Hutool 只返回"主屏幕"信息,`xcap` 提供所有显示器枚举,Rust 版本通过
 //! [`ScreenUtil::primary_monitor`] 选择主显示器,其余显示器可由调用方自行枚举。
 
-use crate::swing::{Result, SwingError};
-use image::RgbaImage;
-use std::path::Path;
+use crate::swing::SwingError;
 
 /// 屏幕错误别名。
 pub type ScreenError = SwingError;

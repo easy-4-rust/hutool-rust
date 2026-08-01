@@ -2,13 +2,11 @@
 /// 字符集工具类
 
 use std::{
-    fmt, fs,
+    fs,
     io::{self, Read},
     path::{Path, PathBuf},
 };
 
-use encoding_rs::{Encoding, GBK, UTF_8};
-use thiserror::Error;
 
 use super::charset::Charset;
 use super::charset_error::CharsetError;
@@ -154,4 +152,4 @@ impl CharsetUtil {
     }
 }
 
-use super::{DEFAULT_BUFFER_SIZE, convert_file_with_writer, decode_utf16, default_detection_charsets, identify_utf16, is_ascii_label, is_iso_8859_1_label};
+use super::{DEFAULT_BUFFER_SIZE, convert_file_with_writer, default_detection_charsets};

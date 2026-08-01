@@ -28,6 +28,7 @@ pub trait AbsCopier<T> {
 /// 通用辅助函数：判断一个 serde_json::Value 是否为"空值"（null 或缺失）
 ///
 /// 对齐 Java 语义：`ObjectUtil.isEmpty` / `value == null`
+#[allow(dead_code)] // 对齐 Java ObjectUtil.isEmpty，供后续拷贝流程接线使用，暂未调用
 pub(crate) fn is_empty_value(v: &serde_json::Value) -> bool {
     v.is_null()
 }
@@ -35,6 +36,7 @@ pub(crate) fn is_empty_value(v: &serde_json::Value) -> bool {
 /// 通用辅助函数：将 Value 转为 camelCase 字段名对应的目标类型表示
 ///
 /// 对齐 Java: CopyOptions 内部的 `convertField` + `editFieldValue` 组合
+#[allow(dead_code)] // 对齐 Java CopyOptions 内部流程，预留供后续接线使用
 pub(crate) fn apply_value_transform(
     copy_options: &CopyOptions,
     field_name: &str,

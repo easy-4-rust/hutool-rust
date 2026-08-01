@@ -3,8 +3,6 @@
 
 use hutool_core::{
     CollUtil, ListUtil, BooleanUtil, HexUtil, HashUtil, IdcardUtil, PhoneUtil,
-    CoordinateUtil, Coordinate, DesensitizedUtil, VersionUtil, PageUtil,
-    CreditCodeUtil, NumberUtil, RandomUtil, ReflectUtil, ReUtil,
 };
 
 // ── Issue: 字符串处理 ──

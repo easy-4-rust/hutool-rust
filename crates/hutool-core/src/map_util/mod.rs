@@ -16,7 +16,6 @@ pub use create_map_kind::CreateMapKind;
 pub use nested_map_value::NestedMapValue;
 pub use map_util::MapUtil;
 pub use linked_or_hash_map::LinkedOrHashMap;
-pub use map_builder_gate::MapBuilderGate;
 
 pub const DEFAULT_INITIAL_CAPACITY: usize = 16;
 

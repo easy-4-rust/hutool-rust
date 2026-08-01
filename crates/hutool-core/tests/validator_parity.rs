@@ -38,7 +38,8 @@ fn is_not_empty_none() {
 
 // ── 长度验证 ──
 
-/// 对齐 Java: `ValidatorTest.isBetweenTest()`\n#[test]
+/// 对齐 Java: `ValidatorTest.isBetweenTest()`
+#[test]
 fn is_between_valid() {
     assert!(Validator::is_between("hello", 3, 10));
     assert!(Validator::is_between("hello", 5, 5));
@@ -78,7 +79,8 @@ fn max_length_invalid() {
 
 // ── 格式验证 ──
 
-/// 对齐 Java: `ValidatorTest.isEmailTest()`\n#[test]
+/// 对齐 Java: `ValidatorTest.isEmailTest()`
+#[test]
 fn is_email_valid() {
     assert!(Validator::is_email("test@example.com"));
     assert!(Validator::is_email("user.name+tag@domain.co"));
@@ -91,7 +93,8 @@ fn is_email_invalid() {
     assert!(!Validator::is_email(""));
 }
 
-/// 对齐 Java: `ValidatorTest.isMobileTest()`\n#[test]
+/// 对齐 Java: `ValidatorTest.isMobileTest()`
+#[test]
 fn is_mobile_valid() {
     assert!(Validator::is_mobile("13800138000"));
     assert!(Validator::is_mobile("15912345678"));
@@ -105,7 +108,8 @@ fn is_mobile_invalid() {
     assert!(!Validator::is_mobile(""));
 }
 
-/// 对齐 Java: `ValidatorTest.validateIpv4Test()`\n#[test]
+/// 对齐 Java: `ValidatorTest.validateIpv4Test()`
+#[test]
 fn is_ipv4_valid() {
     assert!(Validator::is_ipv4("192.168.1.1"));
     assert!(Validator::is_ipv4("0.0.0.0"));
@@ -118,7 +122,8 @@ fn is_ipv4_invalid() {
     assert!(!Validator::is_ipv4(""));
 }
 
-/// 对齐 Java: `ValidatorTest.isUrlTest()`\n#[test]
+/// 对齐 Java: `ValidatorTest.isUrlTest()`
+#[test]
 fn is_url_valid() {
     assert!(Validator::is_url("https://example.com"));
     assert!(Validator::is_url("http://test.org/path"));
@@ -130,7 +135,8 @@ fn is_url_invalid() {
     assert!(!Validator::is_url(""));
 }
 
-/// 对齐 Java: `ValidatorTest.isChineseTest()`\n#[test]
+/// 对齐 Java: `ValidatorTest.isChineseTest()`
+#[test]
 fn is_chinese_valid() {
     assert!(Validator::is_chinese("你好世界"));
 }
@@ -143,7 +149,8 @@ fn is_chinese_invalid() {
 
 // ── 数字验证 ──
 
-/// 对齐 Java: `ValidatorTest.isNumberTest()`\n#[test]
+/// 对齐 Java: `ValidatorTest.isNumberTest()`
+#[test]
 fn is_number_valid() {
     assert!(Validator::is_number("123"));
     assert!(Validator::is_number("3.14"));
@@ -170,7 +177,8 @@ fn is_integer_invalid() {
 
 // ── 范围验证 ──
 
-/// 对齐 Java: `ValidatorTest.isBetweenPrecisionLossTest()`\n#[test]
+/// 对齐 Java: `ValidatorTest.isBetweenPrecisionLossTest()`
+#[test]
 fn is_between_i64_valid() {
     assert!(Validator::is_between_i64(5, 1, 10));
     assert!(Validator::is_between_i64(1, 1, 10));
@@ -195,7 +203,8 @@ fn is_between_f64_invalid() {
 
 // ── 正则验证 ──
 
-/// 对齐 Java: `ValidatorTest.isMatchTest()`\n#[test]
+/// 对齐 Java: `ValidatorTest.isMatchTest()`
+#[test]
 fn is_match_regex_valid() {
     assert!(Validator::is_match_regex(r"^\d+$", "12345"));
 }
@@ -229,7 +238,8 @@ fn is_empty_collection_not_empty() {
 
 // ── 通用验证 ──
 
-/// 对齐 Java: `ValidatorTest.validateTest()`\n#[test]
+/// 对齐 Java: `ValidatorTest.validateTest()`
+#[test]
 fn validate_not_empty_valid() {
     assert!(Validator::validate_not_empty(Some("hello"), "name").is_ok());
 }

@@ -187,7 +187,7 @@ fn read_lines_csv_fixture_test() {
     let csv = include_str!("fixtures/test_lines.csv");
     let lines = IoUtil::read_lines(Cursor::new(csv)).unwrap();
     assert!(lines.len() >= 1);
-    assert!(lines.iter().all(|line| line.as_str().len() >= 0));
+    let _: usize = lines.iter().map(|line| line.as_str().len()).sum();
 }
 
 /// 对齐 Java: `IoUtil.copy` 大缓冲

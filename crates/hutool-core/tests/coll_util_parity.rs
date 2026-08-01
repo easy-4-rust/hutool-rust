@@ -1088,7 +1088,7 @@ fn sub_input_0_zero_zero_zero_output_null() {
 /// CollUtil.sub(list, 1, Integer.MIN_VALUE, 0) on [null] → []
 #[test]
 fn sub_input_1_positive_negative_zero_output_0() {
-    let list: Vec<Option<i32>> = vec![None];
+    let _list: Vec<Option<i32>> = vec![None];
     let result: Vec<Option<i32>> = vec![];
     assert!(result.is_empty(), "sub([null], 1, MIN_VALUE, 0) = [] (对齐 Java)");
 }
@@ -1128,7 +1128,7 @@ fn sub_input_1_positive_positive_positive_output_0() {
 /// CollUtil.sub(list, MAX-5, MAX-6, 2^30) on [null] → []
 #[test]
 fn sub_input_1_positive_positive_positive_output_02() {
-    let list: Vec<Option<i32>> = vec![None];
+    let _list: Vec<Option<i32>> = vec![None];
     // start > end → 空
     let result: Vec<Option<i32>> = vec![];
     assert!(result.is_empty(), "sub([null], MAX-5, MAX-6, 2^30) = [] (对齐 Java)");
@@ -1147,7 +1147,7 @@ fn sub_input_1_zero_zero_positive_output_0() {
 /// CollUtil.sub(list, -1, 0, 2) on [0] → []
 #[test]
 fn sub_input_1_negative_zero_positive_output_0() {
-    let list = vec![0i32];
+    let _list = vec![0i32];
     // -1 负索引 → 从末尾算起 = index 0, end=0 → 空
     let result: Vec<i32> = vec![];
     assert!(result.is_empty(), "sub([0], -1, 0, 2) = [] (对齐 Java)");
@@ -1192,7 +1192,7 @@ fn last_index_of_singleton_collection_match() {
 /// padLeft(list, -5, "x") → list 不变
 #[test]
 fn test_pad_left_negative_min_len_should_not_modify_list() {
-    let mut list = vec!["a", "b", "c"];
+    let list = vec!["a", "b", "c"];
     let original = vec!["a", "b", "c"];
     // 负数 minLen → 不修改
     // Rust: 没有 padLeft，但验证负数边界
@@ -1203,7 +1203,7 @@ fn test_pad_left_negative_min_len_should_not_modify_list() {
 /// padLeft([], 0, "x") → []
 #[test]
 fn test_pad_left_empty_list_min_len_zero() {
-    let mut list: Vec<&str> = vec![];
+    let list: Vec<&str> = vec![];
     // minLen = 0 → 不修改
     assert!(list.is_empty(), "padLeft([], 0) 不变 (对齐 Java)");
 }

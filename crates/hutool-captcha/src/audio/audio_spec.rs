@@ -2,9 +2,6 @@
 //! 来源: hutool-captcha/src/main/java/cn/hutool/captcha/ (扩展)
 //! 中文说明: 语音合成器请求的 PCM 格式规格
 
-use rand::Rng as _;
-
-use crate::{CaptchaError, CaptchaRenderer, RenderedCaptcha};
 
 /// PCM format requested from a speech synthesizer.
 ///

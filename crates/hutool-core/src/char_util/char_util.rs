@@ -186,4 +186,4 @@ impl CharUtil {
     }
 }
 
-use super::{java_category, java_category_abbreviation, lower_char};
+use super::{java_category, lower_char};

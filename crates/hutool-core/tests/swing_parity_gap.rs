@@ -4,7 +4,7 @@
 
 #[cfg(feature = "swing")]
 mod swing_gap {
-    use hutool_core::swing::clipboard::{ClipboardMonitor, ClipboardUtil};
+    use hutool_core::swing::clipboard::{clipboard_monitor::ClipboardMonitor, clipboard_util::ClipboardUtil};
     use hutool_core::swing::{DesktopUtil, RobotUtil};
     use std::sync::atomic::{AtomicUsize, Ordering as AtomicOrdering};
     use std::sync::Arc;

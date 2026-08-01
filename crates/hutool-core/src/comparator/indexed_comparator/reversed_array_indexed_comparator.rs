@@ -1,9 +1,6 @@
 //! 对齐: `cn.hutool.core.comparator.IndexedComparator`
 //! 来源: hutool-core/src/main/java/cn/hutool/core/comparator/IndexedComparator.java
 
-use std::collections::HashMap;
-use std::hash::Hash;
-
 use super::array_indexed_comparator::ArrayIndexedComparator;
 
 /// 反序包装。

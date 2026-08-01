@@ -1,8 +1,6 @@
 //! 对齐: `cn.hutool.core.comparator.PropertyComparator` / `FieldsComparator`
 //! 来源: hutool-core PropertyComparator / FieldsComparator / FuncComparator
 
-use std::cmp::Ordering;
-
 use super::reversed_property_comparator::ReversedPropertyComparator;
 
 /// 属性比较器 —— 对齐 Java `PropertyComparator`（Rust 用提取闭包代替 Bean 反射）。
@@ -46,4 +44,4 @@ where
     }
 }
 
-use super::{compare_nullable_i32, compare_nullable_str};
+use super::compare_nullable_str;

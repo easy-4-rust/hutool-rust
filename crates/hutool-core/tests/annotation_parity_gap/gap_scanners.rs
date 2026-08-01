@@ -118,8 +118,7 @@ fn method_annotation_scanner_get_annotations_test() {
     let mut reg = global_registry().write();
     let (ty, _field, method) = fixtures::scanner_example(&mut reg);
     let scanner = MethodAnnotationScanner::new(true, true);
-    let annotations = scanner.get_annotations(method);
-    assert!(annotations.is_empty() || annotations.len() >= 0);
+    let _annotations = scanner.get_annotations(method);
     let _ = ty;
 }
 

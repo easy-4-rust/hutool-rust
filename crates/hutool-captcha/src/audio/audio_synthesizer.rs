@@ -2,10 +2,7 @@
 //! 来源: hutool-captcha/src/main/java/cn/hutool/captcha/ (扩展)
 //! 中文说明: 文本转语音接口，用于无障碍音频验证码输出
 
-use rand::Rng as _;
-
-use crate::{CaptchaError, CaptchaRenderer, RenderedCaptcha};
-
+use crate::CaptchaError;
 use super::audio_spec::AudioSpec;
 
 /// Injected text-to-speech boundary for accessible audio CAPTCHA output.

@@ -1,7 +1,5 @@
 use std::cmp::Ordering;
 
-use thiserror::Error;
-
 use super::version_error::VersionError;
 
 /// Hutool-compatible matching for loose Java module-style version strings.
@@ -170,5 +168,5 @@ impl VersionUtil {
     }
 }
 
-use super::{DEFAULT_DELIMITER, LooseVersion, Token, compare_nullable, compare_tokens, compare_versions, comparison_target, java_string_cmp};
-use super::{parse_version, split_operator, take_number, take_text, validate_delimiter};
+use super::{DEFAULT_DELIMITER, compare_nullable, compare_versions, comparison_target};
+use super::{split_operator, validate_delimiter};

@@ -181,19 +181,23 @@ fn is_map_not_i32() {
 // ── Hutool TypeUtilTest remaining gaps ──
 
 struct Level1<T> {
+    #[allow(dead_code)] // 对齐 Java 测试字段，仅用于类型推断，预留
     id: T,
 }
 
 struct Level2<E> {
+    #[allow(dead_code)] // 对齐 Java 测试字段，仅用于类型推断，预留
     id: i64,
     _marker: std::marker::PhantomData<E>,
 }
 
 struct Level3 {
+    #[allow(dead_code)] // 对齐 Java 测试字段，仅用于类型推断，预留
     id: i64,
 }
 
 struct GenericArrayEle {
+    #[allow(dead_code)] // 对齐 Java 测试字段，仅用于类型推断，预留
     uid: i64,
 }
 

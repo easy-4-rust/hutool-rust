@@ -1,5 +1,7 @@
 //! annotation parity 测试公共辅助。
 
+#![allow(dead_code, missing_docs)] // 测试公共常量按需使用、无需文档，预留
+
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex, MutexGuard};
 

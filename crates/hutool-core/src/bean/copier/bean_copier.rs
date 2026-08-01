@@ -21,7 +21,6 @@ use super::bean_to_map_copier::BeanToMapCopier;
 use super::copy_options::CopyOptions;
 use super::map_to_bean_copier::MapToBeanCopier;
 use super::map_to_map_copier::MapToMapCopier;
-use super::value_provider::ValueProvider;
 use super::value_provider_to_bean_copier::ValueProviderToBeanCopier;
 
 /// 对齐 Java 类: `cn.hutool.core.bean.copier.BeanCopier<T>`

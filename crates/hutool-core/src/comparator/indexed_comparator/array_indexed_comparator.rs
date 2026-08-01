@@ -1,9 +1,6 @@
 //! 对齐: `cn.hutool.core.comparator.IndexedComparator`
 //! 来源: hutool-core/src/main/java/cn/hutool/core/comparator/IndexedComparator.java
 
-use std::collections::HashMap;
-use std::hash::Hash;
-
 use super::reversed_array_indexed_comparator::ReversedArrayIndexedComparator;
 
 /// 对齐 Java 测试类 `ArrayIndexedComparator`（按数组索引，允许多次查找同一引用语义用 Eq）。

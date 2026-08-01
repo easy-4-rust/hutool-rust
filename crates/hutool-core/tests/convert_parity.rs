@@ -862,7 +862,6 @@ fn issue_2611_test_chinese_money_to_number_test() {
     let formatted = format!("{:.2}", value.to_f64().unwrap());
     // NumberUtil.decimalFormatMoney → "67,557.00"
     let with_comma = {
-        let s = format!("{:.2}", 67557.0);
         // simple thousands
         "67,557.00".to_string()
     };

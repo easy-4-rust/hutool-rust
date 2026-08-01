@@ -1,5 +1,3 @@
-use std::collections::HashSet;
-
 use thiserror::Error;
 
 /// Errors returned by custom-radix conversion.
@@ -30,5 +28,3 @@ pub enum RadixError {
     #[error("decoded value exceeds i64 range")]
     Overflow,
 }
-
-use super::{MAX_RADIX, encode_unsigned, validate_alphabet};

@@ -292,7 +292,6 @@ fn convert_15_to_18_roundtrip() {
 }
 
 #[test]
-#[test]
 fn is_valid_card_10_tw() {
     // 台湾身份证号
     assert!(IdcardUtil::is_valid_tw_card("A123456789"));

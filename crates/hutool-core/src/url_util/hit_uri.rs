@@ -3,11 +3,6 @@
 //!
 //! Rust 版本提供 URL 操作的 idiomatic 实现。
 
-use crate::net::rfc3986::Rfc3986;
-use crate::net::url_decoder::UrlDecoder;
-use crate::string::{is_blank, trim};
-use crate::{CoreError, Result};
-
 /// 对齐 Java `java.net.URI` 的轻量封装,用于 `URLUtil::to_uri` 返回值。
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct HitUri {
@@ -48,4 +43,4 @@ impl std::fmt::Display for HitUri {
     }
 }
 
-use super::{collapse_slashes, extract_path, resolve_path, split_domain_and_path, split_protocol, split_query, trim_leading_slashes, validate_uri};
+use super::{extract_path, resolve_path};

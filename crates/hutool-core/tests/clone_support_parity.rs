@@ -1,7 +1,7 @@
 //! clone_support module parity tests
 //! 对齐: hutool-core CloneTest
 
-use hutool_core::{CloneSupport, DefaultCloneable, CloneRuntimeException};
+use hutool_core::{CloneSupport, CloneRuntimeException};
 
 // ── CloneSupport ──
 

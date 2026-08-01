@@ -1073,4 +1073,4 @@ impl NumberUtil {
     }
 }
 
-use super::{decimal_to_f64, extract_number_prefix, f64_to_java_string, format_with_pattern, group_thousands, is_scientific_form, plain_fixed};
+use super::{decimal_to_f64, extract_number_prefix, f64_to_java_string, format_with_pattern, is_scientific_form, plain_fixed};

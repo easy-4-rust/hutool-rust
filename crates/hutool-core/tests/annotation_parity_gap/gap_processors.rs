@@ -3,10 +3,10 @@
 use std::sync::Arc;
 
 use hutool_annotation::{
-    fixtures, global_registry, AliasAnnotationPostProcessor, AnnotationAttribute,
-    AnnotationSynthesizer, AnnotationTypeName, ForceAliasedAnnotationAttribute,
+    fixtures, global_registry, AliasAnnotationPostProcessor,
+    AnnotationSynthesizer, AnnotationTypeName,
     GenericSynthesizedAggregateAnnotation, GenericSynthesizedAnnotation,
-    SynthesizedAnnotation, SynthesizedAnnotationPostProcessor, WrappedAnnotationAttribute,
+    SynthesizedAnnotation, SynthesizedAnnotationPostProcessor,
 };
 use hutool_annotation::fixtures_aggregate::{self, types as agg};
 

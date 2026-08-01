@@ -2,7 +2,7 @@
 //! 对齐: hutool-core/builder CompareToBuilder/EqualsBuilder/HashCodeBuilder
 //! 基于 hutool-core builder/mod.rs 真实实现
 
-use hutool_core::{Builder, CompareToBuilder, EqualsBuilder, GenericBuilder, HashCodeBuilder, IdKey};
+use hutool_core::{CompareToBuilder, EqualsBuilder, GenericBuilder, HashCodeBuilder, IdKey};
 
 // ── GenericBuilder ──
 

@@ -1,8 +1,6 @@
 //! 对齐: `cn.hutool.core.math.Combination`
 //! 来源: hutool-core/src/main/java/cn/hutool/core/math/Combination.java
 
-use num_bigint::{BigInt, Sign};
-
 /// 对齐 Java `ArithmeticException`（countSafe 溢出）。
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ArithmeticOverflow {

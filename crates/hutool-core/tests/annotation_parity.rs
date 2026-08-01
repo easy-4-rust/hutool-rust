@@ -4,7 +4,7 @@
 use std::sync::Arc;
 
 use hutool_annotation::{
-    fixtures, global_registry, AnnotationUtil, AnnotationValue, ElementHandle,
+    fixtures, global_registry, AnnotationUtil, ElementHandle,
 };
 
 mod annotation_common;

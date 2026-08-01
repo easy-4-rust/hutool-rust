@@ -1,7 +1,7 @@
 //! `CollUtil` 真实功能测试 —— 对齐 Hutool CollUtilTest
 //! 所有测试基于 hutool-core coll_util.rs 的真实实现(103 个 pub fn)
 
-use hutool_core::{CollUtil, CoreError};
+use hutool_core::CollUtil;
 
 // ===== 集合运算 =====
 

@@ -21,13 +21,6 @@
 //! - Java 静态方法 → Rust ZST + 关联函数,enigo 句柄通过
 //!   `thread_local!` 或每次 new 创建(简化起见用每次 new)。
 
-use crate::swing::screen_util::{ScreenRect, ScreenUtil};
-use crate::swing::{Result, SwingError};
-use enigo::{Direction, Enigo, Key, Keyboard, Mouse, Settings};
-use image::RgbaImage;
-use std::path::Path;
-use std::time::Duration;
-
 /// 鼠标按键枚举,对应 Java `java.awt.event.InputEvent` 的按钮掩码。
 ///
 /// 对齐 Java: `InputEvent.BUTTON1_MASK` / `BUTTON2_MASK` / `BUTTON3_MASK`
@@ -43,7 +36,7 @@ pub enum MouseButton {
 
 impl MouseButton {
     /// 转换为 enigo 的鼠标按键类型。
-    fn to_enigo(self) -> enigo::Button {
+    pub(crate) fn to_enigo(self) -> enigo::Button {
         match self {
             MouseButton::Left => enigo::Button::Left,
             MouseButton::Middle => enigo::Button::Middle,

@@ -3,9 +3,6 @@
 //!
 //! Java 反射 Field → Rust 提取闭包。
 
-use std::cmp::Ordering;
-use std::marker::PhantomData;
-
 use super::base_field_comparator::BaseFieldComparator;
 
 /// 对齐 Java 类: `cn.hutool.core.comparator.FieldComparator`

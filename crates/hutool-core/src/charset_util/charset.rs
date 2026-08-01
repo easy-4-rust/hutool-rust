@@ -1,11 +1,8 @@
 use std::{
-    fmt, fs,
-    io::{self, Read},
-    path::{Path, PathBuf},
+    fmt,
 };
 
 use encoding_rs::{Encoding, GBK, UTF_8};
-use thiserror::Error;
 
 /// A Java-compatible character set, including encodings intentionally absent from WHATWG.
 
@@ -132,4 +129,4 @@ impl PartialEq for Charset {
 
 impl Eq for Charset {}
 
-use super::{DEFAULT_BUFFER_SIZE, convert_file_with_writer, decode_utf16, default_detection_charsets, identify_utf16, is_ascii_label, is_iso_8859_1_label};
+use super::{decode_utf16, identify_utf16, is_ascii_label, is_iso_8859_1_label};

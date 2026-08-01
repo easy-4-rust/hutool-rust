@@ -5,7 +5,7 @@
 //! 将源 Bean 的属性通过 serde_json 序列化/反序列化机制拷贝到目标 Bean，
 //! 支持字段名编辑、大小写忽略、null值忽略等 CopyOptions 配置。
 
-use std::collections::{HashMap, HashSet};
+use std::collections::HashSet;
 
 use serde::de::DeserializeOwned;
 use serde::Serialize;

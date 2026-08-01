@@ -6,8 +6,6 @@
 
 use std::collections::HashMap;
 
-use serde::Serialize;
-use serde::de::DeserializeOwned;
 use serde_json::Value;
 
 /// 对齐 Java: `cn.hutool.core.lang.Dict`

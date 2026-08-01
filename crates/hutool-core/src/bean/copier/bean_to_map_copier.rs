@@ -8,7 +8,7 @@
 use std::collections::HashMap;
 
 use serde::Serialize;
-use serde_json::{Map, Value};
+use serde_json::Value;
 
 use super::abs_copier::AbsCopier;
 use super::copy_options::CopyOptions;

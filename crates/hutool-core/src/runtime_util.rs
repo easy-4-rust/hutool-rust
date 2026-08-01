@@ -3,7 +3,6 @@
 //!
 //! Rust 使用 `std::process` 与系统 API 提供进程/内存信息。
 
-use std::io::Read;
 use std::process::{Command, Output, Stdio};
 
 use crate::{CoreError, Result};

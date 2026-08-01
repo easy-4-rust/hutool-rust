@@ -1,7 +1,5 @@
 use std::collections::HashSet;
 
-use thiserror::Error;
-
 mod radix_error;
 mod radix_util;
 

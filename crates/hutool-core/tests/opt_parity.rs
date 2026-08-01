@@ -37,10 +37,7 @@ fn if_present_or_else_test() {
         absent = true;
     }
     assert!(present && !absent);
-    present = false;
-    if let Some(_) = Option::<&str>::None {
-        present = true;
-    } else {
+    if Option::<&str>::None.is_none() {
         absent = true;
     }
     assert!(absent);

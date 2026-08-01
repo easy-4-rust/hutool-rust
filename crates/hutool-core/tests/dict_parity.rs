@@ -3,7 +3,7 @@
 //! 对齐: `cn.hutool.core.lang.DictTest`
 //! 来源: hutool-core/src/test/java/cn/hutool/core/lang/DictTest.java
 
-use hutool_core::{Dict, DictUtil};
+use hutool_core::DictUtil;
 use serde_json::json;
 
 /// 对齐 Java: `DictTest.dictTest()`

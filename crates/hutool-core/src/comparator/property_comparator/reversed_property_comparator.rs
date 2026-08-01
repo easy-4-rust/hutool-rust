@@ -1,8 +1,6 @@
 //! 对齐: `cn.hutool.core.comparator.PropertyComparator` / `FieldsComparator`
 //! 来源: hutool-core PropertyComparator / FieldsComparator / FuncComparator
 
-use std::cmp::Ordering;
-
 use super::property_comparator::PropertyComparator;
 
 /// 反序属性比较器。
@@ -22,5 +20,3 @@ where
         -self.inner.compare(a, b)
     }
 }
-
-use super::{compare_nullable_i32, compare_nullable_str};

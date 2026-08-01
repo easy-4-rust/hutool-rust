@@ -22,8 +22,11 @@ pub const ENVELOPE_HEADER_LEN: usize = 28;
 /// Default upper bound for a serialized payload: 16 MiB.
 pub const DEFAULT_MAX_PAYLOAD_LEN: usize = 16 * 1024 * 1024;
 
+#[allow(dead_code)] // 对齐 Java 序列化封包常量，暂未接线，预留
 const MAGIC: [u8; 4] = *b"HITL";
+#[allow(dead_code)] // 对齐 Java 序列化封包常量，暂未接线，预留
 const CHECKSUM_FLAG: u16 = 1;
+#[allow(dead_code)] // 对齐 Java 序列化封包常量，暂未接线，预留
 const SUPPORTED_FLAGS: u16 = CHECKSUM_FLAG;
 
 /// Result returned by serialization operations.
@@ -142,6 +145,7 @@ impl EnvelopeOptions {
         self.max_payload_len
     }
 
+    #[allow(dead_code)] // 对齐 Java 封包校验逻辑，暂未接线，预留
     fn validate(self) -> SerializeResult<()> {
         if self.minimum_compatible_version > self.maximum_compatible_version {
             return Err(SerializeError::InvalidOptions(
@@ -158,6 +162,7 @@ impl EnvelopeOptions {
         Ok(())
     }
 
+    #[allow(dead_code)] // 对齐 Java 封包校验逻辑，暂未接线，预留
     fn compatible_versions(self) -> RangeInclusive<u16> {
         self.minimum_compatible_version..=self.maximum_compatible_version
     }

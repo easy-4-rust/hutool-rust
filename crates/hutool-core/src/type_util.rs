@@ -18,7 +18,7 @@ impl TypeUtil {
     }
 
     /// 对齐 Java: `TypeUtil.getClass(Object)`
-    pub fn type_name_of<T: Any>(value: &T) -> &'static str {
+    pub fn type_name_of<T: Any>(_value: &T) -> &'static str {
         std::any::type_name::<T>()
     }
 

@@ -1,6 +1,8 @@
 //! xml_util parity tests
 //! 对齐: hutool-core XmlUtilTest
 
+#![allow(non_snake_case)] // 对齐 Java 测试 Bean 字段名（ReqCode/AccountName 等大写风格）
+
 use hutool_core::XmlUtil;
 
 // ── XML 验证 ──

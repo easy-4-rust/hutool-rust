@@ -21,6 +21,7 @@ pub struct BeanValueProvider {
     /// 是否忽略字段大小写
     ignore_case: bool,
     /// 是否忽略字段值读取错误
+    #[allow(dead_code)] // 对齐 Java 构造参数 ignoreError，供后续读取流程接线使用
     ignore_error: bool,
 }
 
