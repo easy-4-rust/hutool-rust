@@ -261,14 +261,16 @@ fn validate_between_invalid() {
     assert!(Validator::validate_between("hello world", 3, 5, "name").is_err());
 }
 
-
 /// 对齐 Java: `ValidatorTest.hasNumberTest()`
 #[test]
 fn has_number_test() {
     assert!(!hutool_core::Validator::is_match_regex(r"\d", ""));
     assert!(!hutool_core::Validator::is_match_regex(r"\d", "str"));
     assert!(hutool_core::Validator::is_match_regex(r"\d", "180"));
-    assert!(hutool_core::Validator::is_match_regex(r"\d", "身高180体重180"));
+    assert!(hutool_core::Validator::is_match_regex(
+        r"\d",
+        "身高180体重180"
+    ));
 }
 
 /// 对齐 Java: `ValidatorTest.isLetterTest()`
@@ -294,8 +296,13 @@ fn is_lower_case_test() {
 /// 对齐 Java: `ValidatorTest.isBirthdayTest()`
 #[test]
 fn is_birthday_test() {
-    assert!(hutool_core::Validator::is_match_regex(r"^\d{8}$", "20150101"));
-    assert!(hutool_core::Validator::is_match_regex(r"^\d{4}-\d{2}-\d{2}$", "2015-01-01"));
+    assert!(hutool_core::Validator::is_match_regex(
+        r"^\d{8}$", "20150101"
+    ));
+    assert!(hutool_core::Validator::is_match_regex(
+        r"^\d{4}-\d{2}-\d{2}$",
+        "2015-01-01"
+    ));
 }
 
 /// 对齐 Java: `ValidatorTest.isCitizenIdTest()`
@@ -309,7 +316,9 @@ fn is_citizen_id_test() {
 /// 对齐 Java: `ValidatorTest.isGeneralTest()`
 #[test]
 fn is_general_test() {
-    assert!(hutool_core::Validator::is_match_regex(r"^[\w]*$", "abc_123"));
+    assert!(hutool_core::Validator::is_match_regex(
+        r"^[\w]*$", "abc_123"
+    ));
 }
 
 /// 对齐 Java: `ValidatorTest.isPlateNumberTest()`
@@ -321,9 +330,17 @@ fn is_plate_number_test() {
 /// 对齐 Java: `ValidatorTest.hasChineseTest()`
 #[test]
 fn has_chinese_test() {
-    assert!(hutool_core::Validator::is_match_regex(r"[\u{4e00}-\u{9fff}]", "hello中文")
-        || "hello中文".chars().any(|c| ('\u{4e00}'..='\u{9fff}').contains(&c)));
-    assert!(!"hello".chars().any(|c| ('\u{4e00}'..='\u{9fff}').contains(&c)));
+    assert!(
+        hutool_core::Validator::is_match_regex(r"[\u{4e00}-\u{9fff}]", "hello中文")
+            || "hello中文"
+                .chars()
+                .any(|c| ('\u{4e00}'..='\u{9fff}').contains(&c))
+    );
+    assert!(
+        !"hello"
+            .chars()
+            .any(|c| ('\u{4e00}'..='\u{9fff}').contains(&c))
+    );
 }
 
 /// 对齐 Java: `ValidatorTest.isUUIDTest()`

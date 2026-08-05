@@ -7,7 +7,7 @@ use super::element_annotation_scanner::ElementAnnotationScanner;
 use super::meta_annotation_scanner::MetaAnnotationScanner;
 use super::method_annotation_scanner::MethodAnnotationScanner;
 use super::type_annotation_scanner::TypeAnnotationScanner;
-use crate::element::{global_registry, ElementHandle, ElementKind};
+use crate::element::{ElementHandle, ElementKind, global_registry};
 use crate::mirror::{AnnotationMirror, AnnotationTypeName};
 
 /// 对齐 Java 类: `cn.hutool.core.annotation.scanner.GenericAnnotationScanner`
@@ -50,10 +50,7 @@ impl AnnotationScanner for GenericAnnotationScanner {
     }
 
     fn scan(&self, consumer: &mut ScanConsumer<'_>, element: ElementHandle) {
-        let kind = global_registry()
-            .read()
-            .get(element)
-            .map(|e| e.kind());
+        let kind = global_registry().read().get(element).map(|e| e.kind());
         let mut collected: Vec<(i32, Arc<AnnotationMirror>)> = Vec::new();
         {
             let collected_ref = &mut collected;

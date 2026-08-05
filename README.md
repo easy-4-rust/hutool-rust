@@ -65,7 +65,7 @@
 | workspace builds | ✅ | `cargo check` |
 | Unit tests | ✅ 2000+ | `cargo test --tests` 2347 passed / 0 failed |
 | hutool-crypto byte-level parity | ✅ 364 tests | `crypto_byte_level_parity.rs` + `sm_byte_level_parity.rs` |
-| 1:1 facade alignment | 🟡 POI excluded from implementation scope | `crates/hutool-poi/` is an API-only placeholder crate and is not exposed by the `hutool` facade |
+| 1:1 facade alignment | ✅ POI resolved | The `hutool-poi` placeholder crate was removed on 2026-08-04; Excel capability is provided by the `easyexcel-rust` project |
 | MSRV CI | `1.94` | `rust-version = "1.94"` |
 
 ## 2. Features and Maturity
@@ -90,7 +90,7 @@
 | Vernal integration | `hutool-vernal` | 🧪 Experimental | Context-local utility components | Vernal Framework |
 | DFA | `hutool-dfa` | ✅ Stable | DFA state machine | — |
 | Script | `hutool-script` | ✅ Stable | ScriptUtil script execution | rhai |
-| POI | `hutool-poi` | ⚪ Not implemented | API/file placeholders only; constructors panic | thiserror only |
+| POI | ~~`hutool-poi`~~ (removed) | ✅ Resolved | Placeholder crate deleted; Excel/Word/OFD capability provided by `easyexcel-rust` (faithful migration of EasyExcel 4.0.3) | — |
 | Captcha | `hutool-captcha` | 🧪 Preview | Captcha generation | — |
 | BloomFilter | `hutool-bloom-filter` | ✅ Stable | BloomFilter | bloomfilter |
 | Socket | `hutool-socket` | 🧪 Experimental | SocketUtil | — |
@@ -239,7 +239,7 @@ flowchart TB
 | `hutool-jwt` | `crates/hutool-jwt` | 🧪 | JWT auth |
 | `hutool-log` | `crates/hutool-log` | 🧪 | Logging |
 | `hutool-observability` | `crates/hutool-observability` | 🧪 | Default tracing/metrics/health; diagnostic backends require a feature and authorization |
-| `hutool-poi` | `crates/hutool-poi` | ⚪ | API registration skeleton only; no Office engine implementation and no facade feature |
+| `hutool-poi` | ~~`crates/hutool-poi`~~ (removed 2026-08-04) | ✅ | Skeleton removed; capability provided by `easyexcel-rust` |
 | `hutool-script` | `crates/hutool-script` | ✅ | Script execution |
 | `hutool-setting` | `crates/hutool-setting` | ✅ | Settings/config |
 | `hutool-socket` | `crates/hutool-socket` | 🧪 | Socket |
@@ -446,7 +446,7 @@ Why hutool-rust chooses RustCrypto over openssl: pure Rust, zero FFI, `#![forbid
 - **V0.2**: Fill in hutool-db (missing 75 files), hutool-extra (missing 170 files)
 - **V0.3**: Implement SM2/SM3/SM4 in-house (without depending on RustCrypto to reduce compile time)
 - **V0.4**: Publish to crates.io, add complete rustdoc
-- **V1.0**: All implemented capability crates stable and aligned with Hutool; `hutool-poi` remains outside completion claims until real engines are integrated
+- **V1.0**: All implemented capability crates stable and aligned with Hutool; `hutool-poi` was removed on 2026-08-04, with Excel capability provided by `easyexcel-rust`
 
 ## 13. Build Test and Quality Gates
 
@@ -482,7 +482,7 @@ CI gates:
 
 ## 14. Known Issues
 
-- `hutool-poi` exists only as an API/file placeholder skeleton. It is not exposed by the `hutool` facade, has no `poi` feature, depends only on `thiserror`, and contains no usable Excel/Word/OFD/PDF engine implementation.
+- The `hutool-poi` placeholder skeleton was removed from the workspace on 2026-08-04 (`git rm -r crates/hutool-poi`); Rust-side Excel capability is provided by the standalone `easyexcel-rust` project (faithful migration of EasyExcel 4.0.3) instead of being duplicated here.
 - Some Hutool APIs are not ported due to Rust semantic differences (e.g. `RuntimeException` → `Result<T, E>`)
 - Some stub functions use `PendingEngine` error placeholders, awaiting upper-layer engine completion
 

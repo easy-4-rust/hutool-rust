@@ -25,7 +25,11 @@ impl FastByteBuffer {
 
     /// 对齐 Java: `FastByteBuffer(int size)`
     pub fn with_chunk(min_chunk_len: usize) -> Self {
-        let min_chunk_len = if min_chunk_len == 0 { 1024 } else { min_chunk_len };
+        let min_chunk_len = if min_chunk_len == 0 {
+            1024
+        } else {
+            min_chunk_len
+        };
         Self {
             buf: Vec::with_capacity(min_chunk_len),
             min_chunk_len,
@@ -71,11 +75,7 @@ impl FastByteBuffer {
 
     /// 对齐 Java: `FastByteBuffer.index()` — 当前块索引（单缓冲恒为 0 或 -1）。
     pub fn index(&self) -> isize {
-        if self.buf.is_empty() {
-            -1
-        } else {
-            0
-        }
+        if self.buf.is_empty() { -1 } else { 0 }
     }
 
     /// 对齐 Java: `FastByteBuffer.offset()` — 当前写偏移（等于 size）。

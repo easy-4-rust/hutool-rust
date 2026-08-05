@@ -284,8 +284,7 @@ fn bean_validator_util_test_bean_validator_test() {
 fn bean_validator_util_test_property_validator_test() {
     use hutool_extra::ValidationUtil;
 
-    let result =
-        ValidationUtil::warp_validate_property("name", [("姓名不能为空".into(), None)]);
+    let result = ValidationUtil::warp_validate_property("name", [("姓名不能为空".into(), None)]);
     assert!(!result.is_success());
     assert_eq!(result.error_messages().len(), 1);
 }

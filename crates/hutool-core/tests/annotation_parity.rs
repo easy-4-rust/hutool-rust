@@ -3,9 +3,7 @@
 
 use std::sync::Arc;
 
-use hutool_annotation::{
-    fixtures, global_registry, AnnotationUtil, ElementHandle,
-};
+use hutool_annotation::{AnnotationUtil, ElementHandle, fixtures, global_registry};
 
 mod annotation_common;
 use annotation_common::*;
@@ -36,10 +34,7 @@ fn annotation_util_scan_meta_annotation_test() {
     register_meta_annotation_chain();
     let annotations = AnnotationUtil::scan_meta_annotation(ROOT_ANNOTATION);
     assert_eq!(4, annotations.len());
-    assert_eq!(
-        ROOT_META3,
-        annotations.last().unwrap().annotation_type()
-    );
+    assert_eq!(ROOT_META3, annotations.last().unwrap().annotation_type());
 }
 
 /// 对齐 Java: `AnnotationUtilTest.scanClassTest()`
@@ -78,8 +73,14 @@ fn annotation_util_scan_method_test() {
     let (target, method) = register_target_class_with_method();
     let annotations = AnnotationUtil::scan_method(method);
     assert_eq!(3, annotations.len());
-    assert_eq!("TargetClass", annotation_value_str(&annotations[0], "value"));
-    assert_eq!("TargetSuperClass", annotation_value_str(&annotations[1], "value"));
+    assert_eq!(
+        "TargetClass",
+        annotation_value_str(&annotations[0], "value")
+    );
+    assert_eq!(
+        "TargetSuperClass",
+        annotation_value_str(&annotations[1], "value")
+    );
     assert_eq!(
         "TargetSuperInterface",
         annotation_value_str(&annotations[2], "value")
@@ -128,7 +129,10 @@ fn annotation_util_synthesized_annotation_l2_cache_test() {
     let root = root_annotation_element();
     let a1 = AnnotationUtil::get_synthesized_annotation(root, ROOT_META1).unwrap();
     let a2 = AnnotationUtil::get_synthesized_annotation(root, ROOT_META1).unwrap();
-    assert!(Arc::ptr_eq(&a1, &a2), "L2 cache miss on synthesized annotation");
+    assert!(
+        Arc::ptr_eq(&a1, &a2),
+        "L2 cache miss on synthesized annotation"
+    );
 }
 
 /// 对齐 Java: `AnnotationUtilTest.HasAnnotationWithCacheTest()`

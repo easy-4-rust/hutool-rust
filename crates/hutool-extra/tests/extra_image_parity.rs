@@ -5,8 +5,8 @@
 
 #![cfg(feature = "image")]
 
-use hutool_extra::image::{self, ImageLimits, OutputFormat, ResizeMode};
 use ::image::{DynamicImage, ImageBuffer, ImageFormat, Rgb};
+use hutool_extra::image::{self, ImageLimits, OutputFormat, ResizeMode};
 use std::io::Cursor;
 
 /// 构建 20×10 合成 PNG 输入。

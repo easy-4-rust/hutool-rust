@@ -85,14 +85,21 @@ impl YearQuarter {
         let (m, d) = self.quarter.last_month_day();
         // leap year Feb in Q1? Q1 last is Mar 31
         let day = if m == 2 {
-            Month::February.get_last_day(NaiveDate::from_ymd_opt(self.year, 1, 1).unwrap().leap_year())
-                as u32
+            Month::February.get_last_day(
+                NaiveDate::from_ymd_opt(self.year, 1, 1)
+                    .unwrap()
+                    .leap_year(),
+            ) as u32
         } else {
             d
         };
         NaiveDate::from_ymd_opt(self.year, m, day).unwrap_or_else(|| {
-            NaiveDate::from_ymd_opt(self.year, m, self.quarter.last_month().get_last_day(false) as u32)
-                .unwrap()
+            NaiveDate::from_ymd_opt(
+                self.year,
+                m,
+                self.quarter.last_month().get_last_day(false) as u32,
+            )
+            .unwrap()
         })
     }
 

@@ -3,12 +3,12 @@
 use std::collections::HashMap;
 use std::sync::Arc;
 
-use hutool_annotation::{
-    fixtures, global_registry, AnnotationScanner, ElementAnnotationScanner, FieldAnnotationScanner,
-    GenericAnnotationScanner, MetaAnnotationScanner, MethodAnnotationScanner, Scanners,
-    TypeAnnotationScanner,
-};
 use hutool_annotation::fixtures::types;
+use hutool_annotation::{
+    AnnotationScanner, ElementAnnotationScanner, FieldAnnotationScanner, GenericAnnotationScanner,
+    MetaAnnotationScanner, MethodAnnotationScanner, Scanners, TypeAnnotationScanner, fixtures,
+    global_registry,
+};
 
 use crate::annotation_common::reset_all;
 
@@ -33,7 +33,10 @@ fn element_annotation_scanner_get_annotations_test() {
     let scanner = ElementAnnotationScanner;
     let annotations = scanner.get_annotations(field);
     assert_eq!(1, annotations.len());
-    assert_eq!(types::ANNOTATION_FOR_SCANNER_TEST, annotations[0].annotation_type());
+    assert_eq!(
+        types::ANNOTATION_FOR_SCANNER_TEST,
+        annotations[0].annotation_type()
+    );
 }
 
 /// 对齐 Java: `ElementAnnotationScannerTest.scanTest()`
@@ -184,7 +187,10 @@ fn type_annotation_scanner_scan_test() {
     assert_eq!(3, map.len());
     assert_eq!(
         "Example",
-        map.get(&0).unwrap()[0].get_raw("value").and_then(|v| v.as_str()).unwrap()
+        map.get(&0).unwrap()[0]
+            .get_raw("value")
+            .and_then(|v| v.as_str())
+            .unwrap()
     );
 }
 
@@ -263,7 +269,12 @@ fn generic_annotation_scanner_scan_type_hierarchy_and_meta_annotation_test() {
     let _guard = reset_all();
     let mut reg = global_registry().write();
     let class = fixtures::generic_scanner_hierarchy(&mut reg);
-    assert_eq!(6, Scanners::type_hierarchy_and_meta().get_annotations(class).len());
+    assert_eq!(
+        6,
+        Scanners::type_hierarchy_and_meta()
+            .get_annotations(class)
+            .len()
+    );
 }
 
 /// 对齐 Java: `MateAnnotationScannerTest.supportTest()`

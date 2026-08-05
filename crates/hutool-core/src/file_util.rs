@@ -24,23 +24,17 @@ impl FileUtil {
         if s.ends_with('/') || s.ends_with('\\') {
             return "";
         }
-        path.file_name()
-            .and_then(|n| n.to_str())
-            .unwrap_or("")
+        path.file_name().and_then(|n| n.to_str()).unwrap_or("")
     }
 
     /// 对齐 Java: `FileUtil.getSuffix(File)`
     pub fn suffix(path: &Path) -> &str {
-        path.extension()
-            .and_then(|e| e.to_str())
-            .unwrap_or("")
+        path.extension().and_then(|e| e.to_str()).unwrap_or("")
     }
 
     /// 对齐 Java: `FileUtil.mainName(File)`
     pub fn main_name(path: &Path) -> &str {
-        path.file_stem()
-            .and_then(|n| n.to_str())
-            .unwrap_or("")
+        path.file_stem().and_then(|n| n.to_str()).unwrap_or("")
     }
 
     /// 对齐 Java: `FileUtil.getName(String)`
@@ -504,7 +498,9 @@ impl FileUtil {
 
     /// 对齐 Java: `FileUtil.getCanonicalPath` — 规范化绝对路径。
     pub fn canonical_path(path: &str) -> PathBuf {
-        PathBuf::from(Self::normalize(&Self::absolute_path(path).to_string_lossy()))
+        PathBuf::from(Self::normalize(
+            &Self::absolute_path(path).to_string_lossy(),
+        ))
     }
 
     /// 对齐 Java: `FileUtil.newFile(String)` — 构造路径。
@@ -593,10 +589,7 @@ impl FileUtil {
     }
 
     /// 对齐 Java: `FileUtil.writeFromStream(InputStream, File)`
-    pub fn write_from_stream<R: std::io::Read>(
-        path: &str,
-        reader: &mut R,
-    ) -> std::io::Result<u64> {
+    pub fn write_from_stream<R: std::io::Read>(path: &str, reader: &mut R) -> std::io::Result<u64> {
         crate::io::file::path_util::PathUtil::write_from_reader(Path::new(path), reader)
     }
 
@@ -607,10 +600,7 @@ impl FileUtil {
 
     /// 对齐 Java: `FileUtil.writeUtf8Map` / `writeMap` — `k=v` 行。
     pub fn write_utf8_map(path: &str, entries: &[(String, String)]) -> std::io::Result<()> {
-        let lines: Vec<String> = entries
-            .iter()
-            .map(|(k, v)| format!("{k}={v}"))
-            .collect();
+        let lines: Vec<String> = entries.iter().map(|(k, v)| format!("{k}={v}")).collect();
         Self::write_utf8_lines(path, &lines)
     }
 

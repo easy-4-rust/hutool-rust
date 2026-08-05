@@ -2,13 +2,9 @@
 
 /// 对齐: `cn.hutool.core.xml.XmlStream`
 /// XML事件读取器
-
 use std::io::{BufRead, Take};
 
-use quick_xml::{
-    events::Event,
-    Reader, XmlVersion,
-};
+use quick_xml::{Reader, XmlVersion, events::Event};
 
 use crate::{CoreError, Result};
 

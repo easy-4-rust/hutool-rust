@@ -115,7 +115,11 @@ impl TemplateException {
     }
 
     /// 对齐 `TemplateException(Throwable throwable, String messageTemplate, Object... params)`
-    pub fn formatted_with_cause<E>(throwable: E, template: &str, params: &[&dyn fmt::Display]) -> Self
+    pub fn formatted_with_cause<E>(
+        throwable: E,
+        template: &str,
+        params: &[&dyn fmt::Display],
+    ) -> Self
     where
         E: std::error::Error + Send + Sync + 'static,
     {

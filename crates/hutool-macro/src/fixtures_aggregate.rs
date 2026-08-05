@@ -23,44 +23,32 @@ pub mod types {
     pub const CHILD: &str =
         "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.ChildAnnotation";
     /// 镜像测试注解全限定名。
-    pub const MIRROR: &str =
-        "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.AnnotationForMirrorTest";
+    pub const MIRROR: &str = "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.AnnotationForMirrorTest";
     /// AliasFor 测试注解全限定名。
-    pub const ALIAS_FOR: &str =
-        "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.AnnotationForAliasForTest";
+    pub const ALIAS_FOR: &str = "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.AnnotationForAliasForTest";
     /// MetaAliasFor 测试注解全限定名。
-    pub const META_ALIAS_FOR: &str =
-        "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.MetaAnnotationForAliasForTest";
+    pub const META_ALIAS_FOR: &str = "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.MetaAnnotationForAliasForTest";
     /// ForceAliasFor 测试注解全限定名。
-    pub const FORCE_ALIAS: &str =
-        "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.AnnotationForceForAliasForTest";
+    pub const FORCE_ALIAS: &str = "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.AnnotationForceForAliasForTest";
     /// MetaForceAliasFor 测试注解全限定名。
-    pub const META_FORCE_ALIAS: &str =
-        "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.MetaAnnotationForForceAliasForTest";
+    pub const META_FORCE_ALIAS: &str = "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.MetaAnnotationForForceAliasForTest";
     /// Link 测试注解全限定名。
     pub const LINK_TEST: &str =
         "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.AnnotationForLinkTest";
     /// MirrorThenAliasFor 测试注解全限定名。
-    pub const MIRROR_THEN_ALIAS: &str =
-        "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.AnnotationForMirrorThenAliasForTest";
+    pub const MIRROR_THEN_ALIAS: &str = "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.AnnotationForMirrorThenAliasForTest";
     /// MetaMirrorThenAliasFor 测试注解全限定名。
-    pub const META_MIRROR_THEN_ALIAS: &str =
-        "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.MetaAnnotationForMirrorThenAliasForTest";
+    pub const META_MIRROR_THEN_ALIAS: &str = "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.MetaAnnotationForMirrorThenAliasForTest";
     /// MultiAliasFor 测试注解全限定名。
-    pub const MULTI_ALIAS: &str =
-        "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.AnnotationForMultiAliasForTest";
+    pub const MULTI_ALIAS: &str = "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.AnnotationForMultiAliasForTest";
     /// MetaMultiAliasFor1 测试注解全限定名。
-    pub const META_MULTI1: &str =
-        "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.MetaAnnotationForMultiAliasForTest1";
+    pub const META_MULTI1: &str = "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.MetaAnnotationForMultiAliasForTest1";
     /// MetaMultiAliasFor2 测试注解全限定名。
-    pub const META_MULTI2: &str =
-        "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.MetaAnnotationForMultiAliasForTest2";
+    pub const META_MULTI2: &str = "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.MetaAnnotationForMultiAliasForTest2";
     /// ImplicitAlias 测试注解全限定名。
-    pub const IMPLICIT: &str =
-        "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.AnnotationForImplicitAliasTest";
+    pub const IMPLICIT: &str = "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.AnnotationForImplicitAliasTest";
     /// MetaImplicitAlias 测试注解全限定名。
-    pub const META_IMPLICIT: &str =
-        "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.MetaAnnotationForImplicitAliasTest";
+    pub const META_IMPLICIT: &str = "cn.hutool.core.annotation.GenericSynthesizedAggregateAnnotationTest.MetaAnnotationForImplicitAliasTest";
 }
 
 fn link(
@@ -93,10 +81,7 @@ fn link(
 fn alias_meta(reg: &AnnotationRegistry, target: &str) -> Arc<AnnotationMirror> {
     reg.annotation(
         ALIAS_TYPE,
-        HashMap::from([(
-            "value".to_string(),
-            AnnotationValue::String(target.into()),
-        )]),
+        HashMap::from([("value".to_string(), AnnotationValue::String(target.into()))]),
     )
 }
 
@@ -143,8 +128,8 @@ pub fn register_schemas(reg: &mut AnnotationRegistry) {
             AnnotationValue::String("Child's Parent!".into()),
         )]),
     );
-    let child_value = AttributeDef::string("childValue", "")
-        .with_meta(alias_meta(reg, "childValueAlias"));
+    let child_value =
+        AttributeDef::string("childValue", "").with_meta(alias_meta(reg, "childValueAlias"));
     reg.register_schema(AnnotationSchema {
         type_name: types::CHILD,
         attributes: vec![
@@ -156,10 +141,18 @@ pub fn register_schemas(reg: &mut AnnotationRegistry) {
         inherited: false,
     });
 
-    let mirror_value = AttributeDef::string("value", "")
-        .with_meta(link(reg, "java.lang.annotation.Annotation", "name", RelationType::MirrorFor));
-    let mirror_name = AttributeDef::string("name", "")
-        .with_meta(link(reg, "java.lang.annotation.Annotation", "value", RelationType::MirrorFor));
+    let mirror_value = AttributeDef::string("value", "").with_meta(link(
+        reg,
+        "java.lang.annotation.Annotation",
+        "name",
+        RelationType::MirrorFor,
+    ));
+    let mirror_name = AttributeDef::string("name", "").with_meta(link(
+        reg,
+        "java.lang.annotation.Annotation",
+        "value",
+        RelationType::MirrorFor,
+    ));
     reg.register_schema(AnnotationSchema {
         type_name: types::MIRROR,
         attributes: vec![mirror_value, mirror_name],
@@ -172,10 +165,7 @@ pub fn register_schemas(reg: &mut AnnotationRegistry) {
         attributes: vec![AttributeDef::string("name", "")],
         meta: vec![reg.annotation(
             types::META_ALIAS_FOR,
-            HashMap::from([(
-                "name".to_string(),
-                AnnotationValue::String("Meta".into()),
-            )]),
+            HashMap::from([("name".to_string(), AnnotationValue::String("Meta".into()))]),
         )],
         inherited: false,
     });
@@ -197,10 +187,7 @@ pub fn register_schemas(reg: &mut AnnotationRegistry) {
         attributes: vec![AttributeDef::string("name", "")],
         meta: vec![reg.annotation(
             types::META_FORCE_ALIAS,
-            HashMap::from([(
-                "name".to_string(),
-                AnnotationValue::String("Meta".into()),
-            )]),
+            HashMap::from([("name".to_string(), AnnotationValue::String("Meta".into()))]),
         )],
         inherited: false,
     });
@@ -232,19 +219,24 @@ pub fn register_schemas(reg: &mut AnnotationRegistry) {
         inherited: false,
     });
 
-    let mta_name = AttributeDef::string("name", "")
-        .with_meta(link(reg, "java.lang.annotation.Annotation", "value", RelationType::MirrorFor));
-    let mta_value = AttributeDef::string("value", "")
-        .with_meta(link(reg, "java.lang.annotation.Annotation", "name", RelationType::MirrorFor));
+    let mta_name = AttributeDef::string("name", "").with_meta(link(
+        reg,
+        "java.lang.annotation.Annotation",
+        "value",
+        RelationType::MirrorFor,
+    ));
+    let mta_value = AttributeDef::string("value", "").with_meta(link(
+        reg,
+        "java.lang.annotation.Annotation",
+        "name",
+        RelationType::MirrorFor,
+    ));
     reg.register_schema(AnnotationSchema {
         type_name: types::META_MIRROR_THEN_ALIAS,
         attributes: vec![mta_name, mta_value],
         meta: vec![reg.annotation(
             types::META_MIRROR_THEN_ALIAS,
-            HashMap::from([(
-                "name".to_string(),
-                AnnotationValue::String("Meta".into()),
-            )]),
+            HashMap::from([("name".to_string(), AnnotationValue::String("Meta".into()))]),
         )],
         inherited: false,
     });
@@ -261,10 +253,18 @@ pub fn register_schemas(reg: &mut AnnotationRegistry) {
         inherited: false,
     });
 
-    let m1_name = AttributeDef::string("name", "")
-        .with_meta(link(reg, "java.lang.annotation.Annotation", "value1", RelationType::MirrorFor));
-    let m1_v1 = AttributeDef::string("value1", "")
-        .with_meta(link(reg, "java.lang.annotation.Annotation", "name", RelationType::MirrorFor));
+    let m1_name = AttributeDef::string("name", "").with_meta(link(
+        reg,
+        "java.lang.annotation.Annotation",
+        "value1",
+        RelationType::MirrorFor,
+    ));
+    let m1_v1 = AttributeDef::string("value1", "").with_meta(link(
+        reg,
+        "java.lang.annotation.Annotation",
+        "name",
+        RelationType::MirrorFor,
+    ));
     reg.register_schema(AnnotationSchema {
         type_name: types::META_MULTI1,
         attributes: vec![m1_name, m1_v1],
@@ -296,19 +296,24 @@ pub fn register_schemas(reg: &mut AnnotationRegistry) {
         inherited: false,
     });
 
-    let imp_name = AttributeDef::string("name", "")
-        .with_meta(link(reg, "java.lang.annotation.Annotation", "value", RelationType::MirrorFor));
-    let imp_value = AttributeDef::string("value", "")
-        .with_meta(link(reg, "java.lang.annotation.Annotation", "name", RelationType::MirrorFor));
+    let imp_name = AttributeDef::string("name", "").with_meta(link(
+        reg,
+        "java.lang.annotation.Annotation",
+        "value",
+        RelationType::MirrorFor,
+    ));
+    let imp_value = AttributeDef::string("value", "").with_meta(link(
+        reg,
+        "java.lang.annotation.Annotation",
+        "name",
+        RelationType::MirrorFor,
+    ));
     reg.register_schema(AnnotationSchema {
         type_name: types::META_IMPLICIT,
         attributes: vec![imp_name, imp_value],
         meta: vec![reg.annotation(
             types::META_IMPLICIT,
-            HashMap::from([(
-                "name".to_string(),
-                AnnotationValue::String("Meta".into()),
-            )]),
+            HashMap::from([("name".to_string(), AnnotationValue::String("Meta".into()))]),
         )],
         inherited: false,
     });
@@ -338,12 +343,18 @@ pub fn annotated_class_child(reg: &mut AnnotationRegistry) -> Arc<AnnotationMirr
             ),
         ]),
     );
-    TypeBuilder::begin(reg, "AnnotatedClass").annotate(Arc::clone(&child)).build();
+    TypeBuilder::begin(reg, "AnnotatedClass")
+        .annotate(Arc::clone(&child))
+        .build();
     child
 }
 
 /// 镜像测试注解实例。
-pub fn mirror_annotation(reg: &mut AnnotationRegistry, value: &str, name: Option<&str>) -> Arc<AnnotationMirror> {
+pub fn mirror_annotation(
+    reg: &mut AnnotationRegistry,
+    value: &str,
+    name: Option<&str>,
+) -> Arc<AnnotationMirror> {
     register_schemas(reg);
     let mut attrs = HashMap::new();
     if !value.is_empty() {

@@ -59,7 +59,8 @@ fn class_file_object_new() {
 #[test]
 fn class_file_object_write_and_read() {
     let mut cfo = ClassFileObject::new("output");
-    cfo.open_output().extend_from_slice(&[0xCA, 0xFE, 0xBA, 0xBE]);
+    cfo.open_output()
+        .extend_from_slice(&[0xCA, 0xFE, 0xBA, 0xBE]);
     assert_eq!(cfo.open_input(), &[0xCA, 0xFE, 0xBA, 0xBE]);
 }
 
@@ -68,7 +69,9 @@ fn class_file_object_write_and_read() {
 #[test]
 fn class_file_manager_output_and_get() {
     let mut cfm = ClassFileManager::default();
-    cfm.output("my.Class").open_output().extend_from_slice(&[1, 2, 3]);
+    cfm.output("my.Class")
+        .open_output()
+        .extend_from_slice(&[1, 2, 3]);
     let cfo = cfm.get("my.Class");
     assert!(cfo.is_some());
     assert_eq!(cfo.unwrap().open_input(), &[1, 2, 3]);
@@ -128,7 +131,10 @@ fn diagnostic_messages_empty() {
 #[test]
 fn default_max_source_bytes_is_reasonable() {
     assert!(DEFAULT_MAX_SOURCE_BYTES > 0);
-    assert!(DEFAULT_MAX_SOURCE_BYTES >= 64 * 1024, "should be at least 64KB");
+    assert!(
+        DEFAULT_MAX_SOURCE_BYTES >= 64 * 1024,
+        "should be at least 64KB"
+    );
 }
 
 // ── 扩展 compiler 测试 ──
@@ -244,7 +250,11 @@ fn default_max_source_bytes_value() {
 
 #[test]
 fn source_file_object_unicode() {
-    let sfo = SourceFileObject::new("unicode.rs", "fn main() { println!(\"你好\"); }", DEFAULT_MAX_SOURCE_BYTES);
+    let sfo = SourceFileObject::new(
+        "unicode.rs",
+        "fn main() { println!(\"你好\"); }",
+        DEFAULT_MAX_SOURCE_BYTES,
+    );
     assert!(sfo.is_ok());
     assert!(sfo.unwrap().char_content().contains("你好"));
 }

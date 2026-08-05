@@ -19,4 +19,3 @@ pub enum IdcardError {
     #[error("comparison date precedes identity-card birthday")]
     BirthAfterComparison,
 }
-

@@ -115,10 +115,64 @@ async fn service_for(provider: ModelName, url: &str, proxy: bool) -> ProviderSer
     let mut config = BaseConfig::with_api_key(provider, "your-key").unwrap();
     config.set_api_url(url).unwrap();
     if proxy {
-        // Proxy configured like Hutool OpenaiProxyServiceTest; requests still hit the api_url mock.
-        let _ = config.set_proxy("http://127.0.0.1:9");
+        // Java OpenaiProxyServiceTest 配置真实代理（@Disabled，需真实代理环境）。
+        // Rust 侧用本地转发代理验证 proxy 配置下请求仍能到达目标服务。
+        let proxy_url = mock_proxy_once(url).await;
+        config.set_proxy(&proxy_url).unwrap();
     }
     ProviderService::new(config).unwrap()
+}
+
+/// 本地转发代理：接受一个连接，把 HTTP 请求（absolute-form 请求行）转发到目标服务，
+/// 并把目标响应原样回传。对应 Java `OpenaiProxyServiceTest` 的代理环境（本地可复现）。
+async fn mock_proxy_once(target: &str) -> String {
+    let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
+    let address = listener.local_addr().unwrap();
+    let _ = target;
+    tokio::spawn(async move {
+        let Ok((mut socket, _)) = listener.accept().await else {
+            return;
+        };
+        let mut buf = vec![0_u8; 65536];
+        let Ok(n) = socket.read(&mut buf).await else {
+            return;
+        };
+        let raw = String::from_utf8_lossy(&buf[..n]).to_string();
+        let Some(first_line) = raw.lines().next() else {
+            return;
+        };
+        let parts: Vec<&str> = first_line.split_whitespace().collect();
+        if parts.len() < 3 {
+            return;
+        }
+        // 请求行为 absolute-form（"GET http://host:port/path HTTP/1.1"），解析目标地址。
+        let Ok(url) = url::Url::parse(parts[1]) else {
+            return;
+        };
+        let Some(host) = url.host_str() else {
+            return;
+        };
+        let port = url.port().unwrap_or(80);
+        let Ok(mut upstream) = tokio::net::TcpStream::connect((host, port)).await else {
+            return;
+        };
+        // 改写为 origin-form 请求行并转发剩余请求头。
+        let rewritten = format!(
+            "{} {} HTTP/1.1{}",
+            parts[0],
+            url.path(),
+            &raw[first_line.len()..]
+        );
+        if upstream.write_all(rewritten.as_bytes()).await.is_err() {
+            return;
+        }
+        // 读取目标响应（content-length + connection: close），原样回传客户端。
+        let mut response = Vec::new();
+        if upstream.read_to_end(&mut response).await.is_ok() {
+            let _ = socket.write_all(&response).await;
+        }
+    });
+    format!("http://{address}")
 }
 
 async fn assert_json_op(

@@ -95,10 +95,7 @@ fn density_and_greed_match_test() {
             greedy: true,
         },
     );
-    assert_eq!(
-        match_all,
-        vec!["大", "大土^豆", "土^豆", "刚出锅", "出锅"]
-    );
+    assert_eq!(match_all, vec!["大", "大土^豆", "土^豆", "刚出锅", "出锅"]);
 }
 
 /// 对齐 Java: `DfaTest.densityAndGreedMatchTest2()`
@@ -197,10 +194,7 @@ fn a_test() {
         },
     );
     // Java `List.toString()` → `[women]`（无引号）
-    assert_eq!(
-        format!("[{}]", match_all.join(", ")),
-        "[women]"
-    );
+    assert_eq!(format!("[{}]", match_all.join(", ")), "[women]");
 }
 
 /// 对齐 Java: `DfaTest.clearTest()`
@@ -248,7 +242,11 @@ fn test_sensitive_filter() {
 #[test]
 fn issue2126() {
     let util = SensitiveUtil::from_words(["赵", "赵阿", "赵阿三"]);
-    let result = util.filter_sensitive_with("赵阿三在做什么。", true, &hutool_dfa::DefaultSensitiveProcessor);
+    let result = util.filter_sensitive_with(
+        "赵阿三在做什么。",
+        true,
+        &hutool_dfa::DefaultSensitiveProcessor,
+    );
     assert_eq!("***在做什么。", result);
 }
 

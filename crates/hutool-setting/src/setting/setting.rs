@@ -393,5 +393,4 @@ impl notify::EventHandler for ReloadHandler {
     }
 }
 
-
 use super::{ReloadHandler, create_recommended_watcher, reload_event};

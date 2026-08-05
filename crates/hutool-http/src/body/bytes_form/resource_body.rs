@@ -37,9 +37,7 @@ impl ResourceBody {
     pub fn from_path(path: impl AsRef<Path>) -> std::io::Result<Self> {
         let path = path.as_ref();
         let bytes = std::fs::read(path)?;
-        let name = path
-            .file_name()
-            .map(|n| n.to_string_lossy().into_owned());
+        let name = path.file_name().map(|n| n.to_string_lossy().into_owned());
         Ok(Self {
             name,
             content_type: None,

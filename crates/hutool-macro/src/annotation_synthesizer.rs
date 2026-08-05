@@ -18,7 +18,9 @@ pub trait AnnotationSynthesizer: Send + Sync {
     fn get_annotation_selector(&self) -> Arc<dyn SynthesizedAnnotationSelector>;
 
     /// 获取属性处理器。
-    fn get_annotation_attribute_processor(&self) -> Arc<dyn SynthesizedAnnotationAttributeProcessor>;
+    fn get_annotation_attribute_processor(
+        &self,
+    ) -> Arc<dyn SynthesizedAnnotationAttributeProcessor>;
 
     /// 获取后置处理器列表。
     fn get_annotation_post_processors(&self) -> Vec<Arc<dyn SynthesizedAnnotationPostProcessor>>;
@@ -35,8 +37,15 @@ pub trait AnnotationSynthesizer: Send + Sync {
     ) -> HashMap<AnnotationTypeName, Arc<dyn SynthesizedAnnotation>>;
 
     /// 合成指定类型注解视图。
-    fn synthesize(&self, annotation_type: AnnotationTypeName) -> Option<Arc<super::mirror::AnnotationMirror>>;
+    fn synthesize(
+        &self,
+        annotation_type: AnnotationTypeName,
+    ) -> Option<Arc<super::mirror::AnnotationMirror>>;
 
     /// 获取属性值。
-    fn get_attribute_value(&self, attribute_name: &str, attribute_type: ValueKind) -> Option<AnnotationValue>;
+    fn get_attribute_value(
+        &self,
+        attribute_name: &str,
+        attribute_type: ValueKind,
+    ) -> Option<AnnotationValue>;
 }

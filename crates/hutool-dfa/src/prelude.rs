@@ -6,6 +6,6 @@
 //! ```
 
 pub use crate::{
-    DfaError, DfaMatcher, FoundWord, MatchOptions, PatternMatch, SensitiveProcessor,
-    SensitiveUtil, StopChar, WordTree,
+    DfaError, DfaMatcher, FoundWord, MatchOptions, PatternMatch, SensitiveProcessor, SensitiveUtil,
+    StopChar, WordTree,
 };

@@ -4,18 +4,17 @@ use std::collections::HashMap;
 use std::sync::Arc;
 
 use super::element::{
-    global_registry, AnnotationRegistry, ElementHandle, FieldBuilder, MethodBuilder, TypeBuilder,
+    AnnotationRegistry, ElementHandle, FieldBuilder, MethodBuilder, TypeBuilder, global_registry,
 };
-use super::mirror::{
-    AnnotationMirror, AnnotationSchema, AnnotationValue, AttributeDef, ValueKind,
-};
+use super::mirror::{AnnotationMirror, AnnotationSchema, AnnotationValue, AttributeDef, ValueKind};
 
 /// 常用测试类型名。
 pub mod types {
     /// `AnnotationForTest` 全限定名。
     pub const ANNOTATION_FOR_TEST: &str = "cn.hutool.core.annotation.AnnotationForTest";
     /// `RepeatAnnotationForTest` 全限定名。
-    pub const REPEAT_ANNOTATION_FOR_TEST: &str = "cn.hutool.core.annotation.RepeatAnnotationForTest";
+    pub const REPEAT_ANNOTATION_FOR_TEST: &str =
+        "cn.hutool.core.annotation.RepeatAnnotationForTest";
     /// `Alias` 全限定名。
     pub const ALIAS: &str = "cn.hutool.core.annotation.Alias";
     /// `AnnotationForScannerTest` 全限定名。
@@ -40,10 +39,7 @@ pub fn init_base_schemas(registry: &mut AnnotationRegistry) {
     let mut retry_attr = AttributeDef::string("retry", "");
     retry_attr = retry_attr.with_meta(Arc::new(AnnotationMirror::new(
         types::ALIAS,
-        HashMap::from([(
-            "value".to_string(),
-            AnnotationValue::String("value".into()),
-        )]),
+        HashMap::from([("value".to_string(), AnnotationValue::String("value".into()))]),
     )));
     registry.register_schema(AnnotationSchema {
         type_name: types::ANNOTATION_FOR_TEST,
@@ -139,7 +135,10 @@ pub fn wrapped_attribute_setup(registry: &mut AnnotationRegistry) -> Arc<Annotat
     let a1 = registry.annotation(
         t1,
         HashMap::from([
-            ("value1".to_string(), AnnotationValue::String("value1".into())),
+            (
+                "value1".to_string(),
+                AnnotationValue::String("value1".into()),
+            ),
             ("name1".to_string(), AnnotationValue::String("name1".into())),
         ]),
     );
@@ -212,7 +211,10 @@ pub fn aliased_test_annotation(
 }
 
 /// Cacheable 默认值/非默认值测试注解。
-pub fn cacheable_test_annotation(registry: &mut AnnotationRegistry, value: &str) -> Arc<AnnotationMirror> {
+pub fn cacheable_test_annotation(
+    registry: &mut AnnotationRegistry,
+    value: &str,
+) -> Arc<AnnotationMirror> {
     let ty = "CacheableAnnotationAttributeTest.AnnotationForTest";
     registry.register_schema(AnnotationSchema {
         type_name: ty,
@@ -227,7 +229,9 @@ pub fn cacheable_test_annotation(registry: &mut AnnotationRegistry, value: &str)
 }
 
 /// 注册 scanner 测试 Example 类（type, field, method）。
-pub fn scanner_example(registry: &mut AnnotationRegistry) -> (ElementHandle, ElementHandle, ElementHandle) {
+pub fn scanner_example(
+    registry: &mut AnnotationRegistry,
+) -> (ElementHandle, ElementHandle, ElementHandle) {
     init_base_schemas(registry);
     let scanner_anno = registry.annotation(types::ANNOTATION_FOR_SCANNER_TEST, HashMap::new());
     let ty = TypeBuilder::begin(registry, "scanner.Example").build();

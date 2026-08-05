@@ -20,7 +20,7 @@ hostile-input surfaces.
 - Image operations bound encoded input, decoded dimensions and pixels, target
   dimensions, and encoded output before returning an allocation.
 - POI/Office handling is not implemented or exposed by the facade. The
-  placeholder `hutool-poi` crate provides no XLSX/DOCX/OFD/PDF security
+  placeholder `hutool-poi` crate was removed on 2026-08-04 (capability moved to the standalone `easyexcel-rust` project); no XLSX/DOCX/OFD/PDF surface exists in this workspace
   guarantees and must not be used for untrusted documents.
 - SMTP credentials use redacted secret containers. TLS and mandatory STARTTLS
   are explicit modes; unencrypted SMTP requires an explicit `Plaintext` choice.

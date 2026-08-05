@@ -30,14 +30,30 @@ impl<T: Clone + PartialEq> Tree<T> {
         }
     }
 
-    pub fn set_id(&mut self, id: T) { self.id = id; }
-    pub fn set_parent_id(&mut self, pid: T) { self.parent_id = pid; }
-    pub fn set_name(&mut self, name: impl Into<String>) { self.name = name.into(); }
-    pub fn set_weight(&mut self, w: i32) { self.weight = w; }
-    pub fn get_id(&self) -> &T { &self.id }
-    pub fn get_parent_id(&self) -> &T { &self.parent_id }
-    pub fn get_name(&self) -> &str { &self.name }
-    pub fn get_children(&self) -> &[Tree<T>] { &self.children }
+    pub fn set_id(&mut self, id: T) {
+        self.id = id;
+    }
+    pub fn set_parent_id(&mut self, pid: T) {
+        self.parent_id = pid;
+    }
+    pub fn set_name(&mut self, name: impl Into<String>) {
+        self.name = name.into();
+    }
+    pub fn set_weight(&mut self, w: i32) {
+        self.weight = w;
+    }
+    pub fn get_id(&self) -> &T {
+        &self.id
+    }
+    pub fn get_parent_id(&self) -> &T {
+        &self.parent_id
+    }
+    pub fn get_name(&self) -> &str {
+        &self.name
+    }
+    pub fn get_children(&self) -> &[Tree<T>] {
+        &self.children
+    }
     pub fn put_extra(&mut self, k: impl Into<String>, v: impl Into<String>) {
         self.extra.insert(k.into(), v.into());
     }
@@ -66,11 +82,7 @@ impl<T: Clone + PartialEq> Tree<T> {
     /// 对齐 `filterNew`
     pub fn filter_new<F: Fn(&Tree<T>) -> bool>(&self, pred: &F) -> Option<Tree<T>> {
         let mut t = self.clone_tree();
-        if t.filter(pred) {
-            Some(t)
-        } else {
-            None
-        }
+        if t.filter(pred) { Some(t) } else { None }
     }
 
     /// 获取父节点名链

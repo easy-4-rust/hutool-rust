@@ -303,4 +303,4 @@ impl HttpConfig {
     }
 }
 
-use super::{duration};
+use super::duration;

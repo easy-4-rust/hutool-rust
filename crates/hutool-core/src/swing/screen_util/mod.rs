@@ -19,10 +19,10 @@
 //! Hutool 只返回"主屏幕"信息,`xcap` 提供所有显示器枚举,Rust 版本通过
 //! [`ScreenUtil::primary_monitor`] 选择主显示器,其余显示器可由调用方自行枚举。
 
+mod screen_error;
 mod screen_rect;
 mod screen_util;
-mod screen_error;
 
+pub use screen_error::ScreenError;
 pub use screen_rect::ScreenRect;
 pub use screen_util::ScreenUtil;
-pub use screen_error::ScreenError;

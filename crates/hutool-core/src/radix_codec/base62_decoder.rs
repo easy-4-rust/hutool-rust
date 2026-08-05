@@ -2,7 +2,6 @@
 
 /// 对齐: `cn.hutool.core.codec.Base62`
 /// Base62 解码器
-
 use crate::{Decoder, Result};
 
 /// Base62 decoder with a custom validated byte alphabet.

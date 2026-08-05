@@ -2,7 +2,6 @@
 
 /// 对齐: `cn.hutool.core.util.HexUtil`
 /// 十六进制工具类
-
 use encoding_rs::{Encoding, UTF_8, UTF_16BE, UTF_16LE};
 use num_bigint::BigInt;
 

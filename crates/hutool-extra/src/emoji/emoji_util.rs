@@ -192,4 +192,6 @@ impl EmojiUtil {
     }
 }
 
-use super::{from_static, match_emoji_prefix, parse_html_codepoint, replace_emojis, skin_tone_type};
+use super::{
+    from_static, match_emoji_prefix, parse_html_codepoint, replace_emojis, skin_tone_type,
+};

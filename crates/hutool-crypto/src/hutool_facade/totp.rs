@@ -6,8 +6,7 @@
 
 /// 对齐: `cn.hutool.crypto.totp.TOTP`
 /// TOTP 时间密码
-
-use crate::{totp, totp_validate, CryptoError, OtpAlgorithm};
+use crate::{CryptoError, OtpAlgorithm, totp, totp_validate};
 
 /// Hutool `TOTP` facade.
 #[derive(Debug, Clone)]

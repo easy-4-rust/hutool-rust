@@ -3,7 +3,7 @@
 //!
 //! 将可能失败的表达式包装为运行时错误，避免显式 try/catch。
 
-use std::panic::{catch_unwind, AssertUnwindSafe};
+use std::panic::{AssertUnwindSafe, catch_unwind};
 
 use super::checked_util::CheckedUtil;
 use super::unchecked_fn0::UncheckedFn0;
@@ -92,9 +92,7 @@ impl CheckedUtil {
         E: Send + 'static,
     {
         UncheckedFn0 {
-            inner: Box::new(move || {
-                expression().unwrap_or_else(|e| panic!("{}", map(e)))
-            }),
+            inner: Box::new(move || expression().unwrap_or_else(|e| panic!("{}", map(e)))),
         }
     }
 }
@@ -124,4 +122,3 @@ impl UncheckedVoidFn0 {
         self.call();
     }
 }
-

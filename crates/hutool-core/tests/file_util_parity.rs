@@ -21,7 +21,10 @@ fn suffix_basic() {
 #[test]
 fn main_name_basic() {
     assert_eq!(FileUtil::main_name(Path::new("/path/to/file.txt")), "file");
-    assert_eq!(FileUtil::main_name(Path::new("archive.tar.gz")), "archive.tar");
+    assert_eq!(
+        FileUtil::main_name(Path::new("archive.tar.gz")),
+        "archive.tar"
+    );
 }
 
 #[test]
@@ -321,7 +324,10 @@ fn file_util_leftover_helpers() {
     let _ = FileUtil::delete(dir);
     FileUtil::mkdir(dir).unwrap();
     FileUtil::write_utf8_lines(&path, &["one", "two"]).unwrap();
-    assert_eq!(FileUtil::read_utf8_lines(&path).unwrap(), vec!["one", "two"]);
+    assert_eq!(
+        FileUtil::read_utf8_lines(&path).unwrap(),
+        vec!["one", "two"]
+    );
     assert_eq!(FileUtil::total_lines(&path).unwrap(), 2);
     FileUtil::append_utf8_string(&path, "\nthree").unwrap();
     assert!(FileUtil::is_not_empty(&path));

@@ -64,7 +64,7 @@ Hutool TEST behavioral:   3266/3292 (99.21%), ignored_stubs=0, planned=26
 | `hutool-json` | 294/294 (100%) | ✅ |
 | `hutool-jwt` | 121/121 (100%) | ✅ |
 | `hutool-log` | 283/283 (100%) | ✅ |
-| `hutool-poi` | 0/555 (0%) | ⚪ **仅有占位文件，未实现并排除完成度** |
+| `hutool-poi` | 0/555 (0%) | ✅ **2026-08-04 已移除**：占位 crate 删除，Excel/Word/OFD 能力由 `easyexcel-rust` 承接，不再计入本仓库 |
 | `hutool-script` | 79/79 (100%) | ✅ |
 | `hutool-setting` | 225/225 (100%) | ✅ |
 | `hutool-socket` | 102/102 (100%) | ✅ |
@@ -108,7 +108,7 @@ hutool-rust 已经拥有**完整的迁移验证体系**：
 |---|---|---|
 | 总体完成度 | "≈ 59.6% 文件数 / ≈ 50% 加权方法数" | **API 83.53% / feasible 97.55% / TEST 99.21%** |
 | 缺口最大模块 | "hutool-extra 缺 170 文件" | **hutool-extra 36% API 缺口（确认）** |
-| hutool-poi | 79 个 Rust 源文件、67 处 `unimplemented!()` | **555 个 API 未实现；占位登记不算覆盖** |
+| hutool-poi | ~~79 个 Rust 源文件、67 处 `unimplemented!()`~~（2026-08-04 已移除） | **555 个 API 由 `easyexcel-rust` 承接** |
 
 **结论**：IMPLEMENTATION_PLAN.md 是基于早期估算的规划，实际迁移进度远超文档描述。后续 Phase 应以**本文档基线**为起点。
 

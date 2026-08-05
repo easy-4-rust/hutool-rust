@@ -164,7 +164,6 @@ fn is_not_empty_str_empty() {
     assert!(!ObjectUtil::is_not_empty_str(Some("")));
 }
 
-
 // ── 对齐 Hutool ObjectUtilTest ──
 
 /// 对齐 Java: `ObjectUtilTest.equalsTest()`

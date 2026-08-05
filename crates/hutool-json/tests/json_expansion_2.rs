@@ -1,8 +1,10 @@
 //! JSON 扩展 parity 测试 2
 //! 对齐: hutool-json 多个测试类
 
-use hutool_json::{parse, parse_object, parse_array, is_valid, to_string, to_string_pretty, from_str};
 use hutool_json::{Value, json};
+use hutool_json::{
+    from_str, is_valid, parse, parse_array, parse_object, to_string, to_string_pretty,
+};
 
 // ── parse 扩展测试 (10 tests) ──
 
@@ -200,4 +202,4 @@ fn from_str_nested() {
     assert_eq!(obj.get("items").unwrap(), &vec![1, 2, 3]);
 }
 
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};

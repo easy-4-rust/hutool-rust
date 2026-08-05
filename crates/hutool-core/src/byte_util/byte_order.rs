@@ -3,8 +3,6 @@
 /// 对齐: `cn.hutool.core.util.ByteUtil.ByteOrder`
 /// 字节序
 
-
-
 /// Byte order used by numeric conversions.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum ByteOrder {
@@ -13,4 +11,3 @@ pub enum ByteOrder {
     /// Most-significant byte first.
     BigEndian,
 }
-

@@ -4,9 +4,9 @@
 
 #![forbid(unsafe_code)]
 
-use rand::RngExt as _;
 pub use http::{Method, StatusCode, header};
 pub use mime::Mime;
+use rand::RngExt as _;
 use serde::de::DeserializeOwned;
 use std::{fmt, net::IpAddr, sync::Arc, time::Duration};
 use thiserror::Error;
@@ -16,16 +16,16 @@ mod base;
 pub mod prelude;
 pub use base::{HTTP_1_0, HTTP_1_1, HttpBase, HttpBaseError};
 mod body;
-pub use body::{BytesBody, FormUrlEncodedBody, MultipartBody, MultipartOutputStream, RequestBody, ResourceBody};
+pub use body::{
+    BytesBody, FormUrlEncodedBody, MultipartBody, MultipartOutputStream, RequestBody, ResourceBody,
+};
 mod config;
 pub use config::{
     HostnameVerification, HttpConfig, HttpConfigError, HttpInterceptorError, HttpRequestContext,
     HttpResponseContext, RequestInterceptor, ResponseInterceptor, TlsProtocol,
 };
 mod cookie;
-pub use cookie::{
-    CookieJar, CookieManagerHandle, GlobalCookieManager, ThreadLocalCookieStore,
-};
+pub use cookie::{CookieJar, CookieManagerHandle, GlobalCookieManager, ThreadLocalCookieStore};
 mod interceptor;
 pub use interceptor::GlobalInterceptor;
 mod input_stream;
@@ -35,14 +35,14 @@ pub use resource::HttpResource;
 mod downloader;
 pub use downloader::HttpDownloader;
 mod global_config;
-pub use global_config::{HttpGlobalConfig, HttpGlobalConfigState, DEFAULT_BOUNDARY};
+pub use global_config::{DEFAULT_BOUNDARY, HttpGlobalConfig, HttpGlobalConfigState};
 mod metadata;
 pub use metadata::{ContentType, GlobalHeaders, Header, HttpStatus, Status};
 mod progress;
 pub use progress::{FnStreamProgress, NoopStreamProgress, StreamProgress};
-mod query;
 mod http_util;
-pub use http_util::{form_map, HttpUtil};
+mod query;
+pub use http_util::{HttpUtil, form_map};
 mod request;
 pub use request::HttpRequest;
 mod response;
@@ -62,11 +62,11 @@ pub use ssl::{
     TrustAnyHostnameVerifierImpl,
 };
 pub mod webservice;
+use tokio::io::{AsyncWrite, AsyncWriteExt};
 pub use webservice::{
     JakartaSoapClient, JakartaSoapProtocol, JakartaSoapUtil, SoapClient, SoapProtocol,
     SoapRuntimeException, SoapUtil,
 };
-use tokio::io::{AsyncWrite, AsyncWriteExt};
 
 /// User-Agent parsing compatible with Hutool's `useragent` package.
 #[cfg(feature = "useragent")]

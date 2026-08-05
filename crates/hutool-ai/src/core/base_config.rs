@@ -186,11 +186,7 @@ impl BaseConfig {
     }
 
     /// 链式 setter：附加字段。
-    pub fn with_additional(
-        mut self,
-        key: impl Into<String>,
-        value: impl Into<Value>,
-    ) -> Self {
+    pub fn with_additional(mut self, key: impl Into<String>, value: impl Into<Value>) -> Self {
         self.put_additional(key, value);
         self
     }
@@ -257,5 +253,43 @@ mod tests {
             .with_timeout(Duration::from_secs(7));
         assert_eq!(chain.model(), "m");
         assert_eq!(chain.timeout(), Duration::from_secs(7));
+    }
+
+    #[test]
+    fn trait_mutators_and_full_chain_cover_all_setters() {
+        // 通过 AIConfigMut trait 方法调用各 setter（覆盖 trait 委托路径）
+        let mut config = BaseConfig::with_api_key(ModelName::OpenAi, "k").unwrap();
+        AIConfigMut::set_api_url(&mut config, "https://example.com/v1").unwrap();
+        AIConfigMut::set_model(&mut config, "trait-model");
+        AIConfigMut::set_proxy(&mut config, "http://proxy.example:3128").unwrap();
+        assert_eq!(config.api_url().as_str(), "https://example.com/v1");
+        assert_eq!(config.model(), "trait-model");
+        assert!(config.proxy().is_some());
+        AIConfigMut::clear_proxy(&mut config);
+        assert!(config.proxy().is_none());
+
+        // 链式全量：with_api_url / with_additional / with_read_timeout / with_proxy
+        let chained = BaseConfig::with_api_key(ModelName::OpenAi, "k")
+            .unwrap()
+            .with_api_url("https://example.com/v1")
+            .unwrap()
+            .with_model("chain-model")
+            .with_additional("temperature", 0.5)
+            .with_timeout(Duration::from_secs(9))
+            .with_read_timeout(Duration::from_secs(10))
+            .with_proxy("http://proxy.example:8080")
+            .unwrap();
+        assert_eq!(chained.model(), "chain-model");
+        assert_eq!(chained.timeout(), Duration::from_secs(9));
+        assert_eq!(chained.read_timeout(), Duration::from_secs(10));
+        assert!(chained.proxy().is_some());
+        assert_eq!(chained.additional().get("temperature").unwrap(), 0.5);
+        // 非法 URL 在链式方法中同样报错
+        assert!(
+            BaseConfig::with_api_key(ModelName::OpenAi, "k")
+                .unwrap()
+                .with_proxy("not a url")
+                .is_err()
+        );
     }
 }

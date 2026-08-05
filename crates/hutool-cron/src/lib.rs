@@ -52,10 +52,10 @@ mod task_launcher_manager;
 pub mod timingwheel;
 
 pub use compat::{InvokeRegistry, TaskTable};
-pub use listener::{SimpleTaskListener, TaskListener, TaskListenerManager};
 pub use cron_config::CronConfig;
 pub use cron_timer::CronTimer;
 pub use cron_util::CronUtil;
+pub use listener::{SimpleTaskListener, TaskListener, TaskListenerManager};
 pub use pattern::{
     AlwaysTrueMatcher, BoolArrayMatcher, CronPattern, CronPatternBuilder, CronPatternUtil,
     DayOfMonthMatcher, Part, PartMatcher, PartParser, PatternMatcher, PatternParser,

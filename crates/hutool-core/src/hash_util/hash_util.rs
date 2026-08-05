@@ -2,11 +2,10 @@
 
 #![allow(clippy::cast_possible_truncation, clippy::cast_possible_wrap)]
 
+use crate::IdKey;
 /// 对齐: `cn.hutool.core.util.HashUtil`
 /// 哈希工具类
-
 use crate::lang::hash::{CityHash, Number128};
-use crate::IdKey;
 
 use super::hash_error::HashError;
 

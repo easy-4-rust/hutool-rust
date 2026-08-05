@@ -4,10 +4,10 @@ use std::collections::HashMap;
 use std::sync::Arc;
 
 use hutool_annotation::{
+    AnnotationSynthesizer, CacheableSynthesizedAnnotationAttributeProcessor,
+    GenericSynthesizedAggregateAnnotation, SynthesizedAggregateAnnotation, ValueKind,
     fixtures_aggregate::{self, types as agg},
-    global_registry, mirror_string, AnnotationSynthesizer, CacheableSynthesizedAnnotationAttributeProcessor,
-    GenericSynthesizedAggregateAnnotation, SynthesizedAggregateAnnotation,
-    ValueKind,
+    global_registry, mirror_string,
 };
 
 use crate::annotation_common::reset_all;
@@ -41,9 +41,7 @@ fn generic_synthesized_aggregate_annotation_synthesis_annotation_attribute_test(
     assert_eq!(
         "Child!",
         mirror_string(
-            &aggregate
-                .synthesize(agg::CHILD)
-                .expect("child proxy"),
+            &aggregate.synthesize(agg::CHILD).expect("child proxy"),
             "childValue",
             ""
         )
@@ -80,7 +78,13 @@ fn generic_synthesized_aggregate_annotation_synthetic_annotation_test() {
     let aggregate = GenericSynthesizedAggregateAnnotation::new(Arc::clone(&child));
 
     let child_syn = aggregate.synthesize(agg::CHILD).unwrap();
-    assert_eq!("Child!", child_syn.get_raw("childValue").and_then(|v| v.as_str()).unwrap());
+    assert_eq!(
+        "Child!",
+        child_syn
+            .get_raw("childValue")
+            .and_then(|v| v.as_str())
+            .unwrap()
+    );
     assert_eq!(
         "java.lang.Integer",
         child_syn
@@ -95,13 +99,19 @@ fn generic_synthesized_aggregate_annotation_synthetic_annotation_test() {
     let parent_syn = aggregate.synthesize(agg::PARENT).unwrap();
     assert_eq!(
         "Child's Parent!",
-        parent_syn.get_raw("parentValue").and_then(|v| v.as_str()).unwrap()
+        parent_syn
+            .get_raw("parentValue")
+            .and_then(|v| v.as_str())
+            .unwrap()
     );
 
     let gp_syn = aggregate.synthesize(agg::GRAND_PARENT).unwrap();
     assert_eq!(
         "Child's GrandParent!",
-        gp_syn.get_raw("grandParentValue").and_then(|v| v.as_str()).unwrap()
+        gp_syn
+            .get_raw("grandParentValue")
+            .and_then(|v| v.as_str())
+            .unwrap()
     );
 }
 
@@ -114,7 +124,12 @@ fn generic_synthesized_aggregate_annotation_link_test() {
     let link_ann = reg.annotation(agg::LINK_TEST, HashMap::new());
     let aggregate = GenericSynthesizedAggregateAnnotation::new(link_ann);
     let link = aggregate.synthesize(agg::LINK_TEST).unwrap();
-    assert_eq!("name", link.get_raw("value").and_then(|v| v.as_str()).unwrap_or("name"));
+    assert_eq!(
+        "name",
+        link.get_raw("value")
+            .and_then(|v| v.as_str())
+            .unwrap_or("name")
+    );
 }
 
 /// 对齐 Java: `GenericSynthesizedAggregateAnnotationTest.mirrorAttributeTest()`
@@ -123,15 +138,23 @@ fn generic_synthesized_aggregate_annotation_mirror_attribute_test() {
     let _guard = reset_all();
     let mut reg = global_registry().write();
     let ann = fixtures_aggregate::mirror_annotation(&mut reg, "Foo", None);
-    let syn = GenericSynthesizedAggregateAnnotation::new(ann).synthesize(agg::MIRROR).unwrap();
+    let syn = GenericSynthesizedAggregateAnnotation::new(ann)
+        .synthesize(agg::MIRROR)
+        .unwrap();
     assert_eq!("Foo", syn.get_raw("name").and_then(|v| v.as_str()).unwrap());
-    assert_eq!("Foo", syn.get_raw("value").and_then(|v| v.as_str()).unwrap());
+    assert_eq!(
+        "Foo",
+        syn.get_raw("value").and_then(|v| v.as_str()).unwrap()
+    );
 
     let ann2 = fixtures_aggregate::mirror_annotation(&mut reg, "", Some("Foo"));
     let syn2 = GenericSynthesizedAggregateAnnotation::new(ann2)
         .synthesize(agg::MIRROR)
         .unwrap();
-    assert_eq!("Foo", syn2.get_raw("name").and_then(|v| v.as_str()).unwrap());
+    assert_eq!(
+        "Foo",
+        syn2.get_raw("name").and_then(|v| v.as_str()).unwrap()
+    );
 
     let ann3 = fixtures_aggregate::mirror_annotation(&mut reg, "Aoo", Some("Foo"));
     let result = std::panic::catch_unwind(|| {
@@ -238,8 +261,14 @@ fn generic_synthesized_aggregate_annotation_alias_for_and_mirror_test() {
     );
     let aggregate = GenericSynthesizedAggregateAnnotation::new(ann);
     let meta = aggregate.synthesize(agg::META_MIRROR_THEN_ALIAS).unwrap();
-    assert_eq!("test", meta.get_raw("name").and_then(|v| v.as_str()).unwrap());
-    assert_eq!("test", meta.get_raw("value").and_then(|v| v.as_str()).unwrap());
+    assert_eq!(
+        "test",
+        meta.get_raw("name").and_then(|v| v.as_str()).unwrap()
+    );
+    assert_eq!(
+        "test",
+        meta.get_raw("value").and_then(|v| v.as_str()).unwrap()
+    );
 }
 
 /// 对齐 Java: `GenericSynthesizedAggregateAnnotationTest.multiAliasForTest()`
@@ -291,8 +320,14 @@ fn generic_synthesized_aggregate_annotation_implicit_alias_test() {
     );
     let aggregate = GenericSynthesizedAggregateAnnotation::new(ann);
     let meta = aggregate.synthesize(agg::META_IMPLICIT).unwrap();
-    assert_eq!("Meta", meta.get_raw("name").and_then(|v| v.as_str()).unwrap());
-    assert_eq!("Foo", meta.get_raw("value").and_then(|v| v.as_str()).unwrap());
+    assert_eq!(
+        "Meta",
+        meta.get_raw("name").and_then(|v| v.as_str()).unwrap()
+    );
+    assert_eq!(
+        "Foo",
+        meta.get_raw("value").and_then(|v| v.as_str()).unwrap()
+    );
 }
 
 /// 对齐 Java: `CacheableSynthesizedAnnotationAttributeProcessorTest.getAttributeValueTest()`
@@ -303,8 +338,7 @@ fn cacheable_synthesized_annotation_attribute_processor_get_attribute_value_test
     use hutool_annotation::SynthesizedAnnotationAttributeProcessor;
 
     let processor = CacheableSynthesizedAnnotationAttributeProcessor::new();
-    let a1: Arc<dyn hutool_annotation::SynthesizedAnnotation> =
-        TestValueSynthesizedAnnotation::new(
+    let a1: Arc<dyn hutool_annotation::SynthesizedAnnotation> = TestValueSynthesizedAnnotation::new(
         1,
         0,
         HashMap::from([
@@ -318,8 +352,7 @@ fn cacheable_synthesized_annotation_attribute_processor_get_attribute_value_test
             ),
         ]),
     );
-    let a2: Arc<dyn hutool_annotation::SynthesizedAnnotation> =
-        TestValueSynthesizedAnnotation::new(
+    let a2: Arc<dyn hutool_annotation::SynthesizedAnnotation> = TestValueSynthesizedAnnotation::new(
         0,
         0,
         HashMap::from([

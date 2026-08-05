@@ -2,12 +2,9 @@
 
 /// 对齐: `cn.hutool.core.collection.Partition`
 /// 分区
-
-
 use crate::Result;
 
 use super::validate_partition_size;
-
 
 /// A borrowed view that divides a slice into fixed-size partitions.
 ///
@@ -61,4 +58,3 @@ impl<'a, T> Partition<'a, T> {
         self.items.chunks(self.partition_size)
     }
 }
-

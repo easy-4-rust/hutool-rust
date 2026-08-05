@@ -154,11 +154,7 @@ impl DateTime {
     /// 时（24h）。
     pub fn hour(self, is_24: bool) -> i32 {
         let h = self.naive_local().hour() as i32;
-        if is_24 {
-            h
-        } else {
-            h % 12
-        }
+        if is_24 { h } else { h % 12 }
     }
 
     /// 分。
@@ -282,9 +278,7 @@ impl DateTime {
         let new_naive = match field {
             DateField::Year => {
                 let y = naive.year() as i64 + offset;
-                naive
-                    .with_year(y as i32)
-                    .unwrap_or(naive)
+                naive.with_year(y as i32).unwrap_or(naive)
             }
             DateField::Month => {
                 let total = naive.year() as i64 * 12 + naive.month0() as i64 + offset;
@@ -292,12 +286,17 @@ impl DateTime {
                 let m = (total.rem_euclid(12) + 1) as u32;
                 let day = naive.day().min(days_in_month(y, m));
                 NaiveDate::from_ymd_opt(y, m, day)
-                    .and_then(|d| d.and_hms_nano_opt(naive.hour(), naive.minute(), naive.second(), naive.nanosecond()))
+                    .and_then(|d| {
+                        d.and_hms_nano_opt(
+                            naive.hour(),
+                            naive.minute(),
+                            naive.second(),
+                            naive.nanosecond(),
+                        )
+                    })
                     .unwrap_or(naive)
             }
-            DateField::WeekOfYear | DateField::WeekOfMonth => {
-                naive + Duration::weeks(offset)
-            }
+            DateField::WeekOfYear | DateField::WeekOfMonth => naive + Duration::weeks(offset),
             DateField::DayOfMonth | DateField::DayOfYear | DateField::DayOfWeek => {
                 naive + Duration::days(offset)
             }

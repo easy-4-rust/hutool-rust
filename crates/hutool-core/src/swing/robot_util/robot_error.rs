@@ -227,7 +227,10 @@ impl RobotUtil {
     /// 截取指定矩形区域到文件。
     ///
     /// 对齐 Java: `RobotUtil.captureScreen(Rectangle screenRect, File outFile)`
-    pub fn capture_screen_region_to_file(rect: ScreenRect, out_file: impl AsRef<Path>) -> Result<()> {
+    pub fn capture_screen_region_to_file(
+        rect: ScreenRect,
+        out_file: impl AsRef<Path>,
+    ) -> Result<()> {
         ScreenUtil::capture_screen_region_to_file(rect, out_file)
     }
 }

@@ -7,8 +7,8 @@
 
 use std::collections::HashSet;
 
-use serde::de::DeserializeOwned;
 use serde::Serialize;
+use serde::de::DeserializeOwned;
 use serde_json::{Map, Value};
 
 use super::abs_copier::AbsCopier;
@@ -146,7 +146,10 @@ where
                 serde_json::from_value(serde_json::to_value(&self.target).unwrap_or(Value::Null))
                     .expect("Failed to deserialize original target")
             } else {
-                panic!("ValueProviderToBeanCopier: failed to deserialize target: {}", e)
+                panic!(
+                    "ValueProviderToBeanCopier: failed to deserialize target: {}",
+                    e
+                )
             }
         })
     }

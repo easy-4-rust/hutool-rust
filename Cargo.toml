@@ -55,6 +55,7 @@ notify = "8.2.0"
 num-bigint = "0.5.1"
 lettre = { version = "0.11.22", default-features = false, features = ["builder", "hostname", "pool", "smtp-transport", "tokio1-rustls-tls", "tracing"] }
 futures-core = "0.3.32"
+futures-util = "0.3.32"
 font8x8 = "0.3.1"
 # 精确锁：JWT 验签行为敏感，升级需单独评审（基线例外，见 dependency-baseline.toml）
 jsonwebtoken = { version = "=10.3.0", default-features = false, features = ["rust_crypto"] }

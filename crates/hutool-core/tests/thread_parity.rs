@@ -7,12 +7,12 @@ use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
 use std::thread;
 use std::time::Duration;
 
-use hutool_core::thread::semaphore_runnable::{Semaphore, SemaphoreRunnable};
 use hutool_core::thread::concurrency_tester::ConcurrencyTester;
 use hutool_core::thread::executor_builder::ExecutorBuilder;
 use hutool_core::thread::lock::segment_lock::SegmentLock;
 use hutool_core::thread::recyclable_batch_thread_pool_executor::RecyclableBatchThreadPoolExecutor;
 use hutool_core::thread::reject_policy::RejectPolicy;
+use hutool_core::thread::semaphore_runnable::{Semaphore, SemaphoreRunnable};
 use hutool_core::thread::sync_finisher::SyncFinisher;
 
 /// 对齐 Java: `ThreadUtilTest.newExecutorTest()`
@@ -84,7 +84,6 @@ fn thread_util_global_pool_and_lock_util_smoke() {
     ct.reset();
     ct.close();
 }
-
 
 /// 对齐 Java: `ExecutorBuilderTest` (ExecutorBuilder 创建线程池)
 #[test]

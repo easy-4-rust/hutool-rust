@@ -2507,6 +2507,7 @@ dependencies = [
  "async-stream",
  "async-trait",
  "futures-core",
+ "futures-util",
  "hutool-http",
  "reqwest",
  "secrecy",
@@ -2793,13 +2794,6 @@ dependencies = [
  "tracing",
  "tracing-subscriber",
  "zeroize",
-]
-
-[[package]]
-name = "hutool-poi"
-version = "0.1.0"
-dependencies = [
- "thiserror 2.0.19",
 ]
 
 [[package]]

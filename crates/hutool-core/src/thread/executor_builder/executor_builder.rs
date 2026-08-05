@@ -118,23 +118,25 @@ impl ExecutorBuilder {
             .unwrap_or_else(|| NamedThreadFactory::new("hutool-pool-", false));
         let workers = self.core.max(self.max);
 
-        let (channel, rx): (JobChannel, Arc<Mutex<Receiver<Box<dyn FnOnce() + Send + 'static>>>>) =
-            match self.queue {
-                QueueKind::Unbounded => {
-                    let (tx, rx) = mpsc::channel();
-                    (JobChannel::Unbounded(tx), Arc::new(Mutex::new(rx)))
-                }
-                QueueKind::Bounded(_) | QueueKind::Synchronous => {
-                    let cap = match self.queue {
-                        QueueKind::Synchronous => 0,
-                        QueueKind::Bounded(c) => c,
-                        QueueKind::Unbounded => unreachable!(),
-                    };
-                    // sync_channel(0) ≈ SynchronousQueue；>0 ≈ ArrayBlockingQueue
-                    let (tx, rx) = mpsc::sync_channel(cap);
-                    (JobChannel::Bounded(tx), Arc::new(Mutex::new(rx)))
-                }
-            };
+        let (channel, rx): (
+            JobChannel,
+            Arc<Mutex<Receiver<Box<dyn FnOnce() + Send + 'static>>>>,
+        ) = match self.queue {
+            QueueKind::Unbounded => {
+                let (tx, rx) = mpsc::channel();
+                (JobChannel::Unbounded(tx), Arc::new(Mutex::new(rx)))
+            }
+            QueueKind::Bounded(_) | QueueKind::Synchronous => {
+                let cap = match self.queue {
+                    QueueKind::Synchronous => 0,
+                    QueueKind::Bounded(c) => c,
+                    QueueKind::Unbounded => unreachable!(),
+                };
+                // sync_channel(0) ≈ SynchronousQueue；>0 ≈ ArrayBlockingQueue
+                let (tx, rx) = mpsc::sync_channel(cap);
+                (JobChannel::Bounded(tx), Arc::new(Mutex::new(rx)))
+            }
+        };
 
         let mut handles = Vec::new();
         for i in 0..workers {
@@ -143,14 +145,16 @@ impl ExecutorBuilder {
             handles.push(
                 thread::Builder::new()
                     .name(name)
-                    .spawn(move || loop {
-                        let job = {
-                            let guard = rx.lock().unwrap();
-                            guard.recv()
-                        };
-                        match job {
-                            Ok(f) => f(),
-                            Err(_) => break,
+                    .spawn(move || {
+                        loop {
+                            let job = {
+                                let guard = rx.lock().unwrap();
+                                guard.recv()
+                            };
+                            match job {
+                                Ok(f) => f(),
+                                Err(_) => break,
+                            }
                         }
                     })
                     .expect("spawn pool worker"),

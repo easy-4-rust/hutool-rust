@@ -4,9 +4,9 @@
 
 use chrono::{Datelike, NaiveDate, NaiveDateTime, Timelike};
 
+use crate::Result;
 use crate::date::date_field::DateField;
 use crate::date::date_time::{DateTime, parity_zone};
-use crate::Result;
 
 /// 对齐 Java: `cn.hutool.core.date.DateModifier`
 #[derive(Debug, Clone, Copy, Default)]
@@ -144,9 +144,7 @@ fn modify(dt: DateTime, field: DateField, mtype: ModifyType, truncate_ms: bool) 
 }
 
 fn set_hms_nano(n: NaiveDateTime, h: u32, mi: u32, s: u32, nano: u32) -> NaiveDateTime {
-    n.date()
-        .and_hms_nano_opt(h, mi, s, nano)
-        .unwrap_or(n)
+    n.date().and_hms_nano_opt(h, mi, s, nano).unwrap_or(n)
 }
 
 fn last_day_of_month(year: i32, month: u32) -> u32 {

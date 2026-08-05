@@ -4,18 +4,18 @@
 //! Rust 版本提供 Map 操作的 idiomatic 实现。保留既有 `&HashMap` API，
 //! 并补充 Option / IndexMap / BTreeMap / 可变就地编辑等 Hutool 同名能力。
 
-mod empty_map_kind;
 mod create_map_kind;
-mod nested_map_value;
-mod map_util;
+mod empty_map_kind;
 mod linked_or_hash_map;
 mod map_builder_gate;
+mod map_util;
+mod nested_map_value;
 
-pub use empty_map_kind::EmptyMapKind;
 pub use create_map_kind::CreateMapKind;
-pub use nested_map_value::NestedMapValue;
-pub use map_util::MapUtil;
+pub use empty_map_kind::EmptyMapKind;
 pub use linked_or_hash_map::LinkedOrHashMap;
+pub use map_util::MapUtil;
+pub use nested_map_value::NestedMapValue;
 
 pub const DEFAULT_INITIAL_CAPACITY: usize = 16;
 

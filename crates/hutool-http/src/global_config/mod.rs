@@ -4,11 +4,11 @@
 
 use std::sync::{Mutex, OnceLock};
 
-mod http_global_config_state;
 mod http_global_config;
+mod http_global_config_state;
 
-pub use http_global_config_state::HttpGlobalConfigState;
 pub use http_global_config::HttpGlobalConfig;
+pub use http_global_config_state::HttpGlobalConfigState;
 
 /// 默认 multipart 边界字符串，对齐 Hutool `HttpGlobalConfig.DEFAULT_BOUNDARY`。
 pub const DEFAULT_BOUNDARY: &str = "----HiToolHttpBoundary";

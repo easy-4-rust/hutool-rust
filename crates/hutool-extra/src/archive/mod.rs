@@ -11,12 +11,12 @@ use std::{
 };
 use zip::{CompressionMethod, ZipArchive, ZipWriter, write::SimpleFileOptions};
 
-mod extraction_limits;
 mod compress_util;
+mod extraction_limits;
 mod zip_util;
 
-pub use extraction_limits::ExtractionLimits;
 pub use compress_util::CompressUtil;
+pub use extraction_limits::ExtractionLimits;
 pub use zip_util::ZipUtil;
 
 /// Creates an in-memory ZIP archive from named byte entries.

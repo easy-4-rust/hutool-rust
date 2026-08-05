@@ -1,12 +1,10 @@
 /// 对齐: `cn.hutool.core.util.CharsetUtil`
 /// 字符集工具类
-
 use std::{
     fs,
     io::{self, Read},
     path::{Path, PathBuf},
 };
-
 
 use super::charset::Charset;
 use super::charset_error::CharsetError;

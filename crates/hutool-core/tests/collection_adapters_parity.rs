@@ -1,7 +1,7 @@
 //! collection_adapters module parity tests
 //! 对齐: hutool-core CollectionUtil/TransCollection tests
 
-use hutool_core::{CollectionUtil, TransCollection, SpliteratorUtil};
+use hutool_core::{CollectionUtil, SpliteratorUtil, TransCollection};
 
 // ── CollectionUtil (alias for CollUtil) ──
 

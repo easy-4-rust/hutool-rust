@@ -51,15 +51,8 @@ impl MapUtil {
     }
 
     /// 对齐 Java: `MapUtil.defaultIfEmpty(Map, Map)`
-    pub fn default_if_empty<K, V>(
-        map: HashMap<K, V>,
-        default_map: HashMap<K, V>,
-    ) -> HashMap<K, V> {
-        if map.is_empty() {
-            default_map
-        } else {
-            map
-        }
+    pub fn default_if_empty<K, V>(map: HashMap<K, V>, default_map: HashMap<K, V>) -> HashMap<K, V> {
+        if map.is_empty() { default_map } else { map }
     }
 
     // ── 创建操作 ──
@@ -182,10 +175,7 @@ impl MapUtil {
         K: Eq + Hash + Clone,
         V: Clone,
     {
-        pairs
-            .iter()
-            .map(|(k, v)| (k.clone(), v.clone()))
-            .collect()
+        pairs.iter().map(|(k, v)| (k.clone(), v.clone())).collect()
     }
 
     /// 对齐 Java: `MapUtil.ofEntries(Entry...)`
@@ -524,9 +514,7 @@ impl MapUtil {
         K: Eq + Hash + Clone,
         F: Fn(&K, &V) -> R,
     {
-        map.iter()
-            .map(|(k, v)| (k.clone(), bi(k, v)))
-            .collect()
+        map.iter().map(|(k, v)| (k.clone(), bi(k, v))).collect()
     }
 
     /// 对齐 Java: `MapUtil.reverse(Map)` —— 同类型键值互换。
@@ -574,13 +562,7 @@ impl MapUtil {
         V: Clone + Ord,
     {
         let mut entries: Vec<(K, V)> = map.iter().map(|(k, v)| (k.clone(), v.clone())).collect();
-        entries.sort_by(|(_, a), (_, b)| {
-            if is_desc {
-                b.cmp(a)
-            } else {
-                a.cmp(b)
-            }
-        });
+        entries.sort_by(|(_, a), (_, b)| if is_desc { b.cmp(a) } else { a.cmp(b) });
         entries.into_iter().collect()
     }
 
@@ -665,7 +647,10 @@ impl MapUtil {
     }
 
     /// 对齐 Java: `MapUtil.valuesOfKeys`
-    pub fn values_of_keys<K, V>(map: &HashMap<K, V>, keys: impl IntoIterator<Item = K>) -> Vec<Option<V>>
+    pub fn values_of_keys<K, V>(
+        map: &HashMap<K, V>,
+        keys: impl IntoIterator<Item = K>,
+    ) -> Vec<Option<V>>
     where
         K: Eq + Hash,
         V: Clone,
@@ -777,11 +762,7 @@ impl MapUtil {
     }
 
     /// 对齐 Java: `MapUtil.getDate(Map, Object, Date)` —— 默认 epoch 毫秒。
-    pub fn get_date_millis_or<K: Eq + Hash>(
-        map: &HashMap<K, i64>,
-        key: &K,
-        default: i64,
-    ) -> i64 {
+    pub fn get_date_millis_or<K: Eq + Hash>(map: &HashMap<K, i64>, key: &K, default: i64) -> i64 {
         map.get(key).copied().unwrap_or(default)
     }
 
@@ -797,10 +778,8 @@ impl MapUtil {
     }
 
     /// 对齐 Java: `MapUtil.flatten(Map, Map)` —— 写入给定 flatMap。
-    pub fn flatten_into<K, V>(
-        map: &HashMap<K, NestedMapValue<K, V>>,
-        flat_map: &mut HashMap<K, V>,
-    ) where
+    pub fn flatten_into<K, V>(map: &HashMap<K, NestedMapValue<K, V>>, flat_map: &mut HashMap<K, V>)
+    where
         K: Eq + Hash + Clone,
         V: Clone,
     {

@@ -14,7 +14,12 @@
 //!
 //! 重载的 Java 方法通过 `<name>_<n>` 后缀区分,避免 Rust 关联函数重名冲突。
 
-#![allow(dead_code, unused_variables, clippy::too_many_arguments, non_snake_case)]
+#![allow(
+    dead_code,
+    unused_variables,
+    clippy::too_many_arguments,
+    non_snake_case
+)]
 
 use std::collections::HashMap;
 use std::fmt::Display;
@@ -551,11 +556,7 @@ mod tests {
     fn format_ignore_null_removes_missing_keys() {
         let mut map = HashMap::new();
         map.insert("name", Some("Alice"));
-        let result = StrUtil::format_ignore_null(
-            "Hello {name}, age: {age}",
-            &map,
-            true,
-        );
+        let result = StrUtil::format_ignore_null("Hello {name}, age: {age}", &map, true);
         assert_eq!(result, "Hello Alice, age: ");
     }
 

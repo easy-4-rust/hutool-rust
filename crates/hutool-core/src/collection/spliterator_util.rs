@@ -2,9 +2,6 @@
 
 /// 对齐: `cn.hutool.core.collection.SpliteratorUtil`
 /// 分割迭代器
-
-
-
 use super::trans_spliterator::TransSpliterator;
 
 /// Factory for transformed spliterator/iterator views.

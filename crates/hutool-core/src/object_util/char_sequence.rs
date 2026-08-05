@@ -3,7 +3,6 @@
 //!
 //! Rust 版本提供对象操作的 idiomatic 实现。
 
-
 /// 对齐 Java `CharSequence`：文本序列视图。
 pub trait CharSequence {
     /// 返回 UTF-8 文本内容。

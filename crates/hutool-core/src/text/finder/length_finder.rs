@@ -29,19 +29,11 @@ impl LengthFinder {
         let from = from.max(0);
         let end = from + self.length;
         let len = self.text.chars().count() as i32;
-        if end > len {
-            Ok(-1)
-        } else {
-            Ok(from)
-        }
+        if end > len { Ok(-1) } else { Ok(from) }
     }
 
     /// 对齐 Java: `end`
     pub fn end(&self, start: i32) -> i32 {
-        if start < 0 {
-            -1
-        } else {
-            start + self.length
-        }
+        if start < 0 { -1 } else { start + self.length }
     }
 }

@@ -1,14 +1,14 @@
 use chrono::NaiveDate;
 
-mod idcard_error;
 mod card10_info;
-mod idcard_util;
 mod idcard;
+mod idcard_error;
+mod idcard_util;
 
-pub use idcard_error::IdcardError;
 pub use card10_info::Card10Info;
-pub use idcard_util::IdcardUtil;
 pub use idcard::Idcard;
+pub use idcard_error::IdcardError;
+pub use idcard_util::IdcardUtil;
 
 const CHINA_ID_MIN_LENGTH: usize = 15;
 

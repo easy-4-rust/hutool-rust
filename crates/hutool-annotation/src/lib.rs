@@ -25,8 +25,7 @@ pub use hutool_macro::{
     combination_annotation_element, element, fixtures, fixtures_aggregate,
     force_aliased_annotation_attribute, generic_synthesized_aggregate_annotation,
     generic_synthesized_annotation, hierarchical, link, mirror_link_annotation_post_processor,
-    mirrored_annotation_attribute,
-    synthesized_aggregate_annotation, synthesized_annotation,
+    mirrored_annotation_attribute, synthesized_aggregate_annotation, synthesized_annotation,
     synthesized_annotation_attribute_processor, synthesized_annotation_post_processor,
     synthesized_annotation_proxy, synthesized_annotation_selector, wrapped_annotation_attribute,
 };
@@ -65,15 +64,15 @@ pub use hutool_macro::{
     },
     wrapped_annotation_attribute::WrappedAnnotationAttribute,
 };
-pub use mirror_for::{MirrorFor, TYPE_NAME as MIRROR_FOR_TYPE_NAME};
 pub use mirror::{
     AnnotationMirror, AnnotationSchema, AnnotationTypeName, AnnotationValue, AttributeDef,
     AttributeRef, ValueKind, is_assignable, is_jdk_meta_annotation, is_not_jdk_meta_annotation,
 };
+pub use mirror_for::{MirrorFor, TYPE_NAME as MIRROR_FOR_TYPE_NAME};
 pub use prop_ignore::{PropIgnore, TYPE_NAME as PROP_IGNORE_TYPE};
 pub use relation_type::RelationType;
 pub use scanner::{
-    AnnotationScanner, ElementAnnotationScanner, EmptyAnnotationScanner,
-    FieldAnnotationScanner, GenericAnnotationScanner, MetaAnnotationScanner,
-    MethodAnnotationScanner, Scanners, TypeAnnotationScanner,
+    AnnotationScanner, ElementAnnotationScanner, EmptyAnnotationScanner, FieldAnnotationScanner,
+    GenericAnnotationScanner, MetaAnnotationScanner, MethodAnnotationScanner, Scanners,
+    TypeAnnotationScanner,
 };

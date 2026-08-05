@@ -3,7 +3,9 @@
 //!
 //! 基于 `std::net` 的本机端口 / IPv4 / 主机名辅助（无强制系统探测依赖）。
 
-use std::net::{IpAddr, Ipv4Addr, Ipv6Addr, SocketAddr, TcpListener, TcpStream, ToSocketAddrs, UdpSocket};
+use std::net::{
+    IpAddr, Ipv4Addr, Ipv6Addr, SocketAddr, TcpListener, TcpStream, ToSocketAddrs, UdpSocket,
+};
 use std::time::Duration;
 
 use idna::domain_to_ascii;

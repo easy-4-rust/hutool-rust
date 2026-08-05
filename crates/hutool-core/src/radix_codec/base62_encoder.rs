@@ -2,11 +2,7 @@
 
 /// 对齐: `cn.hutool.core.codec.Base62`
 /// Base62 编码器
-
-use crate::{
-    Encoder, Result,
-    advanced_codec::convert_base,
-};
+use crate::{Encoder, Result, advanced_codec::convert_base};
 
 /// Base62 encoder with a custom validated byte alphabet.
 #[derive(Debug, Clone, PartialEq, Eq)]

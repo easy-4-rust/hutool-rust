@@ -4,9 +4,9 @@
 
 use std::fmt;
 
+use super::is_mobile_platform_name;
 use super::rule_error::RuleError;
 use super::user_agent_info::UserAgentInfo;
-use super::is_mobile_platform_name;
 
 /// Device platform classification.
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]

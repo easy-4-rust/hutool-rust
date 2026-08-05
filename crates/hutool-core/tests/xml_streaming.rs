@@ -3,8 +3,8 @@
 use std::{io::Cursor, ops::ControlFlow};
 
 use hutool_core::{
-    transform_xml, visit_xml, CoreError, NamespaceMode, XmlChild, XmlParseOptions,
-    XmlTransformAction, XmlUtil,
+    CoreError, NamespaceMode, XmlChild, XmlParseOptions, XmlTransformAction, XmlUtil,
+    transform_xml, visit_xml,
 };
 use quick_xml::events::Event;
 

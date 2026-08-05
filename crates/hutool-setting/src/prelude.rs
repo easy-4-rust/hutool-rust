@@ -5,6 +5,4 @@
 //! use hutool_setting::prelude::*;
 //! ```
 
-pub use crate::{
-    Config, ConfigError, GlobalProfile, Props, Setting, SettingError, SettingsLoader,
-};
+pub use crate::{Config, ConfigError, GlobalProfile, Props, Setting, SettingError, SettingsLoader};

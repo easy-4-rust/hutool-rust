@@ -201,7 +201,11 @@ impl StopWatch {
             sb.push_str("No task info kept");
         } else {
             sb.push_str("---------------------------------------------\n");
-            sb.push_str(&format!("{:>11}  %{:>5}  Task name\n", unit.short_name(), ""));
+            sb.push_str(&format!(
+                "{:>11}  %{:>5}  Task name\n",
+                unit.short_name(),
+                ""
+            ));
             sb.push_str("---------------------------------------------\n");
             let total = self.total_time_nanos.max(1) as f64;
             for task in &self.task_list {

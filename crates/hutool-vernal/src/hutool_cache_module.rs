@@ -31,8 +31,8 @@ impl Default for HutoolCacheConfig {
     fn default() -> Self {
         Self {
             max_capacity: 10_000,
-            ttl_secs: 300,  // 5 分钟
-            tti_secs: 0,    // 不启用
+            ttl_secs: 300, // 5 分钟
+            tti_secs: 0,   // 不启用
         }
     }
 }

@@ -133,4 +133,24 @@ mod tests {
         assert!(combined.to_string().contains("fail retry"));
         assert!(combined.to_string().contains("io"));
     }
+
+    #[test]
+    fn from_conversions_preserve_message_and_source() {
+        let io = std::io::Error::new(std::io::ErrorKind::NotFound, "io-err");
+        let from_io: AIException = io.into();
+        assert!(from_io.to_string().contains("io-err"));
+
+        let from_json: AIException = serde_json::from_str::<serde_json::Value>("{")
+            .unwrap_err()
+            .into();
+        assert!(!from_json.to_string().is_empty());
+
+        let from_url: AIException = url::Url::parse("not a url").unwrap_err().into();
+        assert!(!from_url.to_string().is_empty());
+
+        let from_str: AIException = "direct".into();
+        assert_eq!(from_str.to_string(), "direct");
+        let from_string: AIException = String::from("owned").into();
+        assert_eq!(from_string.to_string(), "owned");
+    }
 }

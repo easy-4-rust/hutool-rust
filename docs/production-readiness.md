@@ -8,13 +8,13 @@ method-for-method Hutool compatibility.
 
 | Requirement | Status | Evidence or boundary |
 |---|---|---|
-| Workspace structure | complete | 25 workspace crates: 20 implemented capability crates, one non-functional `hutool-poi` placeholder, facade, compatibility, macro, and test support |
+| Workspace structure | complete | 26 workspace crates: 20 implemented capability crates, facade, compatibility, macro, test support, and Rust extensions (`hutool-poi` placeholder removed 2026-08-04) |
 | Minimal facade defaults | complete | `hutool` defaults to `core` and `json`; `full` is explicit |
 | Additive feature model | complete | every facade and component feature is checked independently in CI |
 | No reverse/cyclic component dependency | complete | facade-only aggregation; components never depend on `hutool` |
 | Idiomatic and compatibility APIs separated | complete | `hutool-compat-hutool` delegates to core/JSON implementations |
 | No hidden global client, pool, config, or runtime | complete | stateful resources are constructed and injected explicitly |
-| Complete Hutool functional parity | ledger only; not implementation parity | pinned v5.8.46 APIs are registered in the parity ledger, but registration includes planned and unportable entries. `hutool-poi` is explicitly excluded: its 79 Rust source files are API placeholders, 67 calls use `unimplemented!()`, it is absent from the facade features, and it has no document-engine dependencies. |
+| Complete Hutool functional parity | ledger only; not implementation parity | pinned v5.8.46 APIs are registered in the parity ledger, but registration includes planned and unportable entries. `hutool-poi` was explicitly excluded and its placeholder crate was removed on 2026-08-04; Excel/Word/OFD capability is provided by the standalone `easyexcel-rust` project. |
 
 ## Runtime boundaries
 

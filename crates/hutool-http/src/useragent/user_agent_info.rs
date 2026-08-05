@@ -3,7 +3,10 @@
 //! 中文说明: User-Agent匹配规则，包含名称和正则表达式模式
 
 use regex::Regex;
-use std::{fmt, hash::{Hash, Hasher}};
+use std::{
+    fmt,
+    hash::{Hash, Hasher},
+};
 
 use super::rule_error::RuleError;
 use super::{UNKNOWN_NAME, case_insensitive_regex};

@@ -1,19 +1,19 @@
 //! Legacy symmetric algorithms aligned with Hutool parity tests.
 
 use crate::CryptoError;
-use des::cipher::{BlockModeDecrypt, BlockModeEncrypt};
 use des::Des;
+use des::cipher::{BlockModeDecrypt, BlockModeEncrypt};
 use ecb::{Decryptor as EcbDecryptor, Encryptor as EcbEncryptor};
 use pbkdf2::pbkdf2_hmac;
 use sha1::Sha1;
-use sm4::cipher::{BlockCipherDecrypt, BlockCipherEncrypt, KeyInit as Sm4KeyInit};
 use sm4::Sm4;
+use sm4::cipher::{BlockCipherDecrypt, BlockCipherEncrypt, KeyInit as Sm4KeyInit};
 
-mod rc4;
 mod fpe_ff1;
+mod rc4;
 
-pub use rc4::Rc4;
 pub use fpe_ff1::FpeFf1;
+pub use rc4::Rc4;
 
 type DesEcbEnc = EcbEncryptor<Des>;
 

@@ -84,12 +84,7 @@ impl PinyinUtil {
     #[must_use]
     pub fn get_pinyin_multi(c: char) -> Vec<String> {
         c.to_pinyin_multi()
-            .map(|multi| {
-                multi
-                    .into_iter()
-                    .map(|py| py.plain().to_string())
-                    .collect()
-            })
+            .map(|multi| multi.into_iter().map(|py| py.plain().to_string()).collect())
             .unwrap_or_default()
     }
 }

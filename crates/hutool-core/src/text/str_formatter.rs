@@ -51,7 +51,11 @@ impl StrFormatter {
     }
 
     /// map 格式化（简易）
-    pub fn format_map(template: &str, entries: &[(&str, &str)], _ignore_null: bool) -> Result<String> {
+    pub fn format_map(
+        template: &str,
+        entries: &[(&str, &str)],
+        _ignore_null: bool,
+    ) -> Result<String> {
         let mut s = template.to_string();
         for (k, v) in entries {
             s = s.replace(&format!("{{{k}}}"), v);

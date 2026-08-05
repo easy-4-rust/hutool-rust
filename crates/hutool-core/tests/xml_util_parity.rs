@@ -39,7 +39,10 @@ fn escape_char_normal() {
 
 #[test]
 fn escape_basic() {
-    assert_eq!(XmlUtil::escape("<tag>value</tag>"), "&lt;tag&gt;value&lt;/tag&gt;");
+    assert_eq!(
+        XmlUtil::escape("<tag>value</tag>"),
+        "&lt;tag&gt;value&lt;/tag&gt;"
+    );
 }
 
 #[test]
@@ -51,7 +54,10 @@ fn escape_special_chars() {
 
 #[test]
 fn unescape_basic() {
-    assert_eq!(XmlUtil::unescape("&lt;tag&gt;value&lt;/tag&gt;"), "<tag>value</tag>");
+    assert_eq!(
+        XmlUtil::unescape("&lt;tag&gt;value&lt;/tag&gt;"),
+        "<tag>value</tag>"
+    );
 }
 
 #[test]
@@ -86,7 +92,10 @@ fn element_basic() {
 
 #[test]
 fn element_with_special_chars() {
-    assert_eq!(XmlUtil::element("tag", "<value>"), "<tag>&lt;value&gt;</tag>");
+    assert_eq!(
+        XmlUtil::element("tag", "<value>"),
+        "<tag>&lt;value&gt;</tag>"
+    );
 }
 
 #[test]
@@ -102,7 +111,8 @@ fn self_closing_element_basic() {
 
 #[test]
 fn self_closing_element_with_attrs() {
-    let result = XmlUtil::self_closing_element_with_attrs("img", &[("src", "test.png"), ("alt", "test")]);
+    let result =
+        XmlUtil::self_closing_element_with_attrs("img", &[("src", "test.png"), ("alt", "test")]);
     assert_eq!(result, "<img src=\"test.png\" alt=\"test\" />");
 }
 
@@ -110,12 +120,18 @@ fn self_closing_element_with_attrs() {
 
 #[test]
 fn xml_header_utf8() {
-    assert_eq!(XmlUtil::xml_header_utf8(), "<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+    assert_eq!(
+        XmlUtil::xml_header_utf8(),
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+    );
 }
 
 #[test]
 fn xml_header_custom() {
-    assert_eq!(XmlUtil::xml_header("ISO-8859-1"), "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
+    assert_eq!(
+        XmlUtil::xml_header("ISO-8859-1"),
+        "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>"
+    );
 }
 
 // ── CDATA ──
@@ -127,7 +143,10 @@ fn wrap_cdata_basic() {
 
 #[test]
 fn wrap_cdata_with_special_chars() {
-    assert_eq!(XmlUtil::wrap_cdata("<tag>&amp;</tag>"), "<![CDATA[<tag>&amp;</tag>]]>");
+    assert_eq!(
+        XmlUtil::wrap_cdata("<tag>&amp;</tag>"),
+        "<![CDATA[<tag>&amp;</tag>]]>"
+    );
 }
 
 // ── XML 解析辅助 ──
@@ -135,7 +154,10 @@ fn wrap_cdata_with_special_chars() {
 #[test]
 fn get_tag_content_basic() {
     let xml = "<root><name>Alice</name><age>30</age></root>";
-    assert_eq!(XmlUtil::get_tag_content(xml, "name"), Some("Alice".to_string()));
+    assert_eq!(
+        XmlUtil::get_tag_content(xml, "name"),
+        Some("Alice".to_string())
+    );
     assert_eq!(XmlUtil::get_tag_content(xml, "age"), Some("30".to_string()));
 }
 
@@ -149,7 +171,10 @@ fn get_tag_content_missing() {
 fn get_attribute_basic() {
     let xml = "<tag id=\"1\" class=\"test\">value</tag>";
     assert_eq!(XmlUtil::get_attribute(xml, "id"), Some("1".to_string()));
-    assert_eq!(XmlUtil::get_attribute(xml, "class"), Some("test".to_string()));
+    assert_eq!(
+        XmlUtil::get_attribute(xml, "class"),
+        Some("test".to_string())
+    );
 }
 
 #[test]
@@ -186,7 +211,10 @@ fn write_test() {
 fn xpath_test() {
     let xml = "<?xml version=\"1.0\" encoding=\"utf-8\" ?><returnsms><returnstatus>Success（成功）</returnstatus><message>ok</message><remainpoint>1490</remainpoint><taskID>885</taskID><successCounts>1</successCounts></returnsms>";
     let doc = XmlUtil::parse_xml(xml).unwrap();
-    assert_eq!(Some("ok".to_string()), XmlUtil::get_by_xpath("//returnsms/message", &doc));
+    assert_eq!(
+        Some("ok".to_string()),
+        XmlUtil::get_by_xpath("//returnsms/message", &doc)
+    );
 }
 
 /// 对齐 Java: `XmlUtilTest.xpathTest2()`
@@ -194,7 +222,10 @@ fn xpath_test() {
 fn xpath_test2() {
     let xml = include_str!("resources/test.xml");
     let doc = XmlUtil::parse_xml(xml).unwrap();
-    assert_eq!(Some("ok".to_string()), XmlUtil::get_by_xpath("//returnsms/message", &doc));
+    assert_eq!(
+        Some("ok".to_string()),
+        XmlUtil::get_by_xpath("//returnsms/message", &doc)
+    );
 }
 
 /// 对齐 Java: `XmlUtilTest.xmlToMapTest()`
@@ -220,10 +251,7 @@ fn xml_to_map_test2() {
     let xml = "<root><name>张三</name><name>李四</name></root>";
     let map = XmlUtil::xml_to_map(xml).unwrap();
     assert_eq!(1, map.len());
-    assert_eq!(
-        Some(&serde_json::json!(["张三", "李四"])),
-        map.get("name")
-    );
+    assert_eq!(Some(&serde_json::json!(["张三", "李四"])), map.get("name"));
 }
 
 /// 对齐 Java: `XmlUtilTest.mapToXmlTest()`
@@ -247,10 +275,7 @@ fn map_to_xml_test() {
 #[test]
 fn map_to_xml_test2() {
     let mut map = indexmap::IndexMap::new();
-    map.insert(
-        "Town".to_string(),
-        serde_json::json!(["town1", "town2"]),
-    );
+    map.insert("Town".to_string(), serde_json::json!(["town1", "town2"]));
     let doc = XmlUtil::map_to_xml(&map, "City").unwrap();
     assert_eq!(
         "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><City><Town>town1</Town><Town>town2</Town></City>",
@@ -308,10 +333,7 @@ fn get_by_path_test() {
     let doc = XmlUtil::parse_xml(xml_str).unwrap();
     assert_eq!(
         Some("2020/04/15 21:01:21".to_string()),
-        XmlUtil::get_by_xpath(
-            "//soap:Envelope/soap:Body/ns2:testResponse/return",
-            &doc
-        )
+        XmlUtil::get_by_xpath("//soap:Envelope/soap:Body/ns2:testResponse/return", &doc)
     );
 }
 
@@ -414,7 +436,8 @@ fn xml_str_to_bean_test() {
         age: String,
         email: String,
     }
-    let xml = "<userInfo><name>张三</name><age>20</age><email>zhangsan@example.com</email></userInfo>";
+    let xml =
+        "<userInfo><name>张三</name><age>20</age><email>zhangsan@example.com</email></userInfo>";
     let doc = XmlUtil::parse_xml(xml).unwrap();
     let user: UserInfo = XmlUtil::xml_to_bean(&doc).unwrap();
     assert_eq!(

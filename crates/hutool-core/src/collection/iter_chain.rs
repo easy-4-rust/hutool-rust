@@ -2,7 +2,6 @@
 
 /// 对齐: `cn.hutool.core.collection.IterChain`
 /// 迭代器链
-
 use std::collections::VecDeque;
 
 /// A dynamically extensible chain of iterators.

@@ -296,10 +296,7 @@ impl ReUtil {
 
     /// 对齐 Java: `ReUtil.indexOf`
     pub fn index_of(pattern: &str, text: &str) -> Option<usize> {
-        Regex::new(pattern)
-            .ok()?
-            .find(text)
-            .map(|m| m.start())
+        Regex::new(pattern).ok()?.find(text).map(|m| m.start())
     }
 
     /// 对齐 Java: `ReUtil.lastIndexOf`

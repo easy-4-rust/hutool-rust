@@ -1,20 +1,20 @@
 //! Endian-aware numeric byte conversion aligned with Hutool's `ByteUtil` family.
 
 mod byte_order;
-mod byte_util_error;
-mod long_adder;
-mod double_adder;
-mod number_to_bytes;
-mod bytes_to_number;
 mod byte_util;
+mod byte_util_error;
+mod bytes_to_number;
+mod double_adder;
+mod long_adder;
+mod number_to_bytes;
 
 pub use byte_order::ByteOrder;
-pub use byte_util_error::ByteUtilError;
-pub use long_adder::LongAdder;
-pub use double_adder::DoubleAdder;
-pub use number_to_bytes::NumberToBytes;
-pub use bytes_to_number::BytesToNumber;
 pub use byte_util::ByteUtil;
+pub use byte_util_error::ByteUtilError;
+pub use bytes_to_number::BytesToNumber;
+pub use double_adder::DoubleAdder;
+pub use long_adder::LongAdder;
+pub use number_to_bytes::NumberToBytes;
 
 fn read_array<const SIZE: usize>(
     bytes: &[u8],

@@ -2,7 +2,6 @@
 
 /// 对齐: `cn.hutool.core.xml.XmlStream`
 /// XML 流解析
-
 use std::{
     io::{BufRead, Read, Write},
     ops::ControlFlow,
@@ -10,23 +9,23 @@ use std::{
 
 use indexmap::IndexMap;
 use quick_xml::{
+    XmlVersion,
     escape::resolve_predefined_entity,
     events::{BytesEnd, BytesRef, BytesStart, Event},
-    XmlVersion,
 };
 
 use crate::{CoreError, Result};
 
 mod namespace_mode;
-mod xml_parse_options;
 mod xml_event_reader;
 mod xml_event_writer;
+mod xml_parse_options;
 mod xml_transform_action;
 
 pub use namespace_mode::NamespaceMode;
-pub use xml_parse_options::XmlParseOptions;
 pub use xml_event_reader::XmlEventReader;
 pub use xml_event_writer::XmlEventWriter;
+pub use xml_parse_options::XmlParseOptions;
 pub use xml_transform_action::XmlTransformAction;
 
 struct ParseState {

@@ -33,23 +33,41 @@ const ID_15: &str = "150102880730303";
 fn is_valid_card_test() {
     assert!(IdcardUtil::is_valid_card(ID_18), "ID_18 valid (对齐 Java)");
     assert!(IdcardUtil::is_valid_card(ID_15), "ID_15 valid (对齐 Java)");
-    assert!(IdcardUtil::is_valid_card(FOREIGN_ID_18), "FOREIGN_ID_18 valid (对齐 Java)");
+    assert!(
+        IdcardUtil::is_valid_card(FOREIGN_ID_18),
+        "FOREIGN_ID_18 valid (对齐 Java)"
+    );
 
     // 无效
-    assert!(!IdcardUtil::is_valid_card("360198910283844"), "无效卡 (对齐 Java)");
+    assert!(
+        !IdcardUtil::is_valid_card("360198910283844"),
+        "无效卡 (对齐 Java)"
+    );
     // 生日无效
-    assert!(!IdcardUtil::is_valid_card("201511221897205960"), "生日无效 (对齐 Java)");
-    assert!(!IdcardUtil::is_valid_card("815727834224151"), "生日无效 (对齐 Java)");
+    assert!(
+        !IdcardUtil::is_valid_card("201511221897205960"),
+        "生日无效 (对齐 Java)"
+    );
+    assert!(
+        !IdcardUtil::is_valid_card("815727834224151"),
+        "生日无效 (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `IdcardUtilTest.convert15To18Test()` (行 47-54)
 #[test]
 fn convert_15_to_18_test() {
     let r = IdcardUtil::convert_15_to_18(ID_15).unwrap();
-    assert_eq!(r, "150102198807303035", "convert_15_to_18 ID_15 (对齐 Java)");
+    assert_eq!(
+        r, "150102198807303035",
+        "convert_15_to_18 ID_15 (对齐 Java)"
+    );
 
     let r2 = IdcardUtil::convert_15_to_18("330102200403064").unwrap();
-    assert_eq!(r2, "33010219200403064X", "convert_15_to_18 含 X (对齐 Java)");
+    assert_eq!(
+        r2, "33010219200403064X",
+        "convert_15_to_18 含 X (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `IdcardUtilTest.convert18To15Test()` (行 56-60)
@@ -131,7 +149,10 @@ fn get_gender_by_id_card_test() {
 /// 对齐 Java: `IdcardUtilTest.isValidCard18Test()` (行 121-153)
 #[test]
 fn is_valid_card_18_test() {
-    assert!(!IdcardUtil::is_valid_card_18("3301022011022000D6"), "非法字符 D (对齐 Java)");
+    assert!(
+        !IdcardUtil::is_valid_card_18("3301022011022000D6"),
+        "非法字符 D (对齐 Java)"
+    );
 
     // 不忽略大小写情况下,X 严格校验必须大写
     // Java `isValidCard18(str, false)` 第二参数 ignoreCase=false → 严格
@@ -146,41 +167,77 @@ fn is_valid_card_18_test() {
     );
 
     // 非严格校验下大小写皆可
-    assert!(IdcardUtil::is_valid_card_18("33010219200403064x"), "非严格 小写 x (对齐 Java)");
-    assert!(IdcardUtil::is_valid_card_18("33010219200403064X"), "非严格 大写 X (对齐 Java)");
+    assert!(
+        IdcardUtil::is_valid_card_18("33010219200403064x"),
+        "非严格 小写 x (对齐 Java)"
+    );
+    assert!(
+        IdcardUtil::is_valid_card_18("33010219200403064X"),
+        "非严格 大写 X (对齐 Java)"
+    );
 
     // 港澳台
-    assert!(IdcardUtil::is_valid_card_18("81000019980902013X"), "香港人在大陆身份证 (对齐 Java)");
-    assert!(IdcardUtil::is_valid_card_18("820000200009100032"), "澳门人在大陆身份证 (对齐 Java)");
-    assert!(IdcardUtil::is_valid_card_18("830000200209060065"), "台湾人在大陆身份证 (对齐 Java)");
-    assert!(IdcardUtil::is_valid_card_18("932682198501010017"), "外国人永久居留 (对齐 Java)");
+    assert!(
+        IdcardUtil::is_valid_card_18("81000019980902013X"),
+        "香港人在大陆身份证 (对齐 Java)"
+    );
+    assert!(
+        IdcardUtil::is_valid_card_18("820000200009100032"),
+        "澳门人在大陆身份证 (对齐 Java)"
+    );
+    assert!(
+        IdcardUtil::is_valid_card_18("830000200209060065"),
+        "台湾人在大陆身份证 (对齐 Java)"
+    );
+    assert!(
+        IdcardUtil::is_valid_card_18("932682198501010017"),
+        "外国人永久居留 (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `IdcardUtilTest.isValidHKCardIdTest()` (行 155-160)
 #[test]
 fn is_valid_hk_card_id_test() {
-    assert!(IdcardUtil::is_valid_hk_card("P174468(6)"), "香港身份证 (对齐 Java)");
+    assert!(
+        IdcardUtil::is_valid_hk_card("P174468(6)"),
+        "香港身份证 (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `IdcardUtilTest.isValidTWCardIdTest()` (行 162-173)
 #[test]
 fn is_valid_tw_card_id_test() {
-    assert!(IdcardUtil::is_valid_tw_card("B221690311"), "台湾身份证 有效 (对齐 Java)");
-    assert!(!IdcardUtil::is_valid_tw_card("M517086311"), "台湾身份证 无效 1 (对齐 Java)");
-    assert!(!IdcardUtil::is_valid_tw_card("B2216903112"), "台湾身份证 无效 2 (对齐 Java)");
+    assert!(
+        IdcardUtil::is_valid_tw_card("B221690311"),
+        "台湾身份证 有效 (对齐 Java)"
+    );
+    assert!(
+        !IdcardUtil::is_valid_tw_card("M517086311"),
+        "台湾身份证 无效 1 (对齐 Java)"
+    );
+    assert!(
+        !IdcardUtil::is_valid_tw_card("B2216903112"),
+        "台湾身份证 无效 2 (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `IdcardUtilTest.issueI88YKMTest()` (行 175-178)
 #[test]
 fn issue_i88ykm_test() {
-    assert!(IdcardUtil::is_valid_card("111111111111111"), "15 位全 1 (对齐 Java issueI88YKM)");
+    assert!(
+        IdcardUtil::is_valid_card("111111111111111"),
+        "15 位全 1 (对齐 Java issueI88YKM)"
+    );
 }
 
 /// 对齐 Java: `IdcardUtilTest.issueIAFOLITest()` (行 180-186)
 #[test]
 fn issue_iafoli_test() {
     let idcard = "H01487002";
-    assert!(!IdcardUtil::is_valid_hk_card(idcard), "非 HK 卡 (对齐 Java)");
+    assert!(
+        !IdcardUtil::is_valid_hk_card(idcard),
+        "非 HK 卡 (对齐 Java)"
+    );
     assert!(
         IdcardUtil::is_valid_card_10(idcard).is_none(),
         "Card10 应返回 None (对齐 Java assertNull)"

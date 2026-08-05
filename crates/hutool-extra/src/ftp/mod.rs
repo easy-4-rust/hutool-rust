@@ -4,12 +4,12 @@
 //! 具体 FTP 协议操作（Ftp/SimpleFtpServer）需要外部 Java crate（Apache Commons Net /
 //! Apache FtpServer），属于 unsafe-to-copy。
 
-mod ftp_mode;
+mod abstract_ftp;
 mod ftp_config;
 mod ftp_exception;
-mod abstract_ftp;
+mod ftp_mode;
 
-pub use ftp_mode::FtpMode;
+pub use abstract_ftp::AbstractFtp;
 pub use ftp_config::FtpConfig;
 pub use ftp_exception::FtpException;
-pub use abstract_ftp::AbstractFtp;
+pub use ftp_mode::FtpMode;

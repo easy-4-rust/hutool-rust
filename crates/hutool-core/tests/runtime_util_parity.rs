@@ -42,7 +42,8 @@ fn exec_cmd_test2() {
     }
     #[cfg(not(unix))]
     {
-        let output = RuntimeUtil::exec_for_str(&["cmd", "/c", "cd", "C:\\", "&&", "cd"]).expect("exec");
+        let output =
+            RuntimeUtil::exec_for_str(&["cmd", "/c", "cd", "C:\\", "&&", "cd"]).expect("exec");
         assert!(!output.is_empty());
     }
 }

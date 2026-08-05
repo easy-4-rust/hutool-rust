@@ -120,7 +120,9 @@ impl<R: Eq + Hash + Clone, C: Eq + Hash + Clone, V: Clone> RowKeyTable<R, C, V> 
         let mut out: HashMap<C, HashMap<R, V>> = HashMap::new();
         for (r, cols) in &self.rows {
             for (c, v) in cols {
-                out.entry(c.clone()).or_default().insert(r.clone(), v.clone());
+                out.entry(c.clone())
+                    .or_default()
+                    .insert(r.clone(), v.clone());
             }
         }
         out

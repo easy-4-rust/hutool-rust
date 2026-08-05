@@ -3,8 +3,8 @@
 //!
 //! 泛型切片实现覆盖 Java 各原始类型重载（isEmpty/reverse/shuffle/min/max 等）。
 
-use rand::seq::SliceRandom;
 use rand::rng;
+use rand::seq::SliceRandom;
 
 use crate::{CoreError, Result};
 
@@ -114,18 +114,26 @@ impl PrimitiveArrayUtil {
 
     /// 对齐 Java: `PrimitiveArrayUtil.min(T...)`
     pub fn min<T: Ord + Copy>(array: &[T]) -> Result<T> {
-        array.iter().copied().min().ok_or(CoreError::InvalidArgument {
-            name: "array",
-            reason: "Number array must not empty !",
-        })
+        array
+            .iter()
+            .copied()
+            .min()
+            .ok_or(CoreError::InvalidArgument {
+                name: "array",
+                reason: "Number array must not empty !",
+            })
     }
 
     /// 对齐 Java: `PrimitiveArrayUtil.max(T...)`
     pub fn max<T: Ord + Copy>(array: &[T]) -> Result<T> {
-        array.iter().copied().max().ok_or(CoreError::InvalidArgument {
-            name: "array",
-            reason: "Number array must not empty !",
-        })
+        array
+            .iter()
+            .copied()
+            .max()
+            .ok_or(CoreError::InvalidArgument {
+                name: "array",
+                reason: "Number array must not empty !",
+            })
     }
 
     /// 对齐 Java: `PrimitiveArrayUtil.min(double...)` / `float...`

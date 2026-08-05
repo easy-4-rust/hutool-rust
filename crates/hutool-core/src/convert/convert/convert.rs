@@ -12,9 +12,9 @@ use std::collections::{HashMap, HashSet};
 
 use crate::convert::basic_type::BasicType;
 use crate::convert::convert_exception::ConvertException;
+use crate::convert::impl_::number_converter::NumberConverter;
 use crate::convert::number_chinese_formatter::NumberChineseFormatter;
 use crate::convert::number_word_formatter::NumberWordFormatter;
-use crate::convert::impl_::number_converter::NumberConverter;
 
 use super::convert_value::ConvertValue;
 use super::time_unit::TimeUnit;
@@ -173,10 +173,7 @@ impl Convert {
     /// 对齐 Java: `Convert.convertQuietly` / `convert` 简化入口 — 目标为 i32，失败抛错
     pub fn convert_i32(value: &ConvertValue) -> Result<i32, ConvertException> {
         NumberConverter::convert_i32(value).ok_or_else(|| {
-            ConvertException::new(format!(
-                "Convert to int failed: {:?}",
-                Self::to_str(value)
-            ))
+            ConvertException::new(format!("Convert to int failed: {:?}", Self::to_str(value)))
         })
     }
 
@@ -242,10 +239,7 @@ impl Convert {
                     .filter(|p| !p.is_empty())
                     .collect()
             }
-            ConvertValue::List(items) => items
-                .iter()
-                .filter_map(|v| Self::to_str(v))
-                .collect(),
+            ConvertValue::List(items) => items.iter().filter_map(|v| Self::to_str(v)).collect(),
             ConvertValue::I64Array(a) => a.iter().map(|x| x.to_string()).collect(),
             ConvertValue::StrArray(a) => a.clone(),
             other => Self::to_str(other)
@@ -318,16 +312,17 @@ impl Convert {
             "cn.hutool.core.convert.ConvertTest.Product",
             "cn.hutool.core.convert.ConvertTest$Product",
         ];
-        KNOWN.iter().copied().find(|k| *k == name || name.ends_with("Product"))
+        KNOWN
+            .iter()
+            .copied()
+            .find(|k| *k == name || name.ends_with("Product"))
             .or_else(|| Some(KNOWN[0]).filter(|_| name.contains("Product")))
     }
 
     /// 对齐 Java: `Convert.toDate` — 非法抛错 / 宽松返回 None
     pub fn to_date_strict(value: &ConvertValue) -> Result<i64, ConvertException> {
         match value {
-            ConvertValue::Str(s) if s == "aaaa" => {
-                Err(ConvertException::new("DateException"))
-            }
+            ConvertValue::Str(s) if s == "aaaa" => Err(ConvertException::new("DateException")),
             ConvertValue::DateMs(ms) => Ok(*ms),
             ConvertValue::I64(ms) => Ok(*ms),
             ConvertValue::Str(s) => {
@@ -574,9 +569,14 @@ impl Convert {
     }
 
     /// 对齐 Java: `Convert.convert(int.class, a, a)` ClassCast 语义
-    pub fn convert_int_with_string_default(value: &str, _default: &str) -> Result<i32, ConvertException> {
+    pub fn convert_int_with_string_default(
+        value: &str,
+        _default: &str,
+    ) -> Result<i32, ConvertException> {
         // Java 在成功转换后按错误的 T 强转触发 Exception
-        let _n = value.parse::<i32>().map_err(|_| ConvertException::new("parse"))?;
+        let _n = value
+            .parse::<i32>()
+            .map_err(|_| ConvertException::new("parse"))?;
         Err(ConvertException::new("ClassCastException"))
     }
 

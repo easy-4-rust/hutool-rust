@@ -193,10 +193,12 @@ fn mail_util_and_mail_facade_test() {
         .unwrap()
         .build(MailLimits::default())
         .unwrap();
-    assert!(String::from_utf8(msg.formatted())
-        .unwrap()
-        .to_lowercase()
-        .contains("text/html"));
+    assert!(
+        String::from_utf8(msg.formatted())
+            .unwrap()
+            .to_lowercase()
+            .contains("text/html")
+    );
 
     let account = MailAccount::new()
         .set_host("smtp.example.com")
@@ -209,7 +211,9 @@ fn mail_util_and_mail_facade_test() {
         .set_content("plain", false)
         .build()
         .unwrap();
-    assert!(String::from_utf8(built.formatted())
-        .unwrap()
-        .contains("Subject: facade"));
+    assert!(
+        String::from_utf8(built.formatted())
+            .unwrap()
+            .contains("Subject: facade")
+    );
 }

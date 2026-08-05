@@ -57,30 +57,28 @@ impl Scanners {
 
     /// `DIRECTLY`
     pub fn directly() -> Arc<dyn AnnotationScanner> {
-        Arc::new(super::generic_annotation_scanner::GenericAnnotationScanner::new(
-            false, false, false,
-        ))
+        Arc::new(
+            super::generic_annotation_scanner::GenericAnnotationScanner::new(false, false, false),
+        )
     }
 
     /// `DIRECTLY_AND_META_ANNOTATION`
     pub fn directly_and_meta() -> Arc<dyn AnnotationScanner> {
-        Arc::new(super::generic_annotation_scanner::GenericAnnotationScanner::new(
-            true, false, false,
-        ))
+        Arc::new(
+            super::generic_annotation_scanner::GenericAnnotationScanner::new(true, false, false),
+        )
     }
 
     /// `TYPE_HIERARCHY`
     pub fn type_hierarchy() -> Arc<dyn AnnotationScanner> {
-        Arc::new(super::generic_annotation_scanner::GenericAnnotationScanner::new(
-            false, true, true,
-        ))
+        Arc::new(
+            super::generic_annotation_scanner::GenericAnnotationScanner::new(false, true, true),
+        )
     }
 
     /// `TYPE_HIERARCHY_AND_META_ANNOTATION`
     pub fn type_hierarchy_and_meta() -> Arc<dyn AnnotationScanner> {
-        Arc::new(super::generic_annotation_scanner::GenericAnnotationScanner::new(
-            true, true, true,
-        ))
+        Arc::new(super::generic_annotation_scanner::GenericAnnotationScanner::new(true, true, true))
     }
 
     /// 透传 trait 的类型扫描入口，便于入口层按 Java 语义调用。

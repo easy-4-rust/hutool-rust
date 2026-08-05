@@ -3,7 +3,7 @@
 use std::sync::Arc;
 
 use super::annotation_synthesizer::AnnotationSynthesizer;
-use super::link::{Link, LINK_TYPE};
+use super::link::{LINK_TYPE, Link};
 use super::mirror::AnnotationTypeName;
 use super::relation_type::RelationType;
 use super::synthesized_annotation::SynthesizedAnnotation;
@@ -25,12 +25,17 @@ impl AbstractLinkAnnotationPostProcessor {
             Arc<dyn super::annotation_attribute::AnnotationAttribute>,
         ),
     ) {
-        for (_original_attribute_name, original_attribute) in synthesized_annotation.get_attributes() {
-            let Some(link) = get_link_annotation(original_attribute.as_ref(), relation_types) else {
+        for (_original_attribute_name, original_attribute) in
+            synthesized_annotation.get_attributes()
+        {
+            let Some(link) = get_link_annotation(original_attribute.as_ref(), relation_types)
+            else {
                 continue;
             };
-            let target_type = get_linked_annotation_type(&link, synthesized_annotation.annotation_type());
-            let Some(linked_annotation) = synthesizer.get_synthesized_annotation(target_type) else {
+            let target_type =
+                get_linked_annotation_type(&link, synthesized_annotation.annotation_type());
+            let Some(linked_annotation) = synthesizer.get_synthesized_annotation(target_type)
+            else {
                 continue;
             };
             let Some(linked_attribute) = linked_annotation

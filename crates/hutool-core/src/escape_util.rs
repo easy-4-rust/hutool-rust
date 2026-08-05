@@ -207,8 +207,7 @@ impl EscapeUtil {
     fn push_java_unit(out: &mut String, unit: u16, pending_high: &mut Option<u16>) {
         if let Some(high) = pending_high.take() {
             if (0xDC00..=0xDFFF).contains(&unit) {
-                let combined = 0x1_0000
-                    + (((high as u32 - 0xD800) << 10) | (unit as u32 - 0xDC00));
+                let combined = 0x1_0000 + (((high as u32 - 0xD800) << 10) | (unit as u32 - 0xDC00));
                 if let Some(ch) = char::from_u32(combined) {
                     out.push(ch);
                     return;

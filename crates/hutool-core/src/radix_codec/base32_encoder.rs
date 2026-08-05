@@ -2,7 +2,6 @@
 
 /// 对齐: `cn.hutool.core.codec.Base32`
 /// Base32 编码器
-
 use crate::{CoreError, Encoder, Result};
 
 /// Base32 encoder with a validated custom ASCII alphabet and optional pad.

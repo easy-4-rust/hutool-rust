@@ -29,7 +29,10 @@ fn sha256_test() {
 #[test]
 fn sha256_empty_test() {
     let hash = hc::sha256_hex("");
-    assert_eq!(hash, "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "SHA-256 空字符串 (对齐 Java)");
+    assert_eq!(
+        hash, "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "SHA-256 空字符串 (对齐 Java)"
+    );
 }
 
 // ════════════════════════════════════════════════════════════
@@ -43,7 +46,11 @@ fn hmac_sha256_test() {
     let message = "test中文".as_bytes();
     let mac = hc::hmac_sha256(key, message).unwrap();
     let hex = hex::encode(mac);
-    assert_eq!(hex.len(), 64, "HMAC-SHA256 输出应为 64 位十六进制 (对齐 Java)");
+    assert_eq!(
+        hex.len(),
+        64,
+        "HMAC-SHA256 输出应为 64 位十六进制 (对齐 Java)"
+    );
     let mac2 = hc::hmac_sha256(key, message).unwrap();
     assert_eq!(mac, mac2, "HMAC-SHA256 幂等性 (对齐 Java)");
 }
@@ -66,8 +73,14 @@ fn hmac_sha256_different_keys() {
 fn argon2_test() {
     let password = secrecy::SecretString::from("123456");
     let encoded = hc::hash_password(&password).unwrap();
-    assert!(encoded.starts_with("$argon2"), "Argon2 输出应以 $argon2 开头 (对齐 Java)");
-    assert!(hc::verify_password(&password, &encoded).unwrap(), "密码验证应成功 (对齐 Java)");
+    assert!(
+        encoded.starts_with("$argon2"),
+        "Argon2 输出应以 $argon2 开头 (对齐 Java)"
+    );
+    assert!(
+        hc::verify_password(&password, &encoded).unwrap(),
+        "密码验证应成功 (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `Argon2Test.argon2Test()` — 错误密码应失败
@@ -76,7 +89,10 @@ fn argon2_wrong_password() {
     let password = secrecy::SecretString::from("123456");
     let encoded = hc::hash_password(&password).unwrap();
     let wrong = secrecy::SecretString::from("654321");
-    assert!(!hc::verify_password(&wrong, &encoded).unwrap(), "错误密码应验证失败 (对齐 Java)");
+    assert!(
+        !hc::verify_password(&wrong, &encoded).unwrap(),
+        "错误密码应验证失败 (对齐 Java)"
+    );
 }
 
 // ════════════════════════════════════════════════════════════
@@ -89,9 +105,15 @@ fn aes256_gcm_round_trip() {
     let key = [0u8; 32];
     let plaintext = "test中文".as_bytes();
     let ciphertext = hc::aes256_gcm_encrypt(&key, plaintext).unwrap();
-    assert!(ciphertext.len() > plaintext.len(), "密文应比明文长 (对齐 Java)");
+    assert!(
+        ciphertext.len() > plaintext.len(),
+        "密文应比明文长 (对齐 Java)"
+    );
     let decrypted = hc::aes256_gcm_decrypt(&key, &ciphertext).unwrap();
-    assert_eq!(decrypted, plaintext, "AES-256-GCM 解密后应等于原文 (对齐 Java)");
+    assert_eq!(
+        decrypted, plaintext,
+        "AES-256-GCM 解密后应等于原文 (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `SymmetricTest.aesTest()` — 错误密钥应解密失败
@@ -112,5 +134,8 @@ fn aes256_gcm_empty_plaintext() {
     let plaintext = b"";
     let ciphertext = hc::aes256_gcm_encrypt(&key, plaintext).unwrap();
     let decrypted = hc::aes256_gcm_decrypt(&key, &ciphertext).unwrap();
-    assert_eq!(decrypted, plaintext, "空明文 AES-256-GCM round-trip (对齐 Java)");
+    assert_eq!(
+        decrypted, plaintext,
+        "空明文 AES-256-GCM round-trip (对齐 Java)"
+    );
 }

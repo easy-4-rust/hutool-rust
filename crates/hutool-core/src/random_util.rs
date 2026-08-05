@@ -34,7 +34,11 @@ impl RandomUtil {
 
     /// 对齐 Java: `RandomUtil.randomInt(int, int, boolean, boolean)`
     pub fn random_int_bounds(min: i32, max: i32, include_min: bool, include_max: bool) -> i32 {
-        let start = if include_min { min } else { min.saturating_add(1) };
+        let start = if include_min {
+            min
+        } else {
+            min.saturating_add(1)
+        };
         let end = if include_max {
             max.saturating_add(1)
         } else {
@@ -74,7 +78,11 @@ impl RandomUtil {
 
     /// 对齐 Java: `RandomUtil.randomLong(long, long, boolean, boolean)`
     pub fn random_long_bounds(min: i64, max: i64, include_min: bool, include_max: bool) -> i64 {
-        let start = if include_min { min } else { min.saturating_add(1) };
+        let start = if include_min {
+            min
+        } else {
+            min.saturating_add(1)
+        };
         let end = if include_max {
             max.saturating_add(1)
         } else {
@@ -281,10 +289,7 @@ impl RandomUtil {
             let j = rng.random_range(i..indices.len());
             indices.swap(i, j);
         }
-        indices[..take]
-            .iter()
-            .map(|&i| items[i].clone())
-            .collect()
+        indices[..take].iter().map(|&i| items[i].clone()).collect()
     }
 
     /// 对齐 Java: `RandomUtil.randomEleSet`

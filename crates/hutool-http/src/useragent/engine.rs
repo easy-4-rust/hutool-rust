@@ -2,7 +2,10 @@
 //! 来源: hutool-http/src/main/java/cn/hutool/http/useragent/Engine.java
 //! 中文说明: 渲染引擎识别规则，通过正则匹配识别WebKit、Gecko等引擎
 
-use std::{fmt, hash::{Hash, Hasher}};
+use std::{
+    fmt,
+    hash::{Hash, Hasher},
+};
 
 use super::rule_error::RuleError;
 use super::user_agent_info::UserAgentInfo;

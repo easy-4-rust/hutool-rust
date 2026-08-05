@@ -206,8 +206,7 @@ fn timed_cache_test() {
     );
     assert!(timed_cache.get(&"key3").is_none());
 
-    let value3_supplier =
-        timed_cache.get_or_insert_with("key3", || "Default supplier".to_string());
+    let value3_supplier = timed_cache.get_or_insert_with("key3", || "Default supplier".to_string());
     assert_eq!(value3_supplier.as_str(), "Default supplier");
 
     assert_eq!(
@@ -313,10 +312,7 @@ fn get_remove_test() {
     t2.join().expect("put thread");
 
     // 过期后 get 应为 None；put 写入新值后可读到 "456"
-    assert_eq!(
-        cache.get(&"a").as_deref().map(String::as_str),
-        Some("456")
-    );
+    assert_eq!(cache.get(&"a").as_deref().map(String::as_str), Some("456"));
     let observed = got.lock().unwrap().clone();
     assert!(
         matches!(observed, Some(None) | Some(Some(_))),
@@ -343,7 +339,10 @@ fn lru_cache_put_test() {
         handles.push(thread::spawn(move || {
             let key: String = (0..5)
                 .map(|_| {
-                    let idx = (i.wrapping_mul(31).wrapping_add(rand::random::<u64>() as usize)) % 26;
+                    let idx = (i
+                        .wrapping_mul(31)
+                        .wrapping_add(rand::random::<u64>() as usize))
+                        % 26;
                     (b'a' + idx as u8) as char
                 })
                 .collect();
@@ -416,10 +415,8 @@ fn issue2647_test() {
     let remove_count = Arc::new(AtomicUsize::new(0));
     let sink = Arc::clone(&remove_count);
     // Java: newLRUCache(3, 1) —— capacity=3, timeout=1ms
-    let cache = hc::CacheUtil::new_lru_cache_with_timeout::<String, i32>(
-        3,
-        Duration::from_millis(1),
-    );
+    let cache =
+        hc::CacheUtil::new_lru_cache_with_timeout::<String, i32>(3, Duration::from_millis(1));
     cache.set_listener(move |_key: &String, _value: &i32| {
         sink.fetch_add(1, Ordering::SeqCst);
     });

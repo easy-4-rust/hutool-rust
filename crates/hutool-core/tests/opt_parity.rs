@@ -116,7 +116,11 @@ fn of_empty_able_test() {
     let opt = if empty.is_empty() { None } else { Some(empty) };
     assert!(opt.is_none());
     let nonempty = vec![1, 2];
-    let opt = if nonempty.is_empty() { None } else { Some(nonempty) };
+    let opt = if nonempty.is_empty() {
+        None
+    } else {
+        Some(nonempty)
+    };
     assert_eq!(opt.unwrap().len(), 2);
 }
 

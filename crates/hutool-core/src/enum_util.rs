@@ -43,10 +43,7 @@ impl EnumUtil {
         C: PartialEq,
         F: Fn(&E) -> C,
     {
-        variants
-            .iter()
-            .find(|v| field(v) == *value)
-            .cloned()
+        variants.iter().find(|v| field(v) == *value).cloned()
     }
 
     /// 对齐 Java: `EnumUtil.getFieldBy(E, Func1, Enum::ordinal, value)`
@@ -62,10 +59,7 @@ impl EnumUtil {
         Field: Fn(&E) -> R,
         Match: Fn(&E) -> C,
     {
-        variants
-            .iter()
-            .find(|v| matcher(v) == *value)
-            .map(field)
+        variants.iter().find(|v| matcher(v) == *value).map(field)
     }
 
     /// 对齐 Java: `EnumUtil.likeValueOf(Class, Object)`

@@ -218,7 +218,6 @@ fn is_equals_not_equal() {
     assert!(!ArrayUtil::is_equals(&[1, 2, 3], &[1, 2, 4]));
 }
 
-
 // ── 对齐 Hutool ArrayUtilTest ──
 
 /// 对齐 Java: `ArrayUtilTest.isEmptyTest()`
@@ -373,7 +372,6 @@ fn split_test() {
     assert_eq!(result, vec![vec![1, 2], vec![3, 4], vec![5]]);
 }
 
-
 /// 对齐 Java: `ArrayUtilTest.filterTestForFilter()`
 #[test]
 fn filter_test_for_filter() {
@@ -386,7 +384,10 @@ fn filter_test_for_filter() {
 #[test]
 fn edit_test() {
     let a = [1, 2, 3, 4, 5, 6];
-    let filter: Vec<i32> = a.iter().map(|t| if t % 2 == 0 { t * 10 } else { *t }).collect();
+    let filter: Vec<i32> = a
+        .iter()
+        .map(|t| if t % 2 == 0 { t * 10 } else { *t })
+        .collect();
     assert_eq!(filter, vec![1, 20, 3, 40, 5, 60]);
 }
 
@@ -394,7 +395,10 @@ fn edit_test() {
 #[test]
 fn filter_edit_test() {
     let a = [1, 2, 3, 4, 5, 6];
-    let filter: Vec<i32> = a.iter().filter_map(|t| if t % 2 == 0 { Some(*t) } else { None }).collect();
+    let filter: Vec<i32> = a
+        .iter()
+        .filter_map(|t| if t % 2 == 0 { Some(*t) } else { None })
+        .collect();
     assert_eq!(filter, vec![2, 4, 6]);
 }
 
@@ -503,7 +507,14 @@ fn is_all_not_null_test() {
         Some("dd"),
     ];
     assert!(ArrayUtil::is_all_not_null(&a));
-    let b: [Option<&str>; 6] = [Some("aa"), Some("bb"), Some("cc"), None, Some("bb"), Some("dd")];
+    let b: [Option<&str>; 6] = [
+        Some("aa"),
+        Some("bb"),
+        Some("cc"),
+        None,
+        Some("bb"),
+        Some("dd"),
+    ];
     assert!(!ArrayUtil::is_all_not_null(&b));
 }
 
@@ -545,7 +556,10 @@ fn last_index_of_sub_test() {
     assert_eq!(ArrayUtil::last_index_of_sub(&a, &d), 3);
     assert_eq!(ArrayUtil::last_index_of_sub(&a, &e), -1);
     assert_eq!(ArrayUtil::last_index_of_sub(&a, &[]), -1);
-    assert_eq!(ArrayUtil::last_index_of_sub(&[] as &[i32], &[] as &[i32]), -1);
+    assert_eq!(
+        ArrayUtil::last_index_of_sub(&[] as &[i32], &[] as &[i32]),
+        -1
+    );
     assert_eq!(ArrayUtil::last_index_of_sub(&[] as &[i32], &b), -1);
 }
 
@@ -571,7 +585,12 @@ fn remove_empty_test() {
     let a: [Option<&str>; 6] = [Some("a"), Some("b"), Some(""), None, Some(" "), Some("c")];
     assert_eq!(
         ArrayUtil::remove_empty(&a),
-        vec!["a".to_string(), "b".to_string(), " ".to_string(), "c".to_string()]
+        vec![
+            "a".to_string(),
+            "b".to_string(),
+            " ".to_string(),
+            "c".to_string()
+        ]
     );
 }
 

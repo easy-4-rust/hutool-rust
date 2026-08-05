@@ -42,7 +42,6 @@ fn id_util_simple_uuid_uniqueness() {
     assert_ne!(id1, id2);
 }
 
-
 // ── 对齐 Hutool IdUtilTest ──
 
 /// 对齐 Java: `IdUtilTest.randomUUIDTest()`

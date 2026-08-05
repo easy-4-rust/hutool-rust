@@ -3,23 +3,32 @@
 
 use hutool_json as hj;
 
-#[test] fn parse_test() { assert!(hj::JSONUtil::parse(r#"[{"a":"a\x]"#).is_err()); }
-#[test] fn parse_number_test() { assert!(hj::JSONUtil::parse_array("123").is_err()); }
+#[test]
+fn parse_test() {
+    assert!(hj::JSONUtil::parse(r#"[{"a":"a\x]"#).is_err());
+}
+#[test]
+fn parse_number_test() {
+    assert!(hj::JSONUtil::parse_array("123").is_err());
+}
 
-#[test] fn parse_obj_test() {
+#[test]
+fn parse_obj_test() {
     let obj = hj::JSONUtil::parse(r#"{"name":"alice","age":25}"#).unwrap();
     assert_eq!(obj["name"], "alice");
     assert_eq!(obj["age"], 25);
 }
 
-#[test] fn to_json_str_test() {
+#[test]
+fn to_json_str_test() {
     let v = serde_json::json!({"total":13,"rows":[{"name":"alice"},{"name":"bob"}]});
     let s = hj::JSONUtil::to_pretty_string(&v).unwrap();
     assert!(!s.is_empty());
     assert!(hj::JSONUtil::parse(&s).unwrap().is_object());
 }
 
-#[test] fn to_json_str_test_2() {
+#[test]
+fn to_json_str_test_2() {
     let v = serde_json::json!({"model":{"mobile":"17610836523","type":1}});
     let s = hj::JSONUtil::to_json_string(&v).unwrap();
     let parsed = hj::JSONUtil::parse(&s).unwrap();
@@ -27,55 +36,74 @@ use hutool_json as hj;
     assert_eq!(parsed["model"]["mobile"], "17610836523");
 }
 
-#[test] fn to_json_str_test_3() {
+#[test]
+fn to_json_str_test_3() {
     let list = vec!["a", "b", "c"];
-    assert_eq!(hj::JSONUtil::to_json_string(&list).unwrap(), r#"["a","b","c"]"#);
+    assert_eq!(
+        hj::JSONUtil::to_json_string(&list).unwrap(),
+        r#"["a","b","c"]"#
+    );
 }
 
-#[test] fn to_bean_test() {
-    #[derive(serde::Deserialize, Debug)] struct User { name: String, age: u32 }
+#[test]
+fn to_bean_test() {
+    #[derive(serde::Deserialize, Debug)]
+    struct User {
+        name: String,
+        age: u32,
+    }
     let u: User = hj::JSONUtil::to_bean(r#"{"name":"alice","age":25}"#).unwrap();
-    assert_eq!(u.name, "alice"); assert_eq!(u.age, 25);
+    assert_eq!(u.name, "alice");
+    assert_eq!(u.age, 25);
 }
 
-#[test] fn get_str_test() {
+#[test]
+fn get_str_test() {
     let obj = hj::JSONUtil::parse(r#"{"name":"alice"}"#).unwrap();
     assert_eq!(obj["name"], "alice");
 }
 
-#[test] fn double_test() {
+#[test]
+fn double_test() {
     let obj = hj::JSONUtil::parse(r#"{"pi":3.141592653589793}"#).unwrap();
     assert!((obj["pi"].as_f64().unwrap() - 3.141592653589793).abs() < 1e-10);
 }
 
-#[test] fn custom_value_test() {
+#[test]
+fn custom_value_test() {
     let obj = hj::JSONUtil::parse(r#"{"key":"value","num":42}"#).unwrap();
-    assert_eq!(obj["key"], "value"); assert_eq!(obj["num"], 42);
+    assert_eq!(obj["key"], "value");
+    assert_eq!(obj["num"], 42);
 }
 
-#[test] fn set_strip_trailing_zeros_test() {
+#[test]
+fn set_strip_trailing_zeros_test() {
     let obj = hj::JSONUtil::parse(r#"{"price":10.0}"#).unwrap();
     assert_eq!(obj["price"], 10.0);
 }
 
-#[test] fn parse_big_number_test() {
+#[test]
+fn parse_big_number_test() {
     let obj = hj::JSONUtil::parse(r#"{"id":1234567890123456789}"#).unwrap();
     assert_eq!(obj["id"], 1234567890123456789_i64);
 }
 
-#[test] fn duplicate_key_test() {
+#[test]
+fn duplicate_key_test() {
     let obj = hj::JSONUtil::parse(r#"{"name":"alice","name":"bob"}"#).unwrap();
     assert_eq!(obj["name"], "bob");
 }
 
-#[test] fn test_array_entity() {
+#[test]
+fn test_array_entity() {
     let arr = hj::JSONUtil::parse(r#"[{"name":"alice"},{"name":"bob"}]"#).unwrap();
     assert!(arr.is_array());
     assert_eq!(arr[0]["name"], "alice");
     assert_eq!(arr[1]["name"], "bob");
 }
 
-#[test] fn is_valid_test() {
+#[test]
+fn is_valid_test() {
     assert!(hj::JSONUtil::is_json(r#"{"a":1}"#));
     assert!(!hj::JSONUtil::is_json("not json"));
     assert!(hj::JSONUtil::is_json_obj(r#"{"a":1}"#));
@@ -84,31 +112,42 @@ use hutool_json as hj;
     assert!(!hj::JSONUtil::is_json_array(r#"{"a":1}"#));
 }
 
-#[test] fn minify_pretty_test() {
+#[test]
+fn minify_pretty_test() {
     let json = r#"{"name":"alice","age":25}"#;
     let formatted = hj::JSONStrFormatter::format(json).unwrap();
     assert!(formatted.contains("\n"));
 }
 
-#[test] fn quote_escape_test() {
+#[test]
+fn quote_escape_test() {
     let quoted = hj::JSONUtil::quote("hello world");
     assert!(quoted.starts_with('"') && quoted.ends_with('"'));
     let escaped = hj::JSONUtil::escape("hello world");
     assert!(!escaped.contains('"'));
 }
 
-#[test] fn format_test() {
+#[test]
+fn format_test() {
     let formatted = hj::JSONStrFormatter::format(r#"{"name":"alice"}"#).unwrap();
     assert!(formatted.contains("\n"));
     assert!(formatted.contains("name"));
 }
 
-#[test] fn issue_3540_test() {
-    assert_eq!(hj::JSONUtil::parse(r#"{"key":"value"}"#).unwrap()["key"], "value");
+#[test]
+fn issue_3540_test() {
+    assert_eq!(
+        hj::JSONUtil::parse(r#"{"key":"value"}"#).unwrap()["key"],
+        "value"
+    );
 }
 
-#[test] fn issue_3873_test() {
-    assert_eq!(hj::JSONUtil::parse(r#"{"key":"value"}"#).unwrap()["key"], "value");
+#[test]
+fn issue_3873_test() {
+    assert_eq!(
+        hj::JSONUtil::parse(r#"{"key":"value"}"#).unwrap()["key"],
+        "value"
+    );
 }
 
 // ===== 第二批:剩余5个 JSONUtilTest 方法 =====

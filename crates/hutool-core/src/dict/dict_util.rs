@@ -166,7 +166,8 @@ impl DictUtil {
     /// 对齐 Java: `Dict.getFloat` / `getDouble` / `getNumber`
     #[must_use]
     pub fn get_float(dict: &Dict, key: &str) -> Option<f64> {
-        dict.get(key).and_then(|v| v.as_f64().or_else(|| v.as_i64().map(|i| i as f64)))
+        dict.get(key)
+            .and_then(|v| v.as_f64().or_else(|| v.as_i64().map(|i| i as f64)))
     }
 
     /// 对齐 Java: `Dict.getDouble(String)`
@@ -238,7 +239,10 @@ impl DictUtil {
     }
 
     /// 对齐 Java: `Dict.getBean(String)` — 子对象反序列化。
-    pub fn get_bean<T: DeserializeOwned>(dict: &Dict, key: &str) -> Result<Option<T>, serde_json::Error> {
+    pub fn get_bean<T: DeserializeOwned>(
+        dict: &Dict,
+        key: &str,
+    ) -> Result<Option<T>, serde_json::Error> {
         match dict.get(key) {
             None | Some(Value::Null) => Ok(None),
             Some(v) => Ok(Some(serde_json::from_value(v.clone())?)),

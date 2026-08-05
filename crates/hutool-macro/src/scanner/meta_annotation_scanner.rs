@@ -3,8 +3,8 @@
 use std::collections::{HashSet, VecDeque};
 use std::sync::Arc;
 
-use super::annotation_scanner::{accept_annotation, AnnotationScanner, ScanConsumer};
-use crate::element::{global_registry, ElementHandle};
+use super::annotation_scanner::{AnnotationScanner, ScanConsumer, accept_annotation};
+use crate::element::{ElementHandle, global_registry};
 use crate::mirror::{AnnotationMirror, AnnotationTypeName};
 
 /// 对齐 Java 类: `cn.hutool.core.annotation.scanner.MetaAnnotationScanner`
@@ -21,7 +21,10 @@ impl MetaAnnotationScanner {
     }
 
     /// 获取注解类型上的元注解列表。
-    pub fn get_meta_annotations(&self, annotation_type: AnnotationTypeName) -> Vec<Arc<AnnotationMirror>> {
+    pub fn get_meta_annotations(
+        &self,
+        annotation_type: AnnotationTypeName,
+    ) -> Vec<Arc<AnnotationMirror>> {
         let mut list = Vec::new();
         {
             let list_ref = &mut list;
@@ -52,7 +55,11 @@ impl AnnotationScanner for MetaAnnotationScanner {
 
 impl MetaAnnotationScanner {
     /// 扫描元注解内部实现。
-    pub fn scan_meta_impl(&self, annotation_type: AnnotationTypeName, consumer: &mut ScanConsumer<'_>) {
+    pub fn scan_meta_impl(
+        &self,
+        annotation_type: AnnotationTypeName,
+        consumer: &mut ScanConsumer<'_>,
+    ) {
         let registry = global_registry().read();
         let Some(_schema) = registry.schema(annotation_type) else {
             return;

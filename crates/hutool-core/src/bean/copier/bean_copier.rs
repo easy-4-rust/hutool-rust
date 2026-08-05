@@ -11,8 +11,8 @@
 
 use std::collections::HashMap;
 
-use serde::de::DeserializeOwned;
 use serde::Serialize;
+use serde::de::DeserializeOwned;
 use serde_json::Value;
 
 use super::abs_copier::AbsCopier;
@@ -214,7 +214,10 @@ mod tests {
         };
 
         let result = copy_bean_to_map(source, CopyOptions::create().ignore_null_value());
-        assert_eq!(result.get("name").unwrap(), &Value::String("Charlie".into()));
+        assert_eq!(
+            result.get("name").unwrap(),
+            &Value::String("Charlie".into())
+        );
         assert_eq!(result.get("age").unwrap(), &Value::Number(35.into()));
         assert!(!result.contains_key("email"));
     }

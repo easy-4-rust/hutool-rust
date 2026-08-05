@@ -65,7 +65,7 @@ hutool-rust 是按 hutool 模块划分的 Cargo workspace，每个 hutool-* 模�
 | workspace 可构建 | ✅ | `cargo check` |
 | 单元测试 | ✅ 2000+ | `cargo test --tests` 2347 passed / 0 failed |
 | hutool-crypto 字节级对比 | ✅ 364 测试 | `crypto_byte_level_parity.rs` + `sm_byte_level_parity.rs` |
-| 1:1 facade 对齐 | 🟡 POI 不计入实现范围 | `crates/hutool-poi/` 仅为 API 占位 crate，未由 `hutool` facade 暴露 |
+| 1:1 facade 对齐 | ✅ POI 已处置 | `hutool-poi` 占位 crate 已于 2026-08-04 移除，Excel 能力由 `easyexcel-rust` 承接 |
 | MSRV CI | `1.85` | `rust-version = "1.85"` |
 
 ## 2. 功能与成熟度
@@ -90,7 +90,7 @@ hutool-rust 是按 hutool 模块划分的 Cargo workspace，每个 hutool-* 模�
 | Vernal 集成 | `hutool-vernal` | 🧪 实验性 | Context-local 工具组件 | Vernal Framework |
 | DFA | `hutool-dfa` | ✅ 稳定 | DFA 状态机 | — |
 | Script | `hutool-script` | ✅ 稳定 | ScriptUtil 脚本执行 | rhai |
-| POI | `hutool-poi` | ⚪ 未实现 | 仅有 API/文件占位，构造方法会 panic | 仅 thiserror |
+| POI | ~~`hutool-poi`~~（已移除） | ✅ 已处置 | 占位 crate 已删除；Excel/Word/OFD 能力由 `easyexcel-rust` 承接（EasyExcel 4.0.3 高保真迁移） | — |
 | 加密子集 | `hutool-captcha` | 🧪 预览 | 验证码生成 | — |
 | 布隆过滤 | `hutool-bloom-filter` | ✅ 稳定 | BloomFilter | bloomfilter |
 | 套接字 | `hutool-socket` | 🧪 实验性 | SocketUtil | — |
@@ -239,7 +239,7 @@ flowchart TB
 | `hutool-jwt` | `crates/hutool-jwt` | 🧪 | JWT 鉴权 |
 | `hutool-log` | `crates/hutool-log` | 🧪 | 日志 |
 | `hutool-observability` | `crates/hutool-observability` | 🧪 | 默认 tracing/metrics/health；诊断后端按 feature + 授权启用 |
-| `hutool-poi` | `crates/hutool-poi` | ⚪ | 仅用于 API 登记的占位骨架；没有 Office 引擎实现，也没有 facade feature |
+| `hutool-poi` | ~~`crates/hutool-poi`~~（2026-08-04 移除） | ✅ | 占位骨架已删除，能力由 `easyexcel-rust` 承接 |
 | `hutool-script` | `crates/hutool-script` | ✅ | 脚本执行 |
 | `hutool-setting` | `crates/hutool-setting` | ✅ | 设置/配置 |
 | `hutool-socket` | `crates/hutool-socket` | 🧪 | 套接字 |
@@ -446,7 +446,7 @@ hutool-rust 选择 RustCrypto 而非 openssl 的原因：纯 Rust、零 FFI、`#
 - **V0.2**：补全 hutool-db（缺 75 文件）、hutool-extra（缺 170 文件）
 - **V0.3**：实现 SM2/SM3/SM4 自有版本（不依赖 RustCrypto 降低编译时间）
 - **V0.4**：发布到 crates.io，添加 rustdoc 完整文档
-- **V1.0**：所有已实现的能力 crate 稳定并与 hutool 对齐；在接入真实引擎前，`hutool-poi` 不计入完成度
+- **V1.0**：所有已实现的能力 crate 稳定并与 hutool 对齐；`hutool-poi` 已于 2026-08-04 移除，Excel 能力由 `easyexcel-rust` 承接
 
 ## 13. 构建测试与质量门禁
 
@@ -482,7 +482,7 @@ CI 门禁：
 
 ## 14. 已知问题
 
-- `hutool-poi` 仅存在 API/文件占位骨架，未由 `hutool` facade 暴露，没有 `poi` feature，只依赖 `thiserror`，不具备可用的 Excel、Word、OFD 或 PDF 引擎实现。
+- `hutool-poi` 占位骨架已于 2026-08-04 从 workspace 移除（`git rm -r crates/hutool-poi`）；Rust 侧 Excel 能力由独立项目 `easyexcel-rust`（EasyExcel 4.0.3 高保真迁移）承接，不再在本仓库重复实现。
 - 部分 hutool API 因 Rust 语义差异未移植（如 `RuntimeException` → `Result<T, E>`）
 - 部分 stub 函数使用 `PendingEngine` 错误占位，等待上层引擎完成
 

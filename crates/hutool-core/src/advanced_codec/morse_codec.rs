@@ -2,7 +2,6 @@
 
 /// 对齐: `cn.hutool.core.codec.Morse`
 /// 摩尔斯电码
-
 use crate::{CoreError, Result};
 
 use super::{morse_bits, morse_character};

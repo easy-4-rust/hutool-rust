@@ -2,8 +2,6 @@
 
 /// 对齐: `cn.hutool.core.collection.ArrayIter`
 /// 数组迭代器
-
-
 use super::resettable_iter::ResettableIter;
 
 /// An iterator over a borrowed slice with Hutool-compatible range handling.

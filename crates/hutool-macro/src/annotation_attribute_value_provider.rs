@@ -8,5 +8,4 @@
 /// 对齐 Java interface: `cn.hutool.core.annotation.AnnotationAttributeValueProvider`
 ///
 /// Java 接口在 Rust 中通过 trait dispatch 表达。
-pub trait AnnotationAttributeValueProvider {
-}
+pub trait AnnotationAttributeValueProvider {}

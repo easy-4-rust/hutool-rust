@@ -98,7 +98,6 @@ fn contains_name_not_found() {
     assert!(!EnumUtil::contains_name(&variants, ""));
 }
 
-
 // ── 对齐 Hutool EnumUtilTest ──
 
 #[derive(Debug, Clone, PartialEq)]
@@ -112,7 +111,14 @@ enum TestEnum {
 #[test]
 fn get_names_test() {
     let names = EnumUtil::names(&[TestEnum::TEST1, TestEnum::TEST2, TestEnum::TEST3]);
-    assert_eq!(vec!["TEST1".to_string(), "TEST2".to_string(), "TEST3".to_string()], names);
+    assert_eq!(
+        vec![
+            "TEST1".to_string(),
+            "TEST2".to_string(),
+            "TEST3".to_string()
+        ],
+        names
+    );
 }
 
 /// 对齐 Java: `EnumUtilTest.getEnumMapTest()`
@@ -220,7 +226,11 @@ fn get_field_by_test() {
 #[test]
 fn like_value_of_test() {
     let all = test_enum_typed_variants();
-    let found = EnumUtil::like_value_of(&all, "type2", &[|e: &TestEnumTyped| e.type_str().to_string()]);
+    let found = EnumUtil::like_value_of(
+        &all,
+        "type2",
+        &[|e: &TestEnumTyped| e.type_str().to_string()],
+    );
     assert_eq!(found, Some(TestEnumTyped::TEST2));
 }
 

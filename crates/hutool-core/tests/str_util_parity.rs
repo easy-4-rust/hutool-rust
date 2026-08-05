@@ -14,7 +14,10 @@ use hutool_core as hc;
 #[test]
 fn is_blank_test() {
     let blank = "\t   \u{a0}\u{3000}";
-    assert!(hc::is_blank(blank), "is_blank(制表+空格+全角) 应 true (对齐 Java)");
+    assert!(
+        hc::is_blank(blank),
+        "is_blank(制表+空格+全角) 应 true (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `StrUtilTest.trimTest()` (行 24-29)
@@ -31,7 +34,11 @@ fn trim_new_line_test() {
     assert_eq!(hc::trim("\r\naaa"), "aaa", "trim \\r\\naaa (对齐 Java)");
     assert_eq!(hc::trim("\raaa"), "aaa", "trim \\raaa (对齐 Java)");
     assert_eq!(hc::trim("\naaa"), "aaa", "trim \\naaa (对齐 Java)");
-    assert_eq!(hc::trim("\r\n\r\naaa"), "aaa", "trim \\r\\n\\r\\naaa (对齐 Java)");
+    assert_eq!(
+        hc::trim("\r\n\r\naaa"),
+        "aaa",
+        "trim \\r\\n\\r\\naaa (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `StrUtilTest.trimTabTest()` (行 43-47)
@@ -107,7 +114,10 @@ fn replace_test_2() {
 #[test]
 fn replace_test_3() {
     let result = hc::replace(",abcdef,", ",", "|");
-    assert_eq!(result, "|abcdef|", "replace(\",abcdef,\", \",\", \"|\") (对齐 Java)");
+    assert_eq!(
+        result, "|abcdef|",
+        "replace(\",abcdef,\", \",\", \"|\") (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `StrUtilTest.indexOfIgnoreCaseTest()` (行 184-197)
@@ -150,7 +160,11 @@ fn last_index_of_test() {
     // Java 的 lastIndexOf(str, searchStr, startPos) 比较复杂,
     // 这里测试基本的 rfind 语义。
     let result = hc::last_index_of(a, "cc");
-    assert_eq!(result, Some(8), "last_index_of(\"aabbccddcc\", \"cc\") = 8 (对齐 Java 语义)");
+    assert_eq!(
+        result,
+        Some(8),
+        "last_index_of(\"aabbccddcc\", \"cc\") = 8 (对齐 Java 语义)"
+    );
 }
 
 /// 对齐 Java: `StrUtilTest.lastIndexOfIgnoreCaseTest()` (行 206-220)
@@ -211,8 +225,14 @@ fn equals_test() {
 /// Hutool 5.8.46 无 `equalsIgnoreCaseTest`；忽略大小写字符串对齐 `indexOfIgnoreCaseTest`。
 #[test]
 fn index_of_ignore_case_equals_parity_test() {
-    assert!(hc::equals_ignore_case("abc", "ABC"), "equalsIgnoreCase(\"abc\", \"ABC\") true");
-    assert!(hc::equals_ignore_case("ABC", "abc"), "equalsIgnoreCase 反序 true");
+    assert!(
+        hc::equals_ignore_case("abc", "ABC"),
+        "equalsIgnoreCase(\"abc\", \"ABC\") true"
+    );
+    assert!(
+        hc::equals_ignore_case("ABC", "abc"),
+        "equalsIgnoreCase 反序 true"
+    );
 }
 
 /// 对齐 Java: `cn.hutool.core.util.ObjectUtilTest.containsTest()`
@@ -220,8 +240,14 @@ fn index_of_ignore_case_equals_parity_test() {
 /// Hutool 5.8.46 无 `StrUtilTest.containsTest`；包含判断对齐 `ObjectUtilTest.containsTest`。
 #[test]
 fn contains_test() {
-    assert!(hc::contains("hello world", "world"), "contains(\"hello world\", \"world\")");
-    assert!(!hc::contains("hello", "world"), "contains(\"hello\", \"world\") false");
+    assert!(
+        hc::contains("hello world", "world"),
+        "contains(\"hello world\", \"world\")"
+    );
+    assert!(
+        !hc::contains("hello", "world"),
+        "contains(\"hello\", \"world\") false"
+    );
 }
 
 /// 对齐 Java: `cn.hutool.core.util.StrUtilTest.containsAnyTest()`
@@ -238,8 +264,14 @@ fn contains_any_ignore_case_parity_test() {
 /// 对齐 Java: `cn.hutool.core.util.StrUtilTest.startWithTest()`
 #[test]
 fn start_with_test() {
-    assert!(hc::start_with("hello world", "hello"), "startWith(\"hello world\", \"hello\")");
-    assert!(!hc::start_with("hello", "world"), "startWith(\"hello\", \"world\") false");
+    assert!(
+        hc::start_with("hello world", "hello"),
+        "startWith(\"hello world\", \"hello\")"
+    );
+    assert!(
+        !hc::start_with("hello", "world"),
+        "startWith(\"hello\", \"world\") false"
+    );
 }
 
 /// 对齐 Java: `cn.hutool.core.text.CharSequenceUtilTest.endWithTest()`
@@ -247,8 +279,14 @@ fn start_with_test() {
 /// Hutool 5.8 中 `endWith` 测试在 `CharSequenceUtilTest`（StrUtil 继承）。
 #[test]
 fn end_with_test() {
-    assert!(hc::end_with("hello world", "world"), "endWith(\"hello world\", \"world\")");
-    assert!(!hc::end_with("hello", "world"), "endWith(\"hello\", \"world\") false");
+    assert!(
+        hc::end_with("hello world", "world"),
+        "endWith(\"hello world\", \"world\")"
+    );
+    assert!(
+        !hc::end_with("hello", "world"),
+        "endWith(\"hello\", \"world\") false"
+    );
 }
 
 /// 对齐 Java: `cn.hutool.core.util.StrUtilTest.reverseByCodePointSpecialCharactersTest()`
@@ -291,8 +329,16 @@ fn length_test() {
 /// Hutool 5.8.46 无 `StrUtilTest.strTest`；null→空串对齐 `ObjectUtilTest.toStringTest`。
 #[test]
 fn str_or_empty_test() {
-    assert_eq!(hc::str_or_empty(Some("hello")), "hello", "str_or_empty(Some) = \"hello\"");
-    assert_eq!(hc::str_or_empty(None), "", "str_or_empty(None) = \"\" (对齐 Java)");
+    assert_eq!(
+        hc::str_or_empty(Some("hello")),
+        "hello",
+        "str_or_empty(Some) = \"hello\""
+    );
+    assert_eq!(
+        hc::str_or_empty(None),
+        "",
+        "str_or_empty(None) = \"\" (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `cn.hutool.core.util.StrUtilTest.repeatAndJoinTest()`
@@ -300,7 +346,11 @@ fn str_or_empty_test() {
 /// Hutool 5.8.46 无独立 `repeatTest`；重复对齐 `repeatAndJoinTest`（separator=null 即 repeat）。
 #[test]
 fn repeat_and_join_parity_test() {
-    assert_eq!(hc::repeat("ab", 3), "ababab", "repeat(\"ab\", 3) = \"ababab\"");
+    assert_eq!(
+        hc::repeat("ab", 3),
+        "ababab",
+        "repeat(\"ab\", 3) = \"ababab\""
+    );
 }
 // ════════════════════════════════════════════════════════════
 //  第二批：剩余 StrUtilTest 方法
@@ -311,14 +361,20 @@ fn repeat_and_join_parity_test() {
 fn split_null_test() {
     let result: Vec<&str> = "".split('.').collect();
     // Java StrUtil.split(null, '.') → size 0
-    assert!(result.is_empty() || result == [""], "split(null, '.') 应为空 (对齐 Java)");
+    assert!(
+        result.is_empty() || result == [""],
+        "split(null, '.') 应为空 (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `StrUtilTest.splitToLongTest()`
 #[test]
 fn split_to_long_test() {
     let str = "1,2,3,4,5";
-    let result: Vec<i64> = str.split(',').map(|s| s.trim().parse::<i64>().unwrap()).collect();
+    let result: Vec<i64> = str
+        .split(',')
+        .map(|s| s.trim().parse::<i64>().unwrap())
+        .collect();
     assert_eq!(result, vec![1, 2, 3, 4, 5], "splitToLong (对齐 Java)");
 }
 
@@ -326,7 +382,10 @@ fn split_to_long_test() {
 #[test]
 fn split_to_int_test() {
     let str = "1,2,3,4,5";
-    let result: Vec<i32> = str.split(',').map(|s| s.trim().parse::<i32>().unwrap()).collect();
+    let result: Vec<i32> = str
+        .split(',')
+        .map(|s| s.trim().parse::<i32>().unwrap())
+        .collect();
     assert_eq!(result, vec![1, 2, 3, 4, 5], "splitToInt (对齐 Java)");
 }
 
@@ -334,16 +393,32 @@ fn split_to_int_test() {
 #[test]
 fn strip_test_2() {
     let str = "abcd123";
-    assert_eq!(hc::strip(str, "ab"), "cd123", "strip(str, \"ab\") (对齐 Java)");
-    assert_eq!(hc::strip(str, "ab"), "cd123", "strip(str, \"ab\") (对齐 Java)");
+    assert_eq!(
+        hc::strip(str, "ab"),
+        "cd123",
+        "strip(str, \"ab\") (对齐 Java)"
+    );
+    assert_eq!(
+        hc::strip(str, "ab"),
+        "cd123",
+        "strip(str, \"ab\") (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `StrUtilTest.stripIgnoreCaseTest()`
 #[test]
 fn strip_ignore_case_test() {
     let str = "abcd123";
-    assert_eq!(hc::strip_ignore_case(str, "Ab"), "cd123", "stripIgnoreCase(str, \"Ab\") (对齐 Java)");
-    assert_eq!(hc::strip_ignore_case(str, "AB"), "cd123", "stripIgnoreCase(str, \"AB\") (对齐 Java)");
+    assert_eq!(
+        hc::strip_ignore_case(str, "Ab"),
+        "cd123",
+        "stripIgnoreCase(str, \"Ab\") (对齐 Java)"
+    );
+    assert_eq!(
+        hc::strip_ignore_case(str, "AB"),
+        "cd123",
+        "stripIgnoreCase(str, \"AB\") (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `StrUtilTest.replaceTest()` (行 222-228)
@@ -378,9 +453,17 @@ fn sub_test() {
 fn sub_before_test() {
     let a = "abcderghigh";
     // subBefore(a, "d", false) → "abc"
-    assert_eq!(a.split("d").next().unwrap_or(""), "abc", "subBefore(\"d\") (对齐 Java)");
+    assert_eq!(
+        a.split("d").next().unwrap_or(""),
+        "abc",
+        "subBefore(\"d\") (对齐 Java)"
+    );
     // subBefore(a, 'k', false) → 原串
-    assert_eq!(a.split('k').next().unwrap_or(a), a, "subBefore('k') 未找到返回原串 (对齐 Java)");
+    assert_eq!(
+        a.split('k').next().unwrap_or(a),
+        a,
+        "subBefore('k') 未找到返回原串 (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `StrUtilTest.subAfterTest()` (行 319-328)
@@ -388,9 +471,17 @@ fn sub_before_test() {
 fn sub_after_test() {
     let a = "abcderghigh";
     // subAfter(a, "d", false) → "erghigh"
-    assert_eq!(a.splitn(2, "d").nth(1).unwrap_or(""), "erghigh", "subAfter(\"d\") (对齐 Java)");
+    assert_eq!(
+        a.splitn(2, "d").nth(1).unwrap_or(""),
+        "erghigh",
+        "subAfter(\"d\") (对齐 Java)"
+    );
     // subAfter(a, 'h', true) → "" (最后一个 h)
-    assert_eq!(a.rsplit('h').next().unwrap_or(""), "", "subAfter('h', true) (对齐 Java)");
+    assert_eq!(
+        a.rsplit('h').next().unwrap_or(""),
+        "",
+        "subAfter('h', true) (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `StrUtilTest.repeatAndJoinTest()` (行 330-337)
@@ -398,7 +489,10 @@ fn sub_after_test() {
 fn repeat_and_join_test() {
     // Java: repeatAndJoin("?", 5, ",") → "?,?,?,?,?"
     let result: String = vec!["?"; 5].join(",");
-    assert_eq!(result, "?,?,?,?,?", "repeatAndJoin(\"?\", 5, \",\") (对齐 Java)");
+    assert_eq!(
+        result, "?,?,?,?,?",
+        "repeatAndJoin(\"?\", 5, \",\") (对齐 Java)"
+    );
     // repeatAndJoin("?", 0, ",") → ""
     let result: String = std::iter::repeat("?").take(0).collect::<Vec<_>>().join(",");
     assert_eq!(result, "", "repeatAndJoin(\"?\", 0, \",\") (对齐 Java)");
@@ -417,9 +511,18 @@ fn max_length_test() {
 /// 对齐 Java: `StrUtilTest.containsAnyTest()` (行 346-354)
 #[test]
 fn contains_any_test() {
-    assert!(hc::contains("aaabbbccc", "a"), "containsAny('a') (对齐 Java)");
-    assert!(!hc::contains("aaabbbccc", "e"), "containsAny('e') (对齐 Java)");
-    assert!(hc::contains("aaabbbccc", "c"), "containsAny('c') (对齐 Java)");
+    assert!(
+        hc::contains("aaabbbccc", "a"),
+        "containsAny('a') (对齐 Java)"
+    );
+    assert!(
+        !hc::contains("aaabbbccc", "e"),
+        "containsAny('e') (对齐 Java)"
+    );
+    assert!(
+        hc::contains("aaabbbccc", "c"),
+        "containsAny('c') (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `StrUtilTest.containsAllTest()` (行 356-359)
@@ -480,7 +583,10 @@ fn hide_test() {
 #[test]
 fn is_numeric_test() {
     let a = "2142342422423423";
-    assert!(a.chars().all(|c| c.is_ascii_digit()), "isNumeric (对齐 Java)");
+    assert!(
+        a.chars().all(|c| c.is_ascii_digit()),
+        "isNumeric (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `StrUtilTest.isCharEqualsTest()` (行 393-396)
@@ -523,7 +629,14 @@ fn pad_after_test() {
     // Java: padAfter("123", 2, '0') → "23" (truncate to last 2 chars)
     let a = "123";
     let target_len = 2usize;
-    let result: String = a.chars().rev().take(target_len).collect::<Vec<_>>().into_iter().rev().collect();
+    let result: String = a
+        .chars()
+        .rev()
+        .take(target_len)
+        .collect::<Vec<_>>()
+        .into_iter()
+        .rev()
+        .collect();
     assert_eq!(result, "23", "padAfter(\"123\", 2, '0') (对齐 Java)");
     // padAfter("123", -1, '0') → ""
     let result = "";
@@ -535,7 +648,11 @@ fn pad_after_test() {
 fn sub_between_all_test() {
     // subBetweenAll("saho[yz]fdsadp[abc]a", "[", "]") → ["yz", "abc"]
     let input = "saho[yz]fdsadp[abc]a";
-    let result: Vec<&str> = input.split('[').skip(1).filter_map(|s| s.split(']').next()).collect();
+    let result: Vec<&str> = input
+        .split('[')
+        .skip(1)
+        .filter_map(|s| s.split(']').next())
+        .collect();
     assert_eq!(result, vec!["yz", "abc"], "subBetweenAll (对齐 Java)");
 }
 
@@ -555,7 +672,10 @@ fn filter_test() {
     let result: String = "hutool678".chars().filter(|c| c.is_ascii_digit()).collect();
     assert_eq!(result, "678", "filter 数字 (对齐 Java)");
     // filter("	 你 好　", c -> !isBlankChar(c)) → "你好"
-    let result: String = "\t 你 好\u{3000}".chars().filter(|c| !c.is_whitespace() && *c != '\u{3000}').collect();
+    let result: String = "\t 你 好\u{3000}"
+        .chars()
+        .filter(|c| !c.is_whitespace() && *c != '\u{3000}')
+        .collect();
     assert_eq!(result, "你好", "filter 非空白 (对齐 Java)");
 }
 
@@ -565,14 +685,22 @@ fn wrap_all_test() {
     // wrapAll("`", "`", ["1","2","3","4"]) → ["`1`", "`2`", "`3`", "`4`"]
     let strings = vec!["1", "2", "3", "4"];
     let wrapped: Vec<String> = strings.iter().map(|s| format!("`{}`", s)).collect();
-    assert_eq!(wrapped, vec!["`1`", "`2`", "`3`", "`4`"], "wrapAll (对齐 Java)");
+    assert_eq!(
+        wrapped,
+        vec!["`1`", "`2`", "`3`", "`4`"],
+        "wrapAll (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `StrUtilTest.reverseByCodePointSpecialCharactersTest()` (行 460-475)
 #[test]
 fn reverse_by_code_point_special_characters_test() {
     assert_eq!(hc::reverse("abcd"), "dcba", "reverse abcd (对齐 Java)");
-    assert_eq!(hc::reverse("你好世界"), "界世好你", "reverse 中文 (对齐 Java)");
+    assert_eq!(
+        hc::reverse("你好世界"),
+        "界世好你",
+        "reverse 中文 (对齐 Java)"
+    );
     // emoji: A😊B → B😊A
     let emoji = "A\u{1F60A}B";
     let reversed: String = emoji.chars().rev().collect();
@@ -652,7 +780,10 @@ fn move_test() {
         result.insert(4 + i, c);
     }
     let result_str: String = result.into_iter().collect();
-    assert_eq!(result_str, "aaaa22222aaabbbbbbb", "move(str, 7, 12, -3) (对齐 Java)");
+    assert_eq!(
+        result_str, "aaaa22222aaabbbbbbb",
+        "move(str, 7, 12, -3) (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `StrUtilTest.removePrefixIgnorecaseTest()`
@@ -661,10 +792,18 @@ fn remove_prefix_ignore_case_test() {
     let a = "aaabbb";
     // removePrefixIgnoreCase("aaabbb", "aaa") → "bbb"
     // removePrefixIgnoreCase("aaabbb", "aaa") → "bbb"
-    assert_eq!(hc::replace(a, "aaa", ""), "bbb", "removePrefixIgnoreCase (对齐 Java)");
+    assert_eq!(
+        hc::replace(a, "aaa", ""),
+        "bbb",
+        "removePrefixIgnoreCase (对齐 Java)"
+    );
     // removePrefixIgnoreCase("aaabbb", "AAA") → "bbb" (忽略大小写)
     // Rust replace 区分大小写，用 replace_ignore_case 替代
-    assert_eq!(hc::replace(&a.to_lowercase(), "aaa", ""), "bbb", "removePrefixIgnoreCase 大写 (对齐 Java)");
+    assert_eq!(
+        hc::replace(&a.to_lowercase(), "aaa", ""),
+        "bbb",
+        "removePrefixIgnoreCase 大写 (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `StrUtilTest.subBetweenAllTest2()`
@@ -673,7 +812,11 @@ fn remove_prefix_ignore_case_test() {
 #[test]
 fn sub_between_all_test_2() {
     let src = "/* \n* hutool  */  asdas  /* \n* hutool  */";
-    let result: Vec<&str> = src.split("/**").skip(1).filter_map(|s| s.split("*/").next()).collect();
+    let result: Vec<&str> = src
+        .split("/**")
+        .skip(1)
+        .filter_map(|s| s.split("*/").next())
+        .collect();
     assert_eq!(result.len(), 0, "subBetweenAll 不匹配 (对齐 Java)");
 }
 
@@ -681,16 +824,33 @@ fn sub_between_all_test_2() {
 #[test]
 fn sub_between_all_test_3() {
     let src = "'abc'and'123'";
-    let result: Vec<&str> = src.split('\'').enumerate().filter(|(i, _)| i % 2 == 1).map(|(_, s)| s).collect();
-    assert_eq!(result, vec!["abc", "123"], "subBetweenAll 单引号 (对齐 Java)");
+    let result: Vec<&str> = src
+        .split('\'')
+        .enumerate()
+        .filter(|(i, _)| i % 2 == 1)
+        .map(|(_, s)| s)
+        .collect();
+    assert_eq!(
+        result,
+        vec!["abc", "123"],
+        "subBetweenAll 单引号 (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `StrUtilTest.subBetweenAllTest4()`
 #[test]
 fn sub_between_all_test_4() {
     let str = "你好:1388681xxxx用户已开通,1877275xxxx用户已开通,无法发送业务开通短信";
-    let result: Vec<&str> = str.split("1877275xxxx").skip(1).filter_map(|s| s.split(',').next()).collect();
-    assert_eq!(result, vec!["用户已开通"], "subBetweenAll 手机号 (对齐 Java)");
+    let result: Vec<&str> = str
+        .split("1877275xxxx")
+        .skip(1)
+        .filter_map(|s| s.split(',').next())
+        .collect();
+    assert_eq!(
+        result,
+        vec!["用户已开通"],
+        "subBetweenAll 手机号 (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `StrUtilTest.briefTest2()`
@@ -750,7 +910,10 @@ fn truncate_by_byte_length_test() {
     // truncateByByteLength(str, ISO_8859_1, 10, 1, false) → "This is En"
     // ISO_8859_1: 每字符 1 字节
     let truncated: String = str.chars().take(10).collect();
-    assert_eq!(truncated, "This is En", "truncateByByteLength(str, ISO_8859_1, 10) (对齐 Java)");
+    assert_eq!(
+        truncated, "This is En",
+        "truncateByByteLength(str, ISO_8859_1, 10) (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `StrUtilTest.issueTest()`
@@ -765,7 +928,10 @@ fn issue_test() {
         end = i + 1;
     }
     let truncated = &s[..end];
-    assert_eq!(truncated, "ab", "truncateByByteLength(str, UTF_8, 2) (对齐 Java)");
+    assert_eq!(
+        truncated, "ab",
+        "truncateByByteLength(str, UTF_8, 2) (对齐 Java)"
+    );
 }
 
 // ── Hutool TEST parity gap wave ──
@@ -795,7 +961,10 @@ fn replace_test_5() {
 
     let aa = "规划大师";
     let result1 = hc::replace_by_code_point(aa, 2, 4, '*');
-    assert_eq!(result1, "规划**", "replaceByCodePoint(aa, 2, a.length(), '*') (对齐 Java)");
+    assert_eq!(
+        result1, "规划**",
+        "replaceByCodePoint(aa, 2, a.length(), '*') (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `StrUtilTest.subByCodePointTest()`

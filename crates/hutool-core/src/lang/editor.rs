@@ -31,7 +31,10 @@ mod editor_idiomatic_parity {
 
     #[test]
     fn editor_maps_and_filters() {
-        let out = edit_all(vec![1, 2, 3], |x| if x % 2 == 0 { None } else { Some(x * 10) });
+        let out = edit_all(
+            vec![1, 2, 3],
+            |x| if x % 2 == 0 { None } else { Some(x * 10) },
+        );
         assert_eq!(out, vec![10, 30]);
     }
 }

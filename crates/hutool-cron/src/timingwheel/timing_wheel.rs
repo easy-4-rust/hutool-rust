@@ -4,12 +4,7 @@
 
 #![allow(clippy::missing_panics_doc)]
 
-use std::{
-    cmp::Ordering,
-    fmt,
-    sync::Arc,
-    time::Duration,
-};
+use std::{cmp::Ordering, fmt, sync::Arc, time::Duration};
 
 use crate::CronError;
 

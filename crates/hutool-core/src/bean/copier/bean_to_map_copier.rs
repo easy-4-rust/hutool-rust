@@ -177,7 +177,10 @@ mod tests {
 
         let opts = CopyOptions::create().set_ignore_properties(&["age"]);
         let result = copy_bean_to_map(&source, opts);
-        assert_eq!(result.get("name").unwrap(), &Value::String("Charlie".into()));
+        assert_eq!(
+            result.get("name").unwrap(),
+            &Value::String("Charlie".into())
+        );
         assert!(!result.contains_key("age"));
         assert_eq!(
             result.get("email").unwrap(),
@@ -193,14 +196,9 @@ mod tests {
             email: Some("dave@example.com".to_string()),
         };
 
-        let opts = CopyOptions::create().set_field_name_editor(|name| {
-            Some(name.to_uppercase())
-        });
+        let opts = CopyOptions::create().set_field_name_editor(|name| Some(name.to_uppercase()));
         let result = copy_bean_to_map(&source, opts);
-        assert_eq!(
-            result.get("NAME").unwrap(),
-            &Value::String("Dave".into())
-        );
+        assert_eq!(result.get("NAME").unwrap(), &Value::String("Dave".into()));
         assert_eq!(result.get("AGE").unwrap(), &Value::Number(40.into()));
     }
 
@@ -250,19 +248,15 @@ mod tests {
             email: Some("frank@example.com".to_string()),
         };
 
-        let opts =
-            CopyOptions::create().set_field_name_editor(|name| {
-                if name == "age" {
-                    None
-                } else {
-                    Some(name.to_string())
-                }
-            });
+        let opts = CopyOptions::create().set_field_name_editor(|name| {
+            if name == "age" {
+                None
+            } else {
+                Some(name.to_string())
+            }
+        });
         let result = copy_bean_to_map(&source, opts);
-        assert_eq!(
-            result.get("name").unwrap(),
-            &Value::String("Frank".into())
-        );
+        assert_eq!(result.get("name").unwrap(), &Value::String("Frank".into()));
         assert!(!result.contains_key("age"));
     }
 }

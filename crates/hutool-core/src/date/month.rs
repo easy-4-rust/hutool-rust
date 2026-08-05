@@ -107,7 +107,12 @@ impl Month {
     /// 对齐 Java: `getLastDay(boolean isLeapYear)`。
     pub fn get_last_day(self, is_leap_year: bool) -> i32 {
         match self {
-            Self::January | Self::March | Self::May | Self::July | Self::August | Self::October
+            Self::January
+            | Self::March
+            | Self::May
+            | Self::July
+            | Self::August
+            | Self::October
             | Self::December => 31,
             Self::April | Self::June | Self::September | Self::November => 30,
             Self::February => {

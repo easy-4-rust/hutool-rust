@@ -6,6 +6,5 @@
 //! ```
 
 pub use crate::{
-    ActiveEntity, DaoTemplate, Db, DbError, Entity, Page, PageRequest, Session, SqlBuilder,
-    Wrapper,
+    ActiveEntity, DaoTemplate, Db, DbError, Entity, Page, PageRequest, Session, SqlBuilder, Wrapper,
 };

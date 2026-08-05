@@ -2,7 +2,10 @@
 //! 来源: hutool-cron/src/main/java/cn/hutool/cron/task/CronTask.java
 //! 中文说明: 绑定稳定 ID、调度表达式与底层任务实现的 cron 任务对象。
 
-use std::{fmt, sync::{Arc, RwLock}};
+use std::{
+    fmt,
+    sync::{Arc, RwLock},
+};
 
 use crate::{CronError, CronPattern};
 

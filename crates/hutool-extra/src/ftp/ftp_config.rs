@@ -34,13 +34,7 @@ impl FtpConfig {
     }
 
     /// 对齐 `FtpConfig(String host, int port, String user, String password, Charset charset)`
-    pub fn new_simple(
-        host: &str,
-        port: u16,
-        user: &str,
-        password: &str,
-        charset: &str,
-    ) -> Self {
+    pub fn new_simple(host: &str, port: u16, user: &str, password: &str, charset: &str) -> Self {
         Self {
             host: Some(host.to_string()),
             port,

@@ -2,7 +2,6 @@
 
 /// 对齐: `cn.hutool.core.collection.CollUtil`
 /// 阻塞队列
-
 use std::sync::mpsc::{Receiver, RecvError, SendError, SyncSender};
 
 use parking_lot::Mutex;

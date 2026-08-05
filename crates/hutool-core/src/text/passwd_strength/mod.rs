@@ -3,12 +3,12 @@
 //!
 //! 密码强度检测。
 
-mod passwd_level;
 mod char_type;
+mod passwd_level;
 mod passwd_strength;
 
-pub use passwd_level::PasswdLevel;
 pub use char_type::CharType;
+pub use passwd_level::PasswdLevel;
 pub use passwd_strength::PasswdStrength;
 
 const DICTIONARY: &[&str] = &[
@@ -17,7 +17,16 @@ const DICTIONARY: &[&str] = &[
 ];
 
 const SIZE_TABLE: &[i32] = &[
-    9, 99, 999, 9999, 99999, 999999, 9999999, 99999999, 999999999, i32::MAX,
+    9,
+    99,
+    999,
+    9999,
+    99999,
+    999999,
+    9999999,
+    99999999,
+    999999999,
+    i32::MAX,
 ];
 
 fn check_character_type(c: char) -> CharType {

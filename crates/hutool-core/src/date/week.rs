@@ -28,7 +28,13 @@ pub enum Week {
 
 const ALIASES: &[&str] = &["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
 const FULL: &[&str] = &[
-    "sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday",
+    "sunday",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
 ];
 const CN: &[&[&str]] = &[
     &["星期日", "周日"],

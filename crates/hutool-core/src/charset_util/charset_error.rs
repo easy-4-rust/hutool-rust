@@ -1,4 +1,3 @@
-
 use std::io;
 
 use thiserror::Error;
@@ -19,4 +18,3 @@ pub enum CharsetError {
     #[error(transparent)]
     Io(#[from] io::Error),
 }
-

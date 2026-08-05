@@ -1,9 +1,9 @@
 //! Workspace-owned `ElementAnnotationScanner`.
 
-use hutool_macro::element::{global_registry, ElementHandle, ElementKind};
+use hutool_macro::element::{ElementHandle, ElementKind, global_registry};
 
 use super::annotation_scanner::{
-    accept_annotation, declared_annotations, element_exists, AnnotationScanner, ScanConsumer,
+    AnnotationScanner, ScanConsumer, accept_annotation, declared_annotations, element_exists,
 };
 
 /// 对齐 Java 类: `cn.hutool.core.annotation.scanner.ElementAnnotationScanner`

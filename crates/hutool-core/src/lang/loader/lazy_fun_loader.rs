@@ -39,7 +39,11 @@ impl<T: Send + Sync + 'static> LazyFunLoader<T> {
                 return Arc::clone(a);
             }
         }
-        let factory = self.factory.lock().take().expect("factory already consumed");
+        let factory = self
+            .factory
+            .lock()
+            .take()
+            .expect("factory already consumed");
         let arc = Arc::new(factory());
         *self.value.lock() = Some(Arc::clone(&arc));
         arc

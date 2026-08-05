@@ -2,8 +2,8 @@
 //! 来源: hutool-core/src/main/java/cn/hutool/core/thread/ExecutorBuilder.java
 
 use crate::thread::reject_policy::RejectPolicy;
-use std::sync::mpsc;
 use std::sync::Mutex;
+use std::sync::mpsc;
 use std::thread::{self, JoinHandle};
 
 /// 简易线程池（对齐 ExecutorBuilder 构建结果的可运行子集）

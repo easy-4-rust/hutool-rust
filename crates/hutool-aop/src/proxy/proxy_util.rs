@@ -2,10 +2,7 @@
 //! 来源: hutool-aop/src/main/java/cn/hutool/aop/proxy/ProxyUtil.java
 //! 中文说明: 代理工具类，提供创建代理实例的便捷静态方法。
 
-use crate::{
-    HandlerProxy,
-    aspects::Aspect,
-};
+use crate::{HandlerProxy, aspects::Aspect};
 
 use super::proxy::Proxy;
 use super::proxy_factory::ProxyFactory;

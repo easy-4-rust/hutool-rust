@@ -42,7 +42,10 @@ impl crate::hierarchical::Hierarchical for TestValueSynthesizedAnnotation {
 
 impl SynthesizedAnnotation for TestValueSynthesizedAnnotation {
     fn get_annotation(&self) -> Arc<crate::mirror::AnnotationMirror> {
-        Arc::new(crate::mirror::AnnotationMirror::new("test.Test", Default::default()))
+        Arc::new(crate::mirror::AnnotationMirror::new(
+            "test.Test",
+            Default::default(),
+        ))
     }
     fn has_attribute(&self, attribute_name: &str, return_type: ValueKind) -> bool {
         self.values
@@ -50,14 +53,27 @@ impl SynthesizedAnnotation for TestValueSynthesizedAnnotation {
             .map(|v| crate::mirror::is_assignable(return_type, v))
             .unwrap_or(false)
     }
-    fn get_attributes(&self) -> HashMap<String, Arc<dyn crate::annotation_attribute::AnnotationAttribute>> {
+    fn get_attributes(
+        &self,
+    ) -> HashMap<String, Arc<dyn crate::annotation_attribute::AnnotationAttribute>> {
         Default::default()
     }
-    fn set_attribute(&self, _attribute_name: &str, _attribute: Arc<dyn crate::annotation_attribute::AnnotationAttribute>) {}
+    fn set_attribute(
+        &self,
+        _attribute_name: &str,
+        _attribute: Arc<dyn crate::annotation_attribute::AnnotationAttribute>,
+    ) {
+    }
     fn replace_attribute(
         &self,
         _attribute_name: &str,
-        _operator: Box<dyn Fn(Arc<dyn crate::annotation_attribute::AnnotationAttribute>) -> Arc<dyn crate::annotation_attribute::AnnotationAttribute> + Send + Sync>,
+        _operator: Box<
+            dyn Fn(
+                    Arc<dyn crate::annotation_attribute::AnnotationAttribute>,
+                ) -> Arc<dyn crate::annotation_attribute::AnnotationAttribute>
+                + Send
+                + Sync,
+        >,
     ) {
     }
     fn get_attribute_value(&self, attribute_name: &str) -> Option<AnnotationValue> {

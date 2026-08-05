@@ -2,7 +2,6 @@
 
 /// 对齐: `cn.hutool.core.codec.Base58`
 /// Base58 编码器
-
 use crate::{
     Encoder, Result,
     advanced_codec::{convert_base, translate_digits},

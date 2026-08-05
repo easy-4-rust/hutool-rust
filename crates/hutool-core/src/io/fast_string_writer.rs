@@ -19,6 +19,8 @@ pub struct FastStringWriter;
 impl FastStringWriter {
     /// Sentinel used until the corresponding IO engine is implemented.
     pub fn pending_io_alignment() -> Result<()> {
-        Err(CoreError::PendingEngine("FastStringWriter::pending_io_alignment"))
+        Err(CoreError::PendingEngine(
+            "FastStringWriter::pending_io_alignment",
+        ))
     }
 }

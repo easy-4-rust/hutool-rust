@@ -52,7 +52,9 @@ fn i_2090_parse_test() {
     struct TestBean {
         local_date: String,
     }
-    let bean = TestBean { local_date: "2024-01-15".into() };
+    let bean = TestBean {
+        local_date: "2024-01-15".into(),
+    };
     let obj = hj::JSONUtil::object_from(&bean, hj::JSONConfig::default()).unwrap();
     let back: TestBean = hj::JSONUtil::to_bean(&obj.to_string()).unwrap();
     assert_eq!(bean, back);
@@ -61,7 +63,11 @@ fn i_2090_parse_test() {
 /// 对齐 Java: `Issue2090Test.parseLocalDateTest()`
 #[test]
 fn i_2090_parse_local_date_test() {
-    let obj = hj::JSONUtil::object_from(&json!({"year":2024,"month":1,"day":15}), hj::JSONConfig::default()).unwrap();
+    let obj = hj::JSONUtil::object_from(
+        &json!({"year":2024,"month":1,"day":15}),
+        hj::JSONConfig::default(),
+    )
+    .unwrap();
     assert!(!obj.to_string().is_empty());
 }
 
@@ -71,7 +77,11 @@ fn i_2090_to_bean_local_date_test() {
     let raw = r#"{"year":2024,"month":1,"day":15}"#;
     let obj = hj::JSONUtil::parse_obj(raw).unwrap();
     #[derive(Deserialize, PartialEq, Debug)]
-    struct D { year: i32, month: u8, day: u8 }
+    struct D {
+        year: i32,
+        month: u8,
+        day: u8,
+    }
     let d: D = hj::JSONUtil::to_bean(&obj.to_string()).unwrap();
     assert_eq!(d.year, 2024);
 }
@@ -116,8 +126,16 @@ fn i_2131_str_to_bean() {
         collections: Vec<GoodsItem>,
     }
     let mut resp = GoodsResponse::default();
-    resp.collections.push(GoodsItem { goods_id: 1, goods_name: "apple".into(), channel: "wechat".into() });
-    resp.collections.push(GoodsItem { goods_id: 2, goods_name: "pear".into(), channel: "jd".into() });
+    resp.collections.push(GoodsItem {
+        goods_id: 1,
+        goods_name: "apple".into(),
+        channel: "wechat".into(),
+    });
+    resp.collections.push(GoodsItem {
+        goods_id: 2,
+        goods_name: "pear".into(),
+        channel: "jd".into(),
+    });
     let json_str = hj::JSONUtil::to_json_string(&resp).unwrap();
     let obj = hj::JSONUtil::parse_obj(&json_str).unwrap();
     let result: GoodsResponse = hj::JSONUtil::to_bean(&obj.to_string()).unwrap();
@@ -153,7 +171,9 @@ fn i_2369_to_json_str_test() {
 #[test]
 fn i_2447_add_integer() {
     #[derive(Serialize, Deserialize)]
-    struct Time { time: i64 }
+    struct Time {
+        time: i64,
+    }
     let time = Time { time: 93_601_000 };
     let time_str = hj::JSONUtil::to_json_string(&time).unwrap();
     assert!(time_str.contains("93601000"));
@@ -206,7 +226,10 @@ fn i_2953_parse_obj_with_big_number_test() {
     config.set_write_long_as_string(true);
     let val = hj::JSONUtil::parse(r#"{"a":"114793903847679990000000000000000000000"}"#).unwrap();
     let obj = hj::JSONObject::from_value(val, config).unwrap();
-    assert_eq!(obj.to_string(), r#"{"a":"114793903847679990000000000000000000000"}"#);
+    assert_eq!(
+        obj.to_string(),
+        r#"{"a":"114793903847679990000000000000000000000"}"#
+    );
 }
 
 /// 对齐 Java: `Issue2997Test.toBeanTest()`
@@ -234,8 +257,12 @@ fn i_3051_parse_test2() {
 #[test]
 fn i_3086_serialize_test() {
     #[derive(Serialize)]
-    struct TestBean { authorities: Vec<String> }
-    let bean = TestBean { authorities: vec!["ROLE_admin".into(), "ROLE_normal".into()] };
+    struct TestBean {
+        authorities: Vec<String>,
+    }
+    let bean = TestBean {
+        authorities: vec!["ROLE_admin".into(), "ROLE_normal".into()],
+    };
     assert_eq!(
         hj::JSONUtil::to_json_string(&bean).unwrap(),
         r#"{"authorities":["ROLE_admin","ROLE_normal"]}"#
@@ -275,8 +302,14 @@ fn i_3274_to_bean_test() {
 #[test]
 fn i_3504_test3504() {
     #[derive(Serialize, Deserialize, Debug)]
-    struct JsonBean { name: String, classes: Vec<String> }
-    let bean = JsonBean { name: "test".into(), classes: vec!["java.lang.String".into()] };
+    struct JsonBean {
+        name: String,
+        classes: Vec<String>,
+    }
+    let bean = JsonBean {
+        name: "test".into(),
+        classes: vec!["java.lang.String".into()],
+    };
     let s = hj::JSONUtil::to_json_string(&bean).unwrap();
     let back: JsonBean = hj::JSONUtil::to_bean(&s).unwrap();
     assert_eq!(back.name, "test");
@@ -286,8 +319,12 @@ fn i_3504_test3504() {
 #[test]
 fn i_3506_test3506() {
     #[derive(Serialize, Deserialize, Debug)]
-    struct Languages { language_type: String }
-    let lang = Languages { language_type: "Java".into() };
+    struct Languages {
+        language_type: String,
+    }
+    let lang = Languages {
+        language_type: "Java".into(),
+    };
     let s = hj::JSONUtil::to_json_string(&lang).unwrap();
     let back: Languages = hj::JSONUtil::to_bean(&s).unwrap();
     assert_eq!(back.language_type, "Java");
@@ -301,7 +338,10 @@ fn i_3541_long_to_string_test() {
     let mut obj = hj::JSONObject::with_config(config);
     obj.set("id", json!(1227690722069581409i64)).unwrap();
     obj.set("name", json!("hutool")).unwrap();
-    assert_eq!(obj.to_string(), r#"{"id":"1227690722069581409","name":"hutool"}"#);
+    assert_eq!(
+        obj.to_string(),
+        r#"{"id":"1227690722069581409","name":"hutool"}"#
+    );
 }
 
 /// 对齐 Java: `Issue3649Test.toEmptyBeanTest()`
@@ -318,11 +358,20 @@ fn i_3649_to_empty_bean_test() {
 fn i_488_to_bean_test() {
     let raw = include_str!("fixtures/issue488.json");
     #[derive(Deserialize)]
-    struct EmailAddress { name: String, address: String }
+    struct EmailAddress {
+        name: String,
+        address: String,
+    }
     #[derive(Deserialize)]
-    struct ResultSuccess<T> { context: String, value: T }
+    struct ResultSuccess<T> {
+        context: String,
+        value: T,
+    }
     let result: ResultSuccess<Vec<EmailAddress>> = hj::JSONUtil::to_bean(raw).unwrap();
-    assert_eq!(result.context, "https://graph.microsoft.com/beta/$metadata#Collection(microsoft.graph.emailAddress)");
+    assert_eq!(
+        result.context,
+        "https://graph.microsoft.com/beta/$metadata#Collection(microsoft.graph.emailAddress)"
+    );
     assert_eq!(result.value[0].name, "会议室101");
     assert_eq!(result.value[3].address, "MeetingRoom219@abc.com");
 }
@@ -333,10 +382,16 @@ fn i_488_to_collction_bean_test() {
     let raw = include_str!("fixtures/issue488Array.json");
     #[derive(Deserialize)]
     #[allow(dead_code)]
-    struct EmailAddress { name: String, address: String }
+    struct EmailAddress {
+        name: String,
+        address: String,
+    }
     #[derive(Deserialize)]
     #[allow(dead_code)]
-    struct ResultSuccess<T> { context: String, value: T }
+    struct ResultSuccess<T> {
+        context: String,
+        value: T,
+    }
     let list: Vec<ResultSuccess<Vec<EmailAddress>>> = hj::JSONUtil::to_bean(raw).unwrap();
     assert_eq!(list[0].value[0].name, "会议室101");
 }
@@ -345,8 +400,12 @@ fn i_488_to_collction_bean_test() {
 #[test]
 fn i_644_to_bean_test() {
     #[derive(Serialize, Deserialize, Debug)]
-    struct BeanWithDate { date: String }
-    let bean = BeanWithDate { date: "2024-01-15T10:30:00".into() };
+    struct BeanWithDate {
+        date: String,
+    }
+    let bean = BeanWithDate {
+        date: "2024-01-15T10:30:00".into(),
+    };
     let obj = hj::JSONUtil::object_from(&bean, hj::JSONConfig::default()).unwrap();
     let back: BeanWithDate = hj::JSONUtil::to_bean(&obj.to_string()).unwrap();
     assert_eq!(back.date, bean.date);
@@ -356,8 +415,12 @@ fn i_644_to_bean_test() {
 #[test]
 fn i_677_to_bean_test() {
     #[derive(Serialize, Deserialize)]
-    struct AuditResultDto { date: i64 }
-    let dto = AuditResultDto { date: -1_497_600_000 };
+    struct AuditResultDto {
+        date: i64,
+    }
+    let dto = AuditResultDto {
+        date: -1_497_600_000,
+    };
     let json_str = hj::JSONUtil::to_json_string(&dto).unwrap();
     let back: AuditResultDto = hj::JSONUtil::to_bean(&json_str).unwrap();
     assert_eq!(back.date, dto.date);
@@ -393,7 +456,11 @@ fn i1au86_to_list_test() {
     }
     #[derive(Deserialize)]
     #[allow(dead_code)]
-    struct Vcc { id: i64, code: String, name: String }
+    struct Vcc {
+        id: i64,
+        code: String,
+        name: String,
+    }
     let list: Vec<Vcc> = hj::JSONUtil::to_list(&arr).unwrap();
     assert_eq!(list.len(), 2);
     assert_eq!(list[0].name, "电影大全");
@@ -403,9 +470,15 @@ fn i1au86_to_list_test() {
 #[test]
 fn i49vzb_to_bean_test() {
     #[derive(Deserialize, Debug, PartialEq)]
-    enum NbCloudKeyType { #[serde(rename = "password")] Password }
+    enum NbCloudKeyType {
+        #[serde(rename = "password")]
+        Password,
+    }
     #[derive(Deserialize)]
-    struct UpOpendoor { #[serde(rename = "type")] key_type: NbCloudKeyType }
+    struct UpOpendoor {
+        #[serde(rename = "type")]
+        key_type: NbCloudKeyType,
+    }
     let bean: UpOpendoor = hj::JSONUtil::to_bean(r#"{"type":"password"}"#).unwrap();
     assert_eq!(bean.key_type, NbCloudKeyType::Password);
 }
@@ -414,7 +487,10 @@ fn i49vzb_to_bean_test() {
 #[test]
 fn i49vzb_enum_convert_test() {
     #[derive(Deserialize, Debug, PartialEq)]
-    enum NbCloudKeyType { #[serde(rename = "snapKey")] SnapKey }
+    enum NbCloudKeyType {
+        #[serde(rename = "snapKey")]
+        SnapKey,
+    }
     let t: NbCloudKeyType = hj::JSONUtil::to_bean(r#""snapKey""#).unwrap();
     assert_eq!(t, NbCloudKeyType::SnapKey);
 }
@@ -429,11 +505,20 @@ fn i4xfmw_test() {
         password: String,
     }
     let list = vec![
-        TestEntity { id: "123".into(), password: "456".into() },
-        TestEntity { id: "789".into(), password: "098".into() },
+        TestEntity {
+            id: "123".into(),
+            password: "456".into(),
+        },
+        TestEntity {
+            id: "789".into(),
+            password: "098".into(),
+        },
     ];
     let json_str = hj::JSONUtil::to_json_string(&list).unwrap();
-    assert_eq!(json_str, r#"[{"uid":"123","password":"456"},{"uid":"789","password":"098"}]"#);
+    assert_eq!(
+        json_str,
+        r#"[{"uid":"123","password":"456"},{"uid":"789","password":"098"}]"#
+    );
     let back: Vec<TestEntity> = hj::JSONUtil::to_bean(&json_str).unwrap();
     assert_eq!(back[0].id, "123");
     assert_eq!(back[1].id, "789");
@@ -447,7 +532,8 @@ fn i50egg_to_bean_test() {
     let obj = hj::JSONObject::from_value(
         hj::JSONUtil::parse(r#"{"return_code":1,"return_msg":"成功","return_data":null}"#).unwrap(),
         config,
-    ).unwrap();
+    )
+    .unwrap();
     assert_eq!(obj.get("return_code").and_then(|v| v.as_i64()), Some(1));
 }
 
@@ -471,17 +557,31 @@ fn i59lw4_bytes_in_json_array_test() {
 #[test]
 fn i6h0xf_to_bean_test() {
     #[derive(Deserialize, Serialize)]
-    struct Demo { biz: String, #[serde(skip_serializing_if = "Option::is_none")] is_biz: Option<bool> }
+    struct Demo {
+        biz: String,
+        #[serde(skip_serializing_if = "Option::is_none")]
+        is_biz: Option<bool>,
+    }
     let demo: Demo = hj::JSONUtil::to_bean(r#"{"biz":"A","isBiz":true}"#).unwrap();
     assert_eq!(demo.biz, "A");
-    assert_eq!(hj::JSONUtil::to_json_string(&Demo { biz: demo.biz, is_biz: None }).unwrap(), r#"{"biz":"A"}"#);
+    assert_eq!(
+        hj::JSONUtil::to_json_string(&Demo {
+            biz: demo.biz,
+            is_biz: None
+        })
+        .unwrap(),
+        r#"{"biz":"A"}"#
+    );
 }
 
 /// 对齐 Java: `IssueI6SZYBTest.pairTest()`
 #[test]
 fn i6szyb_pair_test() {
     #[derive(Serialize, Deserialize, PartialEq, Debug)]
-    struct Pair { key: i32, value: i32 }
+    struct Pair {
+        key: i32,
+        value: i32,
+    }
     let pair = Pair { key: 1, value: 2 };
     let json_str = hj::JSONUtil::to_json_string(&pair).unwrap();
     assert_eq!(json_str, r#"{"key":1,"value":2}"#);
@@ -509,15 +609,24 @@ fn i71be6_to_array_test() {
 fn i7fq29_to_map_test() {
     let raw = r#"{"trans_no":"java.lang.String"}"#;
     let map: serde_json::Map<String, serde_json::Value> = hj::JSONUtil::to_bean(raw).unwrap();
-    assert_eq!(map.get("trans_no").and_then(|v| v.as_str()), Some("java.lang.String"));
+    assert_eq!(
+        map.get("trans_no").and_then(|v| v.as_str()),
+        Some("java.lang.String")
+    );
 }
 
 /// 对齐 Java: `IssueI7GPGXTest.toBeanTest()`
 #[test]
 fn i7gpgx_to_bean_test() {
     #[derive(Serialize, Deserialize, PartialEq, Debug)]
-    struct Pair { key: String, value: bool }
-    let pair = Pair { key: "test1".into(), value: true };
+    struct Pair {
+        key: String,
+        value: bool,
+    }
+    let pair = Pair {
+        key: "test1".into(),
+        value: true,
+    };
     let s = hj::JSONUtil::to_json_string(&pair).unwrap();
     let back: Pair = hj::JSONUtil::to_bean(&s).unwrap();
     assert_eq!(back, pair);
@@ -527,10 +636,20 @@ fn i7gpgx_to_bean_test() {
 #[test]
 fn i_i7m2gz_to_list_test() {
     #[derive(Serialize, Deserialize)]
-    struct ParserImpl { name: String, parsed: i32 }
+    struct ParserImpl {
+        name: String,
+        parsed: i32,
+    }
     #[derive(Serialize, Deserialize)]
-    struct MyEntity { list: Vec<ParserImpl> }
-    let entity = MyEntity { list: vec![ParserImpl { name: "Object1".into(), parsed: 1 }] };
+    struct MyEntity {
+        list: Vec<ParserImpl>,
+    }
+    let entity = MyEntity {
+        list: vec![ParserImpl {
+            name: "Object1".into(),
+            parsed: 1,
+        }],
+    };
     let s = hj::JSONUtil::to_json_string(&entity).unwrap();
     let back: MyEntity = hj::JSONUtil::to_bean(&s).unwrap();
     assert_eq!(back.list.len(), 1);
@@ -572,9 +691,13 @@ fn i8nmp7_to_bean_test() {
 fn i8pc9f_to_bean_ignore_error_test() {
     let mut config = hj::JSONConfig::default();
     config.set_ignore_error(true);
-    let obj = hj::JSONObject::from_value(hj::JSONUtil::parse(r#"{"testMap":""}"#).unwrap(), config).unwrap();
+    let obj = hj::JSONObject::from_value(hj::JSONUtil::parse(r#"{"testMap":""}"#).unwrap(), config)
+        .unwrap();
     #[derive(Deserialize)]
-    struct TestBean { #[serde(default)] test_map: Option<serde_json::Map<String, serde_json::Value>> }
+    struct TestBean {
+        #[serde(default)]
+        test_map: Option<serde_json::Map<String, serde_json::Value>>,
+    }
     let test: TestBean = hj::JSONUtil::to_bean(&obj.to_string()).unwrap();
     assert!(test.test_map.is_none());
 }
@@ -583,8 +706,16 @@ fn i8pc9f_to_bean_ignore_error_test() {
 #[test]
 fn i90adx_parse_test() {
     #[derive(Serialize)]
-    struct TestBean { name: String }
-    let obj = hj::JSONUtil::object_from(&TestBean { name: "aaaa".into() }, hj::JSONConfig::default()).unwrap();
+    struct TestBean {
+        name: String,
+    }
+    let obj = hj::JSONUtil::object_from(
+        &TestBean {
+            name: "aaaa".into(),
+        },
+        hj::JSONConfig::default(),
+    )
+    .unwrap();
     assert_eq!(obj.to_string(), r#"{"name":"aaaa"}"#);
 }
 
@@ -595,7 +726,8 @@ fn id61qr_test_name() {
     obj.set("a", json!(3)).unwrap();
     obj.set("b", json!(5)).unwrap();
     obj.set("c", json!(5432)).unwrap();
-    let map: serde_json::Map<String, serde_json::Value> = hj::JSONUtil::to_bean(&obj.to_string()).unwrap();
+    let map: serde_json::Map<String, serde_json::Value> =
+        hj::JSONUtil::to_bean(&obj.to_string()).unwrap();
     assert_eq!(map.get("a").and_then(|v| v.as_i64()), Some(3));
     assert_eq!(map.get("c").and_then(|v| v.as_i64()), Some(5432));
 }
@@ -604,10 +736,25 @@ fn id61qr_test_name() {
 #[test]
 fn s1881_parse_test() {
     #[derive(Serialize)]
-    struct Vo { id: i64, name: String }
-    let list = vec![Vo { id: 1, name: "1".into() }, Vo { id: 2, name: "2".into() }];
+    struct Vo {
+        id: i64,
+        name: String,
+    }
+    let list = vec![
+        Vo {
+            id: 1,
+            name: "1".into(),
+        },
+        Vo {
+            id: 2,
+            name: "2".into(),
+        },
+    ];
     let arr = hj::JSONUtil::array_from(&list, hj::JSONConfig::default()).unwrap();
-    assert_eq!(arr.to_string(), r#"[{"id":1,"name":"1"},{"id":2,"name":"2"}]"#);
+    assert_eq!(
+        arr.to_string(),
+        r#"[{"id":1,"name":"1"},{"id":2,"name":"2"}]"#
+    );
 }
 
 /// 对齐 Java: `IssuesI44E4HTest.deserializerTest()`
@@ -622,6 +769,7 @@ fn si44e4h_deserializer_test() {
 fn si4v14n_parse_test() {
     let obj = hj::JSONUtil::parse_obj(r#"{"A":"A\nb"}"#).unwrap();
     assert_eq!(obj.get("A").and_then(|v| v.as_str()), Some("A\nb"));
-    let map: serde_json::Map<String, serde_json::Value> = hj::JSONUtil::to_bean(&obj.to_string()).unwrap();
+    let map: serde_json::Map<String, serde_json::Value> =
+        hj::JSONUtil::to_bean(&obj.to_string()).unwrap();
     assert_eq!(map.get("A").and_then(|v| v.as_str()), Some("A\nb"));
 }

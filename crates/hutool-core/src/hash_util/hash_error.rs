@@ -4,7 +4,6 @@
 
 /// 对齐: `cn.hutool.core.util.HashUtil`
 /// 哈希错误
-
 use thiserror::Error;
 
 /// Validation errors for table-driven hash functions.

@@ -5,7 +5,7 @@
 use chrono::{Datelike, Duration, Local, NaiveDate, NaiveDateTime, NaiveTime, Timelike};
 
 use crate::date::date_pattern::{self, NORM_DATE_PATTERN, NORM_TIME_PATTERN};
-use crate::date::date_time::{week_of_year_mon_min1, DateTime};
+use crate::date::date_time::{DateTime, week_of_year_mon_min1};
 use crate::date::date_unit::DateUnit;
 use crate::{CoreError, Result};
 
@@ -137,9 +137,7 @@ impl LocalDateTimeUtil {
     }
     /// 当天结束时刻。
     pub fn end_of_day(dt: NaiveDateTime) -> NaiveDateTime {
-        dt.date()
-            .and_hms_nano_opt(23, 59, 59, 999_000_000)
-            .unwrap()
+        dt.date().and_hms_nano_opt(23, 59, 59, 999_000_000).unwrap()
     }
 
     /// 按单位偏移。

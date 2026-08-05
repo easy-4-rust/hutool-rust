@@ -8,8 +8,8 @@
 
 use crate::message::Message;
 use crate::{
-    ChatChunk, ChatProvider, ChatRequest, ChatResponse, ChatStream, ProviderError, SseDecoder,
-    MAX_SSE_EVENT_BYTES,
+    ChatChunk, ChatProvider, ChatRequest, ChatResponse, ChatStream, MAX_SSE_EVENT_BYTES,
+    ProviderError, SseDecoder,
 };
 use futures_core::Stream;
 use hutool_http::{HttpClient, Method, Url};
@@ -196,9 +196,9 @@ impl ChatProvider for OpenAiCompatibleProvider {
 #[allow(dead_code)]
 pub type OpenaiReasoning = crate::ReasoningEffort;
 #[allow(unused_imports)]
-pub use crate::models::VisionDetail as OpenaiVision;
-#[allow(unused_imports)]
 pub use crate::models::SpeechVoice as OpenaiSpeech;
+#[allow(unused_imports)]
+pub use crate::models::VisionDetail as OpenaiVision;
 
 /// Java `OpenaiConfig` 的 Rust 类型别名：所有配置通过 `BaseConfig` 承载。
 #[allow(dead_code)]
@@ -229,8 +229,8 @@ mod tests {
                 .unwrap();
         let debug = format!("{provider:?}");
         assert!(debug.contains("[REDACTED]"));
-        let _: OpenaiConfig = crate::core::BaseConfig::with_api_key(crate::ModelName::OpenAi, "x")
-            .unwrap();
+        let _: OpenaiConfig =
+            crate::core::BaseConfig::with_api_key(crate::ModelName::OpenAi, "x").unwrap();
         // Re-exported common enums compile.
         let _: ReasoningEffort = ReasoningEffort::Medium;
         for role in [Role::System, Role::User, Role::Assistant, Role::Tool] {

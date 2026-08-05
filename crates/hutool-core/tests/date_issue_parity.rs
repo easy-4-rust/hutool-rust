@@ -33,8 +33,14 @@ fn issue_3011_test_is_same_month_test_2() {
 /// 对齐 Java: `Issue3036Test.getZodiacTest()`
 #[test]
 fn issue_3036_test_get_zodiac_test_2() {
-    assert_eq!(Zodiac::get_zodiac_month(Month::January, 19).unwrap(), "摩羯座");
-    assert_eq!(Zodiac::get_zodiac_month(Month::January, 20).unwrap(), "水瓶座");
+    assert_eq!(
+        Zodiac::get_zodiac_month(Month::January, 19).unwrap(),
+        "摩羯座"
+    );
+    assert_eq!(
+        Zodiac::get_zodiac_month(Month::January, 20).unwrap(),
+        "水瓶座"
+    );
 }
 
 /// 对齐 Java: `Issue3301Test.ofTest()`
@@ -48,7 +54,10 @@ fn issue_3301_test_of_test_2() {
 #[test]
 fn issue_3348_test_format_chinese_date_test_2() {
     let date = DateUtil::parse("2018-02-14").unwrap();
-    assert_eq!(DateUtil::format_chinese_date(date, false, false), "二〇一八年二月十四日");
+    assert_eq!(
+        DateUtil::format_chinese_date(date, false, false),
+        "二〇一八年二月十四日"
+    );
 }
 
 /// 对齐 Java: `Issue3608Test.parseTest()`
@@ -79,7 +88,10 @@ fn issue_i_7_qi_6_r_test_parse_test_2_2_2() {
 /// 对齐 Java: `IssueI7XMYWTest.ageTest()`
 #[test]
 fn issue_i_7_xmyw_test_age_test_2() {
-    let age = DateUtil::age(DateUtil::parse("1990-01-01").unwrap(), DateUtil::parse("2020-01-01").unwrap());
+    let age = DateUtil::age(
+        DateUtil::parse("1990-01-01").unwrap(),
+        DateUtil::parse("2020-01-01").unwrap(),
+    );
     assert_eq!(age, 30);
 }
 
@@ -107,8 +119,10 @@ fn issue_i_9_c_2_d_4_test_parse_http_test_2() {
 /// 对齐 Java: `IssueI9C2D4Test.parseHttpTest2()`
 #[test]
 fn issue_i_9_c_2_d_4_test_parse_http_test_2_2_2() {
-    assert!(DateUtil::parse("Wed, 02 Jan 2019 14:32:01 GMT").is_ok()
-        || DateUtil::parse_rfc2822("Wed, 02 Jan 2019 14:32:01 GMT").is_ok());
+    assert!(
+        DateUtil::parse("Wed, 02 Jan 2019 14:32:01 GMT").is_ok()
+            || DateUtil::parse_rfc2822("Wed, 02 Jan 2019 14:32:01 GMT").is_ok()
+    );
 }
 
 /// 对齐 Java: `IssueI9C2D4Test.parseTimeTest()`
@@ -120,7 +134,10 @@ fn issue_i_9_c_2_d_4_test_parse_time_test_2() {
 /// 对齐 Java: `IssueI9C2D4Test.parseTimeTest2()`
 #[test]
 fn issue_i_9_c_2_d_4_test_parse_time_test_2_2_2() {
-    assert_eq!(DateUtil::time_to_second("02:12:12"), 2 * 3600 + 12 * 60 + 12);
+    assert_eq!(
+        DateUtil::time_to_second("02:12:12"),
+        2 * 3600 + 12 * 60 + 12
+    );
 }
 
 /// 对齐 Java: `IssueIB8OFSTest.rangeTest()`

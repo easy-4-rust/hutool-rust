@@ -38,7 +38,11 @@ impl AnnotationScanner for MethodAnnotationScanner {
             return;
         }
 
-        for (distance, method_handle) in registry.method_override_chain(element).into_iter().enumerate() {
+        for (distance, method_handle) in registry
+            .method_override_chain(element)
+            .into_iter()
+            .enumerate()
+        {
             for annotation in declared_annotations(method_handle) {
                 if accept_annotation(&annotation) {
                     consumer(distance as i32, annotation);

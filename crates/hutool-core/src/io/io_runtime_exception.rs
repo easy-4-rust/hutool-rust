@@ -58,9 +58,7 @@ impl fmt::Display for IORuntimeException {
 
 impl StdError for IORuntimeException {
     fn source(&self) -> Option<&(dyn StdError + 'static)> {
-        self.source
-            .as_ref()
-            .map(|e| e as &(dyn StdError + 'static))
+        self.source.as_ref().map(|e| e as &(dyn StdError + 'static))
     }
 }
 

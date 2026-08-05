@@ -31,7 +31,10 @@ fn subtract_to_list_no_common_elements_test() {
     assert_eq!(result[2], "c", "subtractToList[2] = \"c\" (对齐 Java)");
     assert_eq!(result, list1, "subtractToList = list1 (对齐 Java)");
     // 确保返回的是拷贝而不是原始引用
-    assert!(!std::ptr::eq(&result, &list1), "result != list1 (对齐 Java assertNotSame)");
+    assert!(
+        !std::ptr::eq(&result, &list1),
+        "result != list1 (对齐 Java assertNotSame)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.subtractToListNoCommonElementsTest()` 第2组
@@ -75,7 +78,11 @@ fn subtract_to_list_with_linked_test() {
     let list1: Vec<i32> = vec![1, 2, 3, 4, 5];
     let list2: Vec<i32> = vec![2, 4];
     let result = CollUtil::subtract(&list1, &list2);
-    assert_eq!(result, vec![1, 3, 5], "subtractToList([1..5], [2,4]) = [1,3,5] (对齐 Java)");
+    assert_eq!(
+        result,
+        vec![1, 3, 5],
+        "subtractToList([1..5], [2,4]) = [1,3,5] (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.subtractToListWithNullElementsTest()` (行 1020-1036)
@@ -101,7 +108,11 @@ fn subtract_to_list_large_collection_test() {
     let list1: Vec<i32> = (0..size as i32).collect();
     let list2: Vec<i32> = (0..size as i32).filter(|x| x % 2 == 0).collect();
     let result = CollUtil::subtract(&list1, &list2);
-    assert_eq!(result.len(), (size / 2) as usize, "subtractToList size=5000 (对齐 Java)");
+    assert_eq!(
+        result.len(),
+        (size / 2) as usize,
+        "subtractToList size=5000 (对齐 Java)"
+    );
     // 验证结果只包含奇数
     for num in &result {
         assert_eq!(num % 2, 1, "subtractToList 元素应为奇数 (对齐 Java)");
@@ -118,7 +129,11 @@ fn subtract_to_list_performance_comparison_test() {
     let list1: Vec<i32> = (0..list1_size as i32).collect();
     let list2: Vec<i32> = (0..list2_size as i32).collect();
     let result = CollUtil::subtract(&list1, &list2);
-    assert_eq!(result.len(), (list1_size - list2_size) as usize, "subtractToList size=99000 (对齐 Java)");
+    assert_eq!(
+        result.len(),
+        (list1_size - list2_size) as usize,
+        "subtractToList size=99000 (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.subtractToListPreservesOrderTest()` (行 1094-1106)
@@ -144,7 +159,11 @@ fn subtract_to_list_type_test() {
     let list1: Vec<i32> = vec![1, 2, 3, 4, 5];
     let list2: Vec<i32> = vec![2, 4];
     let result = CollUtil::subtract(&list1, &list2);
-    assert_eq!(result, vec![1, 3, 5], "subtractToList([1..5], [2,4]) = [1,3,5] (对齐 Java)");
+    assert_eq!(
+        result,
+        vec![1, 3, 5],
+        "subtractToList([1..5], [2,4]) = [1,3,5] (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.subtractToListNullElementsComparisonTest()` (行 1120-1147)
@@ -170,7 +189,10 @@ fn subtract_to_list_with_custom_objects_test() {
     let list2 = vec!["张三", "王五"];
     let result = CollUtil::subtract(&list1, &list2);
     assert_eq!(result.len(), 1, "subtractToList size=1 (对齐 Java)");
-    assert_eq!(result[0], "李四", "subtractToList[0] = \"李四\" (对齐 Java)");
+    assert_eq!(
+        result[0], "李四",
+        "subtractToList[0] = \"李四\" (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.subtractToListSameObjectsTest()` (行 1180-1192)
@@ -210,11 +232,27 @@ fn subtract_to_list_consistency_test() {
     // 内容应该一致
     let set1: std::collections::HashSet<&str> = subtract_result.iter().copied().collect();
     let set2: std::collections::HashSet<&str> = subtract_to_list_result.iter().copied().collect();
-    assert_eq!(set1, set2, "subtract 与 subtractToList 内容一致 (对齐 Java)");
-    assert_eq!(subtract_to_list_result.len(), 3, "subtractToList size=3 (对齐 Java)");
-    assert!(subtract_to_list_result.contains(&"a"), "subtractToList 含 \"a\" (对齐 Java)");
-    assert!(subtract_to_list_result.contains(&"c"), "subtractToList 含 \"c\" (对齐 Java)");
-    assert!(subtract_to_list_result.contains(&"e"), "subtractToList 含 \"e\" (对齐 Java)");
+    assert_eq!(
+        set1, set2,
+        "subtract 与 subtractToList 内容一致 (对齐 Java)"
+    );
+    assert_eq!(
+        subtract_to_list_result.len(),
+        3,
+        "subtractToList size=3 (对齐 Java)"
+    );
+    assert!(
+        subtract_to_list_result.contains(&"a"),
+        "subtractToList 含 \"a\" (对齐 Java)"
+    );
+    assert!(
+        subtract_to_list_result.contains(&"c"),
+        "subtractToList 含 \"c\" (对齐 Java)"
+    );
+    assert!(
+        subtract_to_list_result.contains(&"e"),
+        "subtractToList 含 \"e\" (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.sortComparableTest()` (行 1229-1233)
@@ -226,7 +264,11 @@ fn sort_comparable_test() {
     let of = vec!["a", "c", "b"];
     let mut sorted = of.clone();
     sorted.sort();
-    assert_eq!(sorted, vec!["a", "b", "c"], "sort 后应为 [a,b,c] (对齐 Java)");
+    assert_eq!(
+        sorted,
+        vec!["a", "b", "c"],
+        "sort 后应为 [a,b,c] (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.distinctTest()` (行 1235-1241)
@@ -237,7 +279,11 @@ fn distinct_test() {
     let list = vec!["a", "b", "b", "c", "a"];
     let distinct = CollUtil::distinct(&list);
     let distinct_strs: Vec<&str> = distinct.iter().map(|s| **s).collect();
-    assert_eq!(distinct_strs, vec!["a", "b", "c"], "distinct 去重 (对齐 Java)");
+    assert_eq!(
+        distinct_strs,
+        vec!["a", "b", "c"],
+        "distinct 去重 (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.unionNullTest()` (行 1243-1248)
@@ -316,7 +362,10 @@ fn intersection_null_test() {
     let list1: Vec<&str> = vec![];
     let list2: Vec<&str> = vec![];
     let intersection = CollUtil::intersection(&list1, &list2);
-    assert!(intersection.is_empty(), "intersection([], []) = [] (对齐 Java)");
+    assert!(
+        intersection.is_empty(),
+        "intersection([], []) = [] (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.getFirstTest()` (行 1304-1310)
@@ -327,7 +376,10 @@ fn intersection_null_test() {
 fn get_first_test() {
     let test: Vec<String> = vec![];
     let first = test.first();
-    assert!(first.is_none(), "first(empty) = None (对齐 Java assertNull)");
+    assert!(
+        first.is_none(),
+        "first(empty) = None (对齐 Java assertNull)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.testMatch()` (行 1312-1320)
@@ -338,7 +390,10 @@ fn get_first_test() {
 fn test_match_test() {
     let list1 = vec!["a", "b", "c"];
     let list2 = vec!["b", "c", "d"];
-    assert!(CollUtil::contains_any(&list1, &list2), "containsAny 应 true (对齐 Java)");
+    assert!(
+        CollUtil::contains_any(&list1, &list2),
+        "containsAny 应 true (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.maxTest()` (行 1322-1328)
@@ -394,8 +449,14 @@ fn issue_i8z2q4_test() {
 #[test]
 fn test_predicate_contains() {
     let list = vec!["bbbbb", "aaaaa", "ccccc"];
-    assert!(list.iter().any(|s| s.starts_with('a')), "contains 以 'a' 开头 (对齐 Java)");
-    assert!(!list.iter().any(|s| s.starts_with('d')), "contains 以 'd' 开头应 false (对齐 Java)");
+    assert!(
+        list.iter().any(|s| s.starts_with('a')),
+        "contains 以 'a' 开头 (对齐 Java)"
+    );
+    assert!(
+        !list.iter().any(|s| s.starts_with('d')),
+        "contains 以 'd' 开头应 false (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.testRemoveWithAddIf()` (行 35-49)
@@ -414,7 +475,11 @@ fn test_remove_with_add_if() {
             true
         }
     });
-    assert_eq!(list, vec![2, 3], "removeWithAddIf 后 list = [2,3] (对齐 Java)");
+    assert_eq!(
+        list,
+        vec![2, 3],
+        "removeWithAddIf 后 list = [2,3] (对齐 Java)"
+    );
     assert_eq!(removed, vec![1], "removed = [1] (对齐 Java)");
 }
 
@@ -437,9 +502,15 @@ fn test_pad_left() {
 #[test]
 fn is_not_empty_test() {
     let empty: Vec<&str> = vec![];
-    assert!(!CollUtil::is_not_empty(Some(&empty)), "isNotEmpty([]) 应 false (对齐 Java)");
+    assert!(
+        !CollUtil::is_not_empty(Some(&empty)),
+        "isNotEmpty([]) 应 false (对齐 Java)"
+    );
     let non_empty = vec!["a"];
-    assert!(CollUtil::is_not_empty(Some(&non_empty)), "isNotEmpty([\"a\"]) 应 true (对齐 Java)");
+    assert!(
+        CollUtil::is_not_empty(Some(&non_empty)),
+        "isNotEmpty([\"a\"]) 应 true (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.newHashSetTest()` (行 68-70)
@@ -455,8 +526,16 @@ fn new_hash_set_test() {
 fn values_of_keys_test() {
     let map = vec![("a", 1), ("b", 2), ("c", 3)];
     let keys = vec!["a", "c"];
-    let values: Vec<i32> = map.iter().filter(|(k, _)| keys.contains(k)).map(|(_, v)| *v).collect();
-    assert_eq!(values, vec![1, 3], "valuesOfKeys([a,c]) = [1,3] (对齐 Java)");
+    let values: Vec<i32> = map
+        .iter()
+        .filter(|(k, _)| keys.contains(k))
+        .map(|(_, v)| *v)
+        .collect();
+    assert_eq!(
+        values,
+        vec![1, 3],
+        "valuesOfKeys([a,c]) = [1,3] (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.unionTest()` (行 82-90)
@@ -485,11 +564,27 @@ fn intersection_distinct_test() {
     let list1 = vec!["a", "b", "b", "c", "d", "x"];
     let list2 = vec!["a", "b", "b", "b", "c", "d"];
     let inter_distinct = CollUtil::intersection_distinct(&[&list1, &list2]);
-    assert_eq!(inter_distinct.len(), 4usize, "intersectionDistinct size=4 (对齐 Java)");
-    assert!(inter_distinct.contains("a"), "intersectionDistinct 含 \"a\" (对齐 Java)");
-    assert!(inter_distinct.contains("b"), "intersectionDistinct 含 \"b\" (对齐 Java)");
-    assert!(inter_distinct.contains("c"), "intersectionDistinct 含 \"c\" (对齐 Java)");
-    assert!(inter_distinct.contains("d"), "intersectionDistinct 含 \"d\" (对齐 Java)");
+    assert_eq!(
+        inter_distinct.len(),
+        4usize,
+        "intersectionDistinct size=4 (对齐 Java)"
+    );
+    assert!(
+        inter_distinct.contains("a"),
+        "intersectionDistinct 含 \"a\" (对齐 Java)"
+    );
+    assert!(
+        inter_distinct.contains("b"),
+        "intersectionDistinct 含 \"b\" (对齐 Java)"
+    );
+    assert!(
+        inter_distinct.contains("c"),
+        "intersectionDistinct 含 \"c\" (对齐 Java)"
+    );
+    assert!(
+        inter_distinct.contains("d"),
+        "intersectionDistinct 含 \"d\" (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.disjunctionTest()` (行 115-128)
@@ -502,9 +597,18 @@ fn disjunction_test() {
     assert!(disj.contains(&"x2"), "disjunction 含 \"x2\" (对齐 Java)");
     assert!(disj.contains(&"x"), "disjunction 含 \"x\" (对齐 Java)");
     let disj2 = CollUtil::disjunction(&list2, &list1);
-    assert!(disj2.contains(&"b"), "disjunction 反序 含 \"b\" (对齐 Java)");
-    assert!(disj2.contains(&"x2"), "disjunction 反序 含 \"x2\" (对齐 Java)");
-    assert!(disj2.contains(&"x"), "disjunction 反序 含 \"x\" (对齐 Java)");
+    assert!(
+        disj2.contains(&"b"),
+        "disjunction 反序 含 \"b\" (对齐 Java)"
+    );
+    assert!(
+        disj2.contains(&"x2"),
+        "disjunction 反序 含 \"x2\" (对齐 Java)"
+    );
+    assert!(
+        disj2.contains(&"x"),
+        "disjunction 反序 含 \"x\" (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.disjunctionTest2()` (行 130-140)
@@ -513,9 +617,15 @@ fn disjunction_test_2() {
     let list1: Vec<&str> = vec![];
     let list2 = vec!["a", "b", "b", "b", "c", "d", "x2"];
     let disj = CollUtil::disjunction(&list1, &list2);
-    assert_eq!(disj, list2, "disjunction(empty, non-empty) = non-empty (对齐 Java)");
+    assert_eq!(
+        disj, list2,
+        "disjunction(empty, non-empty) = non-empty (对齐 Java)"
+    );
     let disj2 = CollUtil::disjunction(&list2, &list1);
-    assert_eq!(disj2, list2, "disjunction(non-empty, empty) = non-empty (对齐 Java)");
+    assert_eq!(
+        disj2, list2,
+        "disjunction(non-empty, empty) = non-empty (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.disjunctionTest3()` (行 142-154)
@@ -546,7 +656,11 @@ fn subtract_set_test() {
     let set1 = vec!["1", "2"];
     let set2 = vec!["2"];
     let r2 = CollUtil::subtract(&set1, &set2);
-    assert_eq!(format!("{:?}", r2), "[\"1\"]", "subtractSet = [\"1\"] (对齐 Java)");
+    assert_eq!(
+        format!("{:?}", r2),
+        "[\"1\"]",
+        "subtractSet = [\"1\"] (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.subtractSetToListTest()` (行 177-187)
@@ -568,7 +682,10 @@ fn test_subtract_with_duplicates() {
     expected.sort();
     let mut result_sorted = result.clone();
     result_sorted.sort();
-    assert_eq!(expected, result_sorted, "subtractWithDuplicates = [a,c] (对齐 Java)");
+    assert_eq!(
+        expected, result_sorted,
+        "subtractWithDuplicates = [a,c] (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.filterTest()` (行 270-279)
@@ -577,7 +694,11 @@ fn test_subtract_with_duplicates() {
 fn filter_test() {
     let list = vec!["a", "b", "c"];
     let filtered: Vec<String> = list.iter().map(|t| format!("{}1", t)).collect();
-    assert_eq!(filtered, vec!["a1", "b1", "c1"], "trans = [a1,b1,c1] (对齐 Java)");
+    assert_eq!(
+        filtered,
+        vec!["a1", "b1", "c1"],
+        "trans = [a1,b1,c1] (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.filterTest2()` (行 281-290)
@@ -609,14 +730,19 @@ fn filter_remove_test() {
         }
         true
     });
-    assert_eq!(list, vec!["b", "c"], "filterRemove 后 list = [b,c] (对齐 Java)");
+    assert_eq!(
+        list,
+        vec!["b", "c"],
+        "filterRemove 后 list = [b,c] (对齐 Java)"
+    );
     assert_eq!(removed, vec!["a"], "removed = [a] (对齐 Java)");
 }
 
 /// 对齐 Java: `CollUtilTest.removeNullTest()` (行 316-325)
 #[test]
 fn remove_null_test() {
-    let mut list: Vec<Option<&str>> = vec![Some("a"), Some("b"), Some("c"), None, Some(""), Some("  ")];
+    let mut list: Vec<Option<&str>> =
+        vec![Some("a"), Some("b"), Some("c"), None, Some(""), Some("  ")];
     list.retain(|x| x.is_some());
     let expected: Vec<Option<&str>> = vec![Some("a"), Some("b"), Some("c"), Some(""), Some("  ")];
     assert_eq!(list, expected, "removeNull (对齐 Java)");
@@ -625,17 +751,42 @@ fn remove_null_test() {
 /// 对齐 Java: `CollUtilTest.removeEmptyTest()` (行 327-336)
 #[test]
 fn remove_empty_test() {
-    let mut list = vec!["a".to_string(), "b".to_string(), "c".to_string(), "".to_string(), "  ".to_string()];
+    let mut list = vec![
+        "a".to_string(),
+        "b".to_string(),
+        "c".to_string(),
+        "".to_string(),
+        "  ".to_string(),
+    ];
     list.retain(|s| !s.is_empty());
-    assert_eq!(list, vec!["a".to_string(), "b".to_string(), "c".to_string(), "  ".to_string()], "removeEmpty (对齐 Java)");
+    assert_eq!(
+        list,
+        vec![
+            "a".to_string(),
+            "b".to_string(),
+            "c".to_string(),
+            "  ".to_string()
+        ],
+        "removeEmpty (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.removeBlankTest()` (行 338-347)
 #[test]
 fn remove_blank_test() {
-    let mut list = vec!["a".to_string(), "b".to_string(), "c".to_string(), "".to_string(), "  ".to_string()];
+    let mut list = vec![
+        "a".to_string(),
+        "b".to_string(),
+        "c".to_string(),
+        "".to_string(),
+        "  ".to_string(),
+    ];
     list.retain(|s| !s.trim().is_empty());
-    assert_eq!(list, vec!["a".to_string(), "b".to_string(), "c".to_string()], "removeBlank (对齐 Java)");
+    assert_eq!(
+        list,
+        vec!["a".to_string(), "b".to_string(), "c".to_string()],
+        "removeBlank (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.groupTest()` (行 349-360)
@@ -643,8 +794,10 @@ fn remove_blank_test() {
 fn group_test() {
     let list = vec!["1", "2", "3", "4", "5", "6"];
     let grouped = CollUtil::group(list, |x: &&str| x.parse::<i32>().unwrap() as usize % 2);
-    let group0: Vec<&&str> = grouped[0].iter().collect(); assert_eq!(group0.len(), 3, "group 偶数 (对齐 Java)");
-    let group1: Vec<&&str> = grouped[1].iter().collect(); assert_eq!(group1.len(), 3, "group 奇数 (对齐 Java)");
+    let group0: Vec<&&str> = grouped[0].iter().collect();
+    assert_eq!(group0.len(), 3, "group 偶数 (对齐 Java)");
+    let group1: Vec<&&str> = grouped[1].iter().collect();
+    assert_eq!(group1.len(), 3, "group 奇数 (对齐 Java)");
 }
 
 /// 对齐 Java: `CollUtilTest.groupByFieldTest()` (行 362-371)
@@ -680,20 +833,48 @@ fn sort_by_property_test_2() {
 #[test]
 fn field_value_map_test() {
     let list = vec![("张三", 12), ("李四", 13), ("王五", 12)];
-    let map: std::collections::HashMap<&str, (&str, i32)> = list.iter().map(|&(name, age)| (name, (name, age))).collect();
-    assert_eq!(map.get("张三").unwrap().0, "张三", "fieldValueMap 张三 (对齐 Java)");
-    assert_eq!(map.get("李四").unwrap().0, "李四", "fieldValueMap 李四 (对齐 Java)");
-    assert_eq!(map.get("王五").unwrap().0, "王五", "fieldValueMap 王五 (对齐 Java)");
+    let map: std::collections::HashMap<&str, (&str, i32)> = list
+        .iter()
+        .map(|&(name, age)| (name, (name, age)))
+        .collect();
+    assert_eq!(
+        map.get("张三").unwrap().0,
+        "张三",
+        "fieldValueMap 张三 (对齐 Java)"
+    );
+    assert_eq!(
+        map.get("李四").unwrap().0,
+        "李四",
+        "fieldValueMap 李四 (对齐 Java)"
+    );
+    assert_eq!(
+        map.get("王五").unwrap().0,
+        "王五",
+        "fieldValueMap 王五 (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.fieldValueAsMapTest()` (行 414-425)
 #[test]
 fn field_value_as_map_test() {
     let list = vec![("张三", 12), ("李四", 13), ("王五", 14)];
-    let map: std::collections::HashMap<&str, i32> = list.iter().map(|&(name, age)| (name, age)).collect();
-    assert_eq!(map.get("张三"), Some(&12), "fieldValueAsMap 张三→12 (对齐 Java)");
-    assert_eq!(map.get("李四"), Some(&13), "fieldValueAsMap 李四→13 (对齐 Java)");
-    assert_eq!(map.get("王五"), Some(&14), "fieldValueAsMap 王五→14 (对齐 Java)");
+    let map: std::collections::HashMap<&str, i32> =
+        list.iter().map(|&(name, age)| (name, age)).collect();
+    assert_eq!(
+        map.get("张三"),
+        Some(&12),
+        "fieldValueAsMap 张三→12 (对齐 Java)"
+    );
+    assert_eq!(
+        map.get("李四"),
+        Some(&13),
+        "fieldValueAsMap 李四→13 (对齐 Java)"
+    );
+    assert_eq!(
+        map.get("王五"),
+        Some(&14),
+        "fieldValueAsMap 王五→14 (对齐 Java)"
+    );
 }
 
 // ════════════════ 第五批 (51 个未覆盖方法) ════════════════
@@ -723,8 +904,16 @@ fn to_map_list_and_to_list_map_test() {
             result.entry(k).or_default().push(v);
         }
     }
-    assert_eq!(result.get("a").unwrap(), &vec!["值1", "值2"], "toListMap \"a\" (对齐 Java)");
-    assert_eq!(result.get("b").unwrap(), &vec!["值1"], "toListMap \"b\" (对齐 Java)");
+    assert_eq!(
+        result.get("a").unwrap(),
+        &vec!["值1", "值2"],
+        "toListMap \"a\" (对齐 Java)"
+    );
+    assert_eq!(
+        result.get("b").unwrap(),
+        &vec!["值1"],
+        "toListMap \"b\" (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.getFieldValuesTest()`
@@ -733,7 +922,10 @@ fn get_field_values_test() {
     let v1 = vec![("id", 12), ("name", 23), ("age", 23)]; // 用整数模拟
     let v2 = vec![("id", 15), ("name", 13), ("age", 13)];
     let list = vec![v1, v2];
-    let field_values: Vec<i32> = list.iter().map(|m| m.iter().find(|(k, _)| *k == "name").unwrap().1).collect();
+    let field_values: Vec<i32> = list
+        .iter()
+        .map(|m| m.iter().find(|(k, _)| *k == "name").unwrap().1)
+        .collect();
     assert_eq!(field_values, vec![23, 13], "getFieldValues (对齐 Java)");
 }
 
@@ -788,7 +980,11 @@ fn list_test() {
 #[test]
 fn list_test_2() {
     let list = vec!["a", "b", "c"];
-    assert_eq!(format!("{:?}", list), "[\"a\", \"b\", \"c\"]", "list2 (对齐 Java)");
+    assert_eq!(
+        format!("{:?}", list),
+        "[\"a\", \"b\", \"c\"]",
+        "list2 (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.listTest3()`
@@ -822,7 +1018,11 @@ fn add_all_if_not_contains_test() {
             list1.push(item);
         }
     }
-    assert_eq!(list1, vec!["1", "2", "3"], "addAllIfNotContains (对齐 Java)");
+    assert_eq!(
+        list1,
+        vec!["1", "2", "3"],
+        "addAllIfNotContains (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.sortPageAllTest()`
@@ -832,7 +1032,7 @@ fn sort_page_all_test() {
     let sorted: Vec<i32> = list.iter().copied().collect();
     let mut sorted_rev = sorted.clone();
     sorted_rev.sort_by(|a, b| b.cmp(a));
-    let page: Vec<i32> = sorted_rev[5..9].to_vec();  // Java page(1,5) on [9,8,7,6,5,4,3,2,1]
+    let page: Vec<i32> = sorted_rev[5..9].to_vec(); // Java page(1,5) on [9,8,7,6,5,4,3,2,1]
     assert_eq!(page, vec![4, 3, 2, 1], "sortPageAll (对齐 Java)");
 }
 
@@ -841,7 +1041,10 @@ fn sort_page_all_test() {
 fn contains_any_test() {
     let list1 = vec![1, 2, 3, 4, 5];
     let list2 = vec![5, 3, 1, 9, 11];
-    assert!(CollUtil::contains_any(&list1, &list2), "containsAny (对齐 Java)");
+    assert!(
+        CollUtil::contains_any(&list1, &list2),
+        "containsAny (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.containsAllTest()`
@@ -849,10 +1052,16 @@ fn contains_any_test() {
 fn contains_all_test() {
     let list1 = vec![1, 2, 3, 4, 5];
     let list2 = vec![5, 3, 1];
-    assert!(CollUtil::contains_all(&list1, &list2), "containsAll (对齐 Java)");
+    assert!(
+        CollUtil::contains_all(&list1, &list2),
+        "containsAll (对齐 Java)"
+    );
     let list3 = vec![1];
     let list4: Vec<i32> = vec![];
-    assert!(CollUtil::contains_all(&list3, &list4), "containsAll 空集 (对齐 Java)");
+    assert!(
+        CollUtil::contains_all(&list3, &list4),
+        "containsAll 空集 (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.getLastTest()`
@@ -860,7 +1069,10 @@ fn contains_all_test() {
 fn get_last_test() {
     let empty: Vec<&str> = vec![];
     let last = empty.last();
-    assert!(last.is_none(), "getLast(empty) = None (对齐 Java assertNull)");
+    assert!(
+        last.is_none(),
+        "getLast(empty) = None (对齐 Java assertNull)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.zipTest()`
@@ -880,11 +1092,28 @@ fn zip_test() {
 #[test]
 fn to_map_test() {
     let keys = vec!["a", "b", "c", "d"];
-    let map: std::collections::HashMap<String, &str> = keys.iter().map(|v| (format!("key{}", v), *v)).collect();
-    assert_eq!(map.get("keya"), Some(&"a"), "toMap \"keya\"→\"a\" (对齐 Java)");
-    assert_eq!(map.get("keyb"), Some(&"b"), "toMap \"keyb\"→\"b\" (对齐 Java)");
-    assert_eq!(map.get("keyc"), Some(&"c"), "toMap \"keyc\"→\"c\" (对齐 Java)");
-    assert_eq!(map.get("keyd"), Some(&"d"), "toMap \"keyd\"→\"d\" (对齐 Java)");
+    let map: std::collections::HashMap<String, &str> =
+        keys.iter().map(|v| (format!("key{}", v), *v)).collect();
+    assert_eq!(
+        map.get("keya"),
+        Some(&"a"),
+        "toMap \"keya\"→\"a\" (对齐 Java)"
+    );
+    assert_eq!(
+        map.get("keyb"),
+        Some(&"b"),
+        "toMap \"keyb\"→\"b\" (对齐 Java)"
+    );
+    assert_eq!(
+        map.get("keyc"),
+        Some(&"c"),
+        "toMap \"keyc\"→\"c\" (对齐 Java)"
+    );
+    assert_eq!(
+        map.get("keyd"),
+        Some(&"d"),
+        "toMap \"keyd\"→\"d\" (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.addIfAbsentTest()`
@@ -892,20 +1121,33 @@ fn to_map_test() {
 fn add_if_absent_test() {
     let mut list = vec!["123"];
     // addIfAbsent(["123"], "123") → false
-    assert!(!CollUtil::add_if_absent(&mut list, Some("123")), "addIfAbsent 已存在 (对齐 Java)");
+    assert!(
+        !CollUtil::add_if_absent(&mut list, Some("123")),
+        "addIfAbsent 已存在 (对齐 Java)"
+    );
     // addIfAbsent(["456"], "123") → true
     let mut list2 = vec!["456"];
-    assert!(CollUtil::add_if_absent(&mut list2, Some("123")), "addIfAbsent 不存在 (对齐 Java)");
+    assert!(
+        CollUtil::add_if_absent(&mut list2, Some("123")),
+        "addIfAbsent 不存在 (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.mapToMapTest()`
 #[test]
 fn map_to_map_test() {
     let old_map = vec![("a", "1"), ("b", "12"), ("c", "134")];
-    let new_map: std::collections::HashMap<&str, i64> = old_map.iter().map(|(k, v)| (*k, v.parse::<i64>().unwrap())).collect();
+    let new_map: std::collections::HashMap<&str, i64> = old_map
+        .iter()
+        .map(|(k, v)| (*k, v.parse::<i64>().unwrap()))
+        .collect();
     assert_eq!(new_map.get("a"), Some(&1), "mapToMap \"a\"→1 (对齐 Java)");
     assert_eq!(new_map.get("b"), Some(&12), "mapToMap \"b\"→12 (对齐 Java)");
-    assert_eq!(new_map.get("c"), Some(&134), "mapToMap \"c\"→134 (对齐 Java)");
+    assert_eq!(
+        new_map.get("c"),
+        Some(&134),
+        "mapToMap \"c\"→134 (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.countMapTest()`
@@ -913,10 +1155,26 @@ fn map_to_map_test() {
 fn count_map_test() {
     let list = vec!["a", "b", "c", "c", "a", "b", "d"];
     let count_map = CollUtil::count_map(list);
-    assert_eq!(count_map.get("a"), Some(&2), "countMap \"a\" = 2 (对齐 Java)");
-    assert_eq!(count_map.get("b"), Some(&2), "countMap \"b\" = 2 (对齐 Java)");
-    assert_eq!(count_map.get("c"), Some(&2), "countMap \"c\" = 2 (对齐 Java)");
-    assert_eq!(count_map.get("d"), Some(&1), "countMap \"d\" = 1 (对齐 Java)");
+    assert_eq!(
+        count_map.get("a"),
+        Some(&2),
+        "countMap \"a\" = 2 (对齐 Java)"
+    );
+    assert_eq!(
+        count_map.get("b"),
+        Some(&2),
+        "countMap \"b\" = 2 (对齐 Java)"
+    );
+    assert_eq!(
+        count_map.get("c"),
+        Some(&2),
+        "countMap \"c\" = 2 (对齐 Java)"
+    );
+    assert_eq!(
+        count_map.get("d"),
+        Some(&1),
+        "countMap \"d\" = 1 (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.indexOfTest()`
@@ -966,7 +1224,10 @@ fn subtract_to_list_empty_test() {
     let empty: Vec<&str> = vec![];
     let list2 = vec!["a", "b", "c"];
     let result = CollUtil::subtract(&empty, &list2);
-    assert!(result.is_empty(), "subtractToList(empty, non-empty) = empty (对齐 Java)");
+    assert!(
+        result.is_empty(),
+        "subtractToList(empty, non-empty) = empty (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.subtractToListDuplicateTest()`
@@ -975,7 +1236,11 @@ fn subtract_to_list_duplicate_test() {
     let list1 = vec!["a", "a", "b", "b", "c", "c", "d"];
     let list2 = vec!["b", "c"];
     let result = CollUtil::subtract(&list1, &list2);
-    assert_eq!(result, vec!["a", "a", "d"], "subtractToList duplicate = [a,a,d] (对齐 Java)");
+    assert_eq!(
+        result,
+        vec!["a", "a", "d"],
+        "subtractToList duplicate = [a,a,d] (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.distinctByFunctionTest()`
@@ -994,7 +1259,10 @@ fn distinct_by_function_test() {
 fn union_distinct_null_test() {
     let list1: Vec<&str> = vec![];
     let result = CollUtil::union_distinct(&[&list1, &[], &[]]);
-    assert!(result.is_empty() || true, "unionDistinct(null, null) (对齐 Java assertNotNull)");
+    assert!(
+        result.is_empty() || true,
+        "unionDistinct(null, null) (对齐 Java assertNotNull)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.intersectionDistinctNullTest()`
@@ -1003,7 +1271,10 @@ fn intersection_distinct_null_test() {
     let list1 = vec!["aa"];
     let list2: Vec<&str> = vec![];
     let result = CollUtil::intersection_distinct(&[&list1, &list2]);
-    assert!(!result.is_empty() || true, "intersectionDistinct(null) (对齐 Java assertNotNull)");
+    assert!(
+        !result.is_empty() || true,
+        "intersectionDistinct(null) (对齐 Java assertNotNull)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.finOneTest()`
@@ -1020,7 +1291,10 @@ fn find_one_test() {
 fn issue_i8z2q4_contains_all_test() {
     let coll1 = vec!["1", "2", "3", "4"];
     let coll2 = vec!["1", "1", "1", "1", "1"];
-    assert!(CollUtil::contains_all(&coll1, &coll2), "containsAll (对齐 Java)");
+    assert!(
+        CollUtil::contains_all(&coll1, &coll2),
+        "containsAll (对齐 Java)"
+    );
 }
 
 // ════════════════ 第六批 (setValueByMapTest) ════════════════
@@ -1031,19 +1305,33 @@ fn issue_i8z2q4_contains_all_test() {
 #[test]
 fn set_value_by_map_test() {
     let mut people = vec![
-        ("aa", 12, "man"), ("bb", 13, "woman"), ("cc", 14, "man"),
-        ("dd", 15, "woman"), ("ee", 16, "woman"), ("ff", 17, "man"),
+        ("aa", 12, "man"),
+        ("bb", 13, "woman"),
+        ("cc", 14, "man"),
+        ("dd", 15, "woman"),
+        ("ee", 16, "woman"),
+        ("ff", 17, "man"),
     ];
     let gender_map: std::collections::HashMap<usize, &str> = [
-        (0, ""), (1, "妇女"), (2, "少女"), (3, "女"), (4, "小孩"), (5, "男"),
-    ].into_iter().collect();
+        (0, ""),
+        (1, "妇女"),
+        (2, "少女"),
+        (3, "女"),
+        (4, "小孩"),
+        (5, "男"),
+    ]
+    .into_iter()
+    .collect();
     // 模拟 setValueByMap: 按 id 更新 gender
     for (i, person) in people.iter_mut().enumerate() {
         if let Some(new_gender) = gender_map.get(&i) {
             person.2 = new_gender;
         }
     }
-    assert_eq!(people[1].2, "妇女", "setValueByMap 第二位 gender (对齐 Java)");
+    assert_eq!(
+        people[1].2, "妇女",
+        "setValueByMap 第二位 gender (对齐 Java)"
+    );
     assert_eq!(people[3].2, "女", "setValueByMap 第四位 gender (对齐 Java)");
 }
 
@@ -1090,7 +1378,10 @@ fn sub_input_0_zero_zero_zero_output_null() {
 fn sub_input_1_positive_negative_zero_output_0() {
     let _list: Vec<Option<i32>> = vec![None];
     let result: Vec<Option<i32>> = vec![];
-    assert!(result.is_empty(), "sub([null], 1, MIN_VALUE, 0) = [] (对齐 Java)");
+    assert!(
+        result.is_empty(),
+        "sub([null], 1, MIN_VALUE, 0) = [] (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.subInput1PositiveNegativePositiveOutputArrayIndexOutOfBoundsException()`
@@ -1100,7 +1391,10 @@ fn sub_input_array_index_out_of_bounds() {
     let list: Vec<Option<i32>> = vec![None];
     // start = MAX-5, end = MIN_VALUE → 越界，Rust 中用 saturating_sub 处理
     let result = list.get(i32::MAX as usize - 5..);
-    assert!(result.is_none() || result.unwrap().is_empty(), "sub 越界应为空 (对齐 Java)");
+    assert!(
+        result.is_none() || result.unwrap().is_empty(),
+        "sub 越界应为空 (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.subInput0ZeroPositiveNegativeOutputNull()`
@@ -1111,7 +1405,6 @@ fn sub_input_0_zero_positive_negative_output_null() {
     assert!(list.is_empty(), "sub([], 0, 1, -2^31+2) = [] (对齐 Java)");
 }
 
-
 /// 对齐 Java: `CollUtilTest.subInput1PositivePositivePositiveOutput0()`
 /// CollUtil.sub([null], MAX, MAX, 2^30) → []
 #[test]
@@ -1121,7 +1414,10 @@ fn sub_input_1_positive_positive_positive_output_0() {
     let end = i32::MAX as isize;
     let step = 1_073_741_824isize;
     let result = hutool_core::CollUtil::sub(&list, start, end, step).unwrap_or_default();
-    assert!(result.is_empty(), "sub([null], MAX, MAX, 2^30) = [] (对齐 Java)");
+    assert!(
+        result.is_empty(),
+        "sub([null], MAX, MAX, 2^30) = [] (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.subInput1PositivePositivePositiveOutput02()`
@@ -1131,7 +1427,10 @@ fn sub_input_1_positive_positive_positive_output_02() {
     let _list: Vec<Option<i32>> = vec![None];
     // start > end → 空
     let result: Vec<Option<i32>> = vec![];
-    assert!(result.is_empty(), "sub([null], MAX-5, MAX-6, 2^30) = [] (对齐 Java)");
+    assert!(
+        result.is_empty(),
+        "sub([null], MAX-5, MAX-6, 2^30) = [] (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.subInput1ZeroZeroPositiveOutput0()`
@@ -1215,10 +1514,16 @@ fn subtract_to_list_all_null_test() {
     let list1: Vec<Option<&str>> = vec![None, None, None, None];
     let list2: Vec<Option<&str>> = vec![None, None];
     // Rust subtract 不处理 None，这里用 Vec 模拟
-    let result: Vec<Option<&str>> = list1.iter().filter(|x| !list2.contains(x)).copied().collect();
-    assert!(result.is_empty(), "subtractToList(null list, null list) = [] (对齐 Java)");
+    let result: Vec<Option<&str>> = list1
+        .iter()
+        .filter(|x| !list2.contains(x))
+        .copied()
+        .collect();
+    assert!(
+        result.is_empty(),
+        "subtractToList(null list, null list) = [] (对齐 Java)"
+    );
 }
-
 
 /// 对齐 Java: `CollUtilTest.lastIndexOf_MatcherIsNull_MatchAll()`
 /// Java: matcher=null 视为匹配全部 → 返回最后一个下标
@@ -1227,18 +1532,21 @@ fn last_index_of_matcher_is_null_match_all() {
     let list = vec!["x", "y", "z"];
     // Rust 无始终 true 的 matcher 对齐 null matcher
     let idx = hutool_core::CollUtil::last_index_of(&list, |_| true);
-    assert_eq!(idx, Some(2), "null matcher 匹配全部 → last index=2 (对齐 Java)");
+    assert_eq!(
+        idx,
+        Some(2),
+        "null matcher 匹配全部 → last index=2 (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CollUtilTest.issueIDBU9HTest()`
 #[test]
 fn issue_idbu9h_test() {
     #[derive(Clone)]
-    struct ToolTest { name: String }
-    let list = vec![
-        ToolTest { name: "a".into() },
-        ToolTest { name: "b".into() },
-    ];
+    struct ToolTest {
+        name: String,
+    }
+    let list = vec![ToolTest { name: "a".into() }, ToolTest { name: "b".into() }];
     let map = hutool_core::CollUtil::to_identity_map(list, |t| t.name.clone());
     let keys: Vec<_> = map.keys().cloned().collect();
     let _ = hutool_core::CollUtil::subtract(&keys, &keys);

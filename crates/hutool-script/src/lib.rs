@@ -11,19 +11,19 @@
 
 #![forbid(unsafe_code)]
 
+pub mod javax_script;
 pub mod prelude;
 mod script_runtime_exception;
 mod script_util;
-pub mod javax_script;
 
-pub use script_runtime_exception::ScriptRuntimeException;
-pub use script_util::ScriptUtil;
 pub use javax_script::all::{
     Bindings, CompiledScript, FullSupportScriptEngine, JavaScriptEngine, ScriptContext,
     ScriptEngineFactory, ScriptInterface, ScriptLanguage, ScriptScope,
 };
 use rhai::Engine;
 pub use rhai::{AST, CallFnOptions, Dynamic, EvalAltResult, ParseError, Scope};
+pub use script_runtime_exception::ScriptRuntimeException;
+pub use script_util::ScriptUtil;
 use std::{any::Any, any::type_name};
 use thiserror::Error;
 

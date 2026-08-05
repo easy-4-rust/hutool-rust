@@ -3,9 +3,9 @@
 use std::sync::Arc;
 
 use hutool_annotation::{
-    fixtures, global_registry, AbstractWrappedAnnotationAttribute, AliasedAnnotationAttribute,
-    AnnotationAttribute, ForceAliasedAnnotationAttribute,
-    MirroredAnnotationAttribute, ValueKind, ALIAS_TYPE,
+    ALIAS_TYPE, AbstractWrappedAnnotationAttribute, AliasedAnnotationAttribute,
+    AnnotationAttribute, ForceAliasedAnnotationAttribute, MirroredAnnotationAttribute, ValueKind,
+    fixtures, global_registry,
 };
 
 use crate::annotation_common::*;
@@ -50,12 +50,21 @@ fn abstract_wrapped_annotation_attribute_multi_wrapper_test() {
     let v3 = cacheable_attr(a3, T3, "value3");
     let w3 = AbstractWrappedAnnotationAttribute::test_wrapper(v3.clone(), w2.clone());
 
-    assert_eq!(n1.impl_type_name(), w1.get_non_wrapped_original().impl_type_name());
+    assert_eq!(
+        n1.impl_type_name(),
+        w1.get_non_wrapped_original().impl_type_name()
+    );
     let leaves1 = w1.get_all_linked_non_wrapped_attributes();
     assert_eq!(2, leaves1.len());
-    assert_eq!(n1.impl_type_name(), w2.get_non_wrapped_original().impl_type_name());
+    assert_eq!(
+        n1.impl_type_name(),
+        w2.get_non_wrapped_original().impl_type_name()
+    );
     assert_eq!(3, w2.get_all_linked_non_wrapped_attributes().len());
-    assert_eq!(v3.impl_type_name(), w3.get_non_wrapped_original().impl_type_name());
+    assert_eq!(
+        v3.impl_type_name(),
+        w3.get_non_wrapped_original().impl_type_name()
+    );
     assert_eq!(4, w3.get_all_linked_non_wrapped_attributes().len());
 }
 

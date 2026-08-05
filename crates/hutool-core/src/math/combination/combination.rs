@@ -65,11 +65,7 @@ impl Combination {
         if !(0..=63).contains(&n) {
             panic!("countAll must have n >= 0 and n <= 63, but got n={n}");
         }
-        if n == 63 {
-            i64::MAX
-        } else {
-            (1i64 << n) - 1
-        }
+        if n == 63 { i64::MAX } else { (1i64 << n) - 1 }
     }
 
     /// 对齐 Java: `select(int m)`

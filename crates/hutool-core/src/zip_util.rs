@@ -7,9 +7,9 @@ use std::fs::{self, File};
 use std::io::{Cursor, Read, Write};
 use std::path::{Path, PathBuf};
 
+use flate2::Compression;
 use flate2::read::{GzDecoder, ZlibDecoder};
 use flate2::write::{GzEncoder, ZlibEncoder};
-use flate2::Compression;
 
 use crate::compress::{ZipLimits, ZipReader, ZipWriter, memory_zip_writer};
 use crate::{CoreError, Result};

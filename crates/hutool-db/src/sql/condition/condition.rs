@@ -149,7 +149,10 @@ impl Condition {
             condition.build_between(&mut out, param_values);
         } else if condition.is_operator_in() {
             condition.build_in(&mut out, param_values);
-        } else if condition.place_holder && !condition.is_operator_is() && !condition.is_operator_is_not() {
+        } else if condition.place_holder
+            && !condition.is_operator_is()
+            && !condition.is_operator_is_not()
+        {
             out.push_str(" ?");
             param_values.push(condition.value.clone());
         } else {
@@ -225,10 +228,12 @@ impl Condition {
         out.push_str(" (");
         if self.place_holder {
             let values = in_values(&self.value);
-            out.push_str(&std::iter::repeat("?")
-                .take(values.len())
-                .collect::<Vec<_>>()
-                .join(","));
+            out.push_str(
+                &std::iter::repeat("?")
+                    .take(values.len())
+                    .collect::<Vec<_>>()
+                    .join(","),
+            );
             param_values.extend(values);
         } else {
             out.push_str(&in_literal(&self.value));
@@ -266,7 +271,8 @@ impl Condition {
             self.place_holder = false;
             return;
         }
-        if value_str.eq_ignore_ascii_case("!= null") || value_str.eq_ignore_ascii_case("is not null")
+        if value_str.eq_ignore_ascii_case("!= null")
+            || value_str.eq_ignore_ascii_case("is not null")
         {
             self.operator = Self::OPERATOR_IS_NOT.to_string();
             self.value = Value::String(Self::VALUE_NULL.to_string());
@@ -330,7 +336,9 @@ fn json_scalar(value: &Value) -> String {
 }
 
 fn split_once_space(input: &str) -> Option<(&str, &str)> {
-    input.find(' ').map(|idx| (&input[..idx], input[idx + 1..].trim()))
+    input
+        .find(' ')
+        .map(|idx| (&input[..idx], input[idx + 1..].trim()))
 }
 
 fn in_literal(value: &Value) -> String {

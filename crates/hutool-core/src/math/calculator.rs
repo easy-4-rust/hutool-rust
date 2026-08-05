@@ -71,8 +71,7 @@ impl Calculator {
                 let mut peek_op = *op_stack.last().unwrap();
                 if current_op == ')' {
                     while *op_stack.last().unwrap() != '(' {
-                        self.postfix_stack
-                            .push(op_stack.pop().unwrap().to_string());
+                        self.postfix_stack.push(op_stack.pop().unwrap().to_string());
                     }
                     op_stack.pop();
                 } else {
@@ -80,8 +79,7 @@ impl Calculator {
                         && peek_op != ','
                         && self.compare_ops(current_op, peek_op)
                     {
-                        self.postfix_stack
-                            .push(op_stack.pop().unwrap().to_string());
+                        self.postfix_stack.push(op_stack.pop().unwrap().to_string());
                         peek_op = *op_stack.last().unwrap();
                     }
                     op_stack.push(current_op);
@@ -93,16 +91,13 @@ impl Calculator {
             }
         }
         if count > 1
-            || (count == 1
-                && current_index < arr.len()
-                && !is_operator(arr[current_index]))
+            || (count == 1 && current_index < arr.len() && !is_operator(arr[current_index]))
         {
             self.postfix_stack
                 .push(arr[current_index..current_index + count].iter().collect());
         }
         while *op_stack.last().unwrap() != ',' {
-            self.postfix_stack
-                .push(op_stack.pop().unwrap().to_string());
+            self.postfix_stack.push(op_stack.pop().unwrap().to_string());
         }
     }
 

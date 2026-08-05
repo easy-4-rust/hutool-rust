@@ -3,7 +3,9 @@
 use std::sync::Arc;
 
 use super::annotation_attribute::AnnotationAttribute;
-use super::mirror::{AnnotationMirror, AnnotationTypeName, AnnotationValue, AttributeRef, ValueKind};
+use super::mirror::{
+    AnnotationMirror, AnnotationTypeName, AnnotationValue, AttributeRef, ValueKind,
+};
 use super::wrapped_annotation_attribute::WrappedAnnotationAttribute;
 
 /// 对齐 Java 抽象类: `cn.hutool.core.annotation.AbstractWrappedAnnotationAttribute`
@@ -19,7 +21,10 @@ impl AbstractWrappedAnnotationAttribute {
     pub fn new(
         original: Arc<dyn AnnotationAttribute>,
         linked: Arc<dyn AnnotationAttribute>,
-        value_fn: fn(&Arc<dyn AnnotationAttribute>, &Arc<dyn AnnotationAttribute>) -> AnnotationValue,
+        value_fn: fn(
+            &Arc<dyn AnnotationAttribute>,
+            &Arc<dyn AnnotationAttribute>,
+        ) -> AnnotationValue,
         default_fn: fn(&Arc<dyn AnnotationAttribute>, &Arc<dyn AnnotationAttribute>) -> bool,
     ) -> Arc<Self> {
         Arc::new(Self {
@@ -68,7 +73,10 @@ impl AbstractWrappedAnnotationAttribute {
     }
 }
 
-fn collect_leaves(current: Arc<dyn AnnotationAttribute>, out: &mut Vec<Arc<dyn AnnotationAttribute>>) {
+fn collect_leaves(
+    current: Arc<dyn AnnotationAttribute>,
+    out: &mut Vec<Arc<dyn AnnotationAttribute>>,
+) {
     if !current.is_wrapped() {
         out.push(current);
         return;

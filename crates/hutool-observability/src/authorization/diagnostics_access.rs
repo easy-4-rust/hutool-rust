@@ -52,4 +52,4 @@ impl DiagnosticsAccess {
     }
 }
 
-use super::{DenyAll};
+use super::DenyAll;

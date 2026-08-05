@@ -5,9 +5,9 @@
 //! Java 端为同步 + `Consumer<String>` 回调；Rust 端使用 `async fn` + `StreamCallback`。
 
 use super::provider_service::ProviderService;
+use crate::ProviderError;
 use crate::message::Message;
 use crate::operations::{AIResponse, Operation, StreamCallback};
-use crate::ProviderError;
 use async_trait::async_trait;
 use std::fmt;
 
@@ -67,10 +67,7 @@ mod tests {
 
     #[async_trait]
     impl AIService for Dummy {
-        async fn execute(
-            &self,
-            operation: Operation,
-        ) -> Result<AIResponse, ProviderError> {
+        async fn execute(&self, operation: Operation) -> Result<AIResponse, ProviderError> {
             assert!(matches!(operation, Operation::Chat { .. }));
             Ok(AIResponse::Json(json!({"answer": 1})))
         }
@@ -90,5 +87,20 @@ mod tests {
         let dummy = Dummy;
         let result = dummy.chat(vec![Message::user("hi")]).await.unwrap();
         assert_eq!(result, r#"{"answer":1}"#);
+    }
+
+    #[tokio::test]
+    async fn chat_stream_default_delegates_to_execute_stream() {
+        let dummy = Dummy;
+        let events = std::sync::Arc::new(std::sync::Mutex::new(Vec::new()));
+        let slot = std::sync::Arc::clone(&events);
+        dummy
+            .chat_stream(
+                vec![Message::user("hi")],
+                std::sync::Arc::new(move |event| slot.lock().unwrap().push(event)),
+            )
+            .await
+            .unwrap();
+        assert_eq!(events.lock().unwrap().as_slice(), &["event"]);
     }
 }

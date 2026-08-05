@@ -10,16 +10,16 @@
 //!
 //! 使用宏 `define_hutool_exception!` 批量实现，避免重复代码。
 
+mod compress_exception;
+mod expression_exception;
 mod hutool_exception;
 mod mail_exception;
 mod qr_code_exception;
-mod compress_exception;
-mod expression_exception;
 mod tokenizer_exception;
 
+pub use compress_exception::CompressException;
+pub use expression_exception::ExpressionException;
 pub use hutool_exception::HutoolException;
 pub use mail_exception::MailException;
 pub use qr_code_exception::QrCodeException;
-pub use compress_exception::CompressException;
-pub use expression_exception::ExpressionException;
 pub use tokenizer_exception::TokenizerException;

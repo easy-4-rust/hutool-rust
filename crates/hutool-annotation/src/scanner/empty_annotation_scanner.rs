@@ -2,8 +2,8 @@
 
 use std::sync::Arc;
 
-use hutool_macro::element::ElementHandle;
 use hutool_macro::AnnotationMirror;
+use hutool_macro::element::ElementHandle;
 
 use super::annotation_scanner::{AnnotationScanner, ScanConsumer};
 

@@ -6,7 +6,6 @@
 
 /// 对齐: `cn.hutool.crypto.digest.Sm3Util`
 /// SM3 摘要
-
 use crate::sm3_hex;
 
 /// Hutool `SM3` / `SmUtil.sm3` convenience type.

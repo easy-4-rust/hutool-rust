@@ -528,9 +528,7 @@ impl NumberUtil {
         }
         // 十六进制
         if t.len() > 2 && t[..2].eq_ignore_ascii_case("0x") {
-            return i64::from_str_radix(&t[2..], 16)
-                .ok()
-                .map(ParsedNumber::I64);
+            return i64::from_str_radix(&t[2..], 16).ok().map(ParsedNumber::I64);
         }
         // 剥离类型后缀 D/F/L（单独一个后缀字母不是数字）
         let mut stripped = false;
@@ -542,12 +540,15 @@ impl NumberUtil {
             t.pop();
             stripped = true;
         }
-        if stripped && (t.is_empty() || t == "+" || t == "-" || t == "." || t == "+." || t == "-.") {
+        if stripped && (t.is_empty() || t == "+" || t == "-" || t == "." || t == "+." || t == "-.")
+        {
             return None;
         }
         if t.is_empty() || t == "+" || t == "-" || t == "." || t == "+." || t == "-." {
             // ".123" → 0 for int path; for Number keep as 0.123
-            if number.trim().starts_with('.') || number.trim().starts_with("+.") || number.trim().starts_with("-.")
+            if number.trim().starts_with('.')
+                || number.trim().starts_with("+.")
+                || number.trim().starts_with("-.")
             {
                 // fallthrough after restoring
             } else {
@@ -1047,10 +1048,7 @@ impl NumberUtil {
         if values.is_empty() {
             return Decimal::ZERO;
         }
-        values[1..]
-            .iter()
-            .copied()
-            .fold(values[0], |a, b| a - b)
+        values[1..].iter().copied().fold(values[0], |a, b| a - b)
     }
 
     /// 对齐 Java: `NumberUtil.mul(BigDecimal...)`
@@ -1073,4 +1071,7 @@ impl NumberUtil {
     }
 }
 
-use super::{decimal_to_f64, extract_number_prefix, f64_to_java_string, format_with_pattern, is_scientific_form, plain_fixed};
+use super::{
+    decimal_to_f64, extract_number_prefix, f64_to_java_string, format_with_pattern,
+    is_scientific_form, plain_fixed,
+};

@@ -83,11 +83,7 @@ fn group_thousands(int_part: &str) -> String {
         out.push(c);
     }
     let s: String = out.chars().rev().collect();
-    if neg {
-        format!("-{s}")
-    } else {
-        s
-    }
+    if neg { format!("-{s}") } else { s }
 }
 
 fn is_scientific_form(s: &str) -> bool {

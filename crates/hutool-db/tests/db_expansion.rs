@@ -1,7 +1,7 @@
 //! DB 扩展 parity 测试
 //! 对齐: hutool-db 多个测试类
 
-use hutool_db::{PageRequest, Page};
+use hutool_db::{Page, PageRequest};
 
 // ── PageRequest (6 tests) ──
 

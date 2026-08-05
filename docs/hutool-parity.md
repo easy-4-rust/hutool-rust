@@ -24,7 +24,7 @@ model. Status values are `native`, `idiomatic`, `compatible`,
 | `hutool-script` | `hutool-script` | idiomatic | bounded Rhai engine; no JSR-223 globals |
 | `hutool-socket` | `hutool-socket` | idiomatic | Tokio TCP/UDP, bounded AIO/NIO sessions, protocol traits, timeouts, and managed shutdown |
 | `hutool-extra` | `hutool-extra` | idiomatic | QR SVG, safe ZIP, bounded image transforms, injectable Rustls SMTP/MIME mail |
-| `hutool-poi` | `hutool-poi` | excluded / not implemented | API/file placeholder skeleton only. It is not exposed by the `hutool` facade, has no `poi` feature or document-engine dependency, and its constructors use `unimplemented!()`. No XLSX/CSV/DOCX/OFD/PDF capability is claimed. |
+| `hutool-poi` | ~~`hutool-poi`~~ | removed 2026-08-04 | The placeholder crate was deleted (`git rm -r crates/hutool-poi`); Excel/Word/OFD capability is provided by the standalone `easyexcel-rust` project (faithful migration of EasyExcel 4.0.3). No XLSX/CSV/DOCX/OFD/PDF capability is claimed in this repository. |
 | `hutool-captcha` | `hutool-captcha` | idiomatic | generator/challenge verification, randomized SVG/PNG, and injectable speech-to-WAV audio rendering |
 | `hutool-db` | `hutool-db` | idiomatic | SQLx pools, explicit transactions and pagination, not a custom ORM; PostgreSQL/MySQL/SQLite integration-tested |
 | `hutool-ai` | `hutool-ai` | complete | provider-neutral core plus Hutool-aligned configs, models, factory and exhaustive operations for seven providers; bounded JSON/media, proxy, redacted secrets and SSE |
@@ -63,4 +63,4 @@ Tags CSV: `python3 scripts/classify-unportable.py --write-csv parity/unportable-
 2. Maximize **idiomatic** for `portable` tags
 3. Keep TEST registration 100%; behavioral planned only for declared unportable tests
 4. Never delete existing idiomatic implementations; facades must delegate
-5. `hutool-poi` is excluded from implementation and completion metrics; placeholder files record API inventory only
+5. `hutool-poi` was removed from the workspace on 2026-08-04; Excel/Word/OFD capability is provided by the standalone `easyexcel-rust` project

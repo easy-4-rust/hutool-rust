@@ -37,7 +37,10 @@ fn generate_custom_test() {
 fn generate_no_custom_color_test() {
     let svg = qrcode::to_svg("https://hutool.cn/", 200).expect("default colors");
     assert_svg(&svg);
-    assert!(svg.contains("#000000") || svg.contains("black") || svg.contains("<path"), "应有深色模块");
+    assert!(
+        svg.contains("#000000") || svg.contains("black") || svg.contains("<path"),
+        "应有深色模块"
+    );
 }
 
 /// 对齐 Java: `QrCodeUtilTest.generateWithLogoTest()`
@@ -117,8 +120,8 @@ fn generate_data_matrix_test() {
 /// 对齐 Java: `QrCodeUtilTest.generateSvgTest()`
 #[test]
 fn generate_svg_test() {
-    let svg = qrcode::to_svg_with_level("https://hutool.cn/", 256, ErrorCorrection::Medium)
-        .unwrap();
+    let svg =
+        qrcode::to_svg_with_level("https://hutool.cn/", 256, ErrorCorrection::Medium).unwrap();
     assert_svg(&svg);
 }
 

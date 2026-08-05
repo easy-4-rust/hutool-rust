@@ -73,7 +73,8 @@ impl NanoId {
         } else {
             (2usize << (((alphabet.len() - 1) as f64).log2().floor() as u32)) - 1
         };
-        let step = ((1.6 * mask as f64 * size as f64 / alphabet.len() as f64).ceil() as usize).max(1);
+        let step =
+            ((1.6 * mask as f64 * size as f64 / alphabet.len() as f64).ceil() as usize).max(1);
         let mut id = String::with_capacity(size);
         let mut count = 0usize;
         loop {

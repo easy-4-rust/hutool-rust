@@ -7,8 +7,8 @@
 
 use std::collections::{HashMap, HashSet};
 
-use serde::de::DeserializeOwned;
 use serde::Serialize;
+use serde::de::DeserializeOwned;
 use serde_json::{Map, Value};
 
 use super::abs_copier::AbsCopier;
@@ -275,8 +275,7 @@ mod tests {
             email: None,
         };
 
-        let opts =
-            CopyOptions::create().set_field_name_editor(|name| Some(name.to_lowercase()));
+        let opts = CopyOptions::create().set_field_name_editor(|name| Some(name.to_lowercase()));
         let result = copy_map_to_bean(source, target, opts);
         assert_eq!(result.name, "Eve");
         assert_eq!(result.age, 28);
@@ -303,9 +302,6 @@ mod tests {
         });
         let result = copy_map_to_bean(source, target, opts);
         assert_eq!(result.name, "Frank");
-        assert_eq!(
-            result.email,
-            Some("default@placeholder.com".to_string())
-        );
+        assert_eq!(result.email, Some("default@placeholder.com".to_string()));
     }
 }

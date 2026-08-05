@@ -6,11 +6,11 @@ use sha2::{Digest as _, Sha256};
 
 use crate::{CoreError, Result};
 
-mod morse_codec;
 mod hash_ids;
+mod morse_codec;
 
-pub use morse_codec::MorseCodec;
 pub use hash_ids::HashIds;
+pub use morse_codec::MorseCodec;
 
 const BASE58_ALPHABET: &[u8] = b"123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 

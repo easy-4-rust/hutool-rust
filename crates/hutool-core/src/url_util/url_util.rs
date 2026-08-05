@@ -3,10 +3,10 @@
 //!
 //! Rust 版本提供 URL 操作的 idiomatic 实现。
 
+use crate::Result;
 use crate::net::rfc3986::Rfc3986;
 use crate::net::url_decoder::UrlDecoder;
 use crate::string::{is_blank, trim};
-use crate::Result;
 
 use super::hit_uri::HitUri;
 
@@ -19,9 +19,7 @@ impl UrlUtil {
 
     /// 对齐 Java: `URLUtil.isUrl(CharSequence)`
     pub fn is_url(value: &str) -> bool {
-        value.starts_with("http://")
-            || value.starts_with("https://")
-            || value.starts_with("ftp://")
+        value.starts_with("http://") || value.starts_with("https://") || value.starts_with("ftp://")
     }
 
     /// 对齐 Java: `URLUtil.isHttp(CharSequence)`
@@ -42,13 +40,9 @@ impl UrlUtil {
             .trim_start_matches("http://")
             .trim_start_matches("https://")
             .trim_start_matches("ftp://");
-        url.split('/').next().and_then(|host| {
-            if host.is_empty() {
-                None
-            } else {
-                Some(host)
-            }
-        })
+        url.split('/')
+            .next()
+            .and_then(|host| if host.is_empty() { None } else { Some(host) })
     }
 
     /// 对齐 Java: `URLUtil.getPath(String uriStr)`
@@ -224,5 +218,7 @@ impl UrlUtil {
     }
 }
 
-use super::{collapse_slashes, split_domain_and_path, split_protocol, split_query, trim_leading_slashes, validate_uri};
-
+use super::{
+    collapse_slashes, split_domain_and_path, split_protocol, split_query, trim_leading_slashes,
+    validate_uri,
+};

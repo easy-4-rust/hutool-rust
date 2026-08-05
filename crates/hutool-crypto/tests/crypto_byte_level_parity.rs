@@ -15,13 +15,9 @@ use std::fs;
 use std::path::PathBuf;
 
 use hutool_crypto::{
-    md5_hex, sha1_hex, sha256_hex, sha512_hex, sm3_hex,
-    hmac_sha256, hmac_sm3_hex,
-    Aes, HMac,
-    chacha20_decrypt, chacha20_encrypt,
-    tea_decrypt, tea_encrypt,
-    aes256_gcm_decrypt, aes256_gcm_encrypt,
-    aes128_cbc_decrypt, aes128_cbc_encrypt,
+    Aes, HMac, aes128_cbc_decrypt, aes128_cbc_encrypt, aes256_gcm_decrypt, aes256_gcm_encrypt,
+    chacha20_decrypt, chacha20_encrypt, hmac_sha256, hmac_sm3_hex, md5_hex, sha1_hex, sha256_hex,
+    sha512_hex, sm3_hex, tea_decrypt, tea_encrypt,
 };
 
 /// One parsed entry from `crypto_test_vectors.txt`:
@@ -44,8 +40,7 @@ fn load_vectors() -> Vec<Vector> {
     path.push("resources");
     path.push("crypto_test_vectors.txt");
     // path is now: hutool-crypto/src/test/resources/crypto_test_vectors.txt
-    let body = fs::read_to_string(&path)
-        .unwrap_or_else(|e| panic!("read {:?}: {e}", path));
+    let body = fs::read_to_string(&path).unwrap_or_else(|e| panic!("read {:?}: {e}", path));
     let mut out = Vec::new();
     let mut current_section = String::new();
     for raw in body.lines() {
@@ -205,7 +200,10 @@ fn aes_cbc_128_roundtrip() {
     let plaintext = b"hello world 0123456789";
     let ct = aes128_cbc_encrypt(&key, &iv, plaintext).unwrap();
     let pt = aes128_cbc_decrypt(&key, &iv, &ct).unwrap();
-    assert_eq!(pt, plaintext, "AES-128-CBC roundtrip must reproduce plaintext");
+    assert_eq!(
+        pt, plaintext,
+        "AES-128-CBC roundtrip must reproduce plaintext"
+    );
 }
 
 #[test]

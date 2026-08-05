@@ -6,10 +6,7 @@
 //! **UTC+08:00** 解析/格式化，与 Asia/Shanghai（无 DST）向量一致。
 
 use chrono::{Datelike, NaiveDate};
-use hutool_core::{
-    DateField, DateUnit, DateUtil, LocalDateTimeUtil, TimeInterval,
-    Week,
-};
+use hutool_core::{DateField, DateUnit, DateUtil, LocalDateTimeUtil, TimeInterval, Week};
 
 /// 对齐 Java: `DateUtil.pending_alignment` 占位（现为 chrono 实现标识）
 #[test]
@@ -82,8 +79,14 @@ fn format_and_parse_test() {
 #[test]
 fn begin_and_end_of_day_test() {
     let date = DateUtil::parse("2017-03-01 00:33:23").unwrap();
-    assert_eq!(DateUtil::begin_of_day(date).to_string(), "2017-03-01 00:00:00");
-    assert_eq!(DateUtil::end_of_day(date).to_string(), "2017-03-01 23:59:59");
+    assert_eq!(
+        DateUtil::begin_of_day(date).to_string(),
+        "2017-03-01 00:00:00"
+    );
+    assert_eq!(
+        DateUtil::end_of_day(date).to_string(),
+        "2017-03-01 23:59:59"
+    );
 }
 
 /// 对齐 Java: `DateUtilTest.betweenTest()` 天数差
@@ -112,7 +115,10 @@ fn local_date_time_of_epoch_test() {
 /// 对齐 Java: `LocalDateTimeUtilTest.offset()` 加减天
 #[test]
 fn local_date_time_offset_test() {
-    let base = NaiveDate::from_ymd_opt(2017, 3, 1).unwrap().and_hms_opt(0, 0, 0).unwrap();
+    let base = NaiveDate::from_ymd_opt(2017, 3, 1)
+        .unwrap()
+        .and_hms_opt(0, 0, 0)
+        .unwrap();
     let offset = LocalDateTimeUtil::offset(base, DateUnit::Day, 2);
     assert_eq!(offset.date(), NaiveDate::from_ymd_opt(2017, 3, 3).unwrap());
 }
@@ -178,7 +184,10 @@ fn date_util_format_and_parse_custom_test_2_2_2() {
 #[test]
 fn date_util_end_of_day_test_2() {
     let parse = DateUtil::parse("2020-05-31 00:00:00").unwrap();
-    assert_eq!(DateUtil::end_of_day(parse).to_string(), "2020-05-31 23:59:59");
+    assert_eq!(
+        DateUtil::end_of_day(parse).to_string(),
+        "2020-05-31 23:59:59"
+    );
 }
 
 /// 对齐 Java: `DateUtilTest.truncateTest()`
@@ -194,9 +203,15 @@ fn date_util_truncate_test_2() {
 fn date_util_ceiling_minute_test_2() {
     let date2 = DateUtil::parse("2020-02-29 12:59:34").unwrap();
     let date_time = DateUtil::ceiling(date2, DateField::Minute);
-    assert_eq!(date_time.format("yyyy-MM-dd HH:mm:ss.SSS"), "2020-02-29 12:59:59.999");
+    assert_eq!(
+        date_time.format("yyyy-MM-dd HH:mm:ss.SSS"),
+        "2020-02-29 12:59:59.999"
+    );
     let date_time = DateUtil::ceiling_ms(date2, DateField::Minute, true);
-    assert_eq!(date_time.format("yyyy-MM-dd HH:mm:ss.SSS"), "2020-02-29 12:59:59.000");
+    assert_eq!(
+        date_time.format("yyyy-MM-dd HH:mm:ss.SSS"),
+        "2020-02-29 12:59:59.000"
+    );
 }
 
 /// 对齐 Java: `DateUtilTest.cellingAmPmTest()`
@@ -204,9 +219,15 @@ fn date_util_ceiling_minute_test_2() {
 fn date_util_celling_am_pm_test_2() {
     let date2 = DateUtil::parse("2020-02-29 10:59:34").unwrap();
     let date_time = DateUtil::ceiling(date2, DateField::AmPm);
-    assert_eq!(date_time.format("yyyy-MM-dd HH:mm:ss.SSS"), "2020-02-29 11:59:59.999");
+    assert_eq!(
+        date_time.format("yyyy-MM-dd HH:mm:ss.SSS"),
+        "2020-02-29 11:59:59.999"
+    );
     let date_time = DateUtil::ceiling_ms(date2, DateField::AmPm, true);
-    assert_eq!(date_time.format("yyyy-MM-dd HH:mm:ss.SSS"), "2020-02-29 11:59:59.000");
+    assert_eq!(
+        date_time.format("yyyy-MM-dd HH:mm:ss.SSS"),
+        "2020-02-29 11:59:59.000"
+    );
 }
 
 /// 对齐 Java: `DateUtilTest.assertEquals()` / roundAmPm
@@ -214,10 +235,16 @@ fn date_util_celling_am_pm_test_2() {
 fn date_util_assert_equals_2() {
     let date = DateUtil::parse("2020-02-29 13:59:34").unwrap();
     let date_time = DateUtil::round(date, DateField::AmPm);
-    assert_eq!(date_time.format("yyyy-MM-dd HH:mm:ss.SSS"), "2020-02-29 12:59:59.000");
+    assert_eq!(
+        date_time.format("yyyy-MM-dd HH:mm:ss.SSS"),
+        "2020-02-29 12:59:59.000"
+    );
     let date2 = DateUtil::parse("2020-02-29 18:59:34").unwrap();
     let date_time2 = DateUtil::round(date2, DateField::AmPm);
-    assert_eq!(date_time2.format("yyyy-MM-dd HH:mm:ss.SSS"), "2020-02-29 23:59:59.000");
+    assert_eq!(
+        date_time2.format("yyyy-MM-dd HH:mm:ss.SSS"),
+        "2020-02-29 23:59:59.000"
+    );
 }
 
 /// 对齐 Java: `DateUtilTest.ceilingDayTest()`
@@ -225,9 +252,15 @@ fn date_util_assert_equals_2() {
 fn date_util_ceiling_day_test_2() {
     let date2 = DateUtil::parse("2020-02-29 12:59:34").unwrap();
     let date_time = DateUtil::ceiling(date2, DateField::DayOfMonth);
-    assert_eq!(date_time.format("yyyy-MM-dd HH:mm:ss.SSS"), "2020-02-29 23:59:59.999");
+    assert_eq!(
+        date_time.format("yyyy-MM-dd HH:mm:ss.SSS"),
+        "2020-02-29 23:59:59.999"
+    );
     let date_time = DateUtil::ceiling_ms(date2, DateField::DayOfMonth, true);
-    assert_eq!(date_time.format("yyyy-MM-dd HH:mm:ss.SSS"), "2020-02-29 23:59:59.000");
+    assert_eq!(
+        date_time.format("yyyy-MM-dd HH:mm:ss.SSS"),
+        "2020-02-29 23:59:59.000"
+    );
 }
 
 /// 对齐 Java: `DateUtilTest.beginOfWeekTest()`
@@ -235,8 +268,14 @@ fn date_util_ceiling_day_test_2() {
 fn date_util_begin_of_week_test_2() {
     let mut date = DateUtil::parse("2017-03-01 22:33:23").unwrap();
     date.set_first_day_of_week(Week::Monday);
-    assert_eq!(DateUtil::begin_of_week(date).to_string(), "2017-02-27 00:00:00");
-    assert_eq!(DateUtil::end_of_week(date).to_string(), "2017-03-05 23:59:59");
+    assert_eq!(
+        DateUtil::begin_of_week(date).to_string(),
+        "2017-02-27 00:00:00"
+    );
+    assert_eq!(
+        DateUtil::end_of_week(date).to_string(),
+        "2017-03-05 23:59:59"
+    );
 }
 
 /// 对齐 Java: `DateUtilTest.beginOfWeekTest2()`
@@ -253,15 +292,24 @@ fn date_util_begin_of_week_test_2_2_2() {
 #[test]
 fn date_util_offset_date_test_2() {
     let date = DateUtil::parse("2017-03-01 22:33:23").unwrap();
-    assert_eq!(DateUtil::offset_day(date, 2).to_string(), "2017-03-03 22:33:23");
-    assert_eq!(DateUtil::offset_hour(date, -3).to_string(), "2017-03-01 19:33:23");
+    assert_eq!(
+        DateUtil::offset_day(date, 2).to_string(),
+        "2017-03-03 22:33:23"
+    );
+    assert_eq!(
+        DateUtil::offset_hour(date, -3).to_string(),
+        "2017-03-01 19:33:23"
+    );
 }
 
 /// 对齐 Java: `DateUtilTest.offsetMonthTest()`
 #[test]
 fn date_util_offset_month_test_2() {
     let date = DateUtil::parse("2017-03-01 22:33:23").unwrap();
-    assert_eq!(DateUtil::offset_month(date, -1).to_string(), "2017-02-01 22:33:23");
+    assert_eq!(
+        DateUtil::offset_month(date, -1).to_string(),
+        "2017-02-01 22:33:23"
+    );
 }
 
 /// 对齐 Java: `DateUtilTest.betweenTest2()`
@@ -284,7 +332,10 @@ fn date_util_between_test_3_2() {
 #[test]
 fn date_util_format_chinese_date_test_2() {
     let date = DateUtil::parse("2018-02-24").unwrap();
-    assert_eq!(DateUtil::format_chinese_date(date, false, false), "二〇一八年二月二十四日");
+    assert_eq!(
+        DateUtil::format_chinese_date(date, false, false),
+        "二〇一八年二月二十四日"
+    );
 }
 
 /// 对齐 Java: `DateUtilTest.formatChineseDateTimeTest()`
@@ -337,14 +388,20 @@ fn date_util_parse_test_4_2() {
 #[test]
 fn date_util_parse_test_5_2() {
     let date_time = DateUtil::parse("2020-02-06 01:58:00").unwrap();
-    assert_eq!(date_time.format("yyyy-MM-dd HH:mm:ss.SSS"), "2020-02-06 01:58:00.000");
+    assert_eq!(
+        date_time.format("yyyy-MM-dd HH:mm:ss.SSS"),
+        "2020-02-06 01:58:00.000"
+    );
 }
 
 /// 对齐 Java: `DateUtilTest.parseTest6()`
 #[test]
 fn date_util_parse_test_6_2() {
     let date_time = DateUtil::parse("2020-02-06 01:58:00.111").unwrap();
-    assert_eq!(date_time.format("yyyy-MM-dd HH:mm:ss.SSS"), "2020-02-06 01:58:00.111");
+    assert_eq!(
+        date_time.format("yyyy-MM-dd HH:mm:ss.SSS"),
+        "2020-02-06 01:58:00.111"
+    );
 }
 
 /// 对齐 Java: `DateUtilTest.parseTest7()`
@@ -407,25 +464,37 @@ fn date_util_parse_to_date_time_test_1_2() {
 /// 对齐 Java: `DateUtilTest.parseToDateTimeTest2()`
 #[test]
 fn date_util_parse_to_date_time_test_2_2() {
-    assert_eq!(DateUtil::parse("2018-09-13 13:34:31").unwrap().to_string(), "2018-09-13 13:34:31");
+    assert_eq!(
+        DateUtil::parse("2018-09-13 13:34:31").unwrap().to_string(),
+        "2018-09-13 13:34:31"
+    );
 }
 
 /// 对齐 Java: `DateUtilTest.parseToDateTimeTest3()`
 #[test]
 fn date_util_parse_to_date_time_test_3_2() {
-    assert_eq!(DateUtil::parse("2018-09-13 13:34:32").unwrap().to_string(), "2018-09-13 13:34:32");
+    assert_eq!(
+        DateUtil::parse("2018-09-13 13:34:32").unwrap().to_string(),
+        "2018-09-13 13:34:32"
+    );
 }
 
 /// 对齐 Java: `DateUtilTest.parseToDateTimeTest4()`
 #[test]
 fn date_util_parse_to_date_time_test_4_2() {
-    assert_eq!(DateUtil::parse("2018-09-13 13:34:33").unwrap().to_string(), "2018-09-13 13:34:33");
+    assert_eq!(
+        DateUtil::parse("2018-09-13 13:34:33").unwrap().to_string(),
+        "2018-09-13 13:34:33"
+    );
 }
 
 /// 对齐 Java: `DateUtilTest.parseToDateTimeTest5()`
 #[test]
 fn date_util_parse_to_date_time_test_5_2() {
-    assert_eq!(DateUtil::parse("2018-09-13 13:34:34").unwrap().to_string(), "2018-09-13 13:34:34");
+    assert_eq!(
+        DateUtil::parse("2018-09-13 13:34:34").unwrap().to_string(),
+        "2018-09-13 13:34:34"
+    );
 }
 
 /// 对齐 Java: `DateUtilTest.parseISO8601Test()`
@@ -497,8 +566,14 @@ fn date_util_end_of_quarter_test_2() {
 #[test]
 fn date_util_end_of_week_test_2() {
     let date = DateUtil::parse("2019-09-11").unwrap();
-    assert_eq!(DateUtil::begin_of_week(date).to_string(), "2019-09-09 00:00:00");
-    assert_eq!(DateUtil::end_of_week(date).to_string(), "2019-09-15 23:59:59");
+    assert_eq!(
+        DateUtil::begin_of_week(date).to_string(),
+        "2019-09-09 00:00:00"
+    );
+    assert_eq!(
+        DateUtil::end_of_week(date).to_string(),
+        "2019-09-15 23:59:59"
+    );
 }
 
 /// 对齐 Java: `DateUtilTest.compareTest()`
@@ -530,7 +605,10 @@ fn date_util_format_http_date_test_2() {
 fn date_util_to_instant_test_2() {
     let date = DateUtil::parse("2017-05-06 08:30:00").unwrap();
     let instant = DateUtil::to_instant(date);
-    assert_eq!(instant.to_rfc3339_opts(chrono::SecondsFormat::Secs, true), "2017-05-06T00:30:00Z");
+    assert_eq!(
+        instant.to_rfc3339_opts(chrono::SecondsFormat::Secs, true),
+        "2017-05-06T00:30:00Z"
+    );
 }
 
 /// 对齐 Java: `DateUtilTest.dateTest()`
@@ -642,7 +720,10 @@ fn date_util_day_of_year_test_2() {
 /// 对齐 Java: `DateUtilTest.parseSingleNumberTest()`
 #[test]
 fn date_util_parse_single_number_test_2() {
-    assert_eq!(DateUtil::parse("2020-5-8").unwrap().to_string(), "2020-05-08 00:00:00");
+    assert_eq!(
+        DateUtil::parse("2020-5-8").unwrap().to_string(),
+        "2020-05-08 00:00:00"
+    );
 }
 
 /// 对齐 Java: `DateUtilTest.parseWithMilsTest()`
@@ -662,7 +743,10 @@ fn date_util_parse_not_fit_test_2() {
 #[test]
 fn date_util_format_test_2() {
     let date = DateUtil::parse("2021-07-14 23:59:59").unwrap();
-    assert_eq!(DateUtil::format(date, "yyyy-MM-dd HH:mm:ss"), "2021-07-14 23:59:59");
+    assert_eq!(
+        DateUtil::format(date, "yyyy-MM-dd HH:mm:ss"),
+        "2021-07-14 23:59:59"
+    );
 }
 
 /// 对齐 Java: `DateUtilTest.formatNormDateTimeFormatterTest()`
@@ -677,14 +761,22 @@ fn date_util_format_norm_date_time_formatter_test_2() {
 fn date_util_is_weekend_test_2() {
     // 2017-03-04 Saturday
     assert!(DateUtil::is_weekend(DateUtil::parse("2017-03-04").unwrap()));
-    assert!(!DateUtil::is_weekend(DateUtil::parse("2017-03-01").unwrap()));
+    assert!(!DateUtil::is_weekend(
+        DateUtil::parse("2017-03-01").unwrap()
+    ));
 }
 
 /// 对齐 Java: `DateUtilTest.parseSingleMonthAndDayTest()`
 #[test]
 fn date_util_parse_single_month_and_day_test_2() {
-    assert_eq!(DateUtil::parse("2021-1-1").unwrap().to_string(), "2021-01-01 00:00:00");
-    assert_eq!(DateUtil::parse("2021-1-22").unwrap().to_string(), "2021-01-22 00:00:00");
+    assert_eq!(
+        DateUtil::parse("2021-1-1").unwrap().to_string(),
+        "2021-01-01 00:00:00"
+    );
+    assert_eq!(
+        DateUtil::parse("2021-1-22").unwrap().to_string(),
+        "2021-01-22 00:00:00"
+    );
 }
 
 /// 对齐 Java: `DateUtilTest.parseByDateTimeFormatterTest()`
@@ -747,8 +839,12 @@ fn date_util_is_in_test_2() {
 /// 对齐 Java: `DateUtilTest.isLastDayTest()`
 #[test]
 fn date_util_is_last_day_test_2() {
-    assert!(DateUtil::is_last_day_of_month(DateUtil::parse("2020-02-29").unwrap()));
-    assert!(!DateUtil::is_last_day_of_month(DateUtil::parse("2020-02-28").unwrap()));
+    assert!(DateUtil::is_last_day_of_month(
+        DateUtil::parse("2020-02-29").unwrap()
+    ));
+    assert!(!DateUtil::is_last_day_of_month(
+        DateUtil::parse("2020-02-28").unwrap()
+    ));
 }
 
 /// 对齐 Java: `DateUtilTest.parseUTCTest4()`

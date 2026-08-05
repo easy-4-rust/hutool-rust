@@ -81,7 +81,13 @@ impl ImgUtil {
     }
 
     /// 对齐 Java: `ImgUtil.cut(Image, Rectangle)` 矩形裁剪。
-    pub fn cut(image: &DynamicImage, x: u32, y: u32, width: u32, height: u32) -> Result<DynamicImage> {
+    pub fn cut(
+        image: &DynamicImage,
+        x: u32,
+        y: u32,
+        width: u32,
+        height: u32,
+    ) -> Result<DynamicImage> {
         let w = width.max(1);
         let h = height.max(1);
         if x.saturating_add(w) > image.width() || y.saturating_add(h) > image.height() {
@@ -115,11 +121,7 @@ impl ImgUtil {
     }
 
     /// 对齐 Java: `ImgUtil.sliceByRowsAndCols(Image, int, int)`。
-    pub fn slice_by_rows_and_cols(
-        image: &DynamicImage,
-        rows: u32,
-        cols: u32,
-    ) -> Vec<DynamicImage> {
+    pub fn slice_by_rows_and_cols(image: &DynamicImage, rows: u32, cols: u32) -> Vec<DynamicImage> {
         let rows = rows.max(1);
         let cols = cols.max(1);
         let tile_w = (image.width() / cols).max(1);
@@ -315,15 +317,15 @@ impl ImgUtil {
 }
 
 fn format_from_path(path: &Path) -> Option<ImageFormat> {
-    path.extension()
-        .and_then(|e| e.to_str())
-        .and_then(|ext| match ext.to_ascii_lowercase().as_str() {
+    path.extension().and_then(|e| e.to_str()).and_then(|ext| {
+        match ext.to_ascii_lowercase().as_str() {
             "png" => Some(ImageFormat::Png),
             "jpg" | "jpeg" => Some(ImageFormat::Jpeg),
             "webp" => Some(ImageFormat::WebP),
             "gif" => Some(ImageFormat::Gif),
             _ => None,
-        })
+        }
+    })
 }
 
 fn parse_format(name: &str) -> Result<ImageFormat> {

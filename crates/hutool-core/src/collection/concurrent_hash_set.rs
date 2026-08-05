@@ -2,11 +2,7 @@
 
 /// 对齐: `cn.hutool.core.collection.ConcurrentHashSet`
 /// 并发哈希集合
-
-use std::{
-    collections::HashSet,
-    hash::Hash,
-};
+use std::{collections::HashSet, hash::Hash};
 
 use parking_lot::RwLock;
 
@@ -83,4 +79,3 @@ impl<T: Eq + Hash> FromIterator<T> for ConcurrentHashSet<T> {
         }
     }
 }
-

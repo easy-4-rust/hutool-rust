@@ -1,7 +1,7 @@
 //! HttpUtil offline param/URL helpers parity
 //! 对齐: `cn.hutool.http.HttpUtilTest`, `Issue3536Test`, `IssueIBRVE4Test`, `IssueIBQIYQTest`, `MultipartBodyTest`
 
-use hutool_http::{form_map, HttpUtil, MultipartBody};
+use hutool_http::{HttpUtil, MultipartBody, form_map};
 use std::collections::HashMap;
 
 /// 对齐 Java: `HttpUtilTest.isHttpTest()`
@@ -73,9 +73,7 @@ fn get_mime_type_test() {
 /// 对齐 Java: `HttpUtilTest.decodeParamsTest()`
 #[test]
 fn http_util_test_decode_params_test() {
-    let map = HttpUtil::decode_params(
-        "uuuu=0&a=b&c=%3F%23%40!%24%25%5E%26%3Ddsssss555555",
-    );
+    let map = HttpUtil::decode_params("uuuu=0&a=b&c=%3F%23%40!%24%25%5E%26%3Ddsssss555555");
     assert_eq!(map["uuuu"][0], "0");
     assert_eq!(map["a"][0], "b");
     assert_eq!(map["c"][0], "?#@!$%^&=dsssss555555");
@@ -173,7 +171,8 @@ fn http_util_test_url_with_form_test() {
         ("Version", "1.0"),
     ]);
     let expected = "http://api.hutool.cn/login?type=aaa&AccessKeyId=123&Action=DescribeDomainRecords&Format=date&DomainName=lesper.cn&SignatureMethod=POST&SignatureNonce=123&SignatureVersion=4.3.1&Timestamp=123432453&Version=1.0";
-    let url_with_form = HttpUtil::url_with_form("http://api.hutool.cn/login?type=aaa", &param, false);
+    let url_with_form =
+        HttpUtil::url_with_form("http://api.hutool.cn/login?type=aaa", &param, false);
     assert_eq!(url_with_form, expected);
     let again = HttpUtil::url_with_form("http://api.hutool.cn/login?type=aaa", &param, false);
     assert_eq!(again, expected);
@@ -269,7 +268,6 @@ fn multipart_body_test_build_test() {
     assert!(alias.content_type().contains("boundary="));
 }
 
-
 /// 对齐 Java: `HttpUtilTest` / `HttpUtil.buildBasicAuth`
 #[test]
 fn http_util_build_basic_auth_test() {
@@ -304,8 +302,14 @@ fn http_util_get_content_type_by_request_body_test() {
 /// 对齐 Java: `HttpUtil.getMimeType(String, String)`
 #[test]
 fn http_util_get_mime_type_default_test() {
-    assert_eq!(HttpUtil::get_mime_type_or("x.unknown", "application/octet-stream"), "application/octet-stream");
-    assert_eq!(HttpUtil::get_mime_type_or("a.json", "x"), "application/json");
+    assert_eq!(
+        HttpUtil::get_mime_type_or("x.unknown", "application/octet-stream"),
+        "application/octet-stream"
+    );
+    assert_eq!(
+        HttpUtil::get_mime_type_or("a.json", "x"),
+        "application/json"
+    );
 }
 
 /// 对齐 Java: `HttpUtil.getString(byte[], Charset, boolean)`

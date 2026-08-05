@@ -65,14 +65,14 @@ impl RuntimeUtil {
 
     /// 对齐 Java: `RuntimeUtil.getUsableMemory()`
     pub fn get_usable_memory() -> u64 {
-        Self::sys_memory_info().map(|(_, available)| available).unwrap_or(0)
+        Self::sys_memory_info()
+            .map(|(_, available)| available)
+            .unwrap_or(0)
     }
 
     /// 对齐 Java: `RuntimeUtil.getTotalMemory()`
     pub fn get_total_memory() -> u64 {
-        Self::sys_memory_info()
-            .map(|(total, _)| total)
-            .unwrap_or(0)
+        Self::sys_memory_info().map(|(total, _)| total).unwrap_or(0)
     }
 
     /// 对齐 Java: `RuntimeUtil.getPid()`
@@ -96,7 +96,9 @@ impl RuntimeUtil {
             let text = String::from_utf8_lossy(&out.stdout);
             let page_size = text
                 .lines()
-                .find_map(|line| line.strip_prefix("Mach Virtual Memory Statistics: (page size of "))
+                .find_map(|line| {
+                    line.strip_prefix("Mach Virtual Memory Statistics: (page size of ")
+                })
                 .and_then(|rest| rest.split_whitespace().next())
                 .and_then(|size| size.parse::<u64>().ok())
                 .unwrap_or(4096);

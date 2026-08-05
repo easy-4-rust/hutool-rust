@@ -28,4 +28,3 @@ impl Card10Info {
         self.valid
     }
 }
-

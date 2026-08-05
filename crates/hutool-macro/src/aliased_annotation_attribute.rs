@@ -14,7 +14,10 @@ pub struct AliasedAnnotationAttribute {
 
 impl AliasedAnnotationAttribute {
     /// 构造别名属性。
-    pub fn new(original: Arc<dyn AnnotationAttribute>, linked: Arc<dyn AnnotationAttribute>) -> Arc<Self> {
+    pub fn new(
+        original: Arc<dyn AnnotationAttribute>,
+        linked: Arc<dyn AnnotationAttribute>,
+    ) -> Arc<Self> {
         Arc::new(Self {
             inner: AbstractWrappedAnnotationAttribute::new(
                 original,

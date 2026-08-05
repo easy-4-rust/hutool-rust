@@ -6,7 +6,6 @@
 use hutool_core::{EmptyMapKind, MapUtil};
 use std::collections::{BTreeMap, HashMap};
 
-
 /// 对齐 Java: `MapUtilTest.filterTest()`
 #[test]
 fn filter_test() {
@@ -15,7 +14,9 @@ fn filter_test() {
     map.insert("b".into(), "2".into());
     map.insert("c".into(), "3".into());
     map.insert("d".into(), "4".into());
-    let map2 = MapUtil::filter(&map, |_k, v: &String| v.parse::<i32>().unwrap_or(0) % 2 == 0);
+    let map2 = MapUtil::filter(&map, |_k, v: &String| {
+        v.parse::<i32>().unwrap_or(0) % 2 == 0
+    });
     assert_eq!(map2.len(), 2);
     assert_eq!(map2.get("b").map(|s| s.as_str()), Some("2"));
     assert_eq!(map2.get("d").map(|s| s.as_str()), Some("4"));
@@ -43,7 +44,9 @@ fn filter_map_wrapper_test() {
     map.insert("b".into(), "2".into());
     map.insert("c".into(), "3".into());
     map.insert("d".into(), "4".into());
-    let map2 = MapUtil::filter(&map, |_k, v: &String| v.parse::<i32>().unwrap_or(0) % 2 == 0);
+    let map2 = MapUtil::filter(&map, |_k, v: &String| {
+        v.parse::<i32>().unwrap_or(0) % 2 == 0
+    });
     assert_eq!(map2.len(), 2);
 }
 
@@ -69,7 +72,10 @@ fn edit_test() {
     map.insert("b".into(), "2".into());
     map.insert("c".into(), "3".into());
     map.insert("d".into(), "4".into());
-    let map2: HashMap<String, String> = map.into_iter().map(|(k, v)| (k, format!("{}0", v))).collect();
+    let map2: HashMap<String, String> = map
+        .into_iter()
+        .map(|(k, v)| (k, format!("{}0", v)))
+        .collect();
     assert_eq!(map2.len(), 4);
     assert_eq!(map2.get("a").map(|s| s.as_str()), Some("10"));
     assert_eq!(map2.get("b").map(|s| s.as_str()), Some("20"));
@@ -147,7 +153,12 @@ fn join_ignore_null_test() {
     map.insert("id", Some("12"));
     map.insert("name", Some("张三"));
     map.insert("age", None);
-    let s: String = map.iter().filter(|(_, v)| v.is_some()).map(|(k, v)| format!("{}={}", k, v.unwrap())).collect::<Vec<_>>().join(",");
+    let s: String = map
+        .iter()
+        .filter(|(_, v)| v.is_some())
+        .map(|(k, v)| format!("{}={}", k, v.unwrap()))
+        .collect::<Vec<_>>()
+        .join(",");
     assert!(s.contains("id=12"));
     assert!(s.contains("name=张三"));
     assert!(!s.contains("age="));
@@ -237,7 +248,9 @@ fn partition_empty_map_returns_empty_list() {
 #[test]
 fn partition_map_size_multiple_of_size_partitions_correctly() {
     let mut map = BTreeMap::new();
-    for i in 0..5 { map.insert(i, i); }
+    for i in 0..5 {
+        map.insert(i, i);
+    }
     let entries: Vec<_> = map.into_iter().collect();
     let parts: Vec<_> = entries.chunks(2).map(|c| c.to_vec()).collect();
     assert!(!parts.is_empty());
@@ -247,7 +260,9 @@ fn partition_map_size_multiple_of_size_partitions_correctly() {
 #[test]
 fn partition_map_size_not_multiple_of_size_partitions_correctly() {
     let mut map = BTreeMap::new();
-    for i in 0..5 { map.insert(i, i); }
+    for i in 0..5 {
+        map.insert(i, i);
+    }
     let entries: Vec<_> = map.into_iter().collect();
     let parts: Vec<_> = entries.chunks(2).map(|c| c.to_vec()).collect();
     assert!(!parts.is_empty());
@@ -257,7 +272,9 @@ fn partition_map_size_not_multiple_of_size_partitions_correctly() {
 #[test]
 fn partition_general_case_partitions_correctly() {
     let mut map = BTreeMap::new();
-    for i in 0..5 { map.insert(i, i); }
+    for i in 0..5 {
+        map.insert(i, i);
+    }
     let entries: Vec<_> = map.into_iter().collect();
     let parts: Vec<_> = entries.chunks(2).map(|c| c.to_vec()).collect();
     assert!(!parts.is_empty());
@@ -543,9 +560,15 @@ fn get_quietly_map_is_null_returns_default_value() {
     let mut map: HashMap<&str, &str> = HashMap::new();
     map.insert("age", "18");
     let default = 0i32;
-    let val = map.get("age").and_then(|s| s.parse::<i32>().ok()).unwrap_or(default);
+    let val = map
+        .get("age")
+        .and_then(|s| s.parse::<i32>().ok())
+        .unwrap_or(default);
     assert_eq!(val, 18);
-    let missing = map.get("x").and_then(|s| s.parse::<i32>().ok()).unwrap_or(default);
+    let missing = map
+        .get("x")
+        .and_then(|s| s.parse::<i32>().ok())
+        .unwrap_or(default);
     assert_eq!(missing, default);
 }
 
@@ -555,9 +578,15 @@ fn get_quietly_key_exists_returns_converted_value() {
     let mut map: HashMap<&str, &str> = HashMap::new();
     map.insert("age", "18");
     let default = 0i32;
-    let val = map.get("age").and_then(|s| s.parse::<i32>().ok()).unwrap_or(default);
+    let val = map
+        .get("age")
+        .and_then(|s| s.parse::<i32>().ok())
+        .unwrap_or(default);
     assert_eq!(val, 18);
-    let missing = map.get("x").and_then(|s| s.parse::<i32>().ok()).unwrap_or(default);
+    let missing = map
+        .get("x")
+        .and_then(|s| s.parse::<i32>().ok())
+        .unwrap_or(default);
     assert_eq!(missing, default);
 }
 
@@ -567,9 +596,15 @@ fn get_quietly_key_does_not_exist_returns_default_value() {
     let mut map: HashMap<&str, &str> = HashMap::new();
     map.insert("age", "18");
     let default = 0i32;
-    let val = map.get("age").and_then(|s| s.parse::<i32>().ok()).unwrap_or(default);
+    let val = map
+        .get("age")
+        .and_then(|s| s.parse::<i32>().ok())
+        .unwrap_or(default);
     assert_eq!(val, 18);
-    let missing = map.get("x").and_then(|s| s.parse::<i32>().ok()).unwrap_or(default);
+    let missing = map
+        .get("x")
+        .and_then(|s| s.parse::<i32>().ok())
+        .unwrap_or(default);
     assert_eq!(missing, default);
 }
 
@@ -579,9 +614,15 @@ fn get_quietly_conversion_fails_returns_default_value() {
     let mut map: HashMap<&str, &str> = HashMap::new();
     map.insert("age", "18");
     let default = 0i32;
-    let val = map.get("age").and_then(|s| s.parse::<i32>().ok()).unwrap_or(default);
+    let val = map
+        .get("age")
+        .and_then(|s| s.parse::<i32>().ok())
+        .unwrap_or(default);
     assert_eq!(val, 18);
-    let missing = map.get("x").and_then(|s| s.parse::<i32>().ok()).unwrap_or(default);
+    let missing = map
+        .get("x")
+        .and_then(|s| s.parse::<i32>().ok())
+        .unwrap_or(default);
     assert_eq!(missing, default);
 }
 
@@ -591,9 +632,15 @@ fn get_quietly_key_exists_with_correct_type_returns_value() {
     let mut map: HashMap<&str, &str> = HashMap::new();
     map.insert("age", "18");
     let default = 0i32;
-    let val = map.get("age").and_then(|s| s.parse::<i32>().ok()).unwrap_or(default);
+    let val = map
+        .get("age")
+        .and_then(|s| s.parse::<i32>().ok())
+        .unwrap_or(default);
     assert_eq!(val, 18);
-    let missing = map.get("x").and_then(|s| s.parse::<i32>().ok()).unwrap_or(default);
+    let missing = map
+        .get("x")
+        .and_then(|s| s.parse::<i32>().ok())
+        .unwrap_or(default);
     assert_eq!(missing, default);
 }
 
@@ -603,9 +650,15 @@ fn get_quietly_key_exists_with_null_value_returns_default_value() {
     let mut map: HashMap<&str, &str> = HashMap::new();
     map.insert("age", "18");
     let default = 0i32;
-    let val = map.get("age").and_then(|s| s.parse::<i32>().ok()).unwrap_or(default);
+    let val = map
+        .get("age")
+        .and_then(|s| s.parse::<i32>().ok())
+        .unwrap_or(default);
     assert_eq!(val, 18);
-    let missing = map.get("x").and_then(|s| s.parse::<i32>().ok()).unwrap_or(default);
+    let missing = map
+        .get("x")
+        .and_then(|s| s.parse::<i32>().ok())
+        .unwrap_or(default);
     assert_eq!(missing, default);
 }
 
@@ -615,9 +668,15 @@ fn get_map_is_null_returns_default_value() {
     let mut map: HashMap<&str, &str> = HashMap::new();
     map.insert("age", "18");
     let default = 0i32;
-    let val = map.get("age").and_then(|s| s.parse::<i32>().ok()).unwrap_or(default);
+    let val = map
+        .get("age")
+        .and_then(|s| s.parse::<i32>().ok())
+        .unwrap_or(default);
     assert_eq!(val, 18);
-    let missing = map.get("x").and_then(|s| s.parse::<i32>().ok()).unwrap_or(default);
+    let missing = map
+        .get("x")
+        .and_then(|s| s.parse::<i32>().ok())
+        .unwrap_or(default);
     assert_eq!(missing, default);
 }
 
@@ -627,9 +686,15 @@ fn get_key_exists_returns_converted_value() {
     let mut map: HashMap<&str, &str> = HashMap::new();
     map.insert("age", "18");
     let default = 0i32;
-    let val = map.get("age").and_then(|s| s.parse::<i32>().ok()).unwrap_or(default);
+    let val = map
+        .get("age")
+        .and_then(|s| s.parse::<i32>().ok())
+        .unwrap_or(default);
     assert_eq!(val, 18);
-    let missing = map.get("x").and_then(|s| s.parse::<i32>().ok()).unwrap_or(default);
+    let missing = map
+        .get("x")
+        .and_then(|s| s.parse::<i32>().ok())
+        .unwrap_or(default);
     assert_eq!(missing, default);
 }
 
@@ -639,9 +704,15 @@ fn get_key_does_not_exist_returns_default_value() {
     let mut map: HashMap<&str, &str> = HashMap::new();
     map.insert("age", "18");
     let default = 0i32;
-    let val = map.get("age").and_then(|s| s.parse::<i32>().ok()).unwrap_or(default);
+    let val = map
+        .get("age")
+        .and_then(|s| s.parse::<i32>().ok())
+        .unwrap_or(default);
     assert_eq!(val, 18);
-    let missing = map.get("x").and_then(|s| s.parse::<i32>().ok()).unwrap_or(default);
+    let missing = map
+        .get("x")
+        .and_then(|s| s.parse::<i32>().ok())
+        .unwrap_or(default);
     assert_eq!(missing, default);
 }
 
@@ -651,9 +722,15 @@ fn get_type_conversion_fails_returns_default_value() {
     let mut map: HashMap<&str, &str> = HashMap::new();
     map.insert("age", "18");
     let default = 0i32;
-    let val = map.get("age").and_then(|s| s.parse::<i32>().ok()).unwrap_or(default);
+    let val = map
+        .get("age")
+        .and_then(|s| s.parse::<i32>().ok())
+        .unwrap_or(default);
     assert_eq!(val, 18);
-    let missing = map.get("x").and_then(|s| s.parse::<i32>().ok()).unwrap_or(default);
+    let missing = map
+        .get("x")
+        .and_then(|s| s.parse::<i32>().ok())
+        .unwrap_or(default);
     assert_eq!(missing, default);
 }
 
@@ -663,9 +740,15 @@ fn get_quietly_type_conversion_fails_returns_default_value() {
     let mut map: HashMap<&str, &str> = HashMap::new();
     map.insert("age", "18");
     let default = 0i32;
-    let val = map.get("age").and_then(|s| s.parse::<i32>().ok()).unwrap_or(default);
+    let val = map
+        .get("age")
+        .and_then(|s| s.parse::<i32>().ok())
+        .unwrap_or(default);
     assert_eq!(val, 18);
-    let missing = map.get("x").and_then(|s| s.parse::<i32>().ok()).unwrap_or(default);
+    let missing = map
+        .get("x")
+        .and_then(|s| s.parse::<i32>().ok())
+        .unwrap_or(default);
     assert_eq!(missing, default);
 }
 
@@ -675,9 +758,15 @@ fn get_type_reference_returns_converted_value() {
     let mut map: HashMap<&str, &str> = HashMap::new();
     map.insert("age", "18");
     let default = 0i32;
-    let val = map.get("age").and_then(|s| s.parse::<i32>().ok()).unwrap_or(default);
+    let val = map
+        .get("age")
+        .and_then(|s| s.parse::<i32>().ok())
+        .unwrap_or(default);
     assert_eq!(val, 18);
-    let missing = map.get("x").and_then(|s| s.parse::<i32>().ok()).unwrap_or(default);
+    let missing = map
+        .get("x")
+        .and_then(|s| s.parse::<i32>().ok())
+        .unwrap_or(default);
     assert_eq!(missing, default);
 }
 
@@ -687,9 +776,15 @@ fn get_type_reference_with_default_value_returns_converted_value() {
     let mut map: HashMap<&str, &str> = HashMap::new();
     map.insert("age", "18");
     let default = 0i32;
-    let val = map.get("age").and_then(|s| s.parse::<i32>().ok()).unwrap_or(default);
+    let val = map
+        .get("age")
+        .and_then(|s| s.parse::<i32>().ok())
+        .unwrap_or(default);
     assert_eq!(val, 18);
-    let missing = map.get("x").and_then(|s| s.parse::<i32>().ok()).unwrap_or(default);
+    let missing = map
+        .get("x")
+        .and_then(|s| s.parse::<i32>().ok())
+        .unwrap_or(default);
     assert_eq!(missing, default);
 }
 
@@ -699,9 +794,15 @@ fn get_type_reference_with_default_value_type_conversion_fails_returns_default_v
     let mut map: HashMap<&str, &str> = HashMap::new();
     map.insert("age", "18");
     let default = 0i32;
-    let val = map.get("age").and_then(|s| s.parse::<i32>().ok()).unwrap_or(default);
+    let val = map
+        .get("age")
+        .and_then(|s| s.parse::<i32>().ok())
+        .unwrap_or(default);
     assert_eq!(val, 18);
-    let missing = map.get("x").and_then(|s| s.parse::<i32>().ok()).unwrap_or(default);
+    let missing = map
+        .get("x")
+        .and_then(|s| s.parse::<i32>().ok())
+        .unwrap_or(default);
     assert_eq!(missing, default);
 }
 

@@ -10,11 +10,11 @@ use std::collections::{HashMap, HashSet};
 use std::sync::Mutex;
 
 use chrono::{FixedOffset, Local, NaiveDate, NaiveDateTime, TimeZone, Timelike};
+use hutool_core::HexUtil;
 use hutool_core::convert::{
     CastUtil, Convert, ConvertValue, ConverterRegistry, NumberChineseFormatter, NumberConverter,
     NumberTarget, NumberWithFormat, NumberWordFormatter, TimeUnit,
 };
-use hutool_core::HexUtil;
 use rust_decimal::Decimal;
 use rust_decimal::prelude::ToPrimitive;
 use std::str::FromStr;
@@ -183,7 +183,10 @@ fn convert_test_to_int_test_2() {
 /// 对齐 Java: `ConvertTest.toLongTest()`
 #[test]
 fn convert_test_to_long_test() {
-    assert_eq!(Convert::to_long(&v_str(" 342324545435435")), Some(342324545435435));
+    assert_eq!(
+        Convert::to_long(&v_str(" 342324545435435")),
+        Some(342324545435435)
+    );
     assert_eq!(
         Convert::to_long(&v_str(" 342324545435435.245435435")),
         Some(342324545435435)
@@ -296,7 +299,10 @@ fn convert_test_number_to_byte_array_test() {
 #[test]
 fn convert_test_to_atomic_integer_array_test() {
     let arr = Convert::to_atomic_i32_array(&v_str("1,2"));
-    assert_eq!(format!("{:?}", arr).replace(' ', ""), "[1,2]".to_string().replace(' ', "") );
+    assert_eq!(
+        format!("{:?}", arr).replace(' ', ""),
+        "[1,2]".to_string().replace(' ', "")
+    );
     assert_eq!(arr, vec![1, 2]);
 }
 
@@ -512,8 +518,19 @@ fn convert_test_issue_3662_test() {
 /// 对齐 Java: `ConvertToArrayTest.toIntArrayTest()`
 #[test]
 fn convert_to_array_test_to_int_array_test() {
-    assert_eq!(Convert::to_i32_array(&ConvertValue::StrArray(vec!["1".into(),"2".into(),"3".into(),"4".into()])), vec![1,2,3,4]);
-    assert_eq!(Convert::to_i32_array(&ConvertValue::I64Array(vec![1,2,3,4,5])), vec![1,2,3,4,5]);
+    assert_eq!(
+        Convert::to_i32_array(&ConvertValue::StrArray(vec![
+            "1".into(),
+            "2".into(),
+            "3".into(),
+            "4".into()
+        ])),
+        vec![1, 2, 3, 4]
+    );
+    assert_eq!(
+        Convert::to_i32_array(&ConvertValue::I64Array(vec![1, 2, 3, 4, 5])),
+        vec![1, 2, 3, 4, 5]
+    );
 }
 
 /// 对齐 Java: `ConvertToArrayTest.toIntArrayTestIgnoreComponentErrorTest()`
@@ -531,30 +548,55 @@ fn convert_to_array_test_to_int_array_test_ignore_component_error_test() {
 /// 对齐 Java: `ConvertToArrayTest.toLongArrayTest()`
 #[test]
 fn convert_to_array_test_to_long_array_test() {
-    assert_eq!(Convert::to_i64_array(&ConvertValue::StrArray(vec!["1".into(),"2".into(),"3".into(),"4".into()])), vec![1,2,3,4]);
-    assert_eq!(Convert::to_i64_array(&ConvertValue::I64Array(vec![1,2,3,4,5])), vec![1,2,3,4,5]);
+    assert_eq!(
+        Convert::to_i64_array(&ConvertValue::StrArray(vec![
+            "1".into(),
+            "2".into(),
+            "3".into(),
+            "4".into()
+        ])),
+        vec![1, 2, 3, 4]
+    );
+    assert_eq!(
+        Convert::to_i64_array(&ConvertValue::I64Array(vec![1, 2, 3, 4, 5])),
+        vec![1, 2, 3, 4, 5]
+    );
 }
 
 /// 对齐 Java: `ConvertToArrayTest.toDoubleArrayTest()`
 #[test]
 fn convert_to_array_test_to_double_array_test() {
-    assert_eq!(Convert::to_f64_array(&ConvertValue::StrArray(vec!["1".into(),"2".into(),"3".into(),"4".into()])), vec![1.0,2.0,3.0,4.0]);
+    assert_eq!(
+        Convert::to_f64_array(&ConvertValue::StrArray(vec![
+            "1".into(),
+            "2".into(),
+            "3".into(),
+            "4".into()
+        ])),
+        vec![1.0, 2.0, 3.0, 4.0]
+    );
 }
 
 /// 对齐 Java: `ConvertToArrayTest.toPrimitiveArrayTest()`
 #[test]
 fn convert_to_array_test_to_primitive_array_test() {
-    let a = vec![1i64,2,3,4];
-    assert_eq!(Convert::to_i64_array(&ConvertValue::I64Array(a.clone())), vec![1,2,3,4]);
+    let a = vec![1i64, 2, 3, 4];
+    assert_eq!(
+        Convert::to_i64_array(&ConvertValue::I64Array(a.clone())),
+        vec![1, 2, 3, 4]
+    );
     let bytes: Vec<u8> = a.iter().map(|x| *x as u8).collect();
-    assert_eq!(bytes, vec![1,2,3,4]);
-    assert_eq!(Convert::to_i32_array(&v_str("1,2,3,4,5")), vec![1,2,3,4,5]);
+    assert_eq!(bytes, vec![1, 2, 3, 4]);
+    assert_eq!(
+        Convert::to_i32_array(&v_str("1,2,3,4,5")),
+        vec![1, 2, 3, 4, 5]
+    );
 }
 
 /// 对齐 Java: `ConvertToArrayTest.collectionToArrayTest()`
 #[test]
 fn convert_to_array_test_collection_to_array_test() {
-    let list = vec!["a".into(),"b".into(),"c".into()];
+    let list = vec!["a".into(), "b".into(), "c".into()];
     let result = Convert::to_list_str(&ConvertValue::StrArray(list.clone()));
     assert_eq!(result, list);
 }
@@ -563,7 +605,7 @@ fn convert_to_array_test_collection_to_array_test() {
 #[test]
 fn convert_to_array_test_str_to_char_array_test() {
     let array = Convert::to_char_array("abcde");
-    assert_eq!(array, vec!['a','b','c','d','e']);
+    assert_eq!(array, vec!['a', 'b', 'c', 'd', 'e']);
 }
 
 /// 对齐 Java: `ConvertToArrayTest.toUrlArrayTest()` — Java @Disabled，此处覆盖 API 可运行性
@@ -657,13 +699,22 @@ fn convert_to_boolean_test_int_to_boolean_test() {
 /// 对齐 Java: `ConvertToBooleanTest.toBooleanWithDefaultTest()`
 #[test]
 fn convert_to_boolean_test_to_boolean_with_default_test() {
-    assert_eq!(Convert::to_bool_or(&v_str("ddddd"), Some(false)), Some(false));
+    assert_eq!(
+        Convert::to_bool_or(&v_str("ddddd"), Some(false)),
+        Some(false)
+    );
 }
 
 /// 对齐 Java: `ConvertToCollectionTest.toCollectionTest()`
 #[test]
 fn convert_to_collection_test_to_collection_test() {
-    let a = ConvertValue::List(vec![v_str("a"), v_str("你"), v_str("好"), v_str(""), v_i(1)]);
+    let a = ConvertValue::List(vec![
+        v_str("a"),
+        v_str("你"),
+        v_str("好"),
+        v_str(""),
+        v_i(1),
+    ]);
     let list = Convert::to_list_str(&a);
     // mixed — use display list via to_str pieces
     assert_eq!(list[0], "a");
@@ -672,7 +723,13 @@ fn convert_to_collection_test_to_collection_test() {
 /// 对齐 Java: `ConvertToCollectionTest.toListTest()`
 #[test]
 fn convert_to_collection_test_to_list_test() {
-    let list = Convert::to_list_str(&ConvertValue::StrArray(vec!["a".into(),"你".into(),"好".into(),"".into(),"1".into()]));
+    let list = Convert::to_list_str(&ConvertValue::StrArray(vec![
+        "a".into(),
+        "你".into(),
+        "好".into(),
+        "".into(),
+        "1".into(),
+    ]));
     assert_eq!(list[0], "a");
     assert_eq!(list[4], "1");
 }
@@ -712,19 +769,22 @@ fn convert_to_collection_test_str_to_list_test_2() {
 /// 对齐 Java: `ConvertToCollectionTest.numberToListTest()`
 #[test]
 fn convert_to_collection_test_number_to_list_test() {
-    assert_eq!(Convert::to_list_i32(&v_str("1,2,3")), vec![1,2,3]);
+    assert_eq!(Convert::to_list_i32(&v_str("1,2,3")), vec![1, 2, 3]);
 }
 
 /// 对齐 Java: `ConvertToCollectionTest.toLinkedListTest()`
 #[test]
 fn convert_to_collection_test_to_linked_list_test() {
-    assert_eq!(Convert::to_list_str(&v_str("a,b,c")), vec!["a","b","c"]);
+    assert_eq!(Convert::to_list_str(&v_str("a,b,c")), vec!["a", "b", "c"]);
 }
 
 /// 对齐 Java: `ConvertToCollectionTest.toSetTest()`
 #[test]
 fn convert_to_collection_test_to_set_test() {
-    assert_eq!(Convert::to_set_i32(&v_str("1,2,3")), HashSet::from([1,2,3]));
+    assert_eq!(
+        Convert::to_set_i32(&v_str("1,2,3")),
+        HashSet::from([1, 2, 3])
+    );
 }
 
 /// 对齐 Java: `ConvertToNumberTest.dateToLongTest()`
@@ -795,7 +855,10 @@ fn date_convert_test_to_date_test() {
     let naive = NaiveDate::parse_from_str(a, "%Y-%m-%d").unwrap();
     assert_eq!(naive.to_string(), a);
     let time_long = chrono::Utc::now().timestamp_millis();
-    assert_eq!(Convert::to_date(&ConvertValue::DateMs(time_long)), Some(time_long));
+    assert_eq!(
+        Convert::to_date(&ConvertValue::DateMs(time_long)),
+        Some(time_long)
+    );
 }
 
 /// 对齐 Java: `DateConvertTest.toDateFromIntTest()`
@@ -821,7 +884,12 @@ fn date_convert_test_to_date_from_local_date_time_test() {
 /// 对齐 Java: `DateConvertTest.toSqlDateTest()`
 #[test]
 fn date_convert_test_to_sql_date_test() {
-    assert_eq!(NaiveDate::parse_from_str("2017-05-06", "%Y-%m-%d").unwrap().to_string(), "2017-05-06");
+    assert_eq!(
+        NaiveDate::parse_from_str("2017-05-06", "%Y-%m-%d")
+            .unwrap()
+            .to_string(),
+        "2017-05-06"
+    );
 }
 
 /// 对齐 Java: `DateConvertTest.toLocalDateTimeTest()`
@@ -833,12 +901,26 @@ fn date_convert_test_to_local_date_time_test() {
 }
 
 #[derive(Debug, PartialEq)]
-enum TestEnum { A, B, C }
+enum TestEnum {
+    A,
+    B,
+    C,
+}
 fn parse_enum(s: &str) -> Option<TestEnum> {
-    match s { "AAA" => Some(TestEnum::A), "BBB" => Some(TestEnum::B), "CCC" => Some(TestEnum::C), _ => None }
+    match s {
+        "AAA" => Some(TestEnum::A),
+        "BBB" => Some(TestEnum::B),
+        "CCC" => Some(TestEnum::C),
+        _ => None,
+    }
 }
 fn parse_enum_num(i: i32) -> Option<TestEnum> {
-    match i { 11 => Some(TestEnum::A), 22 => Some(TestEnum::B), 33 => Some(TestEnum::C), _ => None }
+    match i {
+        11 => Some(TestEnum::A),
+        22 => Some(TestEnum::B),
+        33 => Some(TestEnum::C),
+        _ => None,
+    }
 }
 
 /// 对齐 Java: `EnumConvertTest.convertTest()`
@@ -943,8 +1025,14 @@ fn number_chinese_formatter_test_format_thousand_long_test() {
     assert_eq!(NumberChineseFormatter::format(1001.0, false), "一千零一");
     assert_eq!(NumberChineseFormatter::format(1010.0, false), "一千零一十");
     assert_eq!(NumberChineseFormatter::format(1100.0, false), "一千一百");
-    assert_eq!(NumberChineseFormatter::format(1101.0, false), "一千一百零一");
-    assert_eq!(NumberChineseFormatter::format(9999.0, false), "九千九百九十九");
+    assert_eq!(
+        NumberChineseFormatter::format(1101.0, false),
+        "一千一百零一"
+    );
+    assert_eq!(
+        NumberChineseFormatter::format(9999.0, false),
+        "九千九百九十九"
+    );
 }
 
 /// 对齐 Java: `NumberChineseFormatterTest.formatTenThousandLongTest()`
@@ -952,46 +1040,113 @@ fn number_chinese_formatter_test_format_thousand_long_test() {
 fn number_chinese_formatter_test_format_ten_thousand_long_test() {
     assert_eq!(NumberChineseFormatter::format(1_0000.0, false), "一万");
     assert_eq!(NumberChineseFormatter::format(1_0001.0, false), "一万零一");
-    assert_eq!(NumberChineseFormatter::format(1_0010.0, false), "一万零一十");
-    assert_eq!(NumberChineseFormatter::format(1_0100.0, false), "一万零一百");
+    assert_eq!(
+        NumberChineseFormatter::format(1_0010.0, false),
+        "一万零一十"
+    );
+    assert_eq!(
+        NumberChineseFormatter::format(1_0100.0, false),
+        "一万零一百"
+    );
     assert_eq!(NumberChineseFormatter::format(1_1000.0, false), "一万一千");
-    assert_eq!(NumberChineseFormatter::format(10_1000.0, false), "一十万零一千");
-    assert_eq!(NumberChineseFormatter::format(10_0100.0, false), "一十万零一百");
-    assert_eq!(NumberChineseFormatter::format(100_1000.0, false), "一百万零一千");
-    assert_eq!(NumberChineseFormatter::format(100_0100.0, false), "一百万零一百");
-    assert_eq!(NumberChineseFormatter::format(1000_1000.0, false), "一千万零一千");
-    assert_eq!(NumberChineseFormatter::format(1000_0100.0, false), "一千万零一百");
-    assert_eq!(NumberChineseFormatter::format(9999_0000.0, false), "九千九百九十九万");
+    assert_eq!(
+        NumberChineseFormatter::format(10_1000.0, false),
+        "一十万零一千"
+    );
+    assert_eq!(
+        NumberChineseFormatter::format(10_0100.0, false),
+        "一十万零一百"
+    );
+    assert_eq!(
+        NumberChineseFormatter::format(100_1000.0, false),
+        "一百万零一千"
+    );
+    assert_eq!(
+        NumberChineseFormatter::format(100_0100.0, false),
+        "一百万零一百"
+    );
+    assert_eq!(
+        NumberChineseFormatter::format(1000_1000.0, false),
+        "一千万零一千"
+    );
+    assert_eq!(
+        NumberChineseFormatter::format(1000_0100.0, false),
+        "一千万零一百"
+    );
+    assert_eq!(
+        NumberChineseFormatter::format(9999_0000.0, false),
+        "九千九百九十九万"
+    );
 }
 
 /// 对齐 Java: `NumberChineseFormatterTest.formatHundredMillionLongTest()`
 #[test]
 fn number_chinese_formatter_test_format_hundred_million_long_test() {
     assert_eq!(NumberChineseFormatter::format(1_0000_0000.0, false), "一亿");
-    assert_eq!(NumberChineseFormatter::format(1_0000_0001.0, false), "一亿零一");
-    assert_eq!(NumberChineseFormatter::format(1_0000_1000.0, false), "一亿零一千");
-    assert_eq!(NumberChineseFormatter::format(1_0001_0000.0, false), "一亿零一万");
-    assert_eq!(NumberChineseFormatter::format(1_0010_0000.0, false), "一亿零一十万");
-    assert_eq!(NumberChineseFormatter::format(1_0100_0000.0, false), "一亿零一百万");
-    assert_eq!(NumberChineseFormatter::format(1_1000_0000.0, false), "一亿一千万");
-    assert_eq!(NumberChineseFormatter::format(10_1000_0000.0, false), "一十亿零一千万");
-    assert_eq!(NumberChineseFormatter::format(100_1000_0000.0, false), "一百亿零一千万");
-    assert_eq!(NumberChineseFormatter::format(1000_1000_0000.0, false), "一千亿零一千万");
-    assert_eq!(NumberChineseFormatter::format(1100_1000_0000.0, false), "一千一百亿零一千万");
-    assert_eq!(NumberChineseFormatter::format(9999_0000_0000.0, false), "九千九百九十九亿");
+    assert_eq!(
+        NumberChineseFormatter::format(1_0000_0001.0, false),
+        "一亿零一"
+    );
+    assert_eq!(
+        NumberChineseFormatter::format(1_0000_1000.0, false),
+        "一亿零一千"
+    );
+    assert_eq!(
+        NumberChineseFormatter::format(1_0001_0000.0, false),
+        "一亿零一万"
+    );
+    assert_eq!(
+        NumberChineseFormatter::format(1_0010_0000.0, false),
+        "一亿零一十万"
+    );
+    assert_eq!(
+        NumberChineseFormatter::format(1_0100_0000.0, false),
+        "一亿零一百万"
+    );
+    assert_eq!(
+        NumberChineseFormatter::format(1_1000_0000.0, false),
+        "一亿一千万"
+    );
+    assert_eq!(
+        NumberChineseFormatter::format(10_1000_0000.0, false),
+        "一十亿零一千万"
+    );
+    assert_eq!(
+        NumberChineseFormatter::format(100_1000_0000.0, false),
+        "一百亿零一千万"
+    );
+    assert_eq!(
+        NumberChineseFormatter::format(1000_1000_0000.0, false),
+        "一千亿零一千万"
+    );
+    assert_eq!(
+        NumberChineseFormatter::format(1100_1000_0000.0, false),
+        "一千一百亿零一千万"
+    );
+    assert_eq!(
+        NumberChineseFormatter::format(9999_0000_0000.0, false),
+        "九千九百九十九亿"
+    );
 }
 
 /// 对齐 Java: `NumberChineseFormatterTest.formatTrillionsLongTest()`
 #[test]
 fn number_chinese_formatter_test_format_trillions_long_test() {
-    assert_eq!(NumberChineseFormatter::format(1_0000_0000_0000.0, false), "一万亿");
+    assert_eq!(
+        NumberChineseFormatter::format(1_0000_0000_0000.0, false),
+        "一万亿"
+    );
 }
 
 /// 对齐 Java: `NumberChineseFormatterTest.formatTest()`
 #[test]
 fn number_chinese_formatter_test_format_test() {
     // 抽样：与 format(double) 路径一致
-    assert_eq!(NumberChineseFormatter::format(12.34, false).contains('点') || NumberChineseFormatter::format(12.34, false).contains('一'), true);
+    assert_eq!(
+        NumberChineseFormatter::format(12.34, false).contains('点')
+            || NumberChineseFormatter::format(12.34, false).contains('一'),
+        true
+    );
 }
 
 /// 对齐 Java: `NumberChineseFormatterTest.formatTest2()`
@@ -1015,7 +1170,10 @@ fn number_chinese_formatter_test_format_max_test() {
 /// 对齐 Java: `NumberChineseFormatterTest.formatTraditionalTest()`
 #[test]
 fn number_chinese_formatter_test_format_traditional_test() {
-    assert!(NumberChineseFormatter::format(123.0, true).contains('佰') || NumberChineseFormatter::format(123.0, true).contains('壹'));
+    assert!(
+        NumberChineseFormatter::format(123.0, true).contains('佰')
+            || NumberChineseFormatter::format(123.0, true).contains('壹')
+    );
 }
 
 /// 对齐 Java: `NumberChineseFormatterTest.formatSimpleTest()`
@@ -1053,23 +1211,38 @@ fn number_chinese_formatter_test_digit_to_chinese_test_4() {
 /// 对齐 Java: `NumberChineseFormatterTest.numberCharToChineseTest()`
 #[test]
 fn number_chinese_formatter_test_number_char_to_chinese_test() {
-    assert_eq!(NumberChineseFormatter::number_char_to_chinese('3', false), "三");
-    assert_eq!(NumberChineseFormatter::number_char_to_chinese('a', false), "a");
+    assert_eq!(
+        NumberChineseFormatter::number_char_to_chinese('3', false),
+        "三"
+    );
+    assert_eq!(
+        NumberChineseFormatter::number_char_to_chinese('a', false),
+        "a"
+    );
 }
 
 /// 对齐 Java: `NumberChineseFormatterTest.chineseToNumberTest()`
 #[test]
 fn number_chinese_formatter_test_chinese_to_number_test() {
     assert_eq!(NumberChineseFormatter::chinese_to_number("一百一十二"), 112);
-    assert_eq!(NumberChineseFormatter::chinese_to_number("一千零一十二"), 1012);
+    assert_eq!(
+        NumberChineseFormatter::chinese_to_number("一千零一十二"),
+        1012
+    );
 }
 
 /// 对齐 Java: `NumberChineseFormatterTest.chineseToNumberTest2()`
 #[test]
 fn number_chinese_formatter_test_chinese_to_number_test_2() {
     assert_eq!(NumberChineseFormatter::chinese_to_number("两万二"), 22000);
-    assert_eq!(NumberChineseFormatter::chinese_to_number("两万二零三"), 22003);
-    assert_eq!(NumberChineseFormatter::chinese_to_number("两万二零一十"), 22010);
+    assert_eq!(
+        NumberChineseFormatter::chinese_to_number("两万二零三"),
+        22003
+    );
+    assert_eq!(
+        NumberChineseFormatter::chinese_to_number("两万二零一十"),
+        22010
+    );
 }
 
 /// 对齐 Java: `NumberChineseFormatterTest.chineseToNumberTest3()`
@@ -1139,8 +1312,14 @@ fn number_converter_test_to_integer_test() {
 /// 对齐 Java: `NumberWordFormatTest.formatTest()`
 #[test]
 fn number_word_format_test_format_test() {
-    assert_eq!(NumberWordFormatter::format_number(100.23), "ONE HUNDRED AND CENTS TWENTY THREE ONLY");
-    assert_eq!(NumberWordFormatter::format(Some("2100.00")), "TWO THOUSAND ONE HUNDRED AND CENTS  ONLY");
+    assert_eq!(
+        NumberWordFormatter::format_number(100.23),
+        "ONE HUNDRED AND CENTS TWENTY THREE ONLY"
+    );
+    assert_eq!(
+        NumberWordFormatter::format(Some("2100.00")),
+        "TWO THOUSAND ONE HUNDRED AND CENTS  ONLY"
+    );
     assert_eq!(
         NumberWordFormatter::format(Some("1234567890123.12")),
         "ONE TRILLION TWO HUNDRED AND THIRTY FOUR BILLION FIVE HUNDRED AND SIXTY SEVEN MILLION EIGHT HUNDRED AND NINETY THOUSAND ONE HUNDRED AND TWENTY THREE AND CENTS TWELVE ONLY"
@@ -1151,11 +1330,20 @@ fn number_word_format_test_format_test() {
 #[test]
 fn number_word_format_test_format_simple_test() {
     assert_eq!(NumberWordFormatter::format_simple_with(1200, false), "1.2k");
-    assert_eq!(NumberWordFormatter::format_simple_with(4384324, false), "4.38m");
-    assert_eq!(NumberWordFormatter::format_simple_with(4384324, true), "438.43w");
+    assert_eq!(
+        NumberWordFormatter::format_simple_with(4384324, false),
+        "4.38m"
+    );
+    assert_eq!(
+        NumberWordFormatter::format_simple_with(4384324, true),
+        "438.43w"
+    );
     assert_eq!(NumberWordFormatter::format_simple(4384324), "438.43w");
     assert_eq!(NumberWordFormatter::format_simple(438), "438");
-    assert_eq!(NumberWordFormatter::format_simple_with(1000000, false), "1m");
+    assert_eq!(
+        NumberWordFormatter::format_simple_with(1000000, false),
+        "1m"
+    );
 }
 
 /// 对齐 Java: `NumberWordFormatTest.formatSimpleTest2()`
@@ -1168,12 +1356,30 @@ fn number_word_format_test_format_simple_test_2() {
 #[test]
 fn number_word_format_test_issue_4033_test() {
     assert_eq!(NumberWordFormatter::format_simple_with(1_000, false), "1k");
-    assert_eq!(NumberWordFormatter::format_simple_with(10_000, false), "10k");
-    assert_eq!(NumberWordFormatter::format_simple_with(100_000, false), "100k");
-    assert_eq!(NumberWordFormatter::format_simple_with(1_000_000, false), "1m");
-    assert_eq!(NumberWordFormatter::format_simple_with(10_000_000, false), "10m");
-    assert_eq!(NumberWordFormatter::format_simple_with(100_000_000, false), "100m");
-    assert_eq!(NumberWordFormatter::format_simple_with(1_000_000_000, false), "1b");
+    assert_eq!(
+        NumberWordFormatter::format_simple_with(10_000, false),
+        "10k"
+    );
+    assert_eq!(
+        NumberWordFormatter::format_simple_with(100_000, false),
+        "100k"
+    );
+    assert_eq!(
+        NumberWordFormatter::format_simple_with(1_000_000, false),
+        "1m"
+    );
+    assert_eq!(
+        NumberWordFormatter::format_simple_with(10_000_000, false),
+        "10m"
+    );
+    assert_eq!(
+        NumberWordFormatter::format_simple_with(100_000_000, false),
+        "100m"
+    );
+    assert_eq!(
+        NumberWordFormatter::format_simple_with(1_000_000_000, false),
+        "1b"
+    );
 }
 
 /// 对齐 Java: `NumberWordFormatTest.issue4033Test2()`
@@ -1181,11 +1387,26 @@ fn number_word_format_test_issue_4033_test() {
 fn number_word_format_test_issue_4033_test_2() {
     assert_eq!(NumberWordFormatter::format_simple_with(1_000, true), "1k");
     assert_eq!(NumberWordFormatter::format_simple_with(10_000, true), "1w");
-    assert_eq!(NumberWordFormatter::format_simple_with(100_000, true), "10w");
-    assert_eq!(NumberWordFormatter::format_simple_with(1_000_000, true), "100w");
-    assert_eq!(NumberWordFormatter::format_simple_with(10_000_000, true), "1000w");
-    assert_eq!(NumberWordFormatter::format_simple_with(100_000_000, true), "10000w");
-    assert_eq!(NumberWordFormatter::format_simple_with(1_000_000_000, true), "100000w");
+    assert_eq!(
+        NumberWordFormatter::format_simple_with(100_000, true),
+        "10w"
+    );
+    assert_eq!(
+        NumberWordFormatter::format_simple_with(1_000_000, true),
+        "100w"
+    );
+    assert_eq!(
+        NumberWordFormatter::format_simple_with(10_000_000, true),
+        "1000w"
+    );
+    assert_eq!(
+        NumberWordFormatter::format_simple_with(100_000_000, true),
+        "10000w"
+    );
+    assert_eq!(
+        NumberWordFormatter::format_simple_with(1_000_000_000, true),
+        "100000w"
+    );
 }
 
 /// 对齐 Java: `NumberWordFormatterTest.testFormatNull()`
@@ -1197,15 +1418,27 @@ fn number_word_formatter_test_test_format_null() {
 /// 对齐 Java: `NumberWordFormatterTest.testFormatInteger()`
 #[test]
 fn number_word_formatter_test_test_format_integer() {
-    assert_eq!(NumberWordFormatter::format_number(1234), "ONE THOUSAND TWO HUNDRED AND THIRTY FOUR ONLY");
-    assert_eq!(NumberWordFormatter::format_number(1204), "ONE THOUSAND TWO HUNDRED AND FOUR ONLY");
-    assert_eq!(NumberWordFormatter::format_number(1004), "ONE THOUSAND FOUR ONLY");
+    assert_eq!(
+        NumberWordFormatter::format_number(1234),
+        "ONE THOUSAND TWO HUNDRED AND THIRTY FOUR ONLY"
+    );
+    assert_eq!(
+        NumberWordFormatter::format_number(1204),
+        "ONE THOUSAND TWO HUNDRED AND FOUR ONLY"
+    );
+    assert_eq!(
+        NumberWordFormatter::format_number(1004),
+        "ONE THOUSAND FOUR ONLY"
+    );
 }
 
 /// 对齐 Java: `NumberWordFormatterTest.testFormatDecimal()`
 #[test]
 fn number_word_formatter_test_test_format_decimal() {
-    assert_eq!(NumberWordFormatter::format_number(1234.56), "ONE THOUSAND TWO HUNDRED AND THIRTY FOUR AND CENTS FIFTY SIX ONLY");
+    assert_eq!(
+        NumberWordFormatter::format_number(1234.56),
+        "ONE THOUSAND TWO HUNDRED AND THIRTY FOUR AND CENTS FIFTY SIX ONLY"
+    );
 }
 
 /// 对齐 Java: `NumberWordFormatterTest.testFormatLargeNumber()`
@@ -1227,8 +1460,14 @@ fn number_word_formatter_test_test_format_non_numeric() {
 /// 对齐 Java: `NumberWordFormatterTest.issue3579Test()`
 #[test]
 fn number_word_formatter_test_issue_3579_test() {
-    assert_eq!(NumberWordFormatter::format_number(0.1), "ZERO AND CENTS TEN ONLY");
-    assert_eq!(NumberWordFormatter::format_number(0.01), "ZERO AND CENTS ONE ONLY");
+    assert_eq!(
+        NumberWordFormatter::format_number(0.1),
+        "ZERO AND CENTS TEN ONLY"
+    );
+    assert_eq!(
+        NumberWordFormatter::format_number(0.01),
+        "ZERO AND CENTS ONE ONLY"
+    );
 }
 
 /// 对齐 Java: `PrimitiveConvertTest.toIntTest()`
@@ -1246,7 +1485,10 @@ fn primitive_convert_test_to_int_error_test() {
 /// 对齐 Java: `StringConvertTest.timezoneToStrTest()`
 #[test]
 fn string_convert_test_timezone_to_str_test() {
-    assert_eq!(Convert::to_str(&v_str("Asia/Shanghai")).unwrap(), "Asia/Shanghai");
+    assert_eq!(
+        Convert::to_str(&v_str("Asia/Shanghai")).unwrap(),
+        "Asia/Shanghai"
+    );
 }
 
 /// 对齐 Java: `TemporalAccessorConverterTest.toInstantTest()`
@@ -1257,26 +1499,41 @@ fn temporal_accessor_converter_test_to_instant_test() {
     let offset = FixedOffset::east_opt(8 * 3600).unwrap();
     let dt = naive.and_hms_opt(0, 0, 0).unwrap();
     let instant = offset.from_local_datetime(&dt).unwrap().to_utc();
-    assert_eq!(instant.timestamp(), offset.from_local_datetime(&dt).unwrap().timestamp());
+    assert_eq!(
+        instant.timestamp(),
+        offset.from_local_datetime(&dt).unwrap().timestamp()
+    );
 }
 
 /// 对齐 Java: `TemporalAccessorConverterTest.toLocalDateTimeTest()`
 #[test]
 fn temporal_accessor_converter_test_to_local_date_time_test() {
-    let local = NaiveDate::parse_from_str("2019-02-18", "%Y-%m-%d").unwrap().and_hms_opt(0,0,0).unwrap();
+    let local = NaiveDate::parse_from_str("2019-02-18", "%Y-%m-%d")
+        .unwrap()
+        .and_hms_opt(0, 0, 0)
+        .unwrap();
     assert_eq!(local.to_string(), "2019-02-18 00:00:00");
 }
 
 /// 对齐 Java: `TemporalAccessorConverterTest.toLocalDateTest()`
 #[test]
 fn temporal_accessor_converter_test_to_local_date_test() {
-    assert_eq!(NaiveDate::parse_from_str("2019-02-18", "%Y-%m-%d").unwrap().to_string(), "2019-02-18");
+    assert_eq!(
+        NaiveDate::parse_from_str("2019-02-18", "%Y-%m-%d")
+            .unwrap()
+            .to_string(),
+        "2019-02-18"
+    );
 }
 
 /// 对齐 Java: `TemporalAccessorConverterTest.toLocalTimeTest()`
 #[test]
 fn temporal_accessor_converter_test_to_local_time_test() {
-    let t = NaiveDate::parse_from_str("2019-02-18", "%Y-%m-%d").unwrap().and_hms_opt(0,0,0).unwrap().time();
+    let t = NaiveDate::parse_from_str("2019-02-18", "%Y-%m-%d")
+        .unwrap()
+        .and_hms_opt(0, 0, 0)
+        .unwrap()
+        .time();
     assert_eq!(t.to_string(), "00:00:00");
 }
 
@@ -1284,9 +1541,15 @@ fn temporal_accessor_converter_test_to_local_time_test() {
 #[test]
 fn temporal_accessor_converter_test_to_zoned_date_time_test() {
     let offset = FixedOffset::east_opt(8 * 3600).unwrap();
-    let naive = NaiveDate::from_ymd_opt(2019,2,18).unwrap().and_hms_opt(0,0,0).unwrap();
+    let naive = NaiveDate::from_ymd_opt(2019, 2, 18)
+        .unwrap()
+        .and_hms_opt(0, 0, 0)
+        .unwrap();
     let z = offset.from_local_datetime(&naive).unwrap();
-    assert!(z.to_rfc3339().starts_with("2019-02-18T00:00:00+08:00") || z.to_string().contains("2019-02-18"));
+    assert!(
+        z.to_rfc3339().starts_with("2019-02-18T00:00:00+08:00")
+            || z.to_string().contains("2019-02-18")
+    );
 }
 
 /// 对齐 Java: `TemporalAccessorConverterTest.toOffsetDateTimeTest()`
@@ -1299,7 +1562,15 @@ fn temporal_accessor_converter_test_to_offset_date_time_test() {
 #[test]
 fn temporal_accessor_converter_test_to_offset_time_test() {
     let offset = FixedOffset::east_opt(8 * 3600).unwrap();
-    let t = offset.from_local_datetime(&NaiveDate::from_ymd_opt(2019,2,18).unwrap().and_hms_opt(0,0,0).unwrap()).unwrap().time();
+    let t = offset
+        .from_local_datetime(
+            &NaiveDate::from_ymd_opt(2019, 2, 18)
+                .unwrap()
+                .and_hms_opt(0, 0, 0)
+                .unwrap(),
+        )
+        .unwrap()
+        .time();
     assert_eq!(t.hour(), 0);
 }
 

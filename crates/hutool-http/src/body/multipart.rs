@@ -46,11 +46,7 @@ impl MultipartBody {
         for (key, value) in &self.form {
             out.extend_from_slice(format!("--{}\r\n", self.boundary).as_bytes());
             out.extend_from_slice(
-                format!(
-                    "Content-Disposition: form-data; name=\"{}\"\r\n\r\n",
-                    key
-                )
-                .as_bytes(),
+                format!("Content-Disposition: form-data; name=\"{}\"\r\n\r\n", key).as_bytes(),
             );
             out.extend_from_slice(value.as_bytes());
             out.extend_from_slice(b"\r\n");

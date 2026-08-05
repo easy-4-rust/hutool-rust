@@ -3,10 +3,10 @@
 //! 提供 CRUD 模板：add/del/update/get/find/page/count/exist 等 25 个方法。
 //! 具体数据库操作依赖 Db（基于 SQLx），属于 unsafe-to-copy 的 JDBC 部分。
 
-use crate::entity::Entity;
-use crate::page_result::PageResult;
-use crate::hutool_page::HutoolPage;
 use crate::DbResult;
+use crate::entity::Entity;
+use crate::hutool_page::HutoolPage;
+use crate::page_result::PageResult;
 
 /// DAO 操作 trait，DaoTemplate 通过此 trait 执行具体数据库操作。
 ///
@@ -27,23 +27,13 @@ pub trait DaoOperations {
     /// 按实体条件删除。
     fn del_by_entity(&self, table: &str, where_entity: &Entity) -> DbResult<i64>;
     /// 按条件更新记录。
-    fn update(
-        &self,
-        table: &str,
-        record: &Entity,
-        where_entity: &Entity,
-    ) -> DbResult<i64>;
+    fn update(&self, table: &str, record: &Entity, where_entity: &Entity) -> DbResult<i64>;
     /// 按主键更新。
     fn update_by_pk(&self, table: &str, pk_field: &str, entity: &Entity) -> DbResult<i64>;
     /// 存在则更新，否则新增。
     fn add_or_update(&self, table: &str, pk_field: &str, entity: &Entity) -> DbResult<i64>;
     /// 按字段取值查询单条。
-    fn get_by_field(
-        &self,
-        table: &str,
-        field: &str,
-        value: &str,
-    ) -> DbResult<Option<Entity>>;
+    fn get_by_field(&self, table: &str, field: &str, value: &str) -> DbResult<Option<Entity>>;
     /// 按实体条件查询单条。
     fn get_by_entity(&self, table: &str, where_entity: &Entity) -> DbResult<Option<Entity>>;
     /// 按字段取值查询列表。

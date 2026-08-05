@@ -3,11 +3,16 @@
 //! 中文说明: 浏览器识别规则，通过正则匹配User-Agent字符串识别浏览器类型
 
 use regex::Regex;
-use std::{fmt, hash::{Hash, Hasher}};
+use std::{
+    fmt,
+    hash::{Hash, Hasher},
+};
 
 use super::rule_error::RuleError;
 use super::user_agent_info::UserAgentInfo;
-use super::{case_insensitive_regex, capture, custom_browsers, is_mobile_browser_name, write_rules};
+use super::{
+    capture, case_insensitive_regex, custom_browsers, is_mobile_browser_name, write_rules,
+};
 
 /// Browser identification rule.
 #[derive(Debug, Clone)]

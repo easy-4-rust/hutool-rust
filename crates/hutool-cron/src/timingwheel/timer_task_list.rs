@@ -4,11 +4,7 @@
 
 #![allow(clippy::missing_panics_doc)]
 
-use std::{
-    cmp::Ordering,
-    sync::Arc,
-    time::Duration,
-};
+use std::{cmp::Ordering, sync::Arc, time::Duration};
 
 use super::timer_task::TimerTask;
 

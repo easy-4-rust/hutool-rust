@@ -2,8 +2,8 @@
 
 use std::sync::Arc;
 
-use crate::element::{global_registry, ElementHandle};
-use crate::mirror::{is_not_jdk_meta_annotation, AnnotationMirror, AnnotationTypeName};
+use crate::element::{ElementHandle, global_registry};
+use crate::mirror::{AnnotationMirror, AnnotationTypeName, is_not_jdk_meta_annotation};
 
 /// 扫描回调。
 pub type ScanConsumer<'a> = Box<dyn FnMut(i32, Arc<AnnotationMirror>) + 'a>;
@@ -24,7 +24,12 @@ pub trait AnnotationScanner: Send + Sync {
     fn scan<'a>(&self, consumer: &mut ScanConsumer<'a>, element: ElementHandle);
 
     /// 扫描注解类型元注解。
-    fn scan_meta<'a>(&self, _annotation_type: AnnotationTypeName, _consumer: &mut ScanConsumer<'a>) {}
+    fn scan_meta<'a>(
+        &self,
+        _annotation_type: AnnotationTypeName,
+        _consumer: &mut ScanConsumer<'a>,
+    ) {
+    }
 
     /// 获取全部注解。
     fn get_annotations(&self, element: ElementHandle) -> Vec<Arc<AnnotationMirror>> {
@@ -74,29 +79,27 @@ impl Scanners {
 
     /// DIRECTLY
     pub fn directly() -> Arc<dyn AnnotationScanner> {
-        Arc::new(super::generic_annotation_scanner::GenericAnnotationScanner::new(
-            false, false, false,
-        ))
+        Arc::new(
+            super::generic_annotation_scanner::GenericAnnotationScanner::new(false, false, false),
+        )
     }
 
     /// DIRECTLY_AND_META_ANNOTATION
     pub fn directly_and_meta() -> Arc<dyn AnnotationScanner> {
-        Arc::new(super::generic_annotation_scanner::GenericAnnotationScanner::new(
-            true, false, false,
-        ))
+        Arc::new(
+            super::generic_annotation_scanner::GenericAnnotationScanner::new(true, false, false),
+        )
     }
 
     /// TYPE_HIERARCHY
     pub fn type_hierarchy() -> Arc<dyn AnnotationScanner> {
-        Arc::new(super::generic_annotation_scanner::GenericAnnotationScanner::new(
-            false, true, true,
-        ))
+        Arc::new(
+            super::generic_annotation_scanner::GenericAnnotationScanner::new(false, true, true),
+        )
     }
 
     /// TYPE_HIERARCHY_AND_META_ANNOTATION
     pub fn type_hierarchy_and_meta() -> Arc<dyn AnnotationScanner> {
-        Arc::new(super::generic_annotation_scanner::GenericAnnotationScanner::new(
-            true, true, true,
-        ))
+        Arc::new(super::generic_annotation_scanner::GenericAnnotationScanner::new(true, true, true))
     }
 }

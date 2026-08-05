@@ -190,7 +190,7 @@ impl ReflectUtil {
 
     /// 对齐 Java: `ReflectUtil.isArray(Class)`
     pub fn is_array<T: 'static>() -> bool {
-        TypeId::of::<T>() == TypeId::of::<Vec<u8>>()  // 简化判断
+        TypeId::of::<T>() == TypeId::of::<Vec<u8>>() // 简化判断
     }
 
     /// 对齐 Java: `ReflectUtil.isCollection(Class)`
@@ -228,27 +228,44 @@ impl ReflectUtil {
     }
 
     /// 对齐 Java: `ReflectUtil.getFieldValue(Object, String)`
-    pub fn get_field_from_map<'a>(map: &'a HashMap<String, Box<dyn Any>>, field: &str) -> Option<&'a Box<dyn Any>> {
+    pub fn get_field_from_map<'a>(
+        map: &'a HashMap<String, Box<dyn Any>>,
+        field: &str,
+    ) -> Option<&'a Box<dyn Any>> {
         map.get(field)
     }
 
     /// 对齐 Java: `ReflectUtil.setFieldValue(Object, String, Object)`
-    pub fn set_field_in_map(map: &mut HashMap<String, Box<dyn Any>>, field: &str, value: Box<dyn Any>) {
+    pub fn set_field_in_map(
+        map: &mut HashMap<String, Box<dyn Any>>,
+        field: &str,
+        value: Box<dyn Any>,
+    ) {
         map.insert(field.to_string(), value);
     }
 
     // ── 默认值 ──
 
     /// 对齐 Java: `ReflectUtil.getDefaultValue(Class)`
-    pub fn default_value_i32() -> i32 { 0 }
+    pub fn default_value_i32() -> i32 {
+        0
+    }
     /// i64 默认值。
-    pub fn default_value_i64() -> i64 { 0 }
+    pub fn default_value_i64() -> i64 {
+        0
+    }
     /// f64 默认值。
-    pub fn default_value_f64() -> f64 { 0.0 }
+    pub fn default_value_f64() -> f64 {
+        0.0
+    }
     /// bool 默认值。
-    pub fn default_value_bool() -> bool { false }
+    pub fn default_value_bool() -> bool {
+        false
+    }
     /// String 默认值。
-    pub fn default_value_string() -> String { String::new() }
+    pub fn default_value_string() -> String {
+        String::new()
+    }
 
     // ── 泛型工具 ──
 

@@ -336,7 +336,12 @@ impl DateUtil {
                     while frac_s.len() < 3 {
                         frac_s.push('0');
                     }
-                    let ms: u32 = frac_s.chars().take(3).collect::<String>().parse().unwrap_or(0);
+                    let ms: u32 = frac_s
+                        .chars()
+                        .take(3)
+                        .collect::<String>()
+                        .parse()
+                        .unwrap_or(0);
                     let ndt = ndt.with_nanosecond(ms * 1_000_000).unwrap_or(ndt);
                     return Ok(DateTime::of_naive(ndt));
                 }
@@ -644,12 +649,7 @@ impl DateUtil {
         date >= begin && date <= end
     }
     /// 两区间是否重叠。
-    pub fn is_overlap(
-        start1: DateTime,
-        end1: DateTime,
-        start2: DateTime,
-        end2: DateTime,
-    ) -> bool {
+    pub fn is_overlap(start1: DateTime, end1: DateTime, start2: DateTime, end2: DateTime) -> bool {
         start1 <= end2 && start2 <= end1
     }
     /// 是否已过期。
@@ -1048,16 +1048,30 @@ fn parse_flexible_norm(s: &str) -> Result<DateTime> {
     let y: i32 = caps[1].parse().unwrap();
     let m: u32 = caps[2].parse().unwrap();
     let d: u32 = caps[3].parse().unwrap();
-    let h: u32 = caps.get(4).map(|c| c.as_str().parse().unwrap()).unwrap_or(0);
-    let mi: u32 = caps.get(5).map(|c| c.as_str().parse().unwrap()).unwrap_or(0);
-    let sec: u32 = caps.get(6).map(|c| c.as_str().parse().unwrap()).unwrap_or(0);
+    let h: u32 = caps
+        .get(4)
+        .map(|c| c.as_str().parse().unwrap())
+        .unwrap_or(0);
+    let mi: u32 = caps
+        .get(5)
+        .map(|c| c.as_str().parse().unwrap())
+        .unwrap_or(0);
+    let sec: u32 = caps
+        .get(6)
+        .map(|c| c.as_str().parse().unwrap())
+        .unwrap_or(0);
     let mut dt = DateTime::of_ymd_hms(y, m, d, h, mi, sec)?;
     if let Some(frac) = caps.get(7) {
         let mut frac_s = frac.as_str().to_string();
         while frac_s.len() < 3 {
             frac_s.push('0');
         }
-        let ms: u32 = frac_s.chars().take(3).collect::<String>().parse().unwrap_or(0);
+        let ms: u32 = frac_s
+            .chars()
+            .take(3)
+            .collect::<String>()
+            .parse()
+            .unwrap_or(0);
         let n = dt.naive_local().with_nanosecond(ms * 1_000_000).unwrap();
         dt = DateTime::of_naive(n);
     }
@@ -1120,5 +1134,7 @@ fn month_abbr(s: &str) -> Option<u32> {
     let m = [
         "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
     ];
-    m.iter().position(|x| x.eq_ignore_ascii_case(s)).map(|i| i as u32 + 1)
+    m.iter()
+        .position(|x| x.eq_ignore_ascii_case(s))
+        .map(|i| i as u32 + 1)
 }

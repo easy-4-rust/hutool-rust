@@ -3,6 +3,6 @@
 //!
 //! 一致性哈希环：`BTreeMap` 模拟 Java `TreeMap`，默认 FNV32 哈希。
 
-mod hash32_fn;
 mod consistent_hash;
+mod hash32_fn;
 mod str_node;

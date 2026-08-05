@@ -123,13 +123,41 @@ macro_rules! filter {
     };
 }
 
-filter!(DefaultFilter, hashes::java_default_hash, "cn.hutool.bloomFilter.filter.DefaultFilter");
-filter!(ELFFilter, hashes::elf_hash, "cn.hutool.bloomFilter.filter.ELFFilter");
-filter!(FNVFilter, hashes::fnv_hash, "cn.hutool.bloomFilter.filter.FNVFilter");
-filter!(JSFilter, hashes::js_hash, "cn.hutool.bloomFilter.filter.JSFilter");
-filter!(PJWFilter, hashes::pjw_hash, "cn.hutool.bloomFilter.filter.PJWFilter");
-filter!(RSFilter, hashes::rs_hash, "cn.hutool.bloomFilter.filter.RSFilter");
-filter!(SDBMFilter, hashes::sdbm_hash, "cn.hutool.bloomFilter.filter.SDBMFilter");
+filter!(
+    DefaultFilter,
+    hashes::java_default_hash,
+    "cn.hutool.bloomFilter.filter.DefaultFilter"
+);
+filter!(
+    ELFFilter,
+    hashes::elf_hash,
+    "cn.hutool.bloomFilter.filter.ELFFilter"
+);
+filter!(
+    FNVFilter,
+    hashes::fnv_hash,
+    "cn.hutool.bloomFilter.filter.FNVFilter"
+);
+filter!(
+    JSFilter,
+    hashes::js_hash,
+    "cn.hutool.bloomFilter.filter.JSFilter"
+);
+filter!(
+    PJWFilter,
+    hashes::pjw_hash,
+    "cn.hutool.bloomFilter.filter.PJWFilter"
+);
+filter!(
+    RSFilter,
+    hashes::rs_hash,
+    "cn.hutool.bloomFilter.filter.RSFilter"
+);
+filter!(
+    SDBMFilter,
+    hashes::sdbm_hash,
+    "cn.hutool.bloomFilter.filter.SDBMFilter"
+);
 
 macro_rules! wide_filter {
     ($name:ident, $hash:path, $java_class:expr) => {
@@ -172,9 +200,21 @@ macro_rules! wide_filter {
     };
 }
 
-wide_filter!(HfFilter, hashes::hf_hash, "cn.hutool.bloomFilter.filter.HfFilter");
-wide_filter!(HfIpFilter, hashes::hf_ip_hash, "cn.hutool.bloomFilter.filter.HfIpFilter");
-wide_filter!(TianlFilter, hashes::tianl_hash, "cn.hutool.bloomFilter.filter.TianlFilter");
+wide_filter!(
+    HfFilter,
+    hashes::hf_hash,
+    "cn.hutool.bloomFilter.filter.HfFilter"
+);
+wide_filter!(
+    HfIpFilter,
+    hashes::hf_ip_hash,
+    "cn.hutool.bloomFilter.filter.HfIpFilter"
+);
+wide_filter!(
+    TianlFilter,
+    hashes::tianl_hash,
+    "cn.hutool.bloomFilter.filter.TianlFilter"
+);
 
 /// An AND-composed group of independently hashed bitmap filters.
 ///

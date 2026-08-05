@@ -21,14 +21,20 @@ impl ActiveEntity {
     }
 
     /// 对齐 Java: `setFieldNames`.
-    pub fn set_field_names(&mut self, fields: impl IntoIterator<Item = impl Into<String>>) -> &mut Self {
+    pub fn set_field_names(
+        &mut self,
+        fields: impl IntoIterator<Item = impl Into<String>>,
+    ) -> &mut Self {
         self.entity.set_field_names(fields);
         self
     }
 
     /// 对齐 Java: `load()`.
     pub async fn load(&mut self) -> DbResult<&mut Self> {
-        let rows = self.db.find_fields(self.entity.field_names(), &self.entity).await?;
+        let rows = self
+            .db
+            .find_fields(self.entity.field_names(), &self.entity)
+            .await?;
         if let Some(first) = rows.into_iter().next() {
             self.entity = first;
         }

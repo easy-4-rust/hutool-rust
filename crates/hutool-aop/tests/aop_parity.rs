@@ -142,7 +142,9 @@ fn interceptor_chain_test() {
 fn aop_test() {
     let mut cat = ProxyUtil::proxy(Cat, TimeIntervalAspect::new());
     let result = cat
-        .invoke(&Method::new("eat"), &mut (), |target, _| Ok::<_, ()>(target.eat()))
+        .invoke(&Method::new("eat"), &mut (), |target, _| {
+            Ok::<_, ()>(target.eat())
+        })
         .expect("eat through JDK-style proxy");
     assert_eq!(result, Some("猫吃鱼".to_owned()));
 
@@ -165,7 +167,9 @@ fn aop_by_auto_cglib_test() {
     // Rust uses explicit CglibProxyFactory while preserving TimeIntervalAspect callbacks.
     let mut dog = CglibProxyFactory::proxy(Dog, TimeIntervalAspect::new());
     let result = dog
-        .invoke(&Method::new("eat"), &mut (), |target, _| Ok::<_, ()>(target.eat()))
+        .invoke(&Method::new("eat"), &mut (), |target, _| {
+            Ok::<_, ()>(target.eat())
+        })
         .expect("eat through CGLIB-style proxy");
     assert_eq!(result, Some("狗吃肉".to_owned()));
 

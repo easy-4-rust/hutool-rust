@@ -22,7 +22,10 @@ impl SynthesizedAnnotationSelector for SelectorAdapter {
         old_annotation: Arc<dyn SynthesizedAnnotation>,
         new_annotation: Arc<dyn SynthesizedAnnotation>,
     ) -> Arc<dyn SynthesizedAnnotation> {
-        match self.inner.choose(old_annotation.as_ref(), new_annotation.as_ref()) {
+        match self
+            .inner
+            .choose(old_annotation.as_ref(), new_annotation.as_ref())
+        {
             ChooseSide::Next => new_annotation,
             ChooseSide::Prev => old_annotation,
         }

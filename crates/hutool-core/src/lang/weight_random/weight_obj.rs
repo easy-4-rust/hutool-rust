@@ -37,8 +37,7 @@ impl<T> WeightObj<T> {
 
 impl<T: PartialEq> PartialEq for WeightObj<T> {
     fn eq(&self, other: &Self) -> bool {
-        self.obj == other.obj
-            && self.weight.to_bits() == other.weight.to_bits()
+        self.obj == other.obj && self.weight.to_bits() == other.weight.to_bits()
     }
 }
 

@@ -13,9 +13,5 @@ use crate::socket_runtime_exception::SocketRuntimeException;
 /// 中文说明: 把业务消息编码为字节流。
 pub trait MsgEncoder<T>: Send + Sync {
     /// 编码一个应用消息为字节。
-    fn encode(
-        &self,
-        session: &AioSession,
-        value: &T,
-    ) -> Result<Vec<u8>, SocketRuntimeException>;
+    fn encode(&self, session: &AioSession, value: &T) -> Result<Vec<u8>, SocketRuntimeException>;
 }

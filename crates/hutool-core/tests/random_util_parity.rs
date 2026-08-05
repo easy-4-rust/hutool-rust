@@ -125,14 +125,14 @@ fn weighted_random_empty() {
     assert!(RandomUtil::weighted_random(&items).is_none());
 }
 
-
 // ── 对齐 Hutool RandomUtilTest ──
 
 /// 对齐 Java: `RandomUtilTest.randomEleSetTest()`
 #[test]
 fn random_ele_set_test() {
     let items = vec![1, 2, 3, 4, 5, 6];
-    let set: std::collections::HashSet<_> = RandomUtil::random_elements(&items, 2).into_iter().collect();
+    let set: std::collections::HashSet<_> =
+        RandomUtil::random_elements(&items, 2).into_iter().collect();
     // Java randomEleSet 保证去重后 size==2；Rust random_elements 可重复，取至多 2
     assert!(set.len() <= 2);
     let result = RandomUtil::random_elements(&items, 2);

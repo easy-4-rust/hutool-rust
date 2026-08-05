@@ -21,7 +21,7 @@ pub mod prelude;
 mod providers;
 
 pub use ai_exception::AIException;
-pub use ai_service_factory::{registry as provider_registry, AIServiceFactory, ProviderRegistry};
+pub use ai_service_factory::{AIServiceFactory, ProviderRegistry, registry as provider_registry};
 pub use ai_util::AIUtil;
 pub use core::{
     AIConfig, AIConfigBuilder, AIService, AIServiceProvider, BaseConfig, ProviderService,
@@ -244,6 +244,17 @@ impl OpenAiCompatibleProvider {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn provider_accessors_expose_client_url_and_default_model() {
+        let client = hutool_http::HttpClient::new(&hutool_http::HttpConfig::default()).unwrap();
+        let provider =
+            OpenAiCompatibleProvider::new(client, "https://example.com/v1", "k", "m").unwrap();
+        let _ = provider.http_client();
+        // 构造函数确保 base_url 以 / 结尾（保证端点 join 正确）
+        assert_eq!(provider.base_url().as_str(), "https://example.com/v1/");
+        assert_eq!(provider.default_model(), "m");
+    }
 
     #[test]
     fn request_constructor_is_provider_neutral() {

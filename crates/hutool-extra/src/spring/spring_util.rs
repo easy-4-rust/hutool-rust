@@ -22,10 +22,12 @@ pub struct SpringUtil;
 
 impl SpringUtil {
     /// 对齐 `SpringUtil.setApplicationContext(ApplicationContext)`
-    pub fn set_application_context(ctx: Arc<dyn ApplicationContext>) -> Result<(), HutoolException> {
-        APPLICATION_CONTEXT
-            .set(ctx)
-            .map_err(|_| HutoolException::Message("SpringUtil: ApplicationContext already set".into()))
+    pub fn set_application_context(
+        ctx: Arc<dyn ApplicationContext>,
+    ) -> Result<(), HutoolException> {
+        APPLICATION_CONTEXT.set(ctx).map_err(|_| {
+            HutoolException::Message("SpringUtil: ApplicationContext already set".into())
+        })
     }
 
     /// 对齐 `SpringUtil.getApplicationContext()`
@@ -57,7 +59,9 @@ impl SpringUtil {
     }
 
     /// 对齐 `SpringUtil.getBeansOfType(Class)`
-    pub fn get_beans_of_type(type_name: &str) -> Result<HashMap<String, Arc<dyn Any>>, HutoolException> {
+    pub fn get_beans_of_type(
+        type_name: &str,
+    ) -> Result<HashMap<String, Arc<dyn Any>>, HutoolException> {
         Ok(Self::get_bean_factory()?.get_beans_of_type(type_name))
     }
 
@@ -79,9 +83,10 @@ impl SpringUtil {
     /// 对齐 `SpringUtil.getActiveProfile()`：取第一个
     pub fn get_active_profile() -> Result<String, HutoolException> {
         let profiles = Self::get_active_profiles()?;
-        profiles.into_iter().next().ok_or_else(|| {
-            HutoolException::Message("No active profile set".into())
-        })
+        profiles
+            .into_iter()
+            .next()
+            .ok_or_else(|| HutoolException::Message("No active profile set".into()))
     }
 
     /// 对齐 `SpringUtil.registerBean(String, Object)`
@@ -118,7 +123,9 @@ impl SpringUtil {
     /// 对齐 `SpringUtil.postProcessBeanFactory(ConfigurableListableBeanFactory)`
     ///
     /// Rust 版无 Spring 生命周期回调；此方法返回 Err 提示用户应直接调用 `set_application_context`。
-    pub fn post_process_bean_factory(_factory: &dyn ConfigurableBeanFactory) -> Result<(), HutoolException> {
+    pub fn post_process_bean_factory(
+        _factory: &dyn ConfigurableBeanFactory,
+    ) -> Result<(), HutoolException> {
         Err(HutoolException::Message(
             "SpringUtil::post_process_bean_factory is Spring-only; call set_application_context instead".into(),
         ))

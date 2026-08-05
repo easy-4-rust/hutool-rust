@@ -15,6 +15,9 @@ impl AnsiEncoder {
 
     /// 前景+背景
     pub fn encode_fore_back(fore_code: u8, back_code: u8, text: &str) -> String {
-        format!("\u{001B}[{};{}m{}\u{001B}[0;39m", fore_code, back_code, text)
+        format!(
+            "\u{001B}[{};{}m{}\u{001B}[0;39m",
+            fore_code, back_code, text
+        )
     }
 }

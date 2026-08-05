@@ -110,13 +110,17 @@ mod tests {
         assert_eq!(built.model_name(), ModelName::DeepSeek);
         assert_eq!(built.model(), "reasoner");
         assert!(built.get_additional("x").is_some());
-        assert!(AIConfigBuilder::new("openai")
-            .unwrap()
-            .api_url("bad")
-            .is_err());
-        assert!(AIConfigBuilder::new("openai")
-            .unwrap()
-            .proxy("bad")
-            .is_err());
+        assert!(
+            AIConfigBuilder::new("openai")
+                .unwrap()
+                .api_url("bad")
+                .is_err()
+        );
+        assert!(
+            AIConfigBuilder::new("openai")
+                .unwrap()
+                .proxy("bad")
+                .is_err()
+        );
     }
 }

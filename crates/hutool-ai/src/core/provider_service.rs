@@ -175,7 +175,8 @@ pub fn default_chat_prompt(prompt: &str) -> Vec<Message> {
 
 impl fmt::Display for ProviderService {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
-        formatter.debug_struct("ProviderService")
+        formatter
+            .debug_struct("ProviderService")
             .field("model_name", &self.config.model_name())
             .field("api_url", &self.config.api_url())
             .field("model", &self.config.model())

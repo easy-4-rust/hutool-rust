@@ -2,7 +2,7 @@
 //! 对齐: Alias / AliasFor / ForceAliasFor / MirrorFor / PropIgnore / RelationType
 
 use hutool_annotation::{
-    Alias, AliasFor, ForceAliasFor, MirrorFor, PropIgnore, RelationType, ALIAS_TYPE_NAME,
+    ALIAS_TYPE_NAME, Alias, AliasFor, ForceAliasFor, MirrorFor, PropIgnore, RelationType,
 };
 
 /// 对齐 Java: 元注解类型名与非反射描述符

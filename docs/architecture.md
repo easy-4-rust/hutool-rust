@@ -120,7 +120,7 @@ Mark each core capability at least once. Don't use future tense to mask current 
 | Data | Stateless (pure functions) primary | Confirmed | Public API |
 | Security | `#![forbid(unsafe_code)]` + `secrecy` + `zeroize` | Confirmed | All crate source |
 | Deployment | Library type (consumed via cargo) | Verified | `cargo install` viable |
-| Max risk | `hutool-poi` has 67 `unimplemented!()` calls and no Office engine integration | Not implemented | `crates/hutool-poi/` |
+| Max risk | ~~`hutool-poi` has 67 `unimplemented!()` calls and no Office engine integration~~ (removed 2026-08-04) | Resolved | ~~`crates/hutool-poi/`~~ → `easyexcel-rust` |
 
 ### 2.4 Architecture Quality Attributes Priority
 
@@ -222,7 +222,7 @@ flowchart LR
 
 | Dimension | Current |
 |---|---|
-| Workspace crate count | 25, including the new `hutool-observability` crate and the non-functional `hutool-poi` placeholder |
+| Workspace crate count | 26; the `hutool-poi` placeholder was removed on 2026-08-04, with Excel capability provided by `easyexcel-rust` |
 | Test count | 2347+ (including 364 byte-level parity) |
 | POI implementation | None; 79 Rust source files register API shape, with 67 `unimplemented!()` calls |
 | File count gaps | hutool-db missing 75, hutool-extra missing 170, hutool-cron missing 37, etc. |
@@ -355,7 +355,7 @@ See [docs/IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md).
 | `hutool-test-support` | Test common utilities | — | — |
 | `hutool-log` | Logging | log | tracing |
 | `hutool-observability` | Default tracing/metrics/health and authorized diagnostics | observability | tracing/metrics |
-| `hutool-poi` | API-registration placeholder only; no usable Office implementation and no facade feature | — | thiserror |
+| `hutool-poi` | ~~placeholder skeleton~~ (removed 2026-08-04); Excel/Word/OFD capability provided by `easyexcel-rust` | ✅ Resolved | — |
 
 ### 8.2 Dependency Relations
 
@@ -755,7 +755,7 @@ flowchart LR
 | hutool | hiwepy toolbox (abbreviation of hi + tool) |
 | hutool | Apache Dubbo tool library (Java) |
 | hutool-compat-hutool | Java-style compat layer |
-| POI placeholder | API/file inventory under `crates/hutool-poi`; not a usable implementation |
+| POI placeholder | ~~API/file inventory under `crates/hutool-poi`~~ (removed 2026-08-04) |
 
 ### 24.2 Reference Documents
 

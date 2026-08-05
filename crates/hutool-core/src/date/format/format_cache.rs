@@ -5,5 +5,7 @@ use crate::Result;
 pub struct FormatCache;
 impl FormatCache {
     /// 兼容 sentinel。
-    pub fn sentinel() -> Result<()> { Ok(()) }
+    pub fn sentinel() -> Result<()> {
+        Ok(())
+    }
 }

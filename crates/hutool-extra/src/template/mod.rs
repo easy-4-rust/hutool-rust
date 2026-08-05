@@ -9,27 +9,27 @@
 //!   在各自的 `engine/<name>.rs` 子模块；本文件只提供配置 + facade。
 //! - 迁移状态：✅ 已实现（Phase 1.4 工作）
 
-mod template_exception;
+mod abstract_template;
 mod resource_mode;
-mod template_engine;
 mod template;
 mod template_binding;
-mod template_value;
 mod template_config;
-mod abstract_template;
-mod template_util;
+mod template_engine;
+mod template_exception;
 mod template_factory;
+mod template_util;
+mod template_value;
 
-pub use template_exception::TemplateException;
+pub use abstract_template::AbstractTemplate;
 pub use resource_mode::ResourceMode;
-pub use template_engine::TemplateEngine;
 pub use template::Template;
 pub use template_binding::TemplateBinding;
-pub use template_value::TemplateValue;
 pub use template_config::TemplateConfig;
-pub use abstract_template::AbstractTemplate;
-pub use template_util::TemplateUtil;
+pub use template_engine::TemplateEngine;
+pub use template_exception::TemplateException;
 pub use template_factory::TemplateFactory;
+pub use template_util::TemplateUtil;
+pub use template_value::TemplateValue;
 
 /// 默认模板配置（进程级懒加载单例），对齐 hutool 的 `TemplateConfig` 默认实例。
 pub static DEFAULT_CONFIG: std::sync::OnceLock<TemplateConfig> = std::sync::OnceLock::new();

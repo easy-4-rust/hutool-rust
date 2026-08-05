@@ -2,9 +2,7 @@
 
 /// 对齐: `cn.hutool.core.collection.TransCollection`
 /// 转换集合
-
 use std::marker::PhantomData;
-
 
 /// A mutable collection view that transforms values only when observed.
 pub struct TransCollection<'a, T, U, F>

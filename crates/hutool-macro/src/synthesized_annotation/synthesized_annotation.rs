@@ -25,7 +25,9 @@ pub trait SynthesizedAnnotation: Hierarchical + Send + Sync {
     fn replace_attribute(
         &self,
         attribute_name: &str,
-        operator: Box<dyn Fn(Arc<dyn AnnotationAttribute>) -> Arc<dyn AnnotationAttribute> + Send + Sync>,
+        operator: Box<
+            dyn Fn(Arc<dyn AnnotationAttribute>) -> Arc<dyn AnnotationAttribute> + Send + Sync,
+        >,
     );
 
     /// 获取属性值。

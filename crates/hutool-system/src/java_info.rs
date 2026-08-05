@@ -73,11 +73,7 @@ impl JavaInfo {
     #[must_use]
     pub fn version_int(&self) -> Option<u32> {
         let (major, minor) = self.version_components()?;
-        if major == 1 {
-            Some(minor)
-        } else {
-            Some(major)
-        }
+        if major == 1 { Some(minor) } else { Some(major) }
     }
 
     /// 中文说明: 检查是否为指定的特性版本。

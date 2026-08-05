@@ -5,19 +5,10 @@
 use std::{fmt::Write as _, io};
 
 use crate::{
-    compilation_info::CompilationInfo,
-    host_info::HostInfo,
-    java_info::JavaInfo,
-    java_runtime_info::JavaRuntimeInfo,
-    java_spec_info::JavaSpecInfo,
-    jvm_info::JvmInfo,
-    jvm_spec_info::JvmSpecInfo,
-    management_info::ManagementInfo,
-    os_info::OsInfo,
-    oshi::OshiUtil,
-    runtime_info::RuntimeInfo,
-    user_info::UserInfo,
-    SystemSnapshot,
+    SystemSnapshot, compilation_info::CompilationInfo, host_info::HostInfo, java_info::JavaInfo,
+    java_runtime_info::JavaRuntimeInfo, java_spec_info::JavaSpecInfo, jvm_info::JvmInfo,
+    jvm_spec_info::JvmSpecInfo, management_info::ManagementInfo, os_info::OsInfo, oshi::OshiUtil,
+    runtime_info::RuntimeInfo, user_info::UserInfo,
 };
 
 /// 对齐: `cn.hutool.system.SystemUtil`

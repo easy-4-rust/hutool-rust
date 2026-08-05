@@ -15,16 +15,13 @@ impl RegexPool {
     /// 对齐 Java: `RegexPool.WORD`
     pub const WORD: &'static str = r"[a-zA-Z]+";
     /// 对齐 Java: `RegexPool.CHINESE`
-    pub const CHINESE: &'static str =
-        "[\u{2E80}-\u{2EFF}\u{2F00}-\u{2FDF}\u{31C0}-\u{31EF}\u{3400}-\u{4DBF}\u{4E00}-\u{9FFF}\u{F900}-\u{FAFF}]";
+    pub const CHINESE: &'static str = "[\u{2E80}-\u{2EFF}\u{2F00}-\u{2FDF}\u{31C0}-\u{31EF}\u{3400}-\u{4DBF}\u{4E00}-\u{9FFF}\u{F900}-\u{FAFF}]";
     /// 对齐 Java: `RegexPool.CHINESES`
-    pub const CHINESES: &'static str =
-        "[\u{2E80}-\u{2EFF}\u{2F00}-\u{2FDF}\u{31C0}-\u{31EF}\u{3400}-\u{4DBF}\u{4E00}-\u{9FFF}\u{F900}-\u{FAFF}]+";
+    pub const CHINESES: &'static str = "[\u{2E80}-\u{2EFF}\u{2F00}-\u{2FDF}\u{31C0}-\u{31EF}\u{3400}-\u{4DBF}\u{4E00}-\u{9FFF}\u{F900}-\u{FAFF}]+";
     /// 对齐 Java: `RegexPool.GROUP_VAR`
     pub const GROUP_VAR: &'static str = r"\$(\d+)";
     /// 对齐 Java: `RegexPool.IPV4`
-    pub const IPV4: &'static str =
-        r"^(25[0-5]|2[0-4]\d|[0-1]?\d?\d)\.(25[0-5]|2[0-4]\d|[0-1]?\d?\d)\.(25[0-5]|2[0-4]\d|[0-1]?\d?\d)\.(25[0-5]|2[0-4]\d|[0-1]?\d?\d)$";
+    pub const IPV4: &'static str = r"^(25[0-5]|2[0-4]\d|[0-1]?\d?\d)\.(25[0-5]|2[0-4]\d|[0-1]?\d?\d)\.(25[0-5]|2[0-4]\d|[0-1]?\d?\d)\.(25[0-5]|2[0-4]\d|[0-1]?\d?\d)$";
     /// 对齐 Java: `RegexPool.IPV6`
     pub const IPV6: &'static str = concat!(
         "(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|",
@@ -58,11 +55,9 @@ impl RegexPool {
     pub const CITIZEN_ID: &'static str =
         r"[1-9]\d{5}[1-2]\d{3}((0\d)|(1[0-2]))(([012]\d)|3[0-1])\d{3}(\d|X|x)";
     /// 对齐 Java: `RegexPool.ZIP_CODE`
-    pub const ZIP_CODE: &'static str =
-        r"^(0[1-7]|1[0-356]|2[0-7]|3[0-6]|4[0-7]|5[0-7]|6[0-7]|7[0-5]|8[0-9]|9[0-8])\d{4}|99907[78]$";
+    pub const ZIP_CODE: &'static str = r"^(0[1-7]|1[0-356]|2[0-7]|3[0-6]|4[0-7]|5[0-7]|6[0-7]|7[0-5]|8[0-9]|9[0-8])\d{4}|99907[78]$";
     /// 对齐 Java: `RegexPool.BIRTHDAY`
-    pub const BIRTHDAY: &'static str =
-        r"^(\d{2,4})([/\\-.年]?)(\d{1,2})([/\\-.月]?)(\d{1,2})日?$";
+    pub const BIRTHDAY: &'static str = r"^(\d{2,4})([/\\-.年]?)(\d{1,2})([/\\-.月]?)(\d{1,2})日?$";
     /// 对齐 Java: `RegexPool.URI`
     pub const URI: &'static str = r"^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?";
     /// 对齐 Java: `RegexPool.URL`
@@ -114,12 +109,22 @@ mod regex_pool_idiomatic_parity {
     fn regex_pool_core_constants_compile_and_match() {
         assert!(Regex::new(RegexPool::GENERAL).unwrap().is_match("ab_1"));
         assert!(Regex::new(RegexPool::NUMBERS).unwrap().is_match("42"));
-        assert!(Regex::new(RegexPool::MOBILE).unwrap().is_match("13800138000"));
+        assert!(
+            Regex::new(RegexPool::MOBILE)
+                .unwrap()
+                .is_match("13800138000")
+        );
         assert!(Regex::new(RegexPool::EMAIL).unwrap().is_match("a@b.com"));
         assert!(Regex::new(RegexPool::IPV4).unwrap().is_match("192.168.1.1"));
-        assert!(Regex::new(RegexPool::UUID_SIMPLE)
-            .unwrap()
-            .is_match("0123456789abcdef0123456789abcdef"));
-        assert!(Regex::new(RegexPool::CHINESE_NAME).unwrap().is_match("张三"));
+        assert!(
+            Regex::new(RegexPool::UUID_SIMPLE)
+                .unwrap()
+                .is_match("0123456789abcdef0123456789abcdef")
+        );
+        assert!(
+            Regex::new(RegexPool::CHINESE_NAME)
+                .unwrap()
+                .is_match("张三")
+        );
     }
 }

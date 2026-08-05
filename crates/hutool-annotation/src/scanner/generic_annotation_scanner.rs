@@ -2,9 +2,9 @@
 
 use std::sync::Arc;
 
-use hutool_macro::{AnnotationMirror, AnnotationTypeName};
 use hutool_macro::element::{ElementHandle, ElementKind, global_registry};
 use hutool_macro::scanner::MetaAnnotationScanner;
+use hutool_macro::{AnnotationMirror, AnnotationTypeName};
 
 use super::annotation_scanner::{AnnotationScanner, ScanConsumer};
 use super::element_annotation_scanner::ElementAnnotationScanner;

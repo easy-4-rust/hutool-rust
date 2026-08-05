@@ -93,10 +93,7 @@ impl ExceptionUtil {
             return true;
         }
         if check_cause {
-            return err
-                .source()
-                .map(|source| source.is::<E>())
-                .unwrap_or(false);
+            return err.source().map(|source| source.is::<E>()).unwrap_or(false);
         }
         false
     }

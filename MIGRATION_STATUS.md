@@ -44,7 +44,7 @@
 | hutool-json | `crates/hutool-json` | ✅ 已迁移 | 6 文件（兼容 facade 完整） |
 | hutool-jwt | `crates/hutool-jwt` | ✅ 已迁移 | 2 文件（lib + compat），结构紧凑 |
 | hutool-log | `crates/hutool-log` | 🟡 部分迁移 | 缺 7+ 个 dialect 子模块（log4j/log4j2/slf4j/jboss/jdk/tinylog/logtube），通过 tracing 抽象 |
-| hutool-poi | `crates/hutool-poi` | ⚪ **未实现/不计完成度** | 79 个 Rust 源文件仅登记 API；67 处 `unimplemented!()`；未接入 facade 或文档引擎 |
+| hutool-poi | ~~`crates/hutool-poi`~~（2026-08-04 移除） | ✅ 已处置 | Excel/Word/OFD 能力由独立项目 `easyexcel-rust` 承接（EasyExcel 4.0.3 高保真迁移） |
 | hutool-script | `crates/hutool-script` | ✅ 已迁移 | 基于 rhai 实现 JavaScript 兼容层 |
 | hutool-setting | `crates/hutool-setting` | ✅ 已迁移 | 基于 config crate + serde_yaml |
 | hutool-socket | `crates/hutool-socket` | ✅ 已迁移 | 基于 tokio 实现 |
@@ -62,7 +62,7 @@
 | 对象/类型命名一致性 | ⭐⭐⭐ 75% | 部分 hutool 类（SetUtil、URLDecodeUtil、RegexUtil、SecureUtil 等）**未在 hutool-rust 中以同名 struct 存在** |
 | 方法签名一致性 | ⭐⭐⭐ 70% | hutool-rust 用 trait/方法组重新切分了原 Java 的静态工具类，参数顺序大致一致，返回值改为 `Result<T>` |
 | 业务逻辑一致性 | ⭐⭐ 50% | hutool-core 实现了原代码骨架但内部细节有简化（如 HashUtil、Codec） |
-| **hutool-poi 迁移** | ⭐ 0% | 存在占位 crate，但没有可用实现，按要求不计入实现完成度 |
+| **hutool-poi 迁移** | ✅ 已处置（2026-08-04） | 占位 crate 已删除，Excel 能力由独立项目 `easyexcel-rust` 承接 |
 | **示例/文档/注释** | ⭐⭐⭐⭐ 85% | 已有 `crates/hutool/examples/`、`cn/` 中文文档、rustdoc 注释 |
 
 ---
@@ -391,20 +391,26 @@ hutool 的 `StrUtil` 是核心门面类（1200+ 行，180+ 方法）。hutool-ru
 
 ---
 
-## 6. hutool-poi ↔ hutool-poi（**实现范围外**）
+## 6. hutool-poi ↔ hutool-poi（**已移除，2026-08-04**）
 
-| 维度 | hutool-poi | hutool-rust |
+> **模块处置**：`crates/hutool-poi` 已从 workspace 删除（`git rm -r crates/hutool-poi`）。
+> Rust 侧 Excel/Word/OFD 能力由独立项目 **easyexcel-rust** 承接
+> （`/Users/wandl/workspaces/workspace-github-easy-4-rust/easyexcel-rust`，EasyExcel 4.0.3 高保真迁移，
+> 含 `easyexcel` / `easyexcel-macro` / `easyexcel-support`（8 个 web 适配器）/ `easyexcel-test`）。
+> 移除后 workspace 共 26 个 crate，`cargo check --workspace --all-targets` 通过。
+
+| 维度 | hutool-poi | hutool-rust（已移除） |
 |---|---:|---:|
 | Java 基线 | 78 Java 文件 | — |
-| Rust 工程形态 | — | `crates/hutool-poi` 下 79 个 `.rs` 文件 |
-| 可用实现 | — | **0%** |
-| 运行时事实 | — | 67 个文件含 `unimplemented!()`，构造占位类型时会 panic |
-| 依赖 | — | 仅 `thiserror`，没有接入 `easyexcel-rs`、`easydoc-rs`、`easyofd-rs` 或 `easypdf-rs` |
+| Rust 工程形态 | — | ~~`crates/hutool-poi` 下 79 个 `.rs` 文件~~（已删除） |
+| 可用实现 | — | 由 `easyexcel-rust` 承接 |
+| 运行时事实 | — | 原 67 个文件含 `unimplemented!()`，构造占位类型时会 panic |
+| 依赖 | — | 原仅 `thiserror`，未接入任何引擎 |
 | Facade | — | `crates/hutool` 没有 `poi`/`poi-docx` feature，也不依赖 `hutool-poi` |
 
-**结论**：`hutool-poi` 只有对象/API/文件占位，用于登记迁移形状；它不是实现、不是可用功能，也不计入迁移完成度或生产就绪声明。
+**结论**：`hutool-poi` 原为对象/API/文件占位，用于登记迁移形状；它不是实现、不是可用功能，也不计入迁移完成度或生产就绪声明。2026-08-04 起该模块移除，Excel 能力由 `easyexcel-rust` 承接。
 
-### 6.1 hutool-poi 已登记的占位类（清单）
+### 6.1 hutool-poi 已登记的占位类（历史清单）
 
 ```
 excel 包（71 个）：
@@ -671,7 +677,7 @@ pub fn get<T>(values: &[T], index: isize) -> Option<&T>
 | hutool-ai providers | 40+ |
 | hutool-bloomFilter filters | 15+ |
 | hutool-cache impls | 12+ |
-| hutool-poi 实现 | 78（Rust 仅占位，功能实现为 0） |
+| hutool-poi 实现 | 78（2026-08-04 起由 `easyexcel-rust` 承接，占位 crate 已删除） |
 
 ---
 

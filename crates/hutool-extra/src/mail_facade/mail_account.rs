@@ -9,8 +9,8 @@ use std::time::Duration;
 
 use lettre::message::Mailbox;
 
-use crate::mail::{SmtpClient, SmtpConfig, SmtpCredentials, SmtpSecurity};
 use crate::Result;
+use crate::mail::{SmtpClient, SmtpConfig, SmtpCredentials, SmtpSecurity};
 
 /// Hutool `MailAccount` — SMTP relay settings without a global singleton.
 ///

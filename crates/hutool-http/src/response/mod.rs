@@ -47,10 +47,7 @@ fn decode_rfc5987(raw: &str) -> String {
 }
 
 fn strip_quotes(value: &str) -> String {
-    value
-        .trim()
-        .trim_matches(['\'', '"'])
-        .to_string()
+    value.trim().trim_matches(['\'', '"']).to_string()
 }
 
 fn percent_decode_lightweight(input: &str) -> String {

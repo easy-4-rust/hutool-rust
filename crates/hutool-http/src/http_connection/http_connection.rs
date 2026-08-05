@@ -67,7 +67,8 @@ pub trait HttpConnection: Send + Sync {
     fn set_cookie(&mut self, cookie: &str) -> Result<(), HttpException>;
 
     /// 对齐 `HttpConnection.setFixedLengthStreamingMode(long)`
-    fn set_fixed_length_streaming_mode(&mut self, content_length: u64) -> Result<(), HttpException>;
+    fn set_fixed_length_streaming_mode(&mut self, content_length: u64)
+    -> Result<(), HttpException>;
 
     /// 对齐 `HttpConnection.setChunkedStreamingMode(int)`
     fn set_chunked_streaming_mode(&mut self, block_size: i32) -> Result<(), HttpException>;

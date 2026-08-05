@@ -122,9 +122,8 @@ impl ApplicationModule for HutoolCronModule {
         // 校验 cron 表达式格式
         for entry in &self.config.entries {
             if entry.enabled {
-                hutool_cron::CronSchedule::parse(&entry.cron_expression).map_err(|e| {
-                    format!("cron 表达式解析失败 [{}]: {}", entry.name, e)
-                })?;
+                hutool_cron::CronSchedule::parse(&entry.cron_expression)
+                    .map_err(|e| format!("cron 表达式解析失败 [{}]: {}", entry.name, e))?;
             }
         }
 

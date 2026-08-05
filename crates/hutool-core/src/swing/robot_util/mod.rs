@@ -22,9 +22,9 @@
 //!   `thread_local!` 或每次 new 创建(简化起见用每次 new)。
 
 mod mouse_button;
-mod robot_util;
 mod robot_error;
+mod robot_util;
 
 pub use mouse_button::MouseButton;
-pub use robot_util::RobotUtil;
 pub use robot_error::RobotError;
+pub use robot_util::RobotUtil;

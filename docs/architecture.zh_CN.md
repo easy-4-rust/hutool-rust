@@ -120,7 +120,7 @@
 | 数据 | 无状态（pure functions）为主 | 已确认 | 公共 API |
 | 安全 | `#![forbid(unsafe_code)]` + `secrecy` + `zeroize` | 已确认 | 所有 crate 源码 |
 | 部署 | 库型（被 cargo 依赖） | 已验证 | `cargo install` 可行 |
-| 最大风险 | `hutool-poi` 有 67 处 `unimplemented!()`，且未接入任何 Office 引擎 | 未实现 | `crates/hutool-poi/` |
+| 最大风险 | ~~`hutool-poi` 有 67 处 `unimplemented!()`，且未接入任何 Office 引擎~~（2026-08-04 已移除） | 已处置 | ~~`crates/hutool-poi/`~~ → `easyexcel-rust` 承接 |
 
 ### 2.4 架构质量属性优先级
 
@@ -222,7 +222,7 @@ flowchart LR
 
 | 维度 | 当前 |
 |---|---|
-| workspace crate 数 | 25，其中包含新增的 `hutool-observability` 和不可用的 `hutool-poi` 占位 crate |
+| workspace crate 数 | 26；`hutool-poi` 占位 crate 已于 2026-08-04 移除，Excel 能力由 `easyexcel-rust` 承接 |
 | 测试数 | 2347+（含 364 字节级对比） |
 | POI 实现 | 无；79 个 Rust 源文件仅登记 API 形状，其中有 67 处 `unimplemented!()` |
 | 文件数缺口 | hutool-db 缺 75、hutool-extra 缺 170、hutool-cron 缺 37 等 |
@@ -354,7 +354,7 @@ flowchart LR
 | `hutool-test-support` | 测试公共工具 | — | — |
 | `hutool-log` | 日志 | log | tracing |
 | `hutool-observability` | 默认 tracing/metrics/health；授权诊断后端 | observability | tracing/metrics |
-| `hutool-poi` | 仅用于 API 登记的占位骨架；没有可用 Office 实现，也没有 facade feature | — | thiserror |
+| `hutool-poi` | ~~占位骨架~~（2026-08-04 已移除）；Excel/Word/OFD 能力由 `easyexcel-rust` 承接 | ✅ 已处置 | — |
 
 ### 8.2 依赖关系
 
@@ -746,7 +746,7 @@ flowchart LR
 | hutool | hiwepy 工具箱（hi + tool 的缩写） |
 | hutool | Apache Dubbo 工具库（Java） |
 | hutool-compat-hutool | Java 风格兼容层 |
-| POI 占位骨架 | `crates/hutool-poi` 下的 API/文件清单，不是可用实现 |
+| POI 占位骨架 | ~~`crates/hutool-poi` 下的 API/文件清单~~（2026-08-04 已移除） |
 
 ### 24.2 参考文档
 

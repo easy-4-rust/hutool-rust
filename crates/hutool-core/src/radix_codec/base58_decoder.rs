@@ -2,7 +2,6 @@
 
 /// 对齐: `cn.hutool.core.codec.Base58`
 /// Base58 解码器
-
 use crate::{Decoder, Result};
 
 /// Base58 decoder with a custom validated alphabet.

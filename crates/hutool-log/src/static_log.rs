@@ -1,8 +1,8 @@
 use std::{fmt, sync::Arc};
 
 use crate::global_log_factory::GlobalLogFactory;
-use crate::log::Log;
 use crate::level::LogLevel;
+use crate::log::Log;
 
 /// Static facade matching Hutool's convenience entry points.
 pub struct StaticLog;

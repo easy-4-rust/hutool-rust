@@ -480,8 +480,7 @@ mod tests {
 
     #[test]
     fn copy_options_ignore_properties() {
-        let opts = CopyOptions::create()
-            .set_ignore_properties(&["id", "createTime"]);
+        let opts = CopyOptions::create().set_ignore_properties(&["id", "createTime"]);
         assert!(!opts.test_key_filter("id"));
         assert!(!opts.test_key_filter("createTime"));
         assert!(opts.test_key_filter("name"));
@@ -499,14 +498,13 @@ mod tests {
 
     #[test]
     fn copy_options_field_name_editor() {
-        let opts = CopyOptions::create()
-            .set_field_name_editor(|name| {
-                if name == "skip_me" {
-                    None
-                } else {
-                    Some(name.to_uppercase())
-                }
-            });
+        let opts = CopyOptions::create().set_field_name_editor(|name| {
+            if name == "skip_me" {
+                None
+            } else {
+                Some(name.to_uppercase())
+            }
+        });
         assert_eq!(opts.edit_field_name("hello"), Some("HELLO".to_string()));
         assert_eq!(opts.edit_field_name("skip_me"), None);
     }
@@ -527,22 +525,18 @@ mod tests {
             Some("dest_age".to_string())
         );
         // unmapped keys pass through
-        assert_eq!(
-            opts.edit_field_name("other"),
-            Some("other".to_string())
-        );
+        assert_eq!(opts.edit_field_name("other"), Some("other".to_string()));
     }
 
     #[test]
     fn copy_options_field_value_editor() {
-        let opts = CopyOptions::create()
-            .set_field_value_editor(|_name, value| {
-                if value.is_null() {
-                    Value::String("default".to_string())
-                } else {
-                    value.clone()
-                }
-            });
+        let opts = CopyOptions::create().set_field_value_editor(|_name, value| {
+            if value.is_null() {
+                Value::String("default".to_string())
+            } else {
+                value.clone()
+            }
+        });
         assert_eq!(
             opts.edit_field_value("field", &Value::Null),
             Value::String("default".to_string())

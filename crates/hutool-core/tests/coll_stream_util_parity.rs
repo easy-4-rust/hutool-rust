@@ -75,7 +75,12 @@ fn test_to_map_null_key_or_value() {
     let list = vec![
         Some(Student::new(1, 1, 1, "张三")),
         None,
-        Some(Student { term_id: 1, class_id: 2, student_id: 2, name: None }),
+        Some(Student {
+            term_id: 1,
+            class_id: 2,
+            student_id: 2,
+            name: None,
+        }),
     ];
     let map = CollStreamUtil::to_map(
         list.into_iter().flatten(),
@@ -137,16 +142,27 @@ fn test_group_by2_key() {
 #[test]
 fn test_group2_map() {
     let empty: Vec<Student> = vec![];
-    assert!(CollStreamUtil::group_to_two_level_map(empty, |s| s.term_id, |s| s.class_id).is_empty());
+    assert!(
+        CollStreamUtil::group_to_two_level_map(empty, |s| s.term_id, |s| s.class_id).is_empty()
+    );
     let list = vec![
         Student::new(1, 1, 1, "张三"),
         Student::new(1, 2, 1, "李四"),
         Student::new(2, 2, 1, "王五"),
     ];
     let map = CollStreamUtil::group_to_two_level_map(list, |s| s.term_id, |s| s.class_id);
-    assert_eq!(map.get(&1).unwrap().get(&1).unwrap().name.as_deref(), Some("张三"));
-    assert_eq!(map.get(&1).unwrap().get(&2).unwrap().name.as_deref(), Some("李四"));
-    assert_eq!(map.get(&2).unwrap().get(&2).unwrap().name.as_deref(), Some("王五"));
+    assert_eq!(
+        map.get(&1).unwrap().get(&1).unwrap().name.as_deref(),
+        Some("张三")
+    );
+    assert_eq!(
+        map.get(&1).unwrap().get(&2).unwrap().name.as_deref(),
+        Some("李四")
+    );
+    assert_eq!(
+        map.get(&2).unwrap().get(&2).unwrap().name.as_deref(),
+        Some("王五")
+    );
 }
 
 /// 对齐 Java: `CollStreamUtilTest.testGroupKeyValue()`
@@ -177,15 +193,22 @@ fn test_group_by() {
         list.clone(),
         |s| s.term_id,
         || None::<Student>,
-        |acc, s| {
-            match acc {
-                None => *acc = Some(s),
-                Some(cur) if s.class_id > cur.class_id => *acc = Some(s),
-                _ => {}
-            }
+        |acc, s| match acc {
+            None => *acc = Some(s),
+            Some(cur) if s.class_id > cur.class_id => *acc = Some(s),
+            _ => {}
         },
     );
-    assert_eq!(max_by_class.get(&1).unwrap().as_ref().unwrap().name.as_deref(), Some("李四"));
+    assert_eq!(
+        max_by_class
+            .get(&1)
+            .unwrap()
+            .as_ref()
+            .unwrap()
+            .name
+            .as_deref(),
+        Some("李四")
+    );
     let counts = CollStreamUtil::group_fold(list, |s| s.term_id, || 0usize, |c, _| *c += 1);
     assert_eq!(counts.get(&1), Some(&2));
     assert_eq!(counts.get(&2), Some(&1));
@@ -231,35 +254,41 @@ fn test_translate2_set() {
 fn test_merge() {
     let map1: HashMap<i64, Student> = HashMap::new();
     let map2: HashMap<i64, Student> = HashMap::new();
-    let merged = CollStreamUtil::merge_maps(&map1, &map2, |_k, a, b| {
-        match (a, b) {
-            (None, None) => None,
-            (Some(s), None) | (None, Some(s)) => s.name.clone(),
-            (Some(s1), Some(s2)) => Some(format!("{}{}", s1.name.as_deref().unwrap_or(""), s2.name.as_deref().unwrap_or(""))),
-        }
+    let merged = CollStreamUtil::merge_maps(&map1, &map2, |_k, a, b| match (a, b) {
+        (None, None) => None,
+        (Some(s), None) | (None, Some(s)) => s.name.clone(),
+        (Some(s1), Some(s2)) => Some(format!(
+            "{}{}",
+            s1.name.as_deref().unwrap_or(""),
+            s2.name.as_deref().unwrap_or("")
+        )),
     });
     assert!(merged.is_empty());
 
     let mut map1 = HashMap::new();
     map1.insert(1, Student::new(1, 1, 1, "张三"));
     let map2: HashMap<i64, Student> = HashMap::new();
-    let merged = CollStreamUtil::merge_maps(&map1, &map2, |_k, a, b| {
-        match (a, b) {
-            (None, None) => None,
-            (Some(s), None) | (None, Some(s)) => s.name.clone(),
-            (Some(s1), Some(s2)) => Some(format!("{}{}", s1.name.as_deref().unwrap_or(""), s2.name.as_deref().unwrap_or(""))),
-        }
+    let merged = CollStreamUtil::merge_maps(&map1, &map2, |_k, a, b| match (a, b) {
+        (None, None) => None,
+        (Some(s), None) | (None, Some(s)) => s.name.clone(),
+        (Some(s1), Some(s2)) => Some(format!(
+            "{}{}",
+            s1.name.as_deref().unwrap_or(""),
+            s2.name.as_deref().unwrap_or("")
+        )),
     });
     assert_eq!(merged.get(&1).map(|s| s.as_str()), Some("张三"));
 
     let mut map2 = HashMap::new();
     map2.insert(1, Student::new(2, 1, 1, "李四"));
-    let merged = CollStreamUtil::merge_maps(&map1, &map2, |_k, a, b| {
-        match (a, b) {
-            (None, None) => None,
-            (Some(s), None) | (None, Some(s)) => s.name.clone(),
-            (Some(s1), Some(s2)) => Some(format!("{}{}", s1.name.as_deref().unwrap_or(""), s2.name.as_deref().unwrap_or(""))),
-        }
+    let merged = CollStreamUtil::merge_maps(&map1, &map2, |_k, a, b| match (a, b) {
+        (None, None) => None,
+        (Some(s), None) | (None, Some(s)) => s.name.clone(),
+        (Some(s1), Some(s2)) => Some(format!(
+            "{}{}",
+            s1.name.as_deref().unwrap_or(""),
+            s2.name.as_deref().unwrap_or("")
+        )),
     });
     assert_eq!(merged.get(&1).map(|s| s.as_str()), Some("张三李四"));
 }

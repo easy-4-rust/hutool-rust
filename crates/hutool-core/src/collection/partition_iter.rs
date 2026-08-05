@@ -2,7 +2,6 @@
 
 /// 对齐: `cn.hutool.core.collection.PartitionIter`
 /// 分区迭代器
-
 use std::iter::Peekable;
 
 use crate::Result;
@@ -54,4 +53,4 @@ where
     }
 }
 
-use super::{validate_partition_size};
+use super::validate_partition_size;

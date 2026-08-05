@@ -177,7 +177,10 @@ mod uuid_idiomatic_parity {
     #[test]
     fn uuid_bits_from_string_and_compare() {
         let u = UUID::from_bits(0x1234_5678_9abc_def0u64 as i64, 0x1111_2222_3333_4444);
-        assert_eq!(u.get_most_significant_bits(), 0x1234_5678_9abc_def0u64 as i64);
+        assert_eq!(
+            u.get_most_significant_bits(),
+            0x1234_5678_9abc_def0u64 as i64
+        );
         assert_eq!(u.get_least_significant_bits(), 0x1111_2222_3333_4444);
         let s = u.to_string_style(false);
         let parsed = UUID::from_string(&s).expect("parse");

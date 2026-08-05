@@ -27,5 +27,8 @@ fn class_proxy_test() {
     bean.insert("name".to_string(), "小明".to_string());
     bean.insert("age".to_string(), "18".to_string());
     assert_eq!(bean.get("name").map(|s| s.as_str()), Some("小明"));
-    assert_eq!(bean.get("age").and_then(|s| s.parse::<i32>().ok()), Some(18));
+    assert_eq!(
+        bean.get("age").and_then(|s| s.parse::<i32>().ok()),
+        Some(18)
+    );
 }

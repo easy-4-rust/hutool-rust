@@ -5,13 +5,13 @@ use std::sync::{Arc, RwLock};
 
 use super::annotation_synthesizer::AnnotationSynthesizer;
 use super::annotation_util::AnnotationUtil;
+use super::cacheable_synthesized_annotation_attribute_processor::CacheableSynthesizedAnnotationAttributeProcessor;
 use super::generic_synthesized_annotation::GenericSynthesizedAnnotation;
 use super::mirror::{AnnotationMirror, AnnotationTypeName, AnnotationValue, ValueKind};
 use super::scanner::annotation_scanner::AnnotationScanner;
 use super::scanner::meta_annotation_scanner::MetaAnnotationScanner;
 use super::synthesized_aggregate_annotation::SynthesizedAggregateAnnotation;
 use super::synthesized_annotation::SynthesizedAnnotation;
-use super::cacheable_synthesized_annotation_attribute_processor::CacheableSynthesizedAnnotationAttributeProcessor;
 use super::synthesized_annotation_attribute_processor::SynthesizedAnnotationAttributeProcessor;
 use super::synthesized_annotation_post_processor::SynthesizedAnnotationPostProcessor;
 use super::synthesized_annotation_selector::SynthesizedAnnotationSelector;
@@ -44,7 +44,8 @@ impl GenericSynthesizedAggregateAnnotation {
         source: Vec<Arc<AnnotationMirror>>,
         scanner: Arc<dyn AnnotationScanner>,
     ) -> Self {
-        let selector = super::synthesized_annotation_selector::Selectors::nearest_and_oldest_priority();
+        let selector =
+            super::synthesized_annotation_selector::Selectors::nearest_and_oldest_priority();
         let attribute_processor = Arc::new(CacheableSynthesizedAnnotationAttributeProcessor::new());
         let post_processors = vec![
             super::synthesized_annotation_post_processor::PostProcessors::alias_annotation_post_processor(),
@@ -188,7 +189,9 @@ impl GenericSynthesizedAggregateAnnotation {
     }
 
     /// 获取 post processors（测试用）。
-    pub fn get_annotation_post_processors(&self) -> Vec<Arc<dyn SynthesizedAnnotationPostProcessor>> {
+    pub fn get_annotation_post_processors(
+        &self,
+    ) -> Vec<Arc<dyn SynthesizedAnnotationPostProcessor>> {
         self.post_processors.clone()
     }
 }
@@ -202,7 +205,9 @@ impl AnnotationSynthesizer for GenericSynthesizedAggregateAnnotation {
         Arc::clone(&self.selector)
     }
 
-    fn get_annotation_attribute_processor(&self) -> Arc<dyn SynthesizedAnnotationAttributeProcessor> {
+    fn get_annotation_attribute_processor(
+        &self,
+    ) -> Arc<dyn SynthesizedAnnotationAttributeProcessor> {
         Arc::clone(&self.attribute_processor)
     }
 
@@ -224,7 +229,13 @@ impl AnnotationSynthesizer for GenericSynthesizedAggregateAnnotation {
     }
 
     fn synthesize(&self, annotation_type: AnnotationTypeName) -> Option<Arc<AnnotationMirror>> {
-        if let Some(cached) = self.proxy_cache.read().unwrap().get(&annotation_type).cloned() {
+        if let Some(cached) = self
+            .proxy_cache
+            .read()
+            .unwrap()
+            .get(&annotation_type)
+            .cloned()
+        {
             return Some(cached);
         }
         let built = self.build_proxy(annotation_type)?;
@@ -235,7 +246,11 @@ impl AnnotationSynthesizer for GenericSynthesizedAggregateAnnotation {
         Some(built)
     }
 
-    fn get_attribute_value(&self, attribute_name: &str, attribute_type: ValueKind) -> Option<AnnotationValue> {
+    fn get_attribute_value(
+        &self,
+        attribute_name: &str,
+        attribute_type: ValueKind,
+    ) -> Option<AnnotationValue> {
         let list: Vec<Arc<dyn SynthesizedAnnotation>> =
             self.synthesized_map.values().cloned().collect();
         self.attribute_processor
@@ -265,7 +280,10 @@ impl SynthesizedAggregateAnnotation for GenericSynthesizedAggregateAnnotation {
             .collect()
     }
 
-    fn synthesize_view(&self, annotation_type: AnnotationTypeName) -> Option<Arc<AnnotationMirror>> {
+    fn synthesize_view(
+        &self,
+        annotation_type: AnnotationTypeName,
+    ) -> Option<Arc<AnnotationMirror>> {
         self.synthesize(annotation_type)
     }
 }

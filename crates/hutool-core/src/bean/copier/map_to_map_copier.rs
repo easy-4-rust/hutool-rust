@@ -199,10 +199,7 @@ mod tests {
         let target = HashMap::new();
         let opts = CopyOptions::create().set_field_name_editor(|name| Some(name.to_uppercase()));
         let result = copy_map_to_map(&source, &target, opts);
-        assert_eq!(
-            result.get("NAME").unwrap(),
-            &Value::String("Alice".into())
-        );
+        assert_eq!(result.get("NAME").unwrap(), &Value::String("Alice".into()));
         assert_eq!(result.get("AGE").unwrap(), &Value::Number(30.into()));
     }
 
@@ -213,19 +210,15 @@ mod tests {
         source.insert("age".to_string(), Value::Number(30.into()));
 
         let target = HashMap::new();
-        let opts =
-            CopyOptions::create().set_field_name_editor(|name| {
-                if name == "age" {
-                    None
-                } else {
-                    Some(name.to_string())
-                }
-            });
+        let opts = CopyOptions::create().set_field_name_editor(|name| {
+            if name == "age" {
+                None
+            } else {
+                Some(name.to_string())
+            }
+        });
         let result = copy_map_to_map(&source, &target, opts);
-        assert_eq!(
-            result.get("name").unwrap(),
-            &Value::String("Alice".into())
-        );
+        assert_eq!(result.get("name").unwrap(), &Value::String("Alice".into()));
         assert!(!result.contains_key("age"));
     }
 

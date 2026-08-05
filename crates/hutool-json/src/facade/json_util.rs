@@ -5,9 +5,7 @@
 use serde::{Serialize, de::DeserializeOwned};
 use serde_json::Value;
 
-use crate::{
-    JSONArray, JSONConfig, JSONObject, JsonContainer, Result, get_by_path, put_by_path,
-};
+use crate::{JSONArray, JSONConfig, JSONObject, JsonContainer, Result, get_by_path, put_by_path};
 
 /// 对齐: `cn.hutool.json.JSONUtil`
 /// 中文说明: Hutool 兼容的 JSON 工具类，提供静态便捷方法。

@@ -60,10 +60,6 @@ impl TextFinder {
 
     /// 对齐 Java: `TextFinder::end#int (int)`
     pub fn end(&self, start: i32) -> Result<i32> {
-        if start < 0 {
-            Ok(-1)
-        } else {
-            Ok(start + 1)
-        }
+        if start < 0 { Ok(-1) } else { Ok(start + 1) }
     }
 }

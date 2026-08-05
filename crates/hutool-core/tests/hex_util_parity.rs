@@ -38,10 +38,7 @@ fn hex_str_test() {
     let s = "我是一个字符串";
     let hex = HexUtil::encode_hex_utf8(s);
     let decoded = HexUtil::decode_hex_text(&hex).unwrap();
-    assert_eq!(
-        decoded, s,
-        "UTF-8 hex round-trip (对齐 Java hexStrTest)"
-    );
+    assert_eq!(decoded, s, "UTF-8 hex round-trip (对齐 Java hexStrTest)");
 }
 
 /// 对齐 Java: `HexUtilTest.issueI50MI6Test()` (行 26-30)
@@ -53,7 +50,10 @@ fn hex_str_test() {
 #[test]
 fn issue_i50mi6_test() {
     // "烟" 在 UTF-16BE 中是 0x70 0xDF
-    let bytes = "烟".encode_utf16().flat_map(|c| c.to_be_bytes()).collect::<Vec<_>>();
+    let bytes = "烟"
+        .encode_utf16()
+        .flat_map(|c| c.to_be_bytes())
+        .collect::<Vec<_>>();
     let s = HexUtil::encode_hex(&bytes);
     assert_eq!(
         s, "70df",
@@ -79,9 +79,18 @@ fn to_unicode_hex_test() {
 /// 对齐 Java: `HexUtilTest.isHexNumberTest()` (行 41-60)
 #[test]
 fn is_hex_number_test() {
-    assert!(HexUtil::is_hex_number("0"), "is_hex_number(\"0\") (对齐 Java)");
-    assert!(HexUtil::is_hex_number("002c"), "is_hex_number(\"002c\") (对齐 Java)");
-    assert!(HexUtil::is_hex_number("0x3544534F444"), "is_hex_number(\"0x3544534F444\") (对齐 Java)");
+    assert!(
+        HexUtil::is_hex_number("0"),
+        "is_hex_number(\"0\") (对齐 Java)"
+    );
+    assert!(
+        HexUtil::is_hex_number("002c"),
+        "is_hex_number(\"002c\") (对齐 Java)"
+    );
+    assert!(
+        HexUtil::is_hex_number("0x3544534F444"),
+        "is_hex_number(\"0x3544534F444\") (对齐 Java)"
+    );
     // https://gitee.com/chinabugotech/hutool/issues/I62H7K
     assert!(
         HexUtil::is_hex_number("0x0000000000000001158e460913d00000"),
@@ -164,17 +173,41 @@ fn decode_hex_test() {
 /// 对齐 Java: `HexUtilTest.hexToIntTest()` (行 96-104)
 #[test]
 fn hex_to_int_test() {
-    assert_eq!(HexUtil::hex_to_i32("FF").unwrap(), 255, "hex_to_i32(\"FF\") (对齐 Java)");
-    assert_eq!(HexUtil::hex_to_i32("0xFF").unwrap(), 255, "hex_to_i32(\"0xFF\") (对齐 Java)");
-    assert_eq!(HexUtil::hex_to_i32("#FF").unwrap(), 255, "hex_to_i32(\"#FF\") (对齐 Java)");
+    assert_eq!(
+        HexUtil::hex_to_i32("FF").unwrap(),
+        255,
+        "hex_to_i32(\"FF\") (对齐 Java)"
+    );
+    assert_eq!(
+        HexUtil::hex_to_i32("0xFF").unwrap(),
+        255,
+        "hex_to_i32(\"0xFF\") (对齐 Java)"
+    );
+    assert_eq!(
+        HexUtil::hex_to_i32("#FF").unwrap(),
+        255,
+        "hex_to_i32(\"#FF\") (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `HexUtilTest.hexToLongTest()` (行 106-114)
 #[test]
 fn hex_to_long_test() {
-    assert_eq!(HexUtil::hex_to_i64("FF").unwrap(), 255, "hex_to_i64(\"FF\") (对齐 Java)");
-    assert_eq!(HexUtil::hex_to_i64("0xFF").unwrap(), 255, "hex_to_i64(\"0xFF\") (对齐 Java)");
-    assert_eq!(HexUtil::hex_to_i64("#FF").unwrap(), 255, "hex_to_i64(\"#FF\") (对齐 Java)");
+    assert_eq!(
+        HexUtil::hex_to_i64("FF").unwrap(),
+        255,
+        "hex_to_i64(\"FF\") (对齐 Java)"
+    );
+    assert_eq!(
+        HexUtil::hex_to_i64("0xFF").unwrap(),
+        255,
+        "hex_to_i64(\"0xFF\") (对齐 Java)"
+    );
+    assert_eq!(
+        HexUtil::hex_to_i64("#FF").unwrap(),
+        255,
+        "hex_to_i64(\"#FF\") (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `HexUtilTest.hexToFloatTest()` (行 116-136)
@@ -183,21 +216,41 @@ fn hex_to_float_test() {
     // 测试正常浮点数值
     let v1: f32 = 1.5;
     let h1 = HexUtil::to_hex_f32(v1);
-    assert_eq!(HexUtil::hex_to_f32(&h1).unwrap(), v1, "f32 round-trip 1.5 (对齐 Java)");
+    assert_eq!(
+        HexUtil::hex_to_f32(&h1).unwrap(),
+        v1,
+        "f32 round-trip 1.5 (对齐 Java)"
+    );
 
     // 测试负数
     let v2: f32 = -1.5;
     let h2 = HexUtil::to_hex_f32(v2);
-    assert_eq!(HexUtil::hex_to_f32(&h2).unwrap(), v2, "f32 round-trip -1.5 (对齐 Java)");
+    assert_eq!(
+        HexUtil::hex_to_f32(&h2).unwrap(),
+        v2,
+        "f32 round-trip -1.5 (对齐 Java)"
+    );
 
     // 测试科学计数法值
     let v3: f32 = 1.23456789e-5;
     let h3 = HexUtil::to_hex_f32(v3);
-    assert_eq!(HexUtil::hex_to_f32(&h3).unwrap(), v3, "f32 round-trip 科学计数法 (对齐 Java)");
+    assert_eq!(
+        HexUtil::hex_to_f32(&h3).unwrap(),
+        v3,
+        "f32 round-trip 科学计数法 (对齐 Java)"
+    );
 
     // 测试十六进制前缀
-    assert_eq!(HexUtil::hex_to_f32("0x3fc00000").unwrap(), 1.5_f32, "0x prefix (对齐 Java)");
-    assert_eq!(HexUtil::hex_to_f32("#3fc00000").unwrap(), 1.5_f32, "# prefix (对齐 Java)");
+    assert_eq!(
+        HexUtil::hex_to_f32("0x3fc00000").unwrap(),
+        1.5_f32,
+        "0x prefix (对齐 Java)"
+    );
+    assert_eq!(
+        HexUtil::hex_to_f32("#3fc00000").unwrap(),
+        1.5_f32,
+        "# prefix (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `HexUtilTest.hexToDoubleTest()` (行 138-163)
@@ -205,22 +258,46 @@ fn hex_to_float_test() {
 fn hex_to_double_test() {
     let v1: f64 = 1.5;
     let h1 = HexUtil::to_hex_f64(v1);
-    assert_eq!(HexUtil::hex_to_f64(&h1).unwrap(), v1, "f64 round-trip 1.5 (对齐 Java)");
+    assert_eq!(
+        HexUtil::hex_to_f64(&h1).unwrap(),
+        v1,
+        "f64 round-trip 1.5 (对齐 Java)"
+    );
 
     let v3: f64 = -1.5;
     let h3 = HexUtil::to_hex_f64(v3);
-    assert_eq!(HexUtil::hex_to_f64(&h3).unwrap(), v3, "f64 round-trip -1.5 (对齐 Java)");
+    assert_eq!(
+        HexUtil::hex_to_f64(&h3).unwrap(),
+        v3,
+        "f64 round-trip -1.5 (对齐 Java)"
+    );
 
     let v4: f64 = std::f64::consts::PI;
     let h4 = HexUtil::to_hex_f64(v4);
-    assert_eq!(HexUtil::hex_to_f64(&h4).unwrap(), v4, "f64 round-trip PI (对齐 Java)");
+    assert_eq!(
+        HexUtil::hex_to_f64(&h4).unwrap(),
+        v4,
+        "f64 round-trip PI (对齐 Java)"
+    );
 
     let v5: f64 = 1.23456789012345e-10;
     let h5 = HexUtil::to_hex_f64(v5);
-    assert_eq!(HexUtil::hex_to_f64(&h5).unwrap(), v5, "f64 round-trip 科学计数法 (对齐 Java)");
+    assert_eq!(
+        HexUtil::hex_to_f64(&h5).unwrap(),
+        v5,
+        "f64 round-trip 科学计数法 (对齐 Java)"
+    );
 
-    assert_eq!(HexUtil::hex_to_f64("0x3ff8000000000000").unwrap(), 1.5_f64, "0x prefix (对齐 Java)");
-    assert_eq!(HexUtil::hex_to_f64("#3ff8000000000000").unwrap(), 1.5_f64, "# prefix (对齐 Java)");
+    assert_eq!(
+        HexUtil::hex_to_f64("0x3ff8000000000000").unwrap(),
+        1.5_f64,
+        "0x prefix (对齐 Java)"
+    );
+    assert_eq!(
+        HexUtil::hex_to_f64("#3ff8000000000000").unwrap(),
+        1.5_f64,
+        "# prefix (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `HexUtilTest.toBigIntegerTest()` (行 165-173)
@@ -252,35 +329,50 @@ fn to_big_integer_test() {
 #[test]
 fn test_format_empty() {
     let result = HexUtil::format("");
-    assert_eq!(result, "", "format(\"\") = \"\" (对齐 Java testFormatEmpty)");
+    assert_eq!(
+        result, "",
+        "format(\"\") = \"\" (对齐 Java testFormatEmpty)"
+    );
 }
 
 /// 对齐 Java: `HexUtilTest.testFormatSingleChar()` (行 181-185)
 #[test]
 fn test_format_single_char() {
     let result = HexUtil::format("1");
-    assert_eq!(result, "1", "format(\"1\") = \"1\" (对齐 Java testFormatSingleChar)");
+    assert_eq!(
+        result, "1",
+        "format(\"1\") = \"1\" (对齐 Java testFormatSingleChar)"
+    );
 }
 
 /// 对齐 Java: `HexUtilTest.testFormatOddLength()` (行 187-191)
 #[test]
 fn test_format_odd_length() {
     let result = HexUtil::format("123");
-    assert_eq!(result, "12 3", "format(\"123\") = \"12 3\" (对齐 Java testFormatOddLength)");
+    assert_eq!(
+        result, "12 3",
+        "format(\"123\") = \"12 3\" (对齐 Java testFormatOddLength)"
+    );
 }
 
 /// 对齐 Java: `HexUtilTest.testFormatWithPrefixSingleChar()` (行 193-197)
 #[test]
 fn test_format_with_prefix_single_char() {
     let result = HexUtil::format_with_prefix("1", "0x");
-    assert_eq!(result, "0x1", "format_with_prefix(\"1\", \"0x\") (对齐 Java)");
+    assert_eq!(
+        result, "0x1",
+        "format_with_prefix(\"1\", \"0x\") (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `HexUtilTest.testFormatWithPrefixOddLength()` (行 199-203)
 #[test]
 fn test_format_with_prefix_odd_length() {
     let result = HexUtil::format_with_prefix("123", "0x");
-    assert_eq!(result, "0x12 0x3", "format_with_prefix(\"123\", \"0x\") (对齐 Java)");
+    assert_eq!(
+        result, "0x12 0x3",
+        "format_with_prefix(\"123\", \"0x\") (对齐 Java)"
+    );
 }
 // ── 扩展 hex_util 测试 ──
 
@@ -317,13 +409,21 @@ fn encode_hex_empty() {
 #[test]
 fn encode_hex_lowercase() {
     let encoded = HexUtil::encode_hex_case(b"AB", true);
-    assert!(encoded.chars().all(|c| c.is_ascii_lowercase() || c.is_ascii_digit()));
+    assert!(
+        encoded
+            .chars()
+            .all(|c| c.is_ascii_lowercase() || c.is_ascii_digit())
+    );
 }
 
 #[test]
 fn encode_hex_uppercase() {
     let encoded = HexUtil::encode_hex_case(b"ab", false);
-    assert!(encoded.chars().all(|c| c.is_ascii_uppercase() || c.is_ascii_digit()));
+    assert!(
+        encoded
+            .chars()
+            .all(|c| c.is_ascii_uppercase() || c.is_ascii_digit())
+    );
 }
 
 #[test]
@@ -337,7 +437,6 @@ fn encode_hex_utf8_roundtrip() {
 #[test]
 fn decode_hex_invalid() {
     assert!(HexUtil::decode_hex("XYZ").is_err());
-    
 }
 
 #[test]
@@ -349,7 +448,11 @@ fn decode_hex_chars() {
 
 #[test]
 fn encode_decode_color_roundtrip() {
-    let color = RgbColor { red: 255, green: 128, blue: 0 };
+    let color = RgbColor {
+        red: 255,
+        green: 128,
+        blue: 0,
+    };
     let encoded = HexUtil::encode_color(color);
     let decoded = HexUtil::decode_color(&encoded).unwrap();
     assert_eq!(decoded.red, 255);
@@ -359,7 +462,11 @@ fn encode_decode_color_roundtrip() {
 
 #[test]
 fn encode_color_with_prefix() {
-    let color = RgbColor { red: 255, green: 128, blue: 0 };
+    let color = RgbColor {
+        red: 255,
+        green: 128,
+        blue: 0,
+    };
     let encoded = HexUtil::encode_color_with_prefix(color, "0x");
     assert!(encoded.starts_with("0x"));
 }

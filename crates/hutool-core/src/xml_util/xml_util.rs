@@ -10,11 +10,9 @@ use std::{
 };
 
 use indexmap::IndexMap;
-use quick_xml::{
-    events::{BytesDecl, Event},
-};
-use serde::de::DeserializeOwned;
+use quick_xml::events::{BytesDecl, Event};
 use serde::Serialize;
+use serde::de::DeserializeOwned;
 use serde_json::{Map, Value};
 
 use crate::xml_stream::{
@@ -22,8 +20,8 @@ use crate::xml_stream::{
     resolve_reference,
 };
 use crate::{
-    transform_xml, visit_xml, CoreError, Result, XmlEventReader, XmlEventWriter, XmlParseOptions,
-    XmlTransformAction,
+    CoreError, Result, XmlEventReader, XmlEventWriter, XmlParseOptions, XmlTransformAction,
+    transform_xml, visit_xml,
 };
 
 use super::xml_child::XmlChild;

@@ -92,7 +92,9 @@ impl fmt::Display for Connector {
             f,
             "Connector [host={}, port={}, user={}, password={}]",
             self.host.as_deref().unwrap_or("null"),
-            self.port.map(|p| p.to_string()).unwrap_or_else(|| "null".into()),
+            self.port
+                .map(|p| p.to_string())
+                .unwrap_or_else(|| "null".into()),
             self.user.as_deref().unwrap_or("null"),
             self.password.as_deref().unwrap_or("null"),
         )

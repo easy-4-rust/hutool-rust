@@ -2,10 +2,9 @@
 
 /// 对齐: `cn.hutool.core.xml.XmlUtil`
 /// XML 序列化/反序列化
-
 use std::io::{BufRead, Write};
 
-use serde::{de::DeserializeOwned, Serialize};
+use serde::{Serialize, de::DeserializeOwned};
 
 use crate::{CoreError, Result};
 

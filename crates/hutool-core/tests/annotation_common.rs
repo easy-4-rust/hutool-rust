@@ -6,10 +6,11 @@ use std::collections::HashMap;
 use std::sync::{Arc, Mutex, MutexGuard};
 
 use hutool_annotation::{
-    clear_combination_cache_for_test, fixtures, global_registry, AnnotationMirror, AnnotationSchema,
-    AnnotationUtil, AnnotationValue, AttributeRef, CacheableAnnotationAttribute,
-    CacheableSynthesizedAnnotationAttributeProcessor, ElementHandle, MethodBuilder, PostProcessors,
-    Selectors, SynthesizedAnnotationPostProcessor, SynthesizedAnnotationSelector, TypeBuilder,
+    AnnotationMirror, AnnotationSchema, AnnotationUtil, AnnotationValue, AttributeRef,
+    CacheableAnnotationAttribute, CacheableSynthesizedAnnotationAttributeProcessor, ElementHandle,
+    MethodBuilder, PostProcessors, Selectors, SynthesizedAnnotationPostProcessor,
+    SynthesizedAnnotationSelector, TypeBuilder, clear_combination_cache_for_test, fixtures,
+    global_registry,
 };
 
 static TEST_SERIAL: Mutex<()> = Mutex::new(());
@@ -81,7 +82,10 @@ pub fn root_annotation_element() -> ElementHandle {
         .build()
 }
 
-fn mk_test_annotation(reg: &mut hutool_annotation::AnnotationRegistry, value: &str) -> Arc<AnnotationMirror> {
+fn mk_test_annotation(
+    reg: &mut hutool_annotation::AnnotationRegistry,
+    value: &str,
+) -> Arc<AnnotationMirror> {
     reg.annotation(
         ANNOTATION_FOR_TEST,
         HashMap::from([("value".to_string(), AnnotationValue::String(value.into()))]),

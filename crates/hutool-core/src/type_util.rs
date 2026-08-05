@@ -121,13 +121,17 @@ impl TypeUtil {
     pub fn is_collection<T: 'static>() -> bool {
         // 简化判断：检查常见集合类型
         let type_name = std::any::type_name::<T>();
-        type_name.contains("Vec") || type_name.contains("VecDeque") || type_name.contains("LinkedList")
+        type_name.contains("Vec")
+            || type_name.contains("VecDeque")
+            || type_name.contains("LinkedList")
     }
 
     /// 对齐 Java: `TypeUtil.isMap(Class)`
     pub fn is_map<T: 'static>() -> bool {
         let type_name = std::any::type_name::<T>();
-        type_name.contains("HashMap") || type_name.contains("BTreeMap") || type_name.contains("IndexMap")
+        type_name.contains("HashMap")
+            || type_name.contains("BTreeMap")
+            || type_name.contains("IndexMap")
     }
 
     // ── 泛型/数组类型（Rust TypeId 等价，非 JVM 反射） ──

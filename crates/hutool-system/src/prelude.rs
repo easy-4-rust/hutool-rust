@@ -5,6 +5,4 @@
 //! use hutool_system::prelude::*;
 //! ```
 
-pub use crate::{
-    HostInfo, OsInfo, RuntimeInfo, SystemSnapshot, SystemUtil,
-};
+pub use crate::{HostInfo, OsInfo, RuntimeInfo, SystemSnapshot, SystemUtil};

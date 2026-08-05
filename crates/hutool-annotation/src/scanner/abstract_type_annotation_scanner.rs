@@ -43,7 +43,9 @@ impl AbstractTypeAnnotationScanner {
                 }
 
                 if let Some(AnnotatedElement::Type(ty)) = registry.get(handle) {
-                    if self.include_super_class && let Some(super_type) = ty.super_type {
+                    if self.include_super_class
+                        && let Some(super_type) = ty.super_type
+                    {
                         next_level.push(super_type);
                     }
                     if self.include_interfaces {

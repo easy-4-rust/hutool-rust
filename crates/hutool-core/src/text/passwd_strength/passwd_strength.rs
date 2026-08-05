@@ -142,8 +142,7 @@ impl PasswdStrength {
         {
             level -= 1;
         }
-        if is_numeric(passwd)
-            && ("01234567890".contains(passwd) || "09876543210".contains(passwd))
+        if is_numeric(passwd) && ("01234567890".contains(passwd) || "09876543210".contains(passwd))
         {
             level -= 1;
         }

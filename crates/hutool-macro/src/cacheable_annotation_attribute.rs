@@ -4,7 +4,9 @@ use std::sync::{Arc, OnceLock};
 
 use super::annotation_attribute::AnnotationAttribute;
 use super::element::global_registry;
-use super::mirror::{AnnotationMirror, AnnotationTypeName, AnnotationValue, AttributeRef, ValueKind};
+use super::mirror::{
+    AnnotationMirror, AnnotationTypeName, AnnotationValue, AttributeRef, ValueKind,
+};
 
 /// 对齐 Java 类: `cn.hutool.core.annotation.CacheableAnnotationAttribute`
 pub struct CacheableAnnotationAttribute {
@@ -61,7 +63,9 @@ impl AnnotationAttribute for CacheableAnnotationAttribute {
     }
 
     fn is_value_equivalent_to_default_value(&self) -> bool {
-        *self.default_checked.get_or_init(|| self.get_value() == self.default_value())
+        *self
+            .default_checked
+            .get_or_init(|| self.get_value() == self.default_value())
     }
 
     fn get_attribute_type(&self) -> ValueKind {

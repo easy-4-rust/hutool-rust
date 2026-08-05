@@ -1,5 +1,4 @@
 /// Supported default masking strategies.
-
 mod desensitized_type;
 mod desensitized_util;
 

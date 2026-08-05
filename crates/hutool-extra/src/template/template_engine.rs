@@ -25,8 +25,5 @@ pub trait TemplateEngine: Send + Sync {
     fn raw_engine(&self) -> Option<&dyn std::any::Any>;
 
     /// 根据资源名获取模板
-    fn get_template(
-        &self,
-        resource: &str,
-    ) -> Result<Box<dyn Template>, TemplateException>;
+    fn get_template(&self, resource: &str) -> Result<Box<dyn Template>, TemplateException>;
 }

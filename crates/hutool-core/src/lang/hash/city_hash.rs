@@ -66,7 +66,9 @@ fn hash128_from(data: &[u8], start: usize, seed: Number128) -> Number128 {
     let mut pos = start;
     while len >= 128 {
         x = rotate64(
-            x.wrapping_add(y).wrapping_add(v.low).wrapping_add(fetch64(data, pos + 8)),
+            x.wrapping_add(y)
+                .wrapping_add(v.low)
+                .wrapping_add(fetch64(data, pos + 8)),
             37,
         )
         .wrapping_mul(K1);
@@ -92,7 +94,9 @@ fn hash128_from(data: &[u8], start: usize, seed: Number128) -> Number128 {
         pos += 64;
 
         x = rotate64(
-            x.wrapping_add(y).wrapping_add(v.low).wrapping_add(fetch64(data, pos + 8)),
+            x.wrapping_add(y)
+                .wrapping_add(v.low)
+                .wrapping_add(fetch64(data, pos + 8)),
             37,
         )
         .wrapping_mul(K1);
@@ -139,12 +143,7 @@ fn hash128_from(data: &[u8], start: usize, seed: Number128) -> Number128 {
             .wrapping_add(w.high)
             .wrapping_add(fetch64(data, pos + len - tail_done));
         w.high = w.high.wrapping_add(v.low);
-        v = weak_hash_len32_with_seeds(
-            data,
-            pos + len - tail_done,
-            v.low.wrapping_add(z),
-            v.high,
-        );
+        v = weak_hash_len32_with_seeds(data, pos + len - tail_done, v.low.wrapping_add(z), v.high);
         v.low = v.low.wrapping_mul(K0);
     }
 
@@ -165,11 +164,7 @@ fn city_murmur(data: &[u8], seed: Number128) -> Number128 {
     let (c, d) = if l <= 0 {
         a = shift_mix(a.wrapping_mul(K1)).wrapping_mul(K1);
         let c = b.wrapping_mul(K1).wrapping_add(hash_len0to16(data));
-        let d = shift_mix(a.wrapping_add(if len >= 8 {
-            fetch64(data, 0)
-        } else {
-            c
-        }));
+        let d = shift_mix(a.wrapping_add(if len >= 8 { fetch64(data, 0) } else { c }));
         (c, d)
     } else {
         let mut c = hash_len16_pair(fetch64(data, len - 8).wrapping_add(K1), a);

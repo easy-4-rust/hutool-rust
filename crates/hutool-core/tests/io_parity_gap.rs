@@ -33,7 +33,6 @@ fn dirs_home() -> String {
     std::env::var("HOME").unwrap_or_else(|_| "/tmp".into())
 }
 
-
 /// 递归列出路径（对齐 loopFiles 简化）。
 fn walkdir_simple(root: &Path) -> Vec<PathBuf> {
     let mut out = Vec::new();
@@ -80,7 +79,11 @@ fn buf_read_line(src: &[u8], pos: &mut usize) -> Option<String> {
     let mut i = 0;
     while i < rest.len() {
         if rest[i] == b'\n' {
-            let end = if i > 0 && rest[i - 1] == b'\r' { i - 1 } else { i };
+            let end = if i > 0 && rest[i - 1] == b'\r' {
+                i - 1
+            } else {
+                i
+            };
             let line = String::from_utf8_lossy(&rest[..end]).into_owned();
             *pos += i + 1;
             return Some(line);
@@ -98,7 +101,12 @@ fn detect_file_type(bytes: &[u8], filename: Option<&str>) -> String {
     if bytes.len() >= 12 && &bytes[..4] == b"RIFF" && &bytes[8..12] == b"WEBP" {
         return "webp".into();
     }
-    if bytes.len() >= 4 && bytes[0] == 0x50 && bytes[1] == 0x4b && bytes[2] == 0x03 && bytes[3] == 0x04 {
+    if bytes.len() >= 4
+        && bytes[0] == 0x50
+        && bytes[1] == 0x4b
+        && bytes[2] == 0x03
+        && bytes[3] == 0x04
+    {
         if let Some(name) = filename {
             let lower = name.to_ascii_lowercase();
             if lower.ends_with(".xlsx") {
@@ -265,8 +273,6 @@ fn data_size_format_unit(bytes: i64, force: Option<&str>) -> String {
 }
 
 const CRC_SAMPLE: &[u8] = b"QN=20160801085857223;ST=23;CN=2011;PW=123456;MN=010000A8900016F000169DC0;Flag=5;CP=&&DataTime=20160801085857; LA-Rtd=50.1&&";
-
-
 
 /// 对齐 Java: `IssueI5DRU0Test.appendTest()`
 #[test]
@@ -476,7 +482,10 @@ fn file_copier_dir_copy_test() {
     let dst = dst.to_string_lossy();
     FileUtil::write_utf8_string(&format!("{src}/f.txt"), "f").unwrap();
     FileUtil::copy(&format!("{src}/f.txt"), &format!("{dst}/f.txt")).unwrap();
-    assert_eq!(FileUtil::read_utf8_string(&format!("{dst}/f.txt")).unwrap(), "f");
+    assert_eq!(
+        FileUtil::read_utf8_string(&format!("{dst}/f.txt")).unwrap(),
+        "f"
+    );
 }
 
 /// 对齐 Java: `FileCopierTest.dirCopyTest2()`
@@ -487,7 +496,10 @@ fn file_copier_dir_copy_test2() {
     let dst = dst.to_string_lossy();
     FileUtil::write_utf8_string(&format!("{src}/f.txt"), "f").unwrap();
     FileUtil::copy(&format!("{src}/f.txt"), &format!("{dst}/f.txt")).unwrap();
-    assert_eq!(FileUtil::read_utf8_string(&format!("{dst}/f.txt")).unwrap(), "f");
+    assert_eq!(
+        FileUtil::read_utf8_string(&format!("{dst}/f.txt")).unwrap(),
+        "f"
+    );
 }
 
 /// 对齐 Java: `FileCopierTest.dirCopySubTest()`
@@ -498,7 +510,10 @@ fn file_copier_dir_copy_sub_test() {
     let dst = dst.to_string_lossy();
     FileUtil::write_utf8_string(&format!("{src}/f.txt"), "f").unwrap();
     FileUtil::copy(&format!("{src}/f.txt"), &format!("{dst}/f.txt")).unwrap();
-    assert_eq!(FileUtil::read_utf8_string(&format!("{dst}/f.txt")).unwrap(), "f");
+    assert_eq!(
+        FileUtil::read_utf8_string(&format!("{dst}/f.txt")).unwrap(),
+        "f"
+    );
 }
 
 /// 对齐 Java: `FileCopierTest.copyFileToDirTest()`
@@ -509,7 +524,10 @@ fn file_copier_copy_file_to_dir_test() {
     let dst = dst.to_string_lossy();
     FileUtil::write_utf8_string(&format!("{src}/f.txt"), "f").unwrap();
     FileUtil::copy(&format!("{src}/f.txt"), &format!("{dst}/f.txt")).unwrap();
-    assert_eq!(FileUtil::read_utf8_string(&format!("{dst}/f.txt")).unwrap(), "f");
+    assert_eq!(
+        FileUtil::read_utf8_string(&format!("{dst}/f.txt")).unwrap(),
+        "f"
+    );
 }
 
 /// 对齐 Java: `FileCopierTest.copyFileByRelativePath()`
@@ -520,7 +538,10 @@ fn file_copier_copy_file_by_relative_path() {
     let dst = dst.to_string_lossy();
     FileUtil::write_utf8_string(&format!("{src}/f.txt"), "f").unwrap();
     FileUtil::copy(&format!("{src}/f.txt"), &format!("{dst}/f.txt")).unwrap();
-    assert_eq!(FileUtil::read_utf8_string(&format!("{dst}/f.txt")).unwrap(), "f");
+    assert_eq!(
+        FileUtil::read_utf8_string(&format!("{dst}/f.txt")).unwrap(),
+        "f"
+    );
 }
 
 /// 对齐 Java: `FileReaderTest.fileReaderTest()`
@@ -684,7 +705,10 @@ fn file_util_copy_files_from_dir_test() {
     FileUtil::mkdir(dst).unwrap();
     FileUtil::write_utf8_string(&format!("{src}/a.txt"), "a").unwrap();
     FileUtil::copy(&format!("{src}/a.txt"), &format!("{dst}/a.txt")).unwrap();
-    assert_eq!(FileUtil::read_utf8_string(&format!("{dst}/a.txt")).unwrap(), "a");
+    assert_eq!(
+        FileUtil::read_utf8_string(&format!("{dst}/a.txt")).unwrap(),
+        "a"
+    );
     FileUtil::delete(src).unwrap();
     FileUtil::delete(dst).unwrap();
 }
@@ -701,9 +725,12 @@ fn file_util_copy_dir_test() {
     FileUtil::mkdir(dst).unwrap();
     // 逐文件复制对齐 copy 目录语义
     for name in FileUtil::list_file_names(src).unwrap() {
-    FileUtil::copy(&format!("{src}/{name}"), &format!("{dst}/{name}")).unwrap();
+        FileUtil::copy(&format!("{src}/{name}"), &format!("{dst}/{name}")).unwrap();
     }
-    assert_eq!(FileUtil::read_utf8_string(&format!("{dst}/a.txt")).unwrap(), "a");
+    assert_eq!(
+        FileUtil::read_utf8_string(&format!("{dst}/a.txt")).unwrap(),
+        "a"
+    );
     FileUtil::delete(src).unwrap();
     FileUtil::delete(dst).unwrap();
 }
@@ -741,7 +768,10 @@ fn file_util_rename_same_test() {
     let _ = FileUtil::delete(p);
     FileUtil::mkdir(p).unwrap();
     FileUtil::write_utf8_string(&format!("{p}/f.txt"), "x").unwrap();
-    assert_eq!(FileUtil::read_utf8_string(&format!("{p}/f.txt")).unwrap(), "x");
+    assert_eq!(
+        FileUtil::read_utf8_string(&format!("{p}/f.txt")).unwrap(),
+        "x"
+    );
     FileUtil::delete(p).unwrap();
 }
 
@@ -836,7 +866,10 @@ fn file_util_sub_path_test2() {
 /// 对齐 Java: `FileUtilTest.getPathEle()`
 #[test]
 fn file_util_get_path_ele() {
-    let parts: Vec<_> = Path::new("/a/b/c").components().filter_map(|c| c.as_os_str().to_str()).collect();
+    let parts: Vec<_> = Path::new("/a/b/c")
+        .components()
+        .filter_map(|c| c.as_os_str().to_str())
+        .collect();
     assert!(parts.contains(&"a"));
     assert!(parts.contains(&"b"));
 }
@@ -845,20 +878,30 @@ fn file_util_get_path_ele() {
 #[test]
 fn file_util_list_file_names_in_jar_test() {
     let mut zw = ZipWriter::new(Cursor::new(Vec::new()));
-    zw.add_bytes("cn/hutool/core/util/StrUtil.class", b"class").unwrap();
+    zw.add_bytes("cn/hutool/core/util/StrUtil.class", b"class")
+        .unwrap();
     let data = zw.finish().unwrap().into_inner();
     let mut zr = ZipReader::new(Cursor::new(data)).unwrap();
-    assert!(zr.get("cn/hutool/core/util/StrUtil.class").unwrap().is_some());
+    assert!(
+        zr.get("cn/hutool/core/util/StrUtil.class")
+            .unwrap()
+            .is_some()
+    );
 }
 
 /// 对齐 Java: `FileUtilTest.listFileNamesTest2()`
 #[test]
 fn file_util_list_file_names_test2() {
     let mut zw = ZipWriter::new(Cursor::new(Vec::new()));
-    zw.add_bytes("org/apache/commons/cli/Options.class", b"x").unwrap();
+    zw.add_bytes("org/apache/commons/cli/Options.class", b"x")
+        .unwrap();
     let data = zw.finish().unwrap().into_inner();
     let mut zr = ZipReader::new(Cursor::new(data)).unwrap();
-    assert!(zr.get("org/apache/commons/cli/Options.class").unwrap().is_some());
+    assert!(
+        zr.get("org/apache/commons/cli/Options.class")
+            .unwrap()
+            .is_some()
+    );
 }
 
 /// 对齐 Java: `FileUtilTest.loopFilesTest()`
@@ -912,7 +955,7 @@ fn file_util_get_parent_test() {
 fn file_util_last_index_of_separator_test() {
     let s = "/aaa/bbb/ccc.txt";
     let idx = s.rfind('/').unwrap();
-    assert_eq!(&s[idx+1..], "ccc.txt");
+    assert_eq!(&s[idx + 1..], "ccc.txt");
 }
 
 /// 对齐 Java: `FileUtilTest.getWebRootTest()`
@@ -1036,7 +1079,9 @@ fn file_util_get_total_lines_cr_test() {
 fn file_util_get_total_lines_crlf_test() {
     let path = "/tmp/hutool_io_gap_lines_crlf.txt";
     FileUtil::write_bytes(path, b"a\r\nb\r\nc\r\n").unwrap();
-    let n = IoUtil::read_lines(Cursor::new(FileUtil::read_bytes(path).unwrap())).unwrap().len();
+    let n = IoUtil::read_lines(Cursor::new(FileUtil::read_bytes(path).unwrap()))
+        .unwrap()
+        .len();
     assert_eq!(n, 3);
     FileUtil::delete(path).unwrap();
 }
@@ -1045,7 +1090,11 @@ fn file_util_get_total_lines_crlf_test() {
 #[test]
 fn file_util_issue3591_test() {
     let content = include_str!("resources/1_psi_index_0.txt");
-    let lines = if content.is_empty() { 0 } else { content.lines().count() };
+    let lines = if content.is_empty() {
+        0
+    } else {
+        content.lines().count()
+    };
     assert_eq!(lines, 11);
 }
 
@@ -1073,7 +1122,10 @@ fn file_util_copy_test2() {
 fn file_util_check_slip_test() {
     // ZIP Slip：相对路径含 .. 应被拒绝（compress validate 语义）
     let bad = Path::new("../etc/passwd");
-    assert!(bad.components().any(|c| matches!(c, std::path::Component::ParentDir)));
+    assert!(
+        bad.components()
+            .any(|c| matches!(c, std::path::Component::ParentDir))
+    );
 }
 
 /// 对齐 Java: `Issue3846Test.readBytesTest()`
@@ -1129,31 +1181,46 @@ fn watch_monitor_test_delay() {
 /// 对齐 Java: `CRC16Test.ccittTest()`
 #[test]
 fn crc16_ccitt_test() {
-    assert_eq!(format!("{:x}", crc16_refl(CRC_SAMPLE, 0x8408, 0, 0)), "c852");
+    assert_eq!(
+        format!("{:x}", crc16_refl(CRC_SAMPLE, 0x8408, 0, 0)),
+        "c852"
+    );
 }
 
 /// 对齐 Java: `CRC16Test.ccittFalseTest()`
 #[test]
 fn crc16_ccitt_false_test() {
-    assert_eq!(format!("{:x}", crc16_nonrefl(CRC_SAMPLE, 0x1021, 0xffff)), "a5e4");
+    assert_eq!(
+        format!("{:x}", crc16_nonrefl(CRC_SAMPLE, 0x1021, 0xffff)),
+        "a5e4"
+    );
 }
 
 /// 对齐 Java: `CRC16Test.xmodemTest()`
 #[test]
 fn crc16_xmodem_test() {
-    assert_eq!(format!("{:x}", crc16_nonrefl(CRC_SAMPLE, 0x1021, 0)), "5a8d");
+    assert_eq!(
+        format!("{:x}", crc16_nonrefl(CRC_SAMPLE, 0x1021, 0)),
+        "5a8d"
+    );
 }
 
 /// 对齐 Java: `CRC16Test.x25Test()`
 #[test]
 fn crc16_x25_test() {
-    assert_eq!(format!("{:x}", crc16_refl(CRC_SAMPLE, 0x8408, 0xffff, 0xffff)), "a152");
+    assert_eq!(
+        format!("{:x}", crc16_refl(CRC_SAMPLE, 0x8408, 0xffff, 0xffff)),
+        "a152"
+    );
 }
 
 /// 对齐 Java: `CRC16Test.modbusTest()`
 #[test]
 fn crc16_modbus_test() {
-    assert_eq!(format!("{:x}", crc16_refl(CRC_SAMPLE, 0xa001, 0xffff, 0)), "25fb");
+    assert_eq!(
+        format!("{:x}", crc16_refl(CRC_SAMPLE, 0xa001, 0xffff, 0)),
+        "25fb"
+    );
 }
 
 /// 对齐 Java: `CRC16Test.ibmTest()`
@@ -1165,19 +1232,28 @@ fn crc16_ibm_test() {
 /// 对齐 Java: `CRC16Test.maximTest()`
 #[test]
 fn crc16_maxim_test() {
-    assert_eq!(format!("{:x}", crc16_refl(CRC_SAMPLE, 0xa001, 0, 0xffff)), "fe73");
+    assert_eq!(
+        format!("{:x}", crc16_refl(CRC_SAMPLE, 0xa001, 0, 0xffff)),
+        "fe73"
+    );
 }
 
 /// 对齐 Java: `CRC16Test.usbTest()`
 #[test]
 fn crc16_usb_test() {
-    assert_eq!(format!("{:x}", crc16_refl(CRC_SAMPLE, 0xa001, 0xffff, 0xffff)), "da04");
+    assert_eq!(
+        format!("{:x}", crc16_refl(CRC_SAMPLE, 0xa001, 0xffff, 0xffff)),
+        "da04"
+    );
 }
 
 /// 对齐 Java: `CRC16Test.dnpTest()`
 #[test]
 fn crc16_dnp_test() {
-    assert_eq!(format!("{:x}", crc16_refl(CRC_SAMPLE, 0xA6BC, 0, 0xffff)), "3d1a");
+    assert_eq!(
+        format!("{:x}", crc16_refl(CRC_SAMPLE, 0xA6BC, 0, 0xffff)),
+        "3d1a"
+    );
 }
 
 /// 对齐 Java: `CRC16Test.ansiTest()`
@@ -1192,8 +1268,9 @@ fn crc16_ansi_test() {
 #[test]
 fn crc_crc8_test() {
     let data: Vec<i8> = vec![
-        1, 56, -23, 3, 0, 19, 0, 0, 2, 0, 3, 13, 8, -34, 7, 9, 42, 18, 26, -5, 54, 11, -94, -46, -128, 4,
-        48, 52, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 1, -32, -80, 0, 98, -5, 71, 0, 64, 0, 0, 0, 0, -116, 1, 104, 2,
+        1, 56, -23, 3, 0, 19, 0, 0, 2, 0, 3, 13, 8, -34, 7, 9, 42, 18, 26, -5, 54, 11, -94, -46,
+        -128, 4, 48, 52, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 1, -32, -80, 0, 98, -5, 71, 0, 64, 0, 0, 0,
+        0, -116, 1, 104, 2,
     ];
     let bytes: Vec<u8> = data.into_iter().map(|x| x as u8).collect();
     assert_eq!(crc8(&bytes, 0x9C, 0xFF), 29);
@@ -1225,14 +1302,20 @@ fn crc_crc16_test2() {
 /// 对齐 Java: `CrcTest.paddingTest()`
 #[test]
 fn crc_padding_test() {
-    assert_eq!(format!("{:04x}", crc16_nonrefl(b"000123FFFFFF", 0x1021, 0)), "0e04");
+    assert_eq!(
+        format!("{:04x}", crc16_nonrefl(b"000123FFFFFF", 0x1021, 0)),
+        "0e04"
+    );
 }
 
 /// 对齐 Java: `FileNameUtilTest.cleanInvalidTest()`
 #[test]
 fn file_name_util_clean_invalid_test() {
     let dirty = "a:b*c?.txt";
-    let cleaned: String = dirty.chars().filter(|c| !r#"\/:*?"<>|"#.contains(*c)).collect();
+    let cleaned: String = dirty
+        .chars()
+        .filter(|c| !r#"\/:*?"<>|"#.contains(*c))
+        .collect();
     assert!(!cleaned.contains('*'));
     assert!(!cleaned.contains('?'));
 }
@@ -1271,7 +1354,10 @@ fn file_writer_write_lines_append_line_separator_test() {
     let mut s = FileUtil::read_utf8_string(path).unwrap();
     s.push_str("b\n");
     FileUtil::write_utf8_string(path, &s).unwrap();
-    assert!(FileUtil::read_utf8_string(path).unwrap().ends_with('\n') || FileUtil::read_utf8_string(path).unwrap().contains('b'));
+    assert!(
+        FileUtil::read_utf8_string(path).unwrap().ends_with('\n')
+            || FileUtil::read_utf8_string(path).unwrap().contains('b')
+    );
     FileUtil::delete(path).unwrap();
 }
 
@@ -1463,7 +1549,11 @@ fn data_size_util_parse_test() {
     assert_eq!(data_size_parse("-3.1MB").unwrap(), -3250585);
     assert_eq!(data_size_parse("+3.1MB").unwrap(), 3250585);
     assert_eq!(data_size_parse("3.1").unwrap(), 3);
-    assert!(data_size_parse("3.1.3").unwrap_err().contains("not a valid data size"));
+    assert!(
+        data_size_parse("3.1.3")
+            .unwrap_err()
+            .contains("not a valid data size")
+    );
 }
 
 /// 对齐 Java: `DataSizeUtilTest.formatTest()`
@@ -1478,8 +1568,14 @@ fn data_size_util_format_test() {
 #[test]
 fn data_size_util_format_with_unit_test() {
     assert_eq!(data_size_format_unit(i64::MAX, Some("TB")), "8388608 TB");
-    assert_eq!(data_size_format_unit(1024_i64.pow(5), Some("GB")), "1048576 GB");
-    assert_eq!(data_size_format_unit(1024_i64.pow(4), Some("GB")), "1024 GB");
+    assert_eq!(
+        data_size_format_unit(1024_i64.pow(5), Some("GB")),
+        "1048576 GB"
+    );
+    assert_eq!(
+        data_size_format_unit(1024_i64.pow(4), Some("GB")),
+        "1024 GB"
+    );
 }
 
 /// 对齐 Java: `DataSizeUtilTest.issueI88Z4ZTest()`
@@ -1497,4 +1593,3 @@ fn data_size_util_issue_i88_z4_z_test() {
 fn data_size_util_issue_icxxvf_test() {
     assert_eq!(data_size_parse("279.40GiB").unwrap(), 300003465625);
 }
-

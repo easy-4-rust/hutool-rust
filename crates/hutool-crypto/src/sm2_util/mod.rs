@@ -5,11 +5,11 @@ use sm2::dsa::signature::{Signer, Verifier};
 use sm2::dsa::{Signature, SigningKey, VerifyingKey};
 use sm2::{PublicKey, Scalar, SecretKey};
 
-mod sm2_public_params;
 mod sm2_private_params;
+mod sm2_public_params;
 
-pub use sm2_public_params::Sm2PublicParams;
 pub use sm2_private_params::Sm2PrivateParams;
+pub use sm2_public_params::Sm2PublicParams;
 
 const SM2_OID_HEX: &str = "06082A811CCF5501822D";
 
@@ -57,8 +57,7 @@ pub fn sm2_oid_present_in_hex(encoded_hex: &str) -> bool {
 
 /// 使用私钥对消息进行 SM2 签名，返回 64 字节签名。
 pub fn sm2_sign(secret: &SecretKey, message: &[u8]) -> Result<[u8; 64], CryptoError> {
-    let signing_key =
-        SigningKey::new(DEFAULT_DISTID, secret).map_err(|_| CryptoError::Sm2Key)?;
+    let signing_key = SigningKey::new(DEFAULT_DISTID, secret).map_err(|_| CryptoError::Sm2Key)?;
     let sig: Signature = signing_key.sign(message);
     Ok(sig.to_bytes())
 }
@@ -66,19 +65,16 @@ pub fn sm2_sign(secret: &SecretKey, message: &[u8]) -> Result<[u8; 64], CryptoEr
 /// 由私钥十六进制字符串签名，返回 64 字节签名。
 pub fn sm2_sign_hex(private_hex: &str, message: &[u8]) -> Result<[u8; 64], CryptoError> {
     let bytes = hex::decode(private_hex).map_err(|_| CryptoError::Sm2Key)?;
-    let signing_key = SigningKey::from_slice(DEFAULT_DISTID, &bytes).map_err(|_| CryptoError::Sm2Key)?;
+    let signing_key =
+        SigningKey::from_slice(DEFAULT_DISTID, &bytes).map_err(|_| CryptoError::Sm2Key)?;
     Ok(signing_key.sign(message).to_bytes())
 }
 
 /// 使用公钥十六进制字符串验证 SM2 签名。
-pub fn sm2_verify(
-    public_hex: &str,
-    message: &[u8],
-    signature: &[u8],
-) -> Result<bool, CryptoError> {
+pub fn sm2_verify(public_hex: &str, message: &[u8], signature: &[u8]) -> Result<bool, CryptoError> {
     let point_bytes = hex::decode(public_hex).map_err(|_| CryptoError::Sm2Key)?;
-    let verifying_key =
-        VerifyingKey::from_sec1_bytes(DEFAULT_DISTID, &point_bytes).map_err(|_| CryptoError::Sm2Key)?;
+    let verifying_key = VerifyingKey::from_sec1_bytes(DEFAULT_DISTID, &point_bytes)
+        .map_err(|_| CryptoError::Sm2Key)?;
     let sig = Signature::from_slice(signature).map_err(|_| CryptoError::Sm2Signature)?;
     Ok(verifying_key.verify(message, &sig).is_ok())
 }

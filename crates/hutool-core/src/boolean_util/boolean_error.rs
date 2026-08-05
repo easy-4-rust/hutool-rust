@@ -2,7 +2,6 @@
 
 /// 对齐: `cn.hutool.core.util.BooleanUtil`
 /// 布尔值错误
-
 use thiserror::Error;
 
 /// Errors produced by boolean aggregations.

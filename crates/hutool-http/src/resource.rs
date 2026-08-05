@@ -55,7 +55,9 @@ impl HttpResource {
     /// Java: `HttpResource.getUrl()` — returns a `file:` URL when sourced from a path.
     #[must_use]
     pub fn get_url(&self) -> Option<String> {
-        self.inner.source_path().map(|p| format!("file://{}", p.display()))
+        self.inner
+            .source_path()
+            .map(|p| format!("file://{}", p.display()))
     }
 
     /// Java: `HttpResource.getStream()` — returns a readable cursor over the bytes.

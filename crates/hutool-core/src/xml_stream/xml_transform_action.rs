@@ -11,4 +11,3 @@ pub enum XmlTransformAction {
     /// Omit the current event from the target.
     Drop,
 }
-

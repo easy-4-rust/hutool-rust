@@ -2,10 +2,10 @@
 //! 对齐: hutool-core StrUtilTest CharSequenceUtilTest
 
 use hutool_core::{
-    clean_blank, contains, contains_ignore_case, end_with, equals,
-    equals_ignore_case, format_template, index_of_ignore_case, is_blank, last_index_of,
-    last_index_of_ignore_case, length, lower_first, remove_all, remove_chars, repeat, replace,
-    reverse, split, start_with, str_or_empty, strip, strip_ignore_case, trim, upper_first,
+    clean_blank, contains, contains_ignore_case, end_with, equals, equals_ignore_case,
+    format_template, index_of_ignore_case, is_blank, last_index_of, last_index_of_ignore_case,
+    length, lower_first, remove_all, remove_chars, repeat, replace, reverse, split, start_with,
+    str_or_empty, strip, strip_ignore_case, trim, upper_first,
 };
 
 // ── is_blank ──

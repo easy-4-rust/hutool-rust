@@ -1,8 +1,10 @@
 //! 对齐: `cn.hutool.core.annotation.scanner.MethodAnnotationScanner`
 
 use super::abstract_type_annotation_scanner::AbstractTypeAnnotationScanner;
-use super::annotation_scanner::{accept_annotation, declared_annotations, AnnotationScanner, ScanConsumer};
-use crate::element::{global_registry, AnnotatedElement, ElementHandle, ElementKind};
+use super::annotation_scanner::{
+    AnnotationScanner, ScanConsumer, accept_annotation, declared_annotations,
+};
+use crate::element::{AnnotatedElement, ElementHandle, ElementKind, global_registry};
 
 /// 对齐 Java 类: `cn.hutool.core.annotation.scanner.MethodAnnotationScanner`
 pub struct MethodAnnotationScanner {

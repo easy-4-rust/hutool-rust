@@ -15,7 +15,8 @@ impl TokenizerUtil {
     /// 对齐 `TokenizerUtil.createEngine()`：根据默认配置创建分词引擎
     pub fn create_engine() -> std::result::Result<Box<dyn TokenizerEngine>, HutoolException> {
         Err(HutoolException::Message(
-            "TokenizerUtil::create_engine requires a concrete TokenizerEngine implementation".into(),
+            "TokenizerUtil::create_engine requires a concrete TokenizerEngine implementation"
+                .into(),
         ))
     }
 }

@@ -2,17 +2,29 @@
 
 #![allow(dead_code)]
 
+use crate::Result;
 use crate::date::date_time::DateTime;
 use crate::date::month::Month;
-use crate::Result;
 
 const DAY_ARR: [i32; 12] = [20, 19, 21, 20, 21, 22, 23, 23, 23, 24, 23, 22];
 const ZODIACS: [&str; 13] = [
-    "摩羯座", "水瓶座", "双鱼座", "白羊座", "金牛座", "双子座", "巨蟹座", "狮子座", "处女座",
-    "天秤座", "天蝎座", "射手座", "摩羯座",
+    "摩羯座",
+    "水瓶座",
+    "双鱼座",
+    "白羊座",
+    "金牛座",
+    "双子座",
+    "巨蟹座",
+    "狮子座",
+    "处女座",
+    "天秤座",
+    "天蝎座",
+    "射手座",
+    "摩羯座",
 ];
-const CHINESE_ZODIACS: [&str; 12] =
-    ["鼠", "牛", "虎", "兔", "龙", "蛇", "马", "羊", "猴", "鸡", "狗", "猪"];
+const CHINESE_ZODIACS: [&str; 12] = [
+    "鼠", "牛", "虎", "兔", "龙", "蛇", "马", "羊", "猴", "鸡", "狗", "猪",
+];
 
 /// 对齐 Java: `cn.hutool.core.date.Zodiac`
 #[derive(Debug, Clone, Copy, Default)]

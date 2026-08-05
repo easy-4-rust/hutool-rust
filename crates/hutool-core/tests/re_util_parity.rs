@@ -35,12 +35,18 @@ fn find_no_match() {
 
 #[test]
 fn group0_basic() {
-    assert_eq!(ReUtil::group0(r"(\d+)", "abc123def"), Some("123".to_string()));
+    assert_eq!(
+        ReUtil::group0(r"(\d+)", "abc123def"),
+        Some("123".to_string())
+    );
 }
 
 #[test]
 fn group1_basic() {
-    assert_eq!(ReUtil::group1(r"(\d+)-(\d+)", "123-456"), Some("123".to_string()));
+    assert_eq!(
+        ReUtil::group1(r"(\d+)-(\d+)", "123-456"),
+        Some("123".to_string())
+    );
 }
 
 #[test]
@@ -77,7 +83,10 @@ fn replace_all_basic() {
 
 #[test]
 fn replace_first_basic() {
-    assert_eq!(ReUtil::replace_first(r"\d+", "abc123def456", "X"), "abcXdef456");
+    assert_eq!(
+        ReUtil::replace_first(r"\d+", "abc123def456", "X"),
+        "abcXdef456"
+    );
 }
 
 #[test]
@@ -115,7 +124,6 @@ fn is_ipv4_valid() {
 
 #[test]
 fn is_ipv4_invalid() {
-    
     assert!(!ReUtil::is_ipv4("not-an-ip"));
 }
 
@@ -183,7 +191,6 @@ fn escape_special_no_special() {
     assert_eq!(ReUtil::escape_special("abc"), "abc");
 }
 
-
 // ── 对齐 Hutool ReUtilTest ──
 
 const CONTENT: &str = "ZZZaaabbbccc中文1234";
@@ -228,7 +235,8 @@ fn del_first_test() {
 /// 对齐 Java: `ReUtilTest.delAllTest()`
 #[test]
 fn del_all_test() {
-    let content = "发东方大厦eee![images]http://abc.com/2.gpg]好机会eee![images]http://abc.com/2.gpg]好机会";
+    let content =
+        "发东方大厦eee![images]http://abc.com/2.gpg]好机会eee![images]http://abc.com/2.gpg]好机会";
     let result_del_all = ReUtil::replace_all(r"!\[images\][^\u{4e00}-\u{9fa5}\\s]*", content, "");
     assert_eq!("发东方大厦eee好机会eee好机会", result_del_all);
 }
@@ -246,7 +254,6 @@ fn replace_all_test_2() {
     let replace_all = ReUtil::replace_all(r"(\d+)", CONTENT, "->$1<-");
     assert_eq!("ZZZaaabbbccc中文->1234<-", replace_all);
 }
-
 
 /// 对齐 Java: `ReUtilTest.escapeTest()`
 #[test]
@@ -288,9 +295,18 @@ fn get_all_groups_test() {
     // find_all_groups(group=0) 返回完整匹配序列；首个完整匹配为 192-168-1
     assert!(!all_groups.is_empty());
     assert_eq!("192-168-1", all_groups[0]);
-    assert_eq!("192", ReUtil::group(r"(\d+)-(\d+)-(\d+)", "192-168-1-1", 1).unwrap());
-    assert_eq!("168", ReUtil::group(r"(\d+)-(\d+)-(\d+)", "192-168-1-1", 2).unwrap());
-    assert_eq!("1", ReUtil::group(r"(\d+)-(\d+)-(\d+)", "192-168-1-1", 3).unwrap());
+    assert_eq!(
+        "192",
+        ReUtil::group(r"(\d+)-(\d+)-(\d+)", "192-168-1-1", 1).unwrap()
+    );
+    assert_eq!(
+        "168",
+        ReUtil::group(r"(\d+)-(\d+)-(\d+)", "192-168-1-1", 2).unwrap()
+    );
+    assert_eq!(
+        "1",
+        ReUtil::group(r"(\d+)-(\d+)-(\d+)", "192-168-1-1", 3).unwrap()
+    );
 }
 
 // ── Hutool TEST parity gap wave ──
@@ -350,8 +366,14 @@ fn replace_test() {
 fn get_by_group_name_test() {
     let content = "2021-10-11";
     let regex = r"(?<year>\d+)-(?<month>\d+)-(?<day>\d+)";
-    assert_eq!("2021", ReUtil::group_by_name(regex, content, "year").unwrap());
-    assert_eq!("10", ReUtil::group_by_name(regex, content, "month").unwrap());
+    assert_eq!(
+        "2021",
+        ReUtil::group_by_name(regex, content, "year").unwrap()
+    );
+    assert_eq!(
+        "10",
+        ReUtil::group_by_name(regex, content, "month").unwrap()
+    );
     assert_eq!("11", ReUtil::group_by_name(regex, content, "day").unwrap());
 }
 
@@ -414,12 +436,18 @@ fn issue_idphvw_test() {
 fn wave2_re_util_portable_parity() {
     assert_eq!(ReUtil::get_group0(r"(\d+)", "a12b").as_deref(), Some("12"));
     assert_eq!(ReUtil::get_group1(r"(\d+)", "a12b").as_deref(), Some("12"));
-    assert_eq!(ReUtil::get_all_groups(r"(\w+)-(\d+)", "ab-12", true).len(), 3);
+    assert_eq!(
+        ReUtil::get_all_groups(r"(\w+)-(\d+)", "ab-12", true).len(),
+        3
+    );
     assert!(ReUtil::contains(r"\d+", "x9y"));
     assert_eq!(ReUtil::count(r"\d", "a1b2c3"), 3);
     assert_eq!(ReUtil::index_of(r"\d+", "ab12cd"), Some(2));
     assert_eq!(ReUtil::last_index_of(r"\d+", "a1b22c"), Some(3));
     assert_eq!(ReUtil::get_first_number("x42y"), Some(42));
-    assert_eq!(ReUtil::find_all_group1(r"(\d+)", "1-2-3"), vec!["1", "2", "3"]);
+    assert_eq!(
+        ReUtil::find_all_group1(r"(\d+)", "1-2-3"),
+        vec!["1", "2", "3"]
+    );
     assert!(ReUtil::escape("a.b").contains(r"\."));
 }

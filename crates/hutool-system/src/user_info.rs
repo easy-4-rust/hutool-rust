@@ -56,10 +56,7 @@ impl UserInfo {
     pub fn collect() -> Self {
         let locale = option_or_default(first_env(env::var("LC_ALL"), env::var("LANG")));
         Self::from_parts(
-            first_env(
-                env::var(SystemPropsKeys::USER_NAME),
-                env::var("USERNAME"),
-            ),
+            first_env(env::var(SystemPropsKeys::USER_NAME), env::var("USERNAME")),
             optional_path(env::var_os(SystemPropsKeys::USER_HOME)),
             result_path(env::current_dir()),
             env::temp_dir(),

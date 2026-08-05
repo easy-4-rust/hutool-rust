@@ -15,8 +15,7 @@ fn generic_builder_of_and_build() {
 
 #[test]
 fn generic_builder_with_modifier() {
-    let mut gb = GenericBuilder::of(|| vec![1, 2, 3])
-        .with(|v| v.push(4));
+    let mut gb = GenericBuilder::of(|| vec![1, 2, 3]).with(|v| v.push(4));
     let result = gb.build();
     assert_eq!(result, vec![1, 2, 3, 4]);
 }
@@ -39,17 +38,16 @@ fn generic_builder_of1() {
 
 #[test]
 fn generic_builder_of2() {
-    let mut gb = GenericBuilder::of2(
-        |a: i32, b: i32| a + b,
-        10, 20,
-    );
+    let mut gb = GenericBuilder::of2(|a: i32, b: i32| a + b, 10, 20);
     assert_eq!(gb.build(), 30);
 }
 
 #[test]
 fn generic_builder_with1() {
-    let mut gb = GenericBuilder::of(|| String::from("hello"))
-        .with1(|s: &mut String, suffix: &String| s.push_str(suffix), " world".to_string());
+    let mut gb = GenericBuilder::of(|| String::from("hello")).with1(
+        |s: &mut String, suffix: &String| s.push_str(suffix),
+        " world".to_string(),
+    );
     assert_eq!(gb.build(), "hello world");
 }
 
@@ -66,17 +64,13 @@ fn compare_to_builder_equal() {
 
 #[test]
 fn compare_to_builder_less() {
-    let result = CompareToBuilder::new()
-        .append(&1, &2)
-        .build();
+    let result = CompareToBuilder::new().append(&1, &2).build();
     assert!(result < 0);
 }
 
 #[test]
 fn compare_to_builder_greater() {
-    let result = CompareToBuilder::new()
-        .append(&5, &3)
-        .build();
+    let result = CompareToBuilder::new().append(&5, &3).build();
     assert!(result > 0);
 }
 
@@ -100,17 +94,13 @@ fn compare_to_builder_option_some_vs_none() {
 
 #[test]
 fn compare_to_builder_f32() {
-    let result = CompareToBuilder::new()
-        .append_f32(1.0, 2.0)
-        .build();
+    let result = CompareToBuilder::new().append_f32(1.0, 2.0).build();
     assert!(result < 0);
 }
 
 #[test]
 fn compare_to_builder_f64() {
-    let result = CompareToBuilder::new()
-        .append_f64(3.14, 3.14)
-        .build();
+    let result = CompareToBuilder::new().append_f64(3.14, 3.14).build();
     assert_eq!(result, 0);
 }
 
@@ -144,17 +134,13 @@ fn equals_builder_not_equal() {
 
 #[test]
 fn equals_builder_f32() {
-    let result = EqualsBuilder::new()
-        .append_f32(1.0, 1.0)
-        .build();
+    let result = EqualsBuilder::new().append_f32(1.0, 1.0).build();
     assert!(result);
 }
 
 #[test]
 fn equals_builder_f64() {
-    let result = EqualsBuilder::new()
-        .append_f64(3.14, 3.15)
-        .build();
+    let result = EqualsBuilder::new().append_f64(3.14, 3.15).build();
     assert!(!result);
 }
 
@@ -227,7 +213,8 @@ fn hash_code_builder_f64() {
 
 #[test]
 fn hash_code_builder_with_constants() {
-    let h = HashCodeBuilder::with_constants(17, 37).unwrap()
+    let h = HashCodeBuilder::with_constants(17, 37)
+        .unwrap()
         .append_i32(42)
         .build();
     assert_ne!(h, 0);

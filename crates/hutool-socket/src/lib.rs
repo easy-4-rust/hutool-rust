@@ -33,13 +33,11 @@ pub mod nio;
 pub mod protocol;
 
 // 顶层公共 re-export：保留原公开 API 路径，crate 用户代码不需要改。
-pub use aio::{
-    AioClient, AioServer, AioSession, IoAction, ReadHandler, SimpleIoAction,
-};
 pub use aio::AcceptHandler as AioAcceptHandler;
+pub use aio::{AioClient, AioServer, AioSession, IoAction, ReadHandler, SimpleIoAction};
 pub use channel_util::ChannelUtil;
-pub use nio::{ChannelHandler, NioClient, NioServer, NioUtil, Operation};
 pub use nio::AcceptHandler as NioAcceptHandler;
+pub use nio::{ChannelHandler, NioClient, NioServer, NioUtil, Operation};
 pub use protocol::{MsgDecoder, MsgEncoder, Protocol};
 pub use socket_config::SocketConfig;
 pub use socket_runtime_exception::SocketRuntimeException;

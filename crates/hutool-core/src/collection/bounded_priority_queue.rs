@@ -2,12 +2,7 @@
 
 /// 对齐: `cn.hutool.core.collection.BoundedPriorityQueue`
 /// 有界优先队列
-
-use std::{
-    cmp::Ordering,
-    fmt,
-    sync::Arc,
-};
+use std::{cmp::Ordering, fmt, sync::Arc};
 
 use crate::{CoreError, Result};
 
@@ -140,4 +135,4 @@ impl<T: fmt::Debug + Clone> fmt::Debug for BoundedPriorityQueue<T> {
     }
 }
 
-use super::{Comparator};
+use super::Comparator;

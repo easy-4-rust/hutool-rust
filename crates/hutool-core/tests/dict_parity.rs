@@ -39,7 +39,10 @@ fn of_test() {
         ("BLUE", json!("#0000FF")),
     ]);
     assert_eq!(DictUtil::get_str(&dict, "RED").as_deref(), Some("#FF0000"));
-    assert_eq!(DictUtil::get_str(&dict, "GREEN").as_deref(), Some("#00FF00"));
+    assert_eq!(
+        DictUtil::get_str(&dict, "GREEN").as_deref(),
+        Some("#00FF00")
+    );
     assert_eq!(DictUtil::get_str(&dict, "BLUE").as_deref(), Some("#0000FF"));
 }
 
@@ -64,7 +67,10 @@ fn set_fields_test() {
     let mut dict = DictUtil::create();
     DictUtil::set(&mut dict, "username", json!("hutool"));
     // nickname 未设置 → null/缺失
-    assert_eq!(DictUtil::get_str(&dict, "username").as_deref(), Some("hutool"));
+    assert_eq!(
+        DictUtil::get_str(&dict, "username").as_deref(),
+        Some("hutool")
+    );
     assert!(dict.get("nickname").is_none());
 }
 

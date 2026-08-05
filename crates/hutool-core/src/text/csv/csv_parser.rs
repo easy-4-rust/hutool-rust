@@ -95,11 +95,7 @@ impl CsvParser {
                 local.insert(field, i);
             }
         }
-        self.header = Some(CsvRow::new(
-            self.line_no,
-            Some(local),
-            current_fields,
-        ));
+        self.header = Some(CsvRow::new(self.line_no, Some(local), current_fields));
     }
 
     fn read_line(&mut self) -> Vec<String> {
@@ -154,16 +150,18 @@ impl CsvParser {
                 } else if Self::is_line_end(c, pre_char) {
                     self.in_quotes_line_count += 1;
                 }
-                self.current_field.push(char::from_u32(c as u32).unwrap_or('\0'));
+                self.current_field
+                    .push(char::from_u32(c as u32).unwrap_or('\0'));
             } else if c == field_sep {
                 let field = std::mem::take(&mut self.current_field);
-                    self.add_field(&mut current_fields, field);
+                self.add_field(&mut current_fields, field);
             } else if c == text_delim && Self::is_field_begin(pre_char, field_sep) {
                 self.in_quotes = true;
-                self.current_field.push(char::from_u32(c as u32).unwrap_or('\0'));
+                self.current_field
+                    .push(char::from_u32(c as u32).unwrap_or('\0'));
             } else if c == CR {
                 let field = std::mem::take(&mut self.current_field);
-                    self.add_field(&mut current_fields, field);
+                self.add_field(&mut current_fields, field);
                 pre_char = c;
                 break;
             } else if c == LF {
@@ -174,7 +172,8 @@ impl CsvParser {
                     break;
                 }
             } else {
-                self.current_field.push(char::from_u32(c as u32).unwrap_or('\0'));
+                self.current_field
+                    .push(char::from_u32(c as u32).unwrap_or('\0'));
             }
             pre_char = c;
         }

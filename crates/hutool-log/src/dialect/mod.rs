@@ -15,12 +15,8 @@ pub mod logtube;
 pub mod slf4j;
 pub mod tinylog;
 
-pub use commons::{
-    ApacheCommonsLog, ApacheCommonsLog4JLog, ApacheCommonsLogFactory,
-};
-pub use console::{
-    ConsoleColorLog, ConsoleColorLogFactory, ConsoleLog, ConsoleLogFactory,
-};
+pub use commons::{ApacheCommonsLog, ApacheCommonsLog4JLog, ApacheCommonsLogFactory};
+pub use console::{ConsoleColorLog, ConsoleColorLogFactory, ConsoleLog, ConsoleLogFactory};
 pub use jboss::{JbossLog, JbossLogFactory};
 pub use jdk::{JdkLog, JdkLogFactory};
 pub use log4j::{Log4jLog, Log4jLogFactory};

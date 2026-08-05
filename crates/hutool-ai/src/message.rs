@@ -82,3 +82,15 @@ impl Message {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn message_new_accepts_any_role_and_content() {
+        let message = Message::new(Role::Tool, "tool-result");
+        assert_eq!(message.role, Role::Tool);
+        assert_eq!(message.content, "tool-result");
+    }
+}

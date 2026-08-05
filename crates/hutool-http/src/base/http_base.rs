@@ -9,8 +9,8 @@ use std::{
     fmt,
 };
 
-use super::http_base_error::HttpBaseError;
 use super::HTTP_1_1;
+use super::http_base_error::HttpBaseError;
 
 /// Shared, explicitly owned metadata for Hutool-style requests and responses.
 #[derive(Debug, Clone)]

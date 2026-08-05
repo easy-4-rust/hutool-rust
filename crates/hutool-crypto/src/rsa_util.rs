@@ -74,9 +74,7 @@ pub fn rsa_encrypt_nopadding(
     let mut em = vec![0u8; k];
     em[k - plaintext.len()..].copy_from_slice(plaintext);
     let m = rsa::BigUint::from_bytes_be(&em);
-    let c = m
-        .modpow(public_key.e(), public_key.n())
-        .to_bytes_be();
+    let c = m.modpow(public_key.e(), public_key.n()).to_bytes_be();
     let mut out = vec![0u8; k];
     out[k - c.len()..].copy_from_slice(&c);
     Ok(out)
@@ -143,7 +141,9 @@ pub fn rsa_decrypt_base64(
 ) -> Result<Vec<u8>, CryptoError> {
     use base64::Engine as _;
     use base64::engine::general_purpose::STANDARD;
-    let ct = STANDARD.decode(ciphertext_b64).map_err(|_| CryptoError::InvalidCiphertext)?;
+    let ct = STANDARD
+        .decode(ciphertext_b64)
+        .map_err(|_| CryptoError::InvalidCiphertext)?;
     rsa_decrypt_pkcs1v15(private_key, &ct)
 }
 

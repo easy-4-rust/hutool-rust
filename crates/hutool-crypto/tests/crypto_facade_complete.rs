@@ -4,17 +4,12 @@
 //! 使用 hutool-crypto 真实 API
 
 use hutool_crypto::{
-    Aes, HMac, Rsa, KeyType, generate_sm2_keypair,
-    aes128_cbc_decrypt, aes128_cbc_encrypt, aes128_ecb_decrypt, aes128_ecb_encrypt,
-    des_ecb_decrypt, des_ecb_encrypt,
-    sm4_ecb_decrypt, sm4_ecb_encrypt,
-    chacha20_decrypt, chacha20_encrypt,
-    md5_hex, md5_hex16, md5_hex_repeat, md5_hex_with_salt, md5_hex_salt, md5_hex_salt_repeat,
-    sha1_hex, sha256_hex, sha512_hex, sm3_hex,
-    hmac_md5_hex, hmac_sha1_hex, hmac_sha256, hmac_sm3_hex,
-    verify_hmac_sha256,
-    verify_password, hash_password, CryptoError,
-    aes256_gcm_encrypt, aes256_gcm_decrypt,
+    Aes, CryptoError, HMac, KeyType, Rsa, aes128_cbc_decrypt, aes128_cbc_encrypt,
+    aes128_ecb_decrypt, aes128_ecb_encrypt, aes256_gcm_decrypt, aes256_gcm_encrypt,
+    chacha20_decrypt, chacha20_encrypt, des_ecb_decrypt, des_ecb_encrypt, generate_sm2_keypair,
+    hash_password, hmac_md5_hex, hmac_sha1_hex, hmac_sha256, hmac_sm3_hex, md5_hex, md5_hex_repeat,
+    md5_hex_salt, md5_hex_salt_repeat, md5_hex_with_salt, md5_hex16, sha1_hex, sha256_hex,
+    sha512_hex, sm3_hex, sm4_ecb_decrypt, sm4_ecb_encrypt, verify_hmac_sha256, verify_password,
 };
 use secrecy::SecretString;
 
@@ -33,13 +28,18 @@ fn digest_md5_hex16() {
 
 #[test]
 fn digest_sha1_hex() {
-    assert_eq!(sha1_hex("hello"), "aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d");
+    assert_eq!(
+        sha1_hex("hello"),
+        "aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d"
+    );
 }
 
 #[test]
 fn digest_sha256_hex() {
-    assert_eq!(sha256_hex("hello"),
-        "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824");
+    assert_eq!(
+        sha256_hex("hello"),
+        "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
+    );
 }
 
 #[test]
@@ -285,7 +285,10 @@ fn password_hash_long() {
 fn empty_string_hash() {
     assert_eq!(md5_hex(""), "d41d8cd98f00b204e9800998ecf8427e");
     assert_eq!(sha1_hex(""), "da39a3ee5e6b4b0d3255bfef95601890afd80709");
-    assert_eq!(sha256_hex(""), "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855");
+    assert_eq!(
+        sha256_hex(""),
+        "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    );
 }
 
 #[test]
@@ -412,18 +415,12 @@ fn md5_abc() {
 
 #[test]
 fn sha1_empty_string() {
-    assert_eq!(
-        sha1_hex(""),
-        "da39a3ee5e6b4b0d3255bfef95601890afd80709"
-    );
+    assert_eq!(sha1_hex(""), "da39a3ee5e6b4b0d3255bfef95601890afd80709");
 }
 
 #[test]
 fn sha1_abc() {
-    assert_eq!(
-        sha1_hex("abc"),
-        "a9993e364706816aba3e25717850c26c9cd0d89d"
-    );
+    assert_eq!(sha1_hex("abc"), "a9993e364706816aba3e25717850c26c9cd0d89d");
 }
 
 #[test]

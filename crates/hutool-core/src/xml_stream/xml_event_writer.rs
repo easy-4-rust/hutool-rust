@@ -2,13 +2,9 @@
 
 /// 对齐: `cn.hutool.core.xml.XmlStream`
 /// XML事件写入器
-
 use std::io::Write;
 
-use quick_xml::{
-    events::Event,
-    Writer,
-};
+use quick_xml::{Writer, events::Event};
 
 use crate::{CoreError, Result};
 

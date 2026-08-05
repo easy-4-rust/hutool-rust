@@ -22,4 +22,3 @@ pub enum ByteUtilError {
     #[error("floating-point value cannot be converted to Decimal: {0}")]
     Decimal(String),
 }
-

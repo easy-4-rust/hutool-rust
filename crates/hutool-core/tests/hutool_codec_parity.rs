@@ -1,14 +1,12 @@
 //! hutool_codec module parity tests
 //! 对齐: hutool-core Base64Test/PercentCodec tests
 
-use hutool_core::{
-    Base16Codec, PercentCodec,
-    base64_encode_config, base64_decode_tolerant, base64_encode_without_padding,
-    base64_encode_text, base64_decode_text,
-    is_base64, is_base64_code,
-    encoding_for_label,
-};
 use encoding_rs::UTF_8;
+use hutool_core::{
+    Base16Codec, PercentCodec, base64_decode_text, base64_decode_tolerant, base64_encode_config,
+    base64_encode_text, base64_encode_without_padding, encoding_for_label, is_base64,
+    is_base64_code,
+};
 
 // ── Base16Codec ──
 
@@ -24,13 +22,24 @@ fn base16_codec_encode_decode() {
 fn base16_codec_uppercase() {
     let codec = Base16Codec::new(false);
     let encoded = codec.encode_bytes(b"hello");
-    assert!(encoded.chars().all(|c| c.is_ascii_uppercase() || c.is_ascii_digit()));
+    assert!(
+        encoded
+            .chars()
+            .all(|c| c.is_ascii_uppercase() || c.is_ascii_digit())
+    );
 }
 
 #[test]
 fn base16_roundtrip_various() {
     let codec = Base16Codec::new(true);
-    let inputs: Vec<&[u8]> = vec![b"", b"a", b"ab", b"abc", b"Hello, World!", &[0u8, 1, 2, 255]];
+    let inputs: Vec<&[u8]> = vec![
+        b"",
+        b"a",
+        b"ab",
+        b"abc",
+        b"Hello, World!",
+        &[0u8, 1, 2, 255],
+    ];
     for input in inputs {
         let encoded = codec.encode_bytes(input);
         let decoded = codec.decode_text(&encoded).unwrap();
@@ -182,7 +191,8 @@ fn base16_append_hex() {
 #[test]
 fn base64_decode_range_tolerant() {
     let encoded = base64_encode_config(b"Hello, World!", false, false);
-    let decoded = hutool_core::base64_decode_range_tolerant(encoded.as_bytes(), 0, encoded.len()).unwrap();
+    let decoded =
+        hutool_core::base64_decode_range_tolerant(encoded.as_bytes(), 0, encoded.len()).unwrap();
     assert_eq!(decoded, b"Hello, World!");
 }
 

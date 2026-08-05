@@ -22,7 +22,11 @@ fn io_util_read_bytes_test() {
     let bytes = include_bytes!("fixtures/hutool.jpg");
     let mut reader = Cursor::new(bytes.as_slice());
     let read = IoUtil::read_all(&mut reader).unwrap();
-    assert_eq!(read.len(), 22807, "hutool.jpg 长度对齐 Java IoUtilTest.readBytesTest");
+    assert_eq!(
+        read.len(),
+        22807,
+        "hutool.jpg 长度对齐 Java IoUtilTest.readBytesTest"
+    );
 }
 
 /// 对齐 Java: `IoUtilTest.readBytesWithLengthTest()`

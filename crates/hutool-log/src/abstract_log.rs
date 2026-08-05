@@ -4,8 +4,8 @@
 
 use std::{fmt, sync::Arc};
 
-use crate::log::Log;
 use crate::level::LogLevel;
+use crate::log::Log;
 use crate::log_record::LogRecord;
 use crate::log_sink::LogSink;
 

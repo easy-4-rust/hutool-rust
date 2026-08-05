@@ -89,7 +89,6 @@ fn out_of_china_northern_border() {
     assert!(CoordinateUtil::out_of_china(108.0, 55.83));
 }
 
-
 // ── 对齐 Hutool CoordinateUtilTest（精确向量）──
 
 /// 对齐 Java: `CoordinateUtilTest.wgs84ToGcj02Test()`

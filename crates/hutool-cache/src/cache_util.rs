@@ -15,7 +15,7 @@ use crate::compat::{
 /// Hutool 缓存工厂方法门面。
 ///
 /// 这里保留 Java `CacheUtil` 的“静态工具类”风格，统一创建 FIFO、LFU、LRU、
-/// Timed、Weak 与 NoCache 等缓存实例。
+/// Timed、Weak 与 `NoCache` 等缓存实例。
 pub struct CacheUtil;
 
 impl CacheUtil {

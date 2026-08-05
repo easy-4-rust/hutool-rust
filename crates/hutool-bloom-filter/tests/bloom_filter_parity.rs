@@ -54,10 +54,7 @@ fn test_int_map() {
                 "对齐 Java testIntMap: remove(30) 后 contains(30) 应为 false"
             );
         } else {
-            assert!(
-                present,
-                "对齐 Java testIntMap: contains({i}) 应为 true"
-            );
+            assert!(present, "对齐 Java testIntMap: contains({i}) 应为 true");
         }
     }
 }
@@ -81,10 +78,7 @@ fn test_long_map() {
                 "对齐 Java testLongMap: remove(30) 后 contains(30) 应为 false"
             );
         } else {
-            assert!(
-                present,
-                "对齐 Java testLongMap: contains({i}) 应为 true"
-            );
+            assert!(present, "对齐 Java testLongMap: contains({i}) 应为 true");
         }
     }
 }

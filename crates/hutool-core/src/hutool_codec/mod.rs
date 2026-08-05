@@ -10,14 +10,14 @@ use encoding_rs::Encoding;
 
 use crate::{CoreError, Result};
 
-mod encoder;
-mod decoder;
 mod base16_codec;
+mod decoder;
+mod encoder;
 mod percent_codec;
 
-pub use encoder::Encoder;
-pub use decoder::Decoder;
 pub use base16_codec::Base16Codec;
+pub use decoder::Decoder;
+pub use encoder::Encoder;
 pub use percent_codec::PercentCodec;
 
 /// 按配置 Base64 编码（支持换行/URL 安全）。

@@ -6,10 +6,7 @@
 
 /// 对齐: `cn.hutool.crypto.digest.HMac`
 /// HMAC 摘要
-
-use crate::{
-    hmac_md5_hex, hmac_sha1_hex, hmac_sha256, hmac_sha256_hex, hmac_sm3_hex, CryptoError,
-};
+use crate::{CryptoError, hmac_md5_hex, hmac_sha1_hex, hmac_sha256, hmac_sha256_hex, hmac_sm3_hex};
 
 /// Hutool `HMac` facade over typed HMAC helpers.
 #[derive(Debug, Clone)]

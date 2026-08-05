@@ -17,7 +17,12 @@ mod swing_tests {
 
     #[test]
     fn screen_rect_fields() {
-        let rect = ScreenRect { x: 0, y: 0, width: 1920, height: 1080 };
+        let rect = ScreenRect {
+            x: 0,
+            y: 0,
+            width: 1920,
+            height: 1080,
+        };
         assert_eq!(rect.width, 1920);
         assert_eq!(rect.height, 1080);
     }

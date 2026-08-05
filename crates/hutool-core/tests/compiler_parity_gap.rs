@@ -31,11 +31,7 @@ fn java_source_compiler_test_compile() {
         .add_source("lib.rs", "pub fn answer() -> i32 { 42 }\n")
         .unwrap();
     let result = compiler.compile_to(&out);
-    assert!(
-        result.is_ok(),
-        "compile should succeed: {:?}",
-        result.err()
-    );
+    assert!(result.is_ok(), "compile should succeed: {:?}", result.err());
     let output = result.unwrap();
     assert!(
         !output.artifacts.is_empty() || out.read_dir().unwrap().next().is_some(),

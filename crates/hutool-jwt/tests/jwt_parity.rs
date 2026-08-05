@@ -17,11 +17,11 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 use base64::Engine as _;
 use base64::engine::general_purpose::{STANDARD, URL_SAFE_NO_PAD};
-use hutool_jwt as hj;
 use hj::{
     AlgorithmUtil, JWT, JWTException, JWTHeader, JWTSigner, JWTSignerUtil, JWTUtil, JWTValidator,
     NoneJWTSigner, RegisteredPayload,
 };
+use hutool_jwt as hj;
 use serde::Deserialize;
 use serde_json::{Map, Value};
 
@@ -246,7 +246,10 @@ fn jwt_util_create_test() {
     let key = b"1234";
     let payload = obj(&[
         ("uid", Value::from(123)),
-        ("expire_time", Value::from(now_secs() * 1000 + 1_000 * 60 * 60 * 24 * 15)),
+        (
+            "expire_time",
+            Value::from(now_secs() * 1000 + 1_000 * 60 * 60 * 24 * 15),
+        ),
     ]);
     let token = JWTUtil::create_token(payload, key).expect("create_token");
     assert_eq!(token.matches('.').count(), 2);
@@ -614,9 +617,7 @@ fn validate_date_test() {
         // 2021-10-13 09:59:00 UTC ≈ 1634119140
         .set_expires_at(1_634_119_140);
     assert!(
-        JWTValidator::of_jwt(jwt)
-            .validate_date()
-            .is_err(),
+        JWTValidator::of_jwt(jwt).validate_date().is_err(),
         "expired token must fail date validation"
     );
 }
@@ -757,10 +758,7 @@ fn verify_hs256_test() {
     let token = issue4105_token(r#"{"alg": "HS256"}"#, r#"{"exp": 1642196407}"#);
     let jwt = JWTUtil::parse_token(&token).expect("parse");
     assert!(jwt.signer().is_none());
-    assert!(
-        jwt.verify().is_err(),
-        "HS256 without signer/key must error"
-    );
+    assert!(jwt.verify().is_err(), "HS256 without signer/key must error");
     let mut jwt2 = JWTUtil::parse_token(&token).expect("parse");
     assert!(
         !jwt2
@@ -826,10 +824,8 @@ fn payload_to_bean_test() {
         .claims()
         .clone();
     assert_eq!(payloads.to_string(), "{\"iat\":1677772800}");
-    let bean: JwtTokenIat = serde_json::from_value(Value::Object(
-        payloads.claims_json().clone(),
-    ))
-    .expect("toBean");
+    let bean: JwtTokenIat =
+        serde_json::from_value(Value::Object(payloads.claims_json().clone())).expect("toBean");
     assert_eq!(bean.iat, iat);
 }
 
@@ -850,9 +846,7 @@ fn payload_to_bean_test2() {
         .claims()
         .clone();
     assert_eq!(payloads.to_string(), "{\"iat\":1677772800}");
-    let bean: JwtTokenIat = serde_json::from_value(Value::Object(
-        payloads.claims_json().clone(),
-    ))
-    .expect("toBean");
+    let bean: JwtTokenIat =
+        serde_json::from_value(Value::Object(payloads.claims_json().clone())).expect("toBean");
     assert_eq!(bean.iat, iat);
 }

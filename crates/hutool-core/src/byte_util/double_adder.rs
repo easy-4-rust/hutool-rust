@@ -2,7 +2,6 @@
 
 /// 对齐: `cn.hutool.core.util.ByteUtil.DoubleAdder`
 /// 双精度累加器
-
 use parking_lot::Mutex;
 
 /// Concurrent floating-point adder equivalent to Java's `DoubleAdder` result branch.
@@ -31,4 +30,3 @@ impl DoubleAdder {
         *self.value.lock()
     }
 }
-

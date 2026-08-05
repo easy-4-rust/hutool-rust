@@ -106,7 +106,12 @@ impl HutoolException {
     }
 
     /// 对齐 `XxxException(String message, Throwable throwable, boolean, boolean)`
-    pub fn full<S: Into<String>, E>(message: S, throwable: E, _suppression: bool, _writable: bool) -> Self
+    pub fn full<S: Into<String>, E>(
+        message: S,
+        throwable: E,
+        _suppression: bool,
+        _writable: bool,
+    ) -> Self
     where
         E: std::error::Error + Send + Sync + 'static,
     {

@@ -7,7 +7,6 @@
 
 /// 对齐: `cn.hutool.core.util.SerializeUtil`
 /// 序列化工具类
-
 use std::{fmt, ops::RangeInclusive};
 
 #[cfg(feature = "serialization")]

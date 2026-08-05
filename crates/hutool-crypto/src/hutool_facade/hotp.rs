@@ -6,8 +6,7 @@
 
 /// 对齐: `cn.hutool.crypto.hotp.HOTP`
 /// HOTP 一次性密码
-
-use crate::{hotp, CryptoError};
+use crate::{CryptoError, hotp};
 
 /// Hutool `HOTP` facade.
 #[derive(Debug, Clone)]

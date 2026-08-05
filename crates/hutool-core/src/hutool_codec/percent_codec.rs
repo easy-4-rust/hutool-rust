@@ -2,7 +2,6 @@
 
 /// 对齐: `cn.hutool.core.codec.PercentCodec`
 /// 百分号编码器
-
 use encoding_rs::Encoding;
 use std::collections::BTreeSet;
 

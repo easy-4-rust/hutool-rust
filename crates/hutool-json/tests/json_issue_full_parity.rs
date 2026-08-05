@@ -13,7 +13,6 @@ fn i_1101_test() {
     assert!(s.contains("ok"));
 }
 
-
 /// 对齐 Java: `Issue1200Test.toBeanTest()`
 #[test]
 fn i_1200_to_bean_test() {
@@ -21,7 +20,6 @@ fn i_1200_to_bean_test() {
     let v = hj::JSONUtil::parse(raw).unwrap();
     assert!(v.is_object() || v.is_array());
 }
-
 
 /// 对齐 Java: `Issue2223Test.toStrOrderTest()`
 #[test]
@@ -33,7 +31,6 @@ fn i_2223_to_str_order_test() {
     assert!(s.contains("ok"));
 }
 
-
 /// 对齐 Java: `Issue2377Test.bytesTest()`
 #[test]
 fn i_2377_bytes_test() {
@@ -43,7 +40,6 @@ fn i_2377_bytes_test() {
     let s = hj::JSONUtil::to_json_string(&v).unwrap();
     assert!(s.contains("ok"));
 }
-
 
 /// 对齐 Java: `Issue2555Test.serAndDeserTest()`
 #[test]
@@ -55,7 +51,6 @@ fn i_2555_ser_and_deser_test() {
     assert!(s.contains("ok"));
 }
 
-
 /// 对齐 Java: `Issue2555Test.deserTest()`
 #[test]
 fn i_2555_deser_test() {
@@ -65,7 +60,6 @@ fn i_2555_deser_test() {
     let s = hj::JSONUtil::to_json_string(&v).unwrap();
     assert!(s.contains("ok"));
 }
-
 
 /// 对齐 Java: `Issue2749Test.jsonObjectTest()`
 #[test]
@@ -77,7 +71,6 @@ fn i_2749_json_object_test() {
     assert!(s.contains("ok"));
 }
 
-
 /// 对齐 Java: `Issue3289Test.parseTest()`
 #[test]
 fn i_3289_parse_test() {
@@ -87,7 +80,6 @@ fn i_3289_parse_test() {
     let s = hj::JSONUtil::to_json_string(&v).unwrap();
     assert!(s.contains("ok"));
 }
-
 
 /// 对齐 Java: `Issue3588Test.toBeanIgnoreCaseTest()`
 #[test]
@@ -99,7 +91,6 @@ fn i_3588_to_bean_ignore_case_test() {
     assert!(s.contains("ok"));
 }
 
-
 /// 对齐 Java: `Issue3619Test.parseObjTest()`
 #[test]
 fn i_3619_parse_obj_test() {
@@ -109,7 +100,6 @@ fn i_3619_parse_obj_test() {
     let s = hj::JSONUtil::to_json_string(&v).unwrap();
     assert!(s.contains("ok"));
 }
-
 
 /// 对齐 Java: `Issue3713Test.toBeanTest()`
 #[test]
@@ -121,7 +111,6 @@ fn i_3713_to_bean_test() {
     assert!(s.contains("ok"));
 }
 
-
 /// 对齐 Java: `Issue3759Test.parseTest()`
 #[test]
 fn i_3759_parse_test() {
@@ -131,7 +120,6 @@ fn i_3759_parse_test() {
     let s = hj::JSONUtil::to_json_string(&v).unwrap();
     assert!(s.contains("ok"));
 }
-
 
 /// 对齐 Java: `Issue3790Test.bigDecimalToStringTest()`
 #[test]
@@ -143,7 +131,6 @@ fn i_3790_big_decimal_to_string_test() {
     assert!(s.contains("ok"));
 }
 
-
 /// 对齐 Java: `Issue3795Test.toBeanTest()`
 #[test]
 fn i_3795_to_bean_test() {
@@ -153,7 +140,6 @@ fn i_3795_to_bean_test() {
     let s = hj::JSONUtil::to_json_string(&v).unwrap();
     assert!(s.contains("ok"));
 }
-
 
 /// 对齐 Java: `Issue4197Test.toBeanTest()`
 #[test]
@@ -165,7 +151,6 @@ fn i_4197_to_bean_test() {
     assert!(s.contains("ok"));
 }
 
-
 /// 对齐 Java: `Issue4210Test.setValueTest()`
 #[test]
 fn i_4210_set_value_test() {
@@ -175,7 +160,6 @@ fn i_4210_set_value_test() {
     let s = hj::JSONUtil::to_json_string(&v).unwrap();
     assert!(s.contains("ok"));
 }
-
 
 /// 对齐 Java: `Issue4214Test.toBeanTest()`
 #[test]
@@ -187,7 +171,6 @@ fn i_4214_to_bean_test() {
     assert!(s.contains("ok"));
 }
 
-
 /// 对齐 Java: `IssueI4RBZ4Test.sortTest()`
 #[test]
 fn i_i4rbz4_sort_test() {
@@ -198,7 +181,6 @@ fn i_i4rbz4_sort_test() {
     assert!(s.contains("ok"));
 }
 
-
 /// 对齐 Java: `IssueI5OMSCTest.filterTest()`
 #[test]
 fn i_i5omsc_filter_test() {
@@ -206,7 +188,6 @@ fn i_i5omsc_filter_test() {
     let v = hj::JSONUtil::parse(raw).unwrap();
     assert!(v.is_object() || v.is_array());
 }
-
 
 /// 对齐 Java: `IssueI6TPIFTest.toStringTest()`
 #[test]
@@ -218,7 +199,6 @@ fn i_i6tpif_to_string_test() {
     assert!(s.contains("ok"));
 }
 
-
 /// 对齐 Java: `IssueI6YN2ATest.toBeanTest()`
 #[test]
 fn i_i6yn2a_to_bean_test() {
@@ -228,7 +208,6 @@ fn i_i6yn2a_to_bean_test() {
     let s = hj::JSONUtil::to_json_string(&v).unwrap();
     assert!(s.contains("ok"));
 }
-
 
 /// 对齐 Java: `IssueIA5YOETest.parseObjTest()`
 #[test]
@@ -240,7 +219,6 @@ fn i_ia5yoe_parse_obj_test() {
     assert!(s.contains("ok"));
 }
 
-
 /// 对齐 Java: `IssueIALQ0NTest.toJsonStrTest()`
 #[test]
 fn i_ialq0n_to_json_str_test() {
@@ -250,7 +228,6 @@ fn i_ialq0n_to_json_str_test() {
     let s = hj::JSONUtil::to_json_string(&v).unwrap();
     assert!(s.contains("ok"));
 }
-
 
 /// 对齐 Java: `IssueIAOPI9Test.toBeanTest()`
 #[test]
@@ -262,7 +239,6 @@ fn i_iaopi9_to_bean_test() {
     assert!(s.contains("ok"));
 }
 
-
 /// 对齐 Java: `IssueIAP4GMTest.parse()`
 #[test]
 fn i_iap4gm_parse() {
@@ -272,7 +248,6 @@ fn i_iap4gm_parse() {
     let s = hj::JSONUtil::to_json_string(&v).unwrap();
     assert!(s.contains("ok"));
 }
-
 
 /// 对齐 Java: `IssueIB9MH0Test.parseTest()`
 #[test]
@@ -284,7 +259,6 @@ fn i_ib9mh0_parse_test() {
     assert!(s.contains("ok"));
 }
 
-
 /// 对齐 Java: `IssueID418BTest.booleanToJsonTest()`
 #[test]
 fn i_id418b_boolean_to_json_test() {
@@ -294,7 +268,6 @@ fn i_id418b_boolean_to_json_test() {
     let s = hj::JSONUtil::to_json_string(&v).unwrap();
     assert!(s.contains("ok"));
 }
-
 
 /// 对齐 Java: `Pr1431Test.filterTest()`
 #[test]
@@ -308,16 +281,16 @@ fn pr1431_filter_test() {
     assert_eq!(filtered.len(), 2);
 }
 
-
 /// 对齐 Java: `Pr192Test.toBeanTest3()`
 #[test]
 fn pr192_to_bean_test3() {
     #[derive(serde::Deserialize, Debug)]
-    struct Bean { value: Option<String> }
+    struct Bean {
+        value: Option<String>,
+    }
     let b: Bean = hj::JSONUtil::to_bean(r#"{"value":null}"#).unwrap();
     assert!(b.value.is_none());
 }
-
 
 /// 对齐 Java: `IssueIVMD5Test.toBeanTest()`
 #[test]
@@ -327,7 +300,6 @@ fn i_ivmd5_to_bean_test() {
     assert!(v.is_object() || v.is_array());
 }
 
-
 /// 对齐 Java: `IssueIVMD5Test.toBeanTest2()`
 #[test]
 fn i_ivmd5_to_bean_test2() {
@@ -335,7 +307,6 @@ fn i_ivmd5_to_bean_test2() {
     let v = hj::JSONUtil::parse(raw).unwrap();
     assert!(!v.is_null());
 }
-
 
 /// 对齐 Java: `IssueID0HP2Test.jsonWithDateToXmlTest()`
 #[test]

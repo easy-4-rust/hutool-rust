@@ -2,8 +2,8 @@
 
 #![allow(dead_code)]
 
-mod level;
 mod between_formatter;
+mod level;
 
-pub use level::Level;
 pub use between_formatter::BetweenFormatter;
+pub use level::Level;

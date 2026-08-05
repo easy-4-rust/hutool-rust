@@ -4,14 +4,14 @@
 //! 各具体分词引擎（Ansj/HanLP/IKAnalyzer/Jcseg/Jieba/MMSeg/MynNLP/Word/Analysis）
 //! 需要外部 Java crate，属于 unsafe-to-copy，暂不在 hutool-extra 中实现。
 
-mod tokenizer_result;
 mod abstract_result;
-mod word;
 mod tokenizer_engine;
+mod tokenizer_result;
 mod tokenizer_util;
+mod word;
 
-pub use tokenizer_result::TokenizerResult;
 pub use abstract_result::AbstractResult;
-pub use word::Word;
 pub use tokenizer_engine::TokenizerEngine;
+pub use tokenizer_result::TokenizerResult;
 pub use tokenizer_util::TokenizerUtil;
+pub use word::Word;

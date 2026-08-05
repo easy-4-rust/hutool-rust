@@ -2,8 +2,8 @@
 //! 来源: hutool-http/src/main/java/cn/hutool/http/HttpGlobalConfig.java
 //! 中文说明: 全局HTTP配置静态访问器，提供进程级HTTP默认设置
 
-use crate::cookie::{CookieManagerHandle, GlobalCookieManager};
 use crate::HostnameVerification;
+use crate::cookie::{CookieManagerHandle, GlobalCookieManager};
 use std::time::Duration;
 
 use super::http_global_config_state::HttpGlobalConfigState;
@@ -15,10 +15,7 @@ impl HttpGlobalConfig {
     /// Returns a snapshot of the current global settings.
     #[must_use]
     pub fn snapshot() -> HttpGlobalConfigState {
-        state()
-            .lock()
-            .unwrap_or_else(|e| e.into_inner())
-            .clone()
+        state().lock().unwrap_or_else(|e| e.into_inner()).clone()
     }
 
     /// Resets all global settings to defaults (tests).
@@ -117,7 +114,10 @@ impl HttpGlobalConfig {
 
     /// Java: `HttpGlobalConfig.allowPatch()` — PATCH is always available via reqwest.
     pub fn allow_patch() {
-        state().lock().unwrap_or_else(|e| e.into_inner()).allow_patch = true;
+        state()
+            .lock()
+            .unwrap_or_else(|e| e.into_inner())
+            .allow_patch = true;
     }
 
     /// Java: `HttpGlobalConfig.isTrustAnyHost()`

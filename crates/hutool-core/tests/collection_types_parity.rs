@@ -2,7 +2,9 @@
 //! 对齐: `cn.hutool.core.collection.UniqueKeySetTest` / `RingIndexUtilTest`
 //! 来源: hutool-core collection types tests
 
-use hutool_core::{BoundedPriorityQueue, ConcurrentHashSet, UniqueKeySet, ring_next_for_len, ring_next_index};
+use hutool_core::{
+    BoundedPriorityQueue, ConcurrentHashSet, UniqueKeySet, ring_next_for_len, ring_next_index,
+};
 use std::sync::atomic::AtomicUsize;
 
 // ── ring_next_index ──
@@ -136,7 +138,6 @@ fn unique_key_set_insert_if_absent() {
     assert_eq!(set.len(), 1);
 }
 
-
 /// 对齐 Java: `UniqueKeySetTest.addTest()`
 #[test]
 fn add_test() {
@@ -147,9 +148,21 @@ fn add_test() {
         address: String,
     }
     let mut set = UniqueKeySet::new(|b: &UniqueTestBean| b.id.clone());
-    set.insert(UniqueTestBean { id: "id1".into(), name: "张三".into(), address: "地球".into() });
-    set.insert(UniqueTestBean { id: "id2".into(), name: "李四".into(), address: "火星".into() });
-    set.insert(UniqueTestBean { id: "id2".into(), name: "王五".into(), address: "木星".into() });
+    set.insert(UniqueTestBean {
+        id: "id1".into(),
+        name: "张三".into(),
+        address: "地球".into(),
+    });
+    set.insert(UniqueTestBean {
+        id: "id2".into(),
+        name: "李四".into(),
+        address: "火星".into(),
+    });
+    set.insert(UniqueTestBean {
+        id: "id2".into(),
+        name: "王五".into(),
+        address: "木星".into(),
+    });
     assert_eq!(set.len(), 2);
 }
 

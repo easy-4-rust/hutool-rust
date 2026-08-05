@@ -2,13 +2,12 @@
 //! 来源: hutool-jwt/src/main/java/cn/hutool/jwt/signers/
 //!
 //! 中文说明: Hutool JWT 签名器子包，对齐 Java `cn.hutool.jwt.signers.*` 全部 7 个类型
-//! （RegisteredPayload trait + JWTSigner trait + HMacJWTSigner / AsymmetricJWTSigner / 
+//! （RegisteredPayload trait + JWTSigner trait + HMacJWTSigner / AsymmetricJWTSigner /
 //! EllipticCurveJWTSigner / NoneJWTSigner / AlgorithmUtil / JWTSignerUtil）的 Rust 实现。
 //!
 //! 实现策略：单文件 `all.rs` 集中实现（Rust trait `JWTSigner` 是公开 trait，
 //! 其余具体结构体在 impl 时互引用。本文件保持 single source 是为了避免 trait 方法体内
 //! 私有 helper 跨文件访问造成 `pub(crate)` 泄漏）。
-
 
 // 共享 imports (与 crates/hutool-jwt/src/compat/mod.rs 头部相同)
 use std::fmt;

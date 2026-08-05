@@ -6,7 +6,6 @@
 
 /// 对齐: `cn.hutool.crypto.digest.MD5`
 /// MD5 摘要
-
 use crate::md5_hex;
 
 /// Hutool `MD5` convenience type.

@@ -5,5 +5,7 @@ use crate::Result;
 pub struct FastDatePrinter;
 impl FastDatePrinter {
     /// 兼容 sentinel。
-    pub fn sentinel() -> Result<()> { Ok(()) }
+    pub fn sentinel() -> Result<()> {
+        Ok(())
+    }
 }

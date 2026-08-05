@@ -75,7 +75,9 @@ impl Db {
             fields.join(",")
         };
         let mut builder = SqlBuilder::create();
-        builder.select([select.as_str()]).from(format!("\"{table}\""));
+        builder
+            .select([select.as_str()])
+            .from(format!("\"{table}\""));
         if !conditions.is_empty() {
             builder.where_conditions(&conditions);
         }
@@ -110,10 +112,8 @@ impl Db {
         like_type: LikeType,
     ) -> DbResult<Vec<Entity>> {
         let like_expr = build_like_value(value, like_type, true);
-        self.find(
-            &Entity::create_table(table).with(field, Value::String(like_expr)),
-        )
-        .await
+        self.find(&Entity::create_table(table).with(field, Value::String(like_expr)))
+            .await
     }
 
     /// 对齐 Java: `Db.page(Entity, int, int)`.

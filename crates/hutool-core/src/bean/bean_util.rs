@@ -31,8 +31,7 @@ impl BeanUtil {
         bean: &T,
         properties: &[&str],
     ) -> Result<HashMap<String, Value>, BeanException> {
-        let value = serde_json::to_value(bean)
-            .map_err(|e| BeanException::new(e.to_string()))?;
+        let value = serde_json::to_value(bean).map_err(|e| BeanException::new(e.to_string()))?;
         let mut map = match value {
             Value::Object(o) => o.into_iter().collect::<HashMap<_, _>>(),
             other => {
@@ -107,15 +106,12 @@ impl BeanUtil {
 
     /// 对齐 Java: `BeanUtil.toBean(Object, Class)` — 源经 Serialize 再 Deserialize。
     pub fn to_bean<S: Serialize, T: DeserializeOwned>(source: &S) -> Result<T, BeanException> {
-        let value = serde_json::to_value(source)
-            .map_err(|e| BeanException::new(e.to_string()))?;
+        let value = serde_json::to_value(source).map_err(|e| BeanException::new(e.to_string()))?;
         serde_json::from_value(value).map_err(|e| BeanException::new(e.to_string()))
     }
 
     /// 对齐 Java: `BeanUtil.toBeanIgnoreError` — 失败返回 `T::default`。
-    pub fn to_bean_ignore_error<S: Serialize, T: DeserializeOwned + Default>(
-        source: &S,
-    ) -> T {
+    pub fn to_bean_ignore_error<S: Serialize, T: DeserializeOwned + Default>(source: &S) -> T {
         Self::to_bean(source).unwrap_or_default()
     }
 
@@ -156,10 +152,15 @@ impl BeanUtil {
     }
 
     /// 对齐 Java: `BeanUtil.isEmpty` / `isNotEmpty` — 经 Serde 后无字段或全 null。
-    pub fn is_empty_bean<T: Serialize>(bean: &T, ignore_field_names: &[&str]) -> Result<bool, BeanException> {
+    pub fn is_empty_bean<T: Serialize>(
+        bean: &T,
+        ignore_field_names: &[&str],
+    ) -> Result<bool, BeanException> {
         let map = Self::bean_to_map(bean, &[])?;
         Ok(map.iter().all(|(k, v)| {
-            ignore_field_names.contains(&k.as_str()) || v.is_null() || v == &Value::String(String::new())
+            ignore_field_names.contains(&k.as_str())
+                || v.is_null()
+                || v == &Value::String(String::new())
         }))
     }
 

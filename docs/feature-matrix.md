@@ -54,7 +54,9 @@ The XML DOM and bounded streaming APIs are included by `core`. `xml-serde`,
 See [xml.md](xml.md) for the API layers, defensive defaults and performance
 verification boundary.
 
-`hutool-poi` is intentionally absent from this table because the `hutool`
-facade defines neither a `poi` nor a `poi-docx` feature. The workspace directory
+`hutool-poi` is absent from this table: the `hutool` facade defines neither a
+`poi` nor a `poi-docx` feature, and the placeholder crate was removed from the
+workspace on 2026-08-04 (Excel/Word/OFD capability is provided by the standalone
+`easyexcel-rust` project). The workspace directory
 is an API-registration placeholder only and provides no usable document
 implementation.

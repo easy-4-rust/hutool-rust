@@ -3,7 +3,6 @@
 //!
 //! 将可能失败的表达式包装为运行时错误，避免显式 try/catch。
 
-
 /// 运行时包装错误。
 #[derive(Debug, Clone)]
 pub struct WrappedRuntime {
@@ -25,4 +24,3 @@ impl std::fmt::Display for WrappedRuntime {
         write!(f, "{}", self.message)
     }
 }
-

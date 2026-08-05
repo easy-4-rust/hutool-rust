@@ -84,7 +84,8 @@ impl CsvReadConfig {
 
     /// 对齐 Java: `addHeaderAlias`
     pub fn add_header_alias(&mut self, header: &str, alias: &str) -> &mut Self {
-        self.header_alias.insert(header.to_string(), alias.to_string());
+        self.header_alias
+            .insert(header.to_string(), alias.to_string());
         self
     }
 

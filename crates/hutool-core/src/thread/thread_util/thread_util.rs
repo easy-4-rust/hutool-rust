@@ -6,4 +6,3 @@
 /// 对齐 Java 类: `cn.hutool.core.thread.ThreadUtil`
 #[derive(Debug, Clone, Copy, Default)]
 pub struct ThreadUtil;
-

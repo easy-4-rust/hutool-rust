@@ -7,14 +7,14 @@
 use std::sync::{Arc, OnceLock};
 
 mod application_context;
+mod application_context_ext;
 mod configurable_bean_factory;
 mod spring_util;
-mod application_context_ext;
 
 pub use application_context::ApplicationContext;
+pub use application_context_ext::ApplicationContextExt;
 pub use configurable_bean_factory::ConfigurableBeanFactory;
 pub use spring_util::SpringUtil;
-pub use application_context_ext::ApplicationContextExt;
 
 static APPLICATION_CONTEXT: OnceLock<Arc<dyn ApplicationContext>> = OnceLock::new();
 

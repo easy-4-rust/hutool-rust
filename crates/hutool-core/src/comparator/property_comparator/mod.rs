@@ -3,13 +3,13 @@
 
 use std::cmp::Ordering;
 
+mod fields_comparator;
 mod property_comparator;
 mod reversed_property_comparator;
-mod fields_comparator;
 
+pub use fields_comparator::FieldsComparator;
 pub use property_comparator::PropertyComparator;
 pub use reversed_property_comparator::ReversedPropertyComparator;
-pub use fields_comparator::FieldsComparator;
 
 fn compare_nullable_str(a: Option<&str>, b: Option<&str>, null_greater: bool) -> i32 {
     match (a, b) {

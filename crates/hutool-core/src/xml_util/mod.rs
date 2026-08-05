@@ -14,14 +14,14 @@ use quick_xml::{
 use crate::xml_stream::is_valid_xml_char;
 use crate::{CoreError, Result, XmlEventWriter};
 
+mod xml_child;
 mod xml_document;
 mod xml_node;
-mod xml_child;
 mod xml_util;
 
+pub use xml_child::XmlChild;
 pub use xml_document::XmlDocument;
 pub use xml_node::XmlNode;
-pub use xml_child::XmlChild;
 pub use xml_util::XmlUtil;
 
 fn input_or_xml_error(input: &str) -> Result<&str> {

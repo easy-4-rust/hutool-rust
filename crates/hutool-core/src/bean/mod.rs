@@ -10,11 +10,11 @@ pub mod bean_exception;
 pub mod bean_info_cache;
 pub mod bean_path;
 pub mod bean_util;
+pub mod copier;
 pub mod dyna_bean;
 pub mod null_wrapper_bean;
 pub mod prop_desc;
 pub mod record_util;
-pub mod copier;
 
 pub use bean_exception::BeanException;
 pub use bean_util::BeanUtil;

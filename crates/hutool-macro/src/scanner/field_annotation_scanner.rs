@@ -4,7 +4,7 @@ use std::sync::Arc;
 
 use super::annotation_scanner::{AnnotationScanner, ScanConsumer};
 use super::element_annotation_scanner::ElementAnnotationScanner;
-use crate::element::{global_registry, ElementHandle, ElementKind};
+use crate::element::{ElementHandle, ElementKind, global_registry};
 
 /// 对齐 Java 类: `cn.hutool.core.annotation.scanner.FieldAnnotationScanner`
 pub struct FieldAnnotationScanner;
@@ -25,7 +25,10 @@ impl AnnotationScanner for FieldAnnotationScanner {
 
 impl FieldAnnotationScanner {
     /// 获取字段声明注解。
-    pub fn get_annotations(&self, element: ElementHandle) -> Vec<Arc<crate::mirror::AnnotationMirror>> {
+    pub fn get_annotations(
+        &self,
+        element: ElementHandle,
+    ) -> Vec<Arc<crate::mirror::AnnotationMirror>> {
         AnnotationScanner::get_annotations(self, element)
     }
 }

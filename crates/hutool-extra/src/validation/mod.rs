@@ -5,10 +5,10 @@
 //!
 //! `ValidationUtil` / Hibernate Validator remain planned — Java bean-validation SPI.
 
-mod error_message;
 mod bean_validation_result;
+mod error_message;
 mod validation_util;
 
-pub use error_message::ErrorMessage;
 pub use bean_validation_result::BeanValidationResult;
+pub use error_message::ErrorMessage;
 pub use validation_util::ValidationUtil;

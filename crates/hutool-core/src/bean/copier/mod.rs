@@ -20,7 +20,9 @@ pub mod value_provider_to_bean_copier;
 
 // Re-export 核心类型，方便外部使用
 pub use abs_copier::AbsCopier;
-pub use bean_copier::{copy_bean_to_map, copy_map_to_bean, copy_map_to_map, copy_properties, BeanCopier};
+pub use bean_copier::{
+    BeanCopier, copy_bean_to_map, copy_map_to_bean, copy_map_to_map, copy_properties,
+};
 pub use bean_copier_exception::BeanCopierException;
 pub use bean_copier_factory::BeanCopierFactory;
 pub use bean_to_bean_copier::BeanToBeanCopier;

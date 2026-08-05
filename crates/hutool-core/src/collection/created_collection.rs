@@ -2,11 +2,9 @@
 
 /// 对齐: `cn.hutool.core.collection.CollUtil`
 /// 创建集合
-
 use std::collections::{BTreeSet, HashSet, VecDeque};
 
 use indexmap::IndexSet;
-
 
 /// A statically typed result for [`CollUtil::create`].
 #[derive(Debug, Clone)]

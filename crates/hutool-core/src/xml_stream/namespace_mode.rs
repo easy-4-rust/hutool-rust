@@ -12,4 +12,3 @@ pub enum NamespaceMode {
     /// Keep only the local part such as `Envelope`.
     LocalName,
 }
-

@@ -4,10 +4,10 @@
 
 mod aspect;
 mod simple_aspect;
-mod timing_event;
 mod time_interval_aspect;
+mod timing_event;
 
 pub use aspect::Aspect;
 pub use simple_aspect::SimpleAspect;
-pub use timing_event::TimingEvent;
 pub use time_interval_aspect::TimeIntervalAspect;
+pub use timing_event::TimingEvent;

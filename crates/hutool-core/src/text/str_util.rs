@@ -11,11 +11,10 @@
 
 /// 对齐: `cn.hutool.core.text.StrUtil`
 /// 字符串定义
-
 use std::fmt::{Display, Write};
 
-use crate::{CoreError, Result};
 use crate::text::str_splitter::StrSplitter;
+use crate::{CoreError, Result};
 
 /// Returns `true` when a string is empty or contains only Unicode whitespace.
 #[inline]
@@ -181,16 +180,16 @@ pub fn cut(value: &str, cut_length: usize) -> Result<Vec<String>> {
 #[must_use]
 pub fn strip(value: &str, prefix_or_suffix_chars: &str) -> String {
     let chars: std::collections::HashSet<char> = prefix_or_suffix_chars.chars().collect();
-    value
-        .trim_matches(|c: char| chars.contains(&c))
-        .to_owned()
+    value.trim_matches(|c: char| chars.contains(&c)).to_owned()
 }
 
 /// 对齐 Java: `StrUtil.stripIgnoreCase(CharSequence str, CharSequence prefixOrSuffix)`
 #[must_use]
 pub fn strip_ignore_case(value: &str, prefix_or_suffix_chars: &str) -> String {
-    let chars: std::collections::HashSet<char> =
-        prefix_or_suffix_chars.chars().flat_map(|c| c.to_lowercase()).collect();
+    let chars: std::collections::HashSet<char> = prefix_or_suffix_chars
+        .chars()
+        .flat_map(|c| c.to_lowercase())
+        .collect();
     value
         .trim_matches(|c: char| chars.contains(&c.to_ascii_lowercase()))
         .to_owned()
@@ -542,9 +541,7 @@ pub fn levenshtein_distance(s1: &str, s2: &str) -> usize {
         curr[0] = i;
         for j in 1..=len2 {
             let cost = if v1[i - 1] == v2[j - 1] { 0 } else { 1 };
-            curr[j] = (prev[j] + 1)
-                .min(curr[j - 1] + 1)
-                .min(prev[j - 1] + cost);
+            curr[j] = (prev[j] + 1).min(curr[j - 1] + 1).min(prev[j - 1] + cost);
         }
         std::mem::swap(&mut prev, &mut curr);
     }

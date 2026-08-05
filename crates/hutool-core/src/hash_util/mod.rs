@@ -4,7 +4,6 @@
 
 /// 对齐: `cn.hutool.core.util.HashUtil`
 /// 哈希工具类
-
 mod hash_error;
 mod hash_util;
 

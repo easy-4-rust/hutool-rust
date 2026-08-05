@@ -5,26 +5,24 @@
 use moka::sync::{Cache as MokaCache, CacheBuilder};
 use std::{hash::Hash, sync::Arc, time::Duration};
 
-mod compat;
-mod global_prune_timer;
-mod file_cache;
 mod cache_util;
+mod compat;
+mod file_cache;
+mod global_prune_timer;
 pub mod prelude;
 
-pub use compat::{
-    CacheListener, ReentrantCache, FIFOCache,
-    LFUCache, LRUCache, NoCache, ScheduledTimedCache, StampedCache,
-    TimedCache, WeakCache,
-};
-pub use global_prune_timer::{GlobalPruneTimer, PruneHandle};
-pub use file_cache::{AbstractFileCache, LFUFileCache, LRUFileCache};
 pub use cache_util::CacheUtil;
+pub use compat::{
+    CacheListener, FIFOCache, LFUCache, LRUCache, NoCache, ReentrantCache, ScheduledTimedCache,
+    StampedCache, TimedCache, WeakCache,
+};
+pub use file_cache::{AbstractFileCache, LFUFileCache, LRUFileCache};
+pub use global_prune_timer::{GlobalPruneTimer, PruneHandle};
 
 /// Hutool-aligned implementation namespace.
 pub mod r#impl {
     pub use crate::{
-        FIFOCache, LFUCache, LRUCache, NoCache, ReentrantCache,
-        TimedCache, WeakCache,
+        FIFOCache, LFUCache, LRUCache, NoCache, ReentrantCache, TimedCache, WeakCache,
     };
 }
 

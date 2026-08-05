@@ -1,6 +1,6 @@
 //! hutool-http parity tests
-use hutool_http as hh;
 use hh::UrlPolicy;
+use hutool_http as hh;
 use std::time::Duration;
 
 #[test]
@@ -63,29 +63,59 @@ fn retry_policy_invalid() {
 #[test]
 fn url_policy_deny_local_localhost() {
     let policy = hh::DenyLocalTargets;
-    assert!(policy.validate(&"http://localhost".parse::<hh::Url>().unwrap()).is_err());
-    assert!(policy.validate(&"http://localhost:8080".parse::<hh::Url>().unwrap()).is_err());
+    assert!(
+        policy
+            .validate(&"http://localhost".parse::<hh::Url>().unwrap())
+            .is_err()
+    );
+    assert!(
+        policy
+            .validate(&"http://localhost:8080".parse::<hh::Url>().unwrap())
+            .is_err()
+    );
 }
 
 #[test]
 fn url_policy_deny_local_private_ip() {
     let policy = hh::DenyLocalTargets;
-    assert!(policy.validate(&"http://10.0.0.1".parse::<hh::Url>().unwrap()).is_err());
-    assert!(policy.validate(&"http://172.16.0.1".parse::<hh::Url>().unwrap()).is_err());
+    assert!(
+        policy
+            .validate(&"http://10.0.0.1".parse::<hh::Url>().unwrap())
+            .is_err()
+    );
+    assert!(
+        policy
+            .validate(&"http://172.16.0.1".parse::<hh::Url>().unwrap())
+            .is_err()
+    );
 }
 
 #[test]
 fn url_policy_allow_all_localhost() {
     let policy = hh::AllowAllUrls;
-    assert!(policy.validate(&"http://127.0.0.1".parse::<hh::Url>().unwrap()).is_ok());
-    assert!(policy.validate(&"http://localhost".parse::<hh::Url>().unwrap()).is_ok());
+    assert!(
+        policy
+            .validate(&"http://127.0.0.1".parse::<hh::Url>().unwrap())
+            .is_ok()
+    );
+    assert!(
+        policy
+            .validate(&"http://localhost".parse::<hh::Url>().unwrap())
+            .is_ok()
+    );
 }
 
 #[test]
 fn content_type_all_variants() {
     assert_eq!(hh::ContentType::TextHtml.value(), "text/html");
-    assert_eq!(hh::ContentType::FormUrlEncoded.value(), "application/x-www-form-urlencoded");
-    assert_eq!(hh::ContentType::OctetStream.value(), "application/octet-stream");
+    assert_eq!(
+        hh::ContentType::FormUrlEncoded.value(),
+        "application/x-www-form-urlencoded"
+    );
+    assert_eq!(
+        hh::ContentType::OctetStream.value(),
+        "application/octet-stream"
+    );
 }
 
 #[test]

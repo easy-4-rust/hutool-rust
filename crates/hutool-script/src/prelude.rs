@@ -5,6 +5,4 @@
 //! use hutool_script::prelude::*;
 //! ```
 
-pub use crate::{
-    ScriptEngine, ScriptError, ScriptLimits, ScriptRuntimeException, ScriptUtil,
-};
+pub use crate::{ScriptEngine, ScriptError, ScriptLimits, ScriptRuntimeException, ScriptUtil};

@@ -4,9 +4,9 @@
 
 use chrono::Datelike;
 
+use crate::Result;
 use crate::date::date_time::DateTime;
 use crate::date::date_unit::DateUnit;
-use crate::Result;
 
 /// 对齐 Java: `cn.hutool.core.date.DateBetween`
 #[derive(Debug, Clone, Copy)]
@@ -24,7 +24,10 @@ impl DateBetween {
     /// 构造。
     pub fn new(begin: DateTime, end: DateTime, is_abs: bool) -> Self {
         if is_abs && begin > end {
-            Self { begin: end, end: begin }
+            Self {
+                begin: end,
+                end: begin,
+            }
         } else {
             Self { begin, end }
         }

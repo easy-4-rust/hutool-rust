@@ -2,23 +2,23 @@
 //!
 //! Rust 无 JVM 运行时注解，通过 [`AnnotationMirror`] + [`ElementHandle`] 表达注解实例与被注解元素。
 
+mod annotation_mirror;
+mod annotation_schema;
 mod annotation_type_name;
-mod value_kind;
 mod annotation_value;
 mod attribute_def;
-mod annotation_schema;
-mod annotation_mirror;
 mod attribute_ref;
 mod element_handle;
+mod value_kind;
 
+pub use annotation_mirror::AnnotationMirror;
+pub use annotation_schema::AnnotationSchema;
 pub use annotation_type_name::AnnotationTypeName;
-pub use value_kind::ValueKind;
 pub use annotation_value::AnnotationValue;
 pub use attribute_def::AttributeDef;
-pub use annotation_schema::AnnotationSchema;
-pub use annotation_mirror::AnnotationMirror;
 pub use attribute_ref::AttributeRef;
 pub use element_handle::ElementHandle;
+pub use value_kind::ValueKind;
 
 /// 判断是否为 JDK 元注解类型。
 pub fn is_jdk_meta_annotation(type_name: AnnotationTypeName) -> bool {

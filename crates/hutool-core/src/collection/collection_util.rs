@@ -2,8 +2,6 @@
 
 /// 对齐: `cn.hutool.core.collection.CollUtil`
 /// 集合适配器
-
-
 use crate::CollUtil;
 
 /// Legacy alias retained for Hutool's `CollectionUtil extends CollUtil` surface.

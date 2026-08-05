@@ -3,7 +3,10 @@
 //! 中文说明: 操作系统识别规则，通过正则匹配识别Windows、macOS、Linux等系统
 
 use regex::Regex;
-use std::{fmt, hash::{Hash, Hasher}};
+use std::{
+    fmt,
+    hash::{Hash, Hasher},
+};
 
 use super::rule_error::RuleError;
 use super::user_agent_info::UserAgentInfo;

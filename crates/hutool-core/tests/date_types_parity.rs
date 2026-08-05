@@ -4,15 +4,15 @@
 #![allow(non_snake_case)] // 对齐 Java 测试方法名（带 _2 后缀的 Java 风格命名）
 
 use chrono::{Month as ChronoMonth, Timelike, Weekday};
+use hutool_core::date::calendar_util::CalendarUtil;
+use hutool_core::date::date_modifier::DateModifier;
+use hutool_core::date::format::fast_date_format::FastDateFormat;
+use hutool_core::date::zone_util::ZoneUtil;
 use hutool_core::{
     BetweenFormatter, BetweenFormatterLevel, DateBetween, DateField, DatePattern, DateRange,
     DateTime, DateUnit, DateUtil, GroupTimeInterval, Month, Quarter, StopWatch,
     TemporalAccessorUtil, TemporalUtil, TimeInterval, Week, YearQuarter, Zodiac,
 };
-use hutool_core::date::calendar_util::CalendarUtil;
-use hutool_core::date::date_modifier::DateModifier;
-use hutool_core::date::format::fast_date_format::FastDateFormat;
-use hutool_core::date::zone_util::ZoneUtil;
 
 /// 对齐 Java: `BetweenFormatterTest.formatTest()`
 #[test]
@@ -142,7 +142,8 @@ fn date_between_between_month_test_2() {
 fn date_between_between_minute_test_2() {
     let date1 = DateUtil::parse("2017-03-01 20:33:23").unwrap();
     let date2 = DateUtil::parse("2017-03-01 23:33:23").unwrap();
-    let format_between = DateUtil::format_between_level(date1, date2, BetweenFormatterLevel::Second);
+    let format_between =
+        DateUtil::format_between_level(date1, date2, BetweenFormatterLevel::Second);
     assert_eq!(format_between, "3小时");
 }
 
@@ -212,7 +213,10 @@ fn date_modifier_truncate_day_of_week_in_month_test_2() {
 fn date_modifier_ceiling_test_2() {
     let date = DateUtil::parse("2020-02-29 12:59:34").unwrap();
     let c = DateModifier::ceiling(date, DateField::DayOfMonth, false);
-    assert!(c.format("yyyy-MM-dd HH:mm:ss.SSS").ends_with("23:59:59.999"));
+    assert!(
+        c.format("yyyy-MM-dd HH:mm:ss.SSS")
+            .ends_with("23:59:59.999")
+    );
 }
 
 /// 对齐 Java: `DateRangeTest.issue3783Test()`
@@ -312,7 +316,10 @@ fn fast_date_format_year_test_2() {
 #[test]
 fn fast_date_format_week_year_test_2() {
     let f = FastDateFormat::get_instance("yyyy-MM-dd");
-    assert_eq!(f.format(DateUtil::parse("2020-01-01").unwrap()), "2020-01-01");
+    assert_eq!(
+        f.format(DateUtil::parse("2020-01-01").unwrap()),
+        "2020-01-01"
+    );
 }
 
 /// 对齐 Java: `MonthTest.getLastDayTest()`
@@ -410,7 +417,9 @@ fn quarter_test_plus_zero_and_negative_number_2() {
 #[test]
 fn temporal_accessor_util_format_test_2() {
     use hutool_core::date::temporal_accessor_util::TemporalAccessorUtil;
-    let dt = DateUtil::parse("2020-01-01 12:00:00").unwrap().naive_local();
+    let dt = DateUtil::parse("2020-01-01 12:00:00")
+        .unwrap()
+        .naive_local();
     assert!(TemporalAccessorUtil::format(dt).contains("2020-01-01"));
 }
 
@@ -515,7 +524,6 @@ fn year_quarter_of__valid_year_and_null_quarter__null_pointer_exception_2() {
     assert!(YearQuarter::of(2024, 0).is_err());
 }
 
-
 /// 对齐 Java: `YearQuarterTest.of_NullLocalDate_NullPointerException()`
 #[test]
 fn year_quarter_of__null_local_date__null_pointer_exception_2() {
@@ -552,25 +560,45 @@ fn year_quarter_of__null_calendar__null_pointer_exception_2() {
 /// 对齐 Java: `YearQuarterTest.of_ValidYearMonth_CreatesYearMonth_Q1()`
 #[test]
 fn year_quarter_of__valid_year_month__creates_year_month_q_1_2() {
-    assert_eq!(YearQuarter::from_year_month(2024, 2).unwrap().get_quarter_value(), 1);
+    assert_eq!(
+        YearQuarter::from_year_month(2024, 2)
+            .unwrap()
+            .get_quarter_value(),
+        1
+    );
 }
 
 /// 对齐 Java: `YearQuarterTest.of_ValidYearMonth_CreatesYearMonth_Q2()`
 #[test]
 fn year_quarter_of__valid_year_month__creates_year_month_q_2_2() {
-    assert_eq!(YearQuarter::from_year_month(2024, 5).unwrap().get_quarter_value(), 2);
+    assert_eq!(
+        YearQuarter::from_year_month(2024, 5)
+            .unwrap()
+            .get_quarter_value(),
+        2
+    );
 }
 
 /// 对齐 Java: `YearQuarterTest.of_ValidYearMonth_CreatesYearMonth_Q3()`
 #[test]
 fn year_quarter_of__valid_year_month__creates_year_month_q_3_2() {
-    assert_eq!(YearQuarter::from_year_month(2024, 8).unwrap().get_quarter_value(), 3);
+    assert_eq!(
+        YearQuarter::from_year_month(2024, 8)
+            .unwrap()
+            .get_quarter_value(),
+        3
+    );
 }
 
 /// 对齐 Java: `YearQuarterTest.of_ValidYearMonth_CreatesYearMonth_Q4()`
 #[test]
 fn year_quarter_of__valid_year_month__creates_year_month_q_4_2() {
-    assert_eq!(YearQuarter::from_year_month(2024, 11).unwrap().get_quarter_value(), 4);
+    assert_eq!(
+        YearQuarter::from_year_month(2024, 11)
+            .unwrap()
+            .get_quarter_value(),
+        4
+    );
 }
 
 /// 对齐 Java: `YearQuarterTest.of_NullYearMonth_CreatesYearMonth_Q4()`
@@ -654,13 +682,21 @@ fn year_quarter_test_compare_to_same_year_2() {
 /// 对齐 Java: `YearQuarterTest.test_isBefore_sameYear()`
 #[test]
 fn year_quarter_test_is_before_same_year_2() {
-    assert!(YearQuarter::of(2024, 1).unwrap().is_before(YearQuarter::of(2024, 2).unwrap()));
+    assert!(
+        YearQuarter::of(2024, 1)
+            .unwrap()
+            .is_before(YearQuarter::of(2024, 2).unwrap())
+    );
 }
 
 /// 对齐 Java: `YearQuarterTest.test_isAfter_sameYear()`
 #[test]
 fn year_quarter_test_is_after_same_year_2() {
-    assert!(YearQuarter::of(2024, 3).unwrap().is_after(YearQuarter::of(2024, 1).unwrap()));
+    assert!(
+        YearQuarter::of(2024, 3)
+            .unwrap()
+            .is_after(YearQuarter::of(2024, 1).unwrap())
+    );
 }
 
 /// 对齐 Java: `YearQuarterTest.test_compareTo_null()`
@@ -680,8 +716,14 @@ fn year_quarter_test_compare_to_different_year_2() {
 /// 对齐 Java: `ZodiacTest.getZodiacTest()`
 #[test]
 fn zodiac_get_zodiac_test_2() {
-    assert_eq!(Zodiac::get_zodiac_month(Month::January, 19).unwrap(), "摩羯座");
-    assert_eq!(Zodiac::get_zodiac_month(Month::January, 20).unwrap(), "水瓶座");
+    assert_eq!(
+        Zodiac::get_zodiac_month(Month::January, 19).unwrap(),
+        "摩羯座"
+    );
+    assert_eq!(
+        Zodiac::get_zodiac_month(Month::January, 20).unwrap(),
+        "水瓶座"
+    );
     assert_eq!(Zodiac::get_zodiac(6, 17).unwrap(), "巨蟹座");
     let cal = DateUtil::parse("2022-07-17").unwrap();
     assert_eq!(Zodiac::get_zodiac_date(cal).unwrap(), "巨蟹座");
@@ -693,33 +735,44 @@ fn zodiac_get_chinese_zodiac_test_2() {
     assert_eq!(Zodiac::get_chinese_zodiac(1994).unwrap(), "狗");
     assert_eq!(Zodiac::get_chinese_zodiac(2018).unwrap(), "狗");
     assert_eq!(Zodiac::get_chinese_zodiac(2019).unwrap(), "猪");
-    assert_eq!(Zodiac::get_chinese_zodiac_date(DateUtil::parse("2022-07-17").unwrap()).unwrap(), "虎");
+    assert_eq!(
+        Zodiac::get_chinese_zodiac_date(DateUtil::parse("2022-07-17").unwrap()).unwrap(),
+        "虎"
+    );
     assert!(Zodiac::get_chinese_zodiac(1899).is_none());
 }
 
 /// 对齐 Java: `ZoneUtilTest.toTest()`
 #[test]
 fn zone_util_to_test_2() {
-    assert_eq!(ZoneUtil::to_zone("Asia/Shanghai").local_minus_utc(), 8 * 3600);
+    assert_eq!(
+        ZoneUtil::to_zone("Asia/Shanghai").local_minus_utc(),
+        8 * 3600
+    );
     assert_eq!(ZoneUtil::to_zone("UTC").local_minus_utc(), 0);
 }
-
 
 /// 对齐 Java: `TemporalAccessorUtilTest.formatLocalDateTest()`
 #[test]
 fn temporal_accessor_util_format_local_date_test_2() {
-    use hutool_core::date::temporal_accessor_util::TemporalAccessorUtil;
     use chrono::NaiveDate;
-    let d = NaiveDate::from_ymd_opt(2020, 1, 23).unwrap().and_hms_opt(0, 0, 0).unwrap();
+    use hutool_core::date::temporal_accessor_util::TemporalAccessorUtil;
+    let d = NaiveDate::from_ymd_opt(2020, 1, 23)
+        .unwrap()
+        .and_hms_opt(0, 0, 0)
+        .unwrap();
     assert!(TemporalAccessorUtil::format(d).contains("2020-01-23"));
 }
 
 /// 对齐 Java: `TemporalAccessorUtilTest.formatLocalTimeTest()`
 #[test]
 fn temporal_accessor_util_format_local_time_test_2() {
-    use hutool_core::date::temporal_accessor_util::TemporalAccessorUtil;
     use chrono::NaiveDate;
-    let d = NaiveDate::from_ymd_opt(2020, 1, 23).unwrap().and_hms_opt(12, 23, 56).unwrap();
+    use hutool_core::date::temporal_accessor_util::TemporalAccessorUtil;
+    let d = NaiveDate::from_ymd_opt(2020, 1, 23)
+        .unwrap()
+        .and_hms_opt(12, 23, 56)
+        .unwrap();
     assert!(TemporalAccessorUtil::format(d).contains("12:23:56"));
 }
 
@@ -727,7 +780,9 @@ fn temporal_accessor_util_format_local_time_test_2() {
 #[test]
 fn temporal_accessor_util_format_custom_test_2() {
     use hutool_core::date::temporal_accessor_util::TemporalAccessorUtil;
-    let dt = DateUtil::parse("2020-01-23 12:23:56").unwrap().naive_local();
+    let dt = DateUtil::parse("2020-01-23 12:23:56")
+        .unwrap()
+        .naive_local();
     assert_eq!(TemporalAccessorUtil::get_year(dt), 2020);
 }
 
@@ -766,25 +821,45 @@ fn year_quarter_of__invalid_year_and_null_quarter__date_time_exception_2() {
 /// 对齐 Java: `YearQuarterTest.of_ValidLocalDate_CreatesYearQuarter_Q1()`
 #[test]
 fn year_quarter_of__valid_local_date__creates_year_quarter_q_1_2() {
-    assert_eq!(YearQuarter::from_ymd(2024, 1, 15).unwrap().get_quarter_value(), 1);
+    assert_eq!(
+        YearQuarter::from_ymd(2024, 1, 15)
+            .unwrap()
+            .get_quarter_value(),
+        1
+    );
 }
 
 /// 对齐 Java: `YearQuarterTest.of_ValidLocalDate_CreatesYearQuarter_Q2()`
 #[test]
 fn year_quarter_of__valid_local_date__creates_year_quarter_q_2_2() {
-    assert_eq!(YearQuarter::from_ymd(2024, 4, 15).unwrap().get_quarter_value(), 2);
+    assert_eq!(
+        YearQuarter::from_ymd(2024, 4, 15)
+            .unwrap()
+            .get_quarter_value(),
+        2
+    );
 }
 
 /// 对齐 Java: `YearQuarterTest.of_ValidLocalDate_CreatesYearQuarter_Q3()`
 #[test]
 fn year_quarter_of__valid_local_date__creates_year_quarter_q_3_2() {
-    assert_eq!(YearQuarter::from_ymd(2024, 7, 15).unwrap().get_quarter_value(), 3);
+    assert_eq!(
+        YearQuarter::from_ymd(2024, 7, 15)
+            .unwrap()
+            .get_quarter_value(),
+        3
+    );
 }
 
 /// 对齐 Java: `YearQuarterTest.of_ValidLocalDate_CreatesYearQuarter_Q4()`
 #[test]
 fn year_quarter_of__valid_local_date__creates_year_quarter_q_4_2() {
-    assert_eq!(YearQuarter::from_ymd(2024, 10, 15).unwrap().get_quarter_value(), 4);
+    assert_eq!(
+        YearQuarter::from_ymd(2024, 10, 15)
+            .unwrap()
+            .get_quarter_value(),
+        4
+    );
 }
 
 /// Wave2 StopWatch Spring-style parity.
@@ -836,8 +911,14 @@ fn wave2_group_time_interval_parity() {
 #[test]
 fn wave2_temporal_util_parity() {
     use chrono::NaiveDate;
-    let a = NaiveDate::from_ymd_opt(2020, 1, 1).unwrap().and_hms_opt(0, 0, 0).unwrap();
-    let b = NaiveDate::from_ymd_opt(2020, 1, 2).unwrap().and_hms_opt(0, 0, 0).unwrap();
+    let a = NaiveDate::from_ymd_opt(2020, 1, 1)
+        .unwrap()
+        .and_hms_opt(0, 0, 0)
+        .unwrap();
+    let b = NaiveDate::from_ymd_opt(2020, 1, 2)
+        .unwrap()
+        .and_hms_opt(0, 0, 0)
+        .unwrap();
     assert_eq!(TemporalUtil::between_ms(a, b), 86_400_000);
     assert_eq!(TemporalUtil::between(a, b, DateUnit::Day), 1);
     let c = TemporalUtil::offset(a, DateUnit::Hour, 3);
@@ -848,11 +929,17 @@ fn wave2_temporal_util_parity() {
 #[test]
 fn wave2_temporal_accessor_parity() {
     use chrono::NaiveDate;
-    let a = NaiveDate::from_ymd_opt(2020, 5, 6).unwrap().and_hms_opt(7, 8, 9).unwrap();
+    let a = NaiveDate::from_ymd_opt(2020, 5, 6)
+        .unwrap()
+        .and_hms_opt(7, 8, 9)
+        .unwrap();
     assert_eq!(TemporalAccessorUtil::get_year(a), 2020);
     assert!(TemporalAccessorUtil::format_pattern(a, "yyyy-MM-dd").contains("2020"));
     let begin = a;
-    let end = NaiveDate::from_ymd_opt(2020, 5, 7).unwrap().and_hms_opt(0, 0, 0).unwrap();
+    let end = NaiveDate::from_ymd_opt(2020, 5, 7)
+        .unwrap()
+        .and_hms_opt(0, 0, 0)
+        .unwrap();
     assert!(TemporalAccessorUtil::is_in(a, begin, end));
 }
 

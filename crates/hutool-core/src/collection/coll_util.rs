@@ -2,16 +2,12 @@
 
 /// 对齐: `cn.hutool.core.collection.CollUtil`
 /// 集合工具类
-
 use std::{
     cmp::Ordering,
     collections::{BTreeMap, BTreeSet, HashMap, HashSet, VecDeque},
     fmt::Display,
     hash::Hash,
-    sync::{
-        Arc,
-        mpsc::sync_channel,
-    },
+    sync::{Arc, mpsc::sync_channel},
 };
 
 use indexmap::{IndexMap, IndexSet};

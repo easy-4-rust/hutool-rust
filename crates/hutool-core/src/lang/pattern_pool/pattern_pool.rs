@@ -33,9 +33,8 @@ impl PatternPool {
         if let Some(existing) = g.get(&key) {
             return Arc::clone(existing);
         }
-        let compiled = Arc::new(
-            compile(regex, flags).unwrap_or_else(|_| Regex::new(r"(?!)").expect("never")),
-        );
+        let compiled =
+            Arc::new(compile(regex, flags).unwrap_or_else(|_| Regex::new(r"(?!)").expect("never")));
         g.insert(key, Arc::clone(&compiled));
         compiled
     }

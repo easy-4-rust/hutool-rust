@@ -1,13 +1,13 @@
 use std::collections::{HashMap, HashSet};
 use std::fmt;
-use std::hash::Hash;
+use std::hash::{Hash, Hasher};
 use std::marker::PhantomData;
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::{Arc, Weak};
 use std::time::{Duration, Instant};
 
-use parking_lot::{Mutex, ReentrantMutex, RwLock};
 use crate::global_prune_timer::{GlobalPruneTimer, PruneHandle};
+use parking_lot::{Mutex, ReentrantMutex, RwLock};
 
 /// Deterministic eviction policy used by Hutool-aligned caches.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -117,13 +117,18 @@ struct State<K, V> {
     entries: HashMap<K, Entry<V>>,
 }
 
+/// 工厂锁带数量（对齐 Java `AbstractCache` 的 striped lock 分段数）。
+const FACTORY_LOCK_STRIPES: usize = 64;
+
 struct CacheInner<K, V> {
     capacity: usize,
     timeout: Option<Duration>,
     policy: CachePolicy,
     state: Mutex<State<K, V>>,
     listener: RwLock<Option<Arc<dyn CacheListener<K, V>>>>,
-    factory_lock: ReentrantMutex<()>,
+    /// 每 key 工厂锁带，对齐 Java `AbstractCache.getLock(key)` 的 striped lock 语义：
+    /// 同一 key 的并发加载合并为一次，不同 key 的加载可以并行。
+    factory_locks: Vec<ReentrantMutex<()>>,
     sequence: AtomicU64,
     hits: AtomicU64,
     misses: AtomicU64,
@@ -174,7 +179,9 @@ where
                     entries: HashMap::new(),
                 }),
                 listener: RwLock::new(None),
-                factory_lock: ReentrantMutex::new(()),
+                factory_locks: (0..FACTORY_LOCK_STRIPES)
+                    .map(|_| ReentrantMutex::new(()))
+                    .collect(),
                 sequence: AtomicU64::new(0),
                 hits: AtomicU64::new(0),
                 misses: AtomicU64::new(0),
@@ -273,20 +280,17 @@ where
         // Hutool: when full, prune before insert. LFU subtracts min access and
         // removes every entry that reaches zero (not a single victim).
         if self.inner.capacity > 0 && state.entries.len() >= self.inner.capacity {
-            match self.inner.policy {
-                CachePolicy::Lfu => {
-                    removed.extend(Self::prune_lfu_when_full_locked(&mut state));
-                }
-                _ => {
-                    let victim = self
-                        .victim_key(&state)
-                        .expect("a cache at positive capacity has an eviction victim");
-                    let entry = state
-                        .entries
-                        .remove(&victim)
-                        .expect("the selected eviction victim is present");
-                    removed.push((victim, entry.value));
-                }
+            if self.inner.policy == CachePolicy::Lfu {
+                removed.extend(Self::prune_lfu_when_full_locked(&mut state));
+            } else {
+                let victim = self
+                    .victim_key(&state)
+                    .expect("a cache at positive capacity has an eviction victim");
+                let entry = state
+                    .entries
+                    .remove(&victim)
+                    .expect("the selected eviction victim is present");
+                removed.push((victim, entry.value));
             }
         }
         state.entries.insert(
@@ -364,13 +368,27 @@ where
     where
         F: FnOnce() -> V,
     {
-        let _factory_guard = self.inner.factory_lock.lock();
+        // 对齐 Java `Cache.get(key, supplier)`：先无锁探测，miss 后取该 key 的
+        // striped lock，锁内 double-check，再执行 factory。
+        if let Some(value) = self.get(&key) {
+            return value;
+        }
+        let lock = self.factory_lock_for(&key);
+        let _factory_guard = lock.lock();
         if let Some(value) = self.get(&key) {
             return value;
         }
         let value = Arc::new(factory());
         self.put_arc_with_timeout(key, Arc::clone(&value), timeout);
         value
+    }
+
+    /// 按 key 哈希取工厂锁带（对齐 Java `AbstractCache.getLock(key)`）。
+    fn factory_lock_for(&self, key: &K) -> &ReentrantMutex<()> {
+        let mut hasher = std::collections::hash_map::DefaultHasher::new();
+        key.hash(&mut hasher);
+        let stripe = usize::try_from(hasher.finish()).unwrap_or_default() % FACTORY_LOCK_STRIPES;
+        &self.inner.factory_locks[stripe]
     }
 
     /// Returns whether a live entry exists without changing hit/miss counters.
@@ -910,6 +928,18 @@ mod tests {
         thread::sleep(Duration::from_millis(12));
     }
 
+    /// 有界轮询等待条件成立（事件驱动替代固定 sleep，避免并行负载下的时序抖动）。
+    fn wait_until(mut condition: impl FnMut() -> bool, timeout: Duration) -> bool {
+        let deadline = Instant::now() + timeout;
+        while Instant::now() < deadline {
+            if condition() {
+                return true;
+            }
+            thread::sleep(Duration::from_millis(2));
+        }
+        condition()
+    }
+
     #[test]
     fn fifo_lru_and_lfu_apply_deterministic_eviction() {
         let fifo = FIFOCache::new(2);
@@ -1068,8 +1098,8 @@ mod tests {
         cache.put("a", 1);
         cache.schedule_prune(Duration::from_millis(2)).unwrap();
         cache.schedule_prune(Duration::from_millis(2)).unwrap();
-        thread::sleep(Duration::from_millis(16));
-        assert!(cache.is_empty());
+        // 有界轮询等待清理生效（并行负载下 2ms 周期任务可能被调度延迟）
+        assert!(wait_until(|| cache.is_empty(), Duration::from_secs(2)));
         assert!(cache.cancel_prune_schedule());
         assert!(!cache.cancel_prune_schedule());
         assert!(format!("{cache:?}").contains("TimedCache"));
@@ -1100,9 +1130,13 @@ mod tests {
             Duration::from_millis(2),
         );
         assert!(format!("{handle:?}").contains("PruneHandle"));
-        thread::sleep(Duration::from_millis(8));
+        // 有界轮询等待定时任务执行（并行负载下 2ms 周期可能被调度延迟）
+        assert!(wait_until(
+            || calls.load(Ordering::Relaxed) > 0,
+            Duration::from_secs(2)
+        ));
         drop(handle);
-        assert!(calls.load(Ordering::Relaxed) > 0);
+        let calls_after_drop = calls.load(Ordering::Relaxed);
         let zero_delay = GlobalPruneTimer::schedule(|| {}, Duration::ZERO);
         thread::sleep(Duration::from_millis(3));
         drop(zero_delay);
@@ -1113,6 +1147,7 @@ mod tests {
         GlobalPruneTimer::create();
         GlobalPruneTimer::shutdown();
         let _ = GlobalPruneTimer::shutdown_now();
+        let _ = calls_after_drop;
     }
 
     #[test]

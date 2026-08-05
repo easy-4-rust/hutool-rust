@@ -4,11 +4,9 @@
 //! 同时与 hutool-crypto 的输出做 1:1 字节级对比
 
 use hutool_crypto::{
-    sm3_hex,
-    sm4_ecb_encrypt, sm4_ecb_decrypt, generate_sm4_key,
-    generate_sm2_keypair, sm2_sign, sm2_verify,
-    sm2_sign_hex, sm2_public_hex_from_secret, sm2_private_scalar_len,
-    hmac_sm3_hex,
+    generate_sm2_keypair, generate_sm4_key, hmac_sm3_hex, sm2_private_scalar_len,
+    sm2_public_hex_from_secret, sm2_sign, sm2_sign_hex, sm2_verify, sm3_hex, sm4_ecb_decrypt,
+    sm4_ecb_encrypt,
 };
 
 // ═══════════════════════════════════════════════════════════════
@@ -192,14 +190,14 @@ fn sm2_generate_keypair() {
 fn sm2_sign_verify() {
     let (secret, _public) = generate_sm2_keypair().unwrap();
     let message = b"hello world";
-    
+
     // 签名
     let signature = sm2_sign(&secret, message).unwrap();
     assert_eq!(signature.len(), 64, "SM2 signature must be 64 bytes (r||s)");
-    
+
     // 从私钥派生公钥
     let public = sm2_public_hex_from_secret(&secret);
-    
+
     // 验签
     let valid = sm2_verify(&public, message, &signature).unwrap();
     assert!(valid, "SM2 signature verification must succeed");
@@ -210,10 +208,10 @@ fn sm2_sign_verify_wrong_message() {
     let (secret, _) = generate_sm2_keypair().unwrap();
     let message = b"hello world";
     let wrong_message = b"goodbye world";
-    
+
     let signature = sm2_sign(&secret, message).unwrap();
     let public = sm2_public_hex_from_secret(&secret);
-    
+
     let valid = sm2_verify(&public, wrong_message, &signature);
     // 错误消息验签应失败
     if let Ok(valid) = valid {
@@ -246,13 +244,16 @@ fn sm2_multiple_signatures_different() {
     // SM2 使用确定性签名（RFC 6979），同一密钥+消息产生相同签名
     let (secret, _) = generate_sm2_keypair().unwrap();
     let message = b"hello world";
-    
+
     let sig1 = sm2_sign(&secret, message).unwrap();
     let sig2 = sm2_sign(&secret, message).unwrap();
-    
+
     // 确定性签名：两次签名相同
-    assert_eq!(sig1, sig2, "SM2 deterministic signatures should be identical");
-    
+    assert_eq!(
+        sig1, sig2,
+        "SM2 deterministic signatures should be identical"
+    );
+
     // 验证签名通过
     let public = sm2_public_hex_from_secret(&secret);
     assert!(sm2_verify(&public, message, &sig1).unwrap_or(false));
@@ -270,7 +271,11 @@ fn sm2_multiple_signatures_different() {
 #[test]
 fn hmac_sm3_basic() {
     let mac = hmac_sm3_hex(b"key", b"message").unwrap();
-    assert_eq!(mac.len(), 64, "HMAC-SM3 must produce 32 bytes = 64 hex chars");
+    assert_eq!(
+        mac.len(),
+        64,
+        "HMAC-SM3 must produce 32 bytes = 64 hex chars"
+    );
 }
 
 #[test]
@@ -291,7 +296,10 @@ fn hmac_sm3_different_keys() {
 fn hmac_sm3_different_messages() {
     let mac1 = hmac_sm3_hex(b"key", b"message1").unwrap();
     let mac2 = hmac_sm3_hex(b"key", b"message2").unwrap();
-    assert_ne!(mac1, mac2, "different messages must produce different HMAC-SM3");
+    assert_ne!(
+        mac1, mac2,
+        "different messages must produce different HMAC-SM3"
+    );
 }
 
 #[test]
@@ -338,15 +346,15 @@ fn sm2_sign_then_sm3_verify() {
     // SM2 签名消息，然后 SM3 计算消息摘要验证一致性
     let (secret, _) = generate_sm2_keypair().unwrap();
     let message = b"hello world";
-    
+
     // SM2 签名
     let sig = sm2_sign(&secret, message).unwrap();
     assert_eq!(sig.len(), 64);
-    
+
     // SM3 计算消息摘要
     let digest = sm3_hex(message);
     assert_eq!(digest.len(), 64);
-    
+
     // 验证签名
     let public = sm2_public_hex_from_secret(&secret);
     assert!(sm2_verify(&public, message, &sig).unwrap());
@@ -360,7 +368,7 @@ fn sm4_encrypt_then_sm3_hash() {
     let ct = sm4_ecb_encrypt(&key, plaintext).unwrap();
     let pt = sm4_ecb_decrypt(&key, &ct).unwrap();
     assert_eq!(pt, plaintext);
-    
+
     let ct_hash = sm3_hex(&ct);
     assert_eq!(ct_hash.len(), 64);
     // 同一密文多次哈希应一致
@@ -385,10 +393,11 @@ fn sm4_invalid_ciphertext() {
     let ct = [0u8; 3]; // 太短，会导致 panic 而非 Err
     // SM4 ECB decrypt 对过短输入会 panic（generic-array 限制）
     // 用 catch_unwind 验证
-    let result = std::panic::catch_unwind(|| {
-        sm4_ecb_decrypt(&key, &ct)
-    });
-    assert!(result.is_err(), "SM4 decrypt with short ciphertext must panic or error");
+    let result = std::panic::catch_unwind(|| sm4_ecb_decrypt(&key, &ct));
+    assert!(
+        result.is_err(),
+        "SM4 decrypt with short ciphertext must panic or error"
+    );
 }
 
 #[test]

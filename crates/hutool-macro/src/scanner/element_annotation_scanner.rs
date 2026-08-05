@@ -1,6 +1,8 @@
 //! 对齐: `cn.hutool.core.annotation.scanner.ElementAnnotationScanner`
 
-use super::annotation_scanner::{accept_annotation, declared_annotations, element_exists, AnnotationScanner, ScanConsumer};
+use super::annotation_scanner::{
+    AnnotationScanner, ScanConsumer, accept_annotation, declared_annotations, element_exists,
+};
 use crate::element::{ElementHandle, ElementKind, global_registry};
 
 /// 对齐 Java 类: `cn.hutool.core.annotation.scanner.ElementAnnotationScanner`
@@ -27,7 +29,12 @@ impl ElementAnnotationScanner {
         global_registry()
             .read()
             .get(element)
-            .map(|e| matches!(e.kind(), ElementKind::Type | ElementKind::Method | ElementKind::Field))
+            .map(|e| {
+                matches!(
+                    e.kind(),
+                    ElementKind::Type | ElementKind::Method | ElementKind::Field
+                )
+            })
             .unwrap_or(false)
     }
 }

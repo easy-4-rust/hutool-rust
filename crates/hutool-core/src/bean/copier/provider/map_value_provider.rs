@@ -165,10 +165,7 @@ mod tests {
         let mut map = HashMap::new();
         map.insert(
             "tags".to_string(),
-            Value::Array(vec![
-                Value::String("a".into()),
-                Value::String("b".into()),
-            ]),
+            Value::Array(vec![Value::String("a".into()), Value::String("b".into())]),
         );
 
         let provider = MapValueProvider::new(map);

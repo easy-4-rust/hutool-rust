@@ -3,8 +3,8 @@
 //!
 //! 委托 `EscapeUtil::unescape_html4`。
 
-use crate::escape_util::EscapeUtil;
 use crate::Result;
+use crate::escape_util::EscapeUtil;
 
 /// 对齐 Java: `Html4Unescape#`
 #[derive(Debug, Clone, Copy, Default)]

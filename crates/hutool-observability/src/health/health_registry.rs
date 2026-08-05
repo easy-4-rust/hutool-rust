@@ -104,4 +104,4 @@ impl HealthRegistry {
     }
 }
 
-use super::{unix_time_ms};
+use super::unix_time_ms;

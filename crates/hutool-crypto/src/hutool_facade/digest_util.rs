@@ -6,8 +6,7 @@
 
 /// 对齐: `cn.hutool.crypto.digest.DigestUtil`
 /// 摘要工具类
-
-use crate::{md5_hex, md5_hex16, sha1_hex, sha256_hex, sha512_hex, CryptoError};
+use crate::{CryptoError, md5_hex, md5_hex16, sha1_hex, sha256_hex, sha512_hex};
 use secrecy::SecretString;
 
 /// Hutool `DigestUtil` static facade.

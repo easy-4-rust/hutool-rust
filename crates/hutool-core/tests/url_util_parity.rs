@@ -37,24 +37,39 @@ fn url_util_leftover_helpers() {
     assert!(UrlUtil::build_query(&[("q", "a b")]).contains("q="));
     assert!(UrlUtil::get_data_uri("text/plain", "YQ==").starts_with("data:"));
     assert!(!UrlUtil::url("example.com/x").is_empty());
-    assert_eq!(UrlUtil::complete_url("http://a.com", "/b"), "http://a.com/b");
+    assert_eq!(
+        UrlUtil::complete_url("http://a.com", "/b"),
+        "http://a.com/b"
+    );
     assert!(!UrlUtil::get_decoded_path("http://a.com/%20").is_empty());
 }
 
 #[test]
 fn get_host_basic() {
-    assert_eq!(UrlUtil::get_host("http://example.com/path"), Some("example.com"));
-    assert_eq!(UrlUtil::get_host("https://example.com"), Some("example.com"));
+    assert_eq!(
+        UrlUtil::get_host("http://example.com/path"),
+        Some("example.com")
+    );
+    assert_eq!(
+        UrlUtil::get_host("https://example.com"),
+        Some("example.com")
+    );
 }
 
 #[test]
 fn get_host_with_port() {
-    assert_eq!(UrlUtil::get_host("http://example.com:8080/path"), Some("example.com:8080"));
+    assert_eq!(
+        UrlUtil::get_host("http://example.com:8080/path"),
+        Some("example.com:8080")
+    );
 }
 
 #[test]
 fn get_path_basic() {
-    assert_eq!(UrlUtil::get_path("http://example.com/path/to/resource"), "/path/to/resource");
+    assert_eq!(
+        UrlUtil::get_path("http://example.com/path/to/resource"),
+        "/path/to/resource"
+    );
 }
 
 #[test]
@@ -116,8 +131,14 @@ fn encode_decode_roundtrip() {
 
 #[test]
 fn normalize_with_protocol() {
-    assert_eq!(UrlUtil::normalize("http://example.com"), "http://example.com");
-    assert_eq!(UrlUtil::normalize("https://example.com"), "https://example.com");
+    assert_eq!(
+        UrlUtil::normalize("http://example.com"),
+        "http://example.com"
+    );
+    assert_eq!(
+        UrlUtil::normalize("https://example.com"),
+        "https://example.com"
+    );
 }
 
 #[test]
@@ -127,14 +148,17 @@ fn normalize_without_protocol() {
 
 #[test]
 fn complete_url_basic() {
-    assert_eq!(UrlUtil::complete_url("http://example.com", "/path"), "http://example.com/path");
-    assert_eq!(UrlUtil::complete_url("http://example.com/", "path"), "http://example.com/path");
+    assert_eq!(
+        UrlUtil::complete_url("http://example.com", "/path"),
+        "http://example.com/path"
+    );
+    assert_eq!(
+        UrlUtil::complete_url("http://example.com/", "path"),
+        "http://example.com/path"
+    );
 }
 
-
 // ── 对齐 Hutool URLUtilTest ──
-
-
 
 /// 对齐 Java: `URLUtilTest.normalizeTest()`
 #[test]

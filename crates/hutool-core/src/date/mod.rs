@@ -6,6 +6,7 @@
 
 pub mod between_formatter;
 pub mod calendar_util;
+pub mod chinese;
 pub mod chinese_date;
 pub mod date_between;
 pub mod date_exception;
@@ -16,6 +17,7 @@ pub mod date_range;
 pub mod date_time;
 pub mod date_unit;
 pub mod date_util;
+pub mod format;
 pub mod group_time_interval;
 pub mod local_date_time_util;
 pub mod month;
@@ -30,5 +32,3 @@ pub mod week;
 pub mod year_quarter;
 pub mod zodiac;
 pub mod zone_util;
-pub mod chinese;
-pub mod format;

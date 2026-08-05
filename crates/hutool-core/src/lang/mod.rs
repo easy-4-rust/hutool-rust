@@ -8,9 +8,9 @@ pub mod assert_;
 pub mod caller;
 pub mod chain;
 pub mod class_scanner;
+pub mod consistent_hash;
 pub mod console;
 pub mod console_table;
-pub mod consistent_hash;
 pub mod default_segment;
 pub mod editor;
 pub mod enum_item;
@@ -43,4 +43,3 @@ pub mod weight_random;
 
 pub use object_id::ObjectId;
 pub use snowflake::Snowflake;
-

@@ -2,7 +2,10 @@
 //! 来源: hutool-cron/src/main/java/cn/hutool/cron/listener/TaskListenerManager.java
 //! 中文说明: 线程安全的监听器集合，统一分发任务生命周期事件。
 
-use std::{fmt, sync::{Arc, RwLock}};
+use std::{
+    fmt,
+    sync::{Arc, RwLock},
+};
 
 use crate::{CronError, TaskExecutor};
 

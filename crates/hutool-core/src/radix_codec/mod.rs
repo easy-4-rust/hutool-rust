@@ -8,25 +8,24 @@ use std::{
 use encoding_rs::{Encoding, GBK};
 
 use crate::{
-    CoreError, Result,
-    advanced_codec::{convert_base},
-    base32_decode, base32_encode, base32_hex_decode, base32_hex_encode, base62_decode,
-    base62_encode, base62_inverted_decode, base62_inverted_encode,
+    CoreError, Result, advanced_codec::convert_base, base32_decode, base32_encode,
+    base32_hex_decode, base32_hex_encode, base62_decode, base62_encode, base62_inverted_decode,
+    base62_inverted_encode,
 };
 
-mod base32_encoder;
 mod base32_decoder;
-mod base58_encoder;
+mod base32_encoder;
 mod base58_decoder;
-mod base62_encoder;
+mod base58_encoder;
 mod base62_decoder;
+mod base62_encoder;
 
-pub use base32_encoder::Base32Encoder;
 pub use base32_decoder::Base32Decoder;
-pub use base58_encoder::Base58Encoder;
+pub use base32_encoder::Base32Encoder;
 pub use base58_decoder::Base58Decoder;
-pub use base62_encoder::Base62Encoder;
+pub use base58_encoder::Base58Encoder;
 pub use base62_decoder::Base62Decoder;
+pub use base62_encoder::Base62Encoder;
 
 const BASE32_STANDARD_BYTES: [u8; 32] = *b"ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
 

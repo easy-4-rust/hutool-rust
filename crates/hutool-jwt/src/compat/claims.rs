@@ -69,9 +69,8 @@ impl Claims {
 
     /// 将 claims 编码为 JWT 片段使用的 URL-safe Base64 JSON。
     pub(super) fn encode(&self) -> String {
-        URL_SAFE_NO_PAD.encode(
-            serde_json::to_vec(&self.0).expect("serde_json::Value maps always serialize"),
-        )
+        URL_SAFE_NO_PAD
+            .encode(serde_json::to_vec(&self.0).expect("serde_json::Value maps always serialize"))
     }
 }
 

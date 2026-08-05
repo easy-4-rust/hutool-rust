@@ -24,7 +24,7 @@ use hutool_log::dialect::slf4j::Slf4jLogFactory;
 use hutool_log::dialect::tinylog::{TinyLog2Factory, TinyLogFactory};
 use hutool_log::level::Level;
 use hutool_log::{
-    format_message, GlobalLogFactory, LogFactory, LogLevel, LogRecord, LogSink, StaticLog,
+    GlobalLogFactory, LogFactory, LogLevel, LogRecord, LogSink, StaticLog, format_message,
 };
 
 const LINE: &str = "----------------------------------------------------------------------";
@@ -100,19 +100,13 @@ fn run_custom_dialect(
         let log = LogFactory::get_current();
         if include_debug {
             log.log_nullable(LogLevel::Debug, None);
-            log.debug_fmt(
-                "This is custom '{}' log\n{}",
-                &[&factory_name, &LINE],
-            );
+            log.debug_fmt("This is custom '{}' log\n{}", &[&factory_name, &LINE]);
         }
         if include_nulls {
             log.log_nullable(LogLevel::Info, None);
             log.log_nullable(LogLevel::Info, None);
         }
-        log.info_fmt(
-            "This is custom '{}' log\n{}",
-            &[&factory_name, &LINE],
-        );
+        log.info_fmt("This is custom '{}' log\n{}", &[&factory_name, &LINE]);
     });
     sink.records()
 }

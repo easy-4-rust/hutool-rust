@@ -1,7 +1,7 @@
 //! Explicit, injectable SMTP and MIME mail support.
 
-use lettre::message::{Attachment, Mailbox, MultiPart, SinglePart, header::ContentType};
 use lettre::Message;
+use lettre::message::{Attachment, Mailbox, MultiPart, SinglePart, header::ContentType};
 
 use crate::{ExtraError, Result};
 

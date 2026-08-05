@@ -2,8 +2,6 @@
 
 /// 对齐: `cn.hutool.core.collection.AvgPartition`
 /// 平均分区
-
-
 use crate::{CoreError, Result};
 
 /// A borrowed view that distributes a slice across exactly `limit` partitions.

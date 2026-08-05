@@ -3,16 +3,15 @@
 //! Backed by the [`emojis`] crate (GitHub gemoji shortcodes) rather than
 //! emoji-java, with the same facade shapes Hutool callers expect.
 
-/// 对齐: `cn.hutool.extra.emoji.EmojiUtil`
-/// Emoji 工具类
-
-mod fitzpatrick_action;
 mod emoji;
 mod emoji_util;
+/// 对齐: `cn.hutool.extra.emoji.EmojiUtil`
+/// Emoji 工具类
+mod fitzpatrick_action;
 
-pub use fitzpatrick_action::FitzpatrickAction;
 pub use emoji::Emoji;
 pub use emoji_util::EmojiUtil;
+pub use fitzpatrick_action::FitzpatrickAction;
 
 fn from_static(emoji: &'static emojis::Emoji) -> Emoji {
     Emoji {
@@ -23,10 +22,7 @@ fn from_static(emoji: &'static emojis::Emoji) -> Emoji {
 }
 
 fn parse_html_codepoint(body: &str) -> Option<u32> {
-    if let Some(hex) = body
-        .strip_prefix('x')
-        .or_else(|| body.strip_prefix('X'))
-    {
+    if let Some(hex) = body.strip_prefix('x').or_else(|| body.strip_prefix('X')) {
         u32::from_str_radix(hex, 16).ok()
     } else {
         body.parse().ok()

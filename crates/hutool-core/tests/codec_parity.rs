@@ -41,7 +41,10 @@ ZzcyZWFwanI2NWNneTg2dnp6cmJoMHQ4MHpxY2R6c3pjazZtaQ=";
 fn encode_and_decode_test() {
     let a = "伦家是一个非常长的字符串66";
     let encode = base64_encode_text(a, UTF_8, false);
-    assert_eq!(encode, "5Lym5a625piv5LiA5Liq6Z2e5bi46ZW/55qE5a2X56ym5LiyNjY=");
+    assert_eq!(
+        encode,
+        "5Lym5a625piv5LiA5Liq6Z2e5bi46ZW/55qE5a2X56ym5LiyNjY="
+    );
     assert_eq!(base64_decode_text(&encode, UTF_8), a);
 }
 
@@ -50,7 +53,10 @@ fn encode_and_decode_test() {
 fn encode_and_decode_without_padding_test() {
     let a = "伦家是一个非常长的字符串66";
     let encode = base64_encode_without_padding(a.as_bytes());
-    assert_eq!(encode, "5Lym5a625piv5LiA5Liq6Z2e5bi46ZW/55qE5a2X56ym5LiyNjY");
+    assert_eq!(
+        encode,
+        "5Lym5a625piv5LiA5Liq6Z2e5bi46ZW/55qE5a2X56ym5LiyNjY"
+    );
     assert_eq!(base64_decode_text(&encode, UTF_8), a);
 }
 
@@ -111,7 +117,10 @@ fn base32_encode_and_decode_test() {
         encode,
         "4S6KNZNOW3TJRL7EXCAOJOFK5GOZ5ZNYXDUZLP7HTKCOLLMX46WKNZFYWI======"
     );
-    assert_eq!(String::from_utf8(base32_decode(&encode).unwrap()).unwrap(), a);
+    assert_eq!(
+        String::from_utf8(base32_decode(&encode).unwrap()).unwrap(),
+        a
+    );
     assert_eq!(
         String::from_utf8(base32_decode(&encode.to_lowercase()).unwrap()).unwrap(),
         a
@@ -140,9 +149,13 @@ fn hex_encode_and_decode_test() {
 /// 对齐 Java: `Base32Test.encodeAndDecodeRandomTest()`
 #[test]
 fn base32_encode_and_decode_random_test() {
-    let a = RandomUtil::random_string(RandomUtil::random_int_range(1, 1000).unsigned_abs() as usize);
+    let a =
+        RandomUtil::random_string(RandomUtil::random_int_range(1, 1000).unsigned_abs() as usize);
     let encode = base32_encode(a.as_bytes());
-    assert_eq!(String::from_utf8(base32_decode(&encode).unwrap()).unwrap(), a);
+    assert_eq!(
+        String::from_utf8(base32_decode(&encode).unwrap()).unwrap(),
+        a
+    );
 }
 
 /// 对齐 Java: `Base32Test.decodeTest()`
@@ -166,10 +179,7 @@ fn base32_decode_test() {
 #[test]
 fn encode_checked_test() {
     let a = b"hello world";
-    assert_eq!(
-        base58_encode_checked(Some(0), a),
-        "13vQB7B6MrGQZaxCuFg4oh"
-    );
+    assert_eq!(base58_encode_checked(Some(0), a), "13vQB7B6MrGQZaxCuFg4oh");
     assert_eq!(base58_encode_checked(None, a), "3vQB7B6MrGQZaxCuFg4oh");
 }
 
@@ -210,7 +220,10 @@ fn base62_encode_and_decode_test() {
         encode,
         "17vKU8W4JMG8dQF8lk9VNnkdMOeWn4rJMva6F0XsLrrT53iKBnqo"
     );
-    assert_eq!(String::from_utf8(base62_decode(&encode).unwrap()).unwrap(), a);
+    assert_eq!(
+        String::from_utf8(base62_decode(&encode).unwrap()).unwrap(),
+        a
+    );
 }
 
 /// 对齐 Java: `Base62Test.encodeAndDecodeInvertedTest()`
@@ -231,15 +244,20 @@ fn encode_and_decode_inverted_test() {
 /// 对齐 Java: `Base62Test.encodeAndDecodeRandomTest()`
 #[test]
 fn base62_encode_and_decode_random_test() {
-    let a = RandomUtil::random_string(RandomUtil::random_int_range(1, 1000).unsigned_abs() as usize);
+    let a =
+        RandomUtil::random_string(RandomUtil::random_int_range(1, 1000).unsigned_abs() as usize);
     let encode = base62_encode(&a);
-    assert_eq!(String::from_utf8(base62_decode(&encode).unwrap()).unwrap(), a);
+    assert_eq!(
+        String::from_utf8(base62_decode(&encode).unwrap()).unwrap(),
+        a
+    );
 }
 
 /// 对齐 Java: `Base62Test.encodeAndDecodeInvertedRandomTest()`
 #[test]
 fn encode_and_decode_inverted_random_test() {
-    let a = RandomUtil::random_string(RandomUtil::random_int_range(1, 1000).unsigned_abs() as usize);
+    let a =
+        RandomUtil::random_string(RandomUtil::random_int_range(1, 1000).unsigned_abs() as usize);
     let encode = base62_inverted_encode(&a);
     assert_eq!(
         String::from_utf8(base62_inverted_decode(&encode).unwrap()).unwrap(),
@@ -283,7 +301,10 @@ fn test0() {
     let text = "Hello World!";
     let morse = "...././.-../.-../---/-...../.--/---/.-./.-../-../-.-.--/";
     assert_eq!(MorseCodec::default().encode(text), morse);
-    assert_eq!(MorseCodec::default().decode(morse).unwrap(), text.to_uppercase());
+    assert_eq!(
+        MorseCodec::default().decode(morse).unwrap(),
+        text.to_uppercase()
+    );
 }
 
 /// 对齐 Java: `MorseTest.test1()`

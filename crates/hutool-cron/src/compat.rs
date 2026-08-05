@@ -215,8 +215,8 @@ impl TaskTable {
 mod tests {
     use std::{
         sync::{
-            atomic::{AtomicUsize, Ordering},
             Arc,
+            atomic::{AtomicUsize, Ordering},
         },
         time::Duration,
     };
@@ -316,8 +316,10 @@ mod tests {
                 Arc::new(ok_task),
             ))
             .unwrap();
-        assert!(table.to_string().contains("
-two"));
+        assert!(table.to_string().contains(
+            "
+two"
+        ));
         assert!(table.remove("one"));
         assert!(!table.remove("one"));
         assert!(table.remove("two"));

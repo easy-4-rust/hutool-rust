@@ -157,7 +157,9 @@ impl HttpResponse {
     /// Java: `HttpResponse.getCookie(String name)`
     #[must_use]
     pub fn get_cookie(&self, name: &str) -> Option<HttpCookie> {
-        self.get_cookies().into_iter().find(|cookie| cookie.name() == name)
+        self.get_cookies()
+            .into_iter()
+            .find(|cookie| cookie.name() == name)
     }
 
     /// Returns the value of the first cookie matching `name`.
@@ -165,7 +167,8 @@ impl HttpResponse {
     /// Java: `HttpResponse.getCookieValue(String name)`
     #[must_use]
     pub fn get_cookie_value(&self, name: &str) -> Option<String> {
-        self.get_cookie(name).map(|cookie| cookie.value().to_string())
+        self.get_cookie(name)
+            .map(|cookie| cookie.value().to_string())
     }
 
     /// No-op sync: bodies are always buffered under the client byte limit.
@@ -234,7 +237,10 @@ impl HttpResponse {
     /// Writes the body to a file or directory path (completing the file name when needed).
     ///
     /// Java: `HttpResponse.writeBody(File targetFileOrDir)` / `writeBody(String)`
-    pub fn write_body_to_path(&self, target_file_or_dir: impl AsRef<Path>) -> Result<u64, HttpError> {
+    pub fn write_body_to_path(
+        &self,
+        target_file_or_dir: impl AsRef<Path>,
+    ) -> Result<u64, HttpError> {
         let path = self.complete_file_name_from_header(target_file_or_dir.as_ref())?;
         let mut file = std::fs::File::create(&path)?;
         self.write_body(&mut file)
@@ -317,10 +323,7 @@ impl HttpResponse {
     ///
     /// Java: `HttpResponse.getFileNameFromDisposition(String paramName)`
     #[must_use]
-    pub fn get_file_name_from_disposition_param(
-        &self,
-        param_name: Option<&str>,
-    ) -> Option<String> {
+    pub fn get_file_name_from_disposition_param(&self, param_name: Option<&str>) -> Option<String> {
         let param = param_name.unwrap_or("filename");
         let dispositions: Vec<&str> = self
             .headers
@@ -396,4 +399,7 @@ impl fmt::Display for HttpResponse {
     }
 }
 
-use super::{decode_rfc5987, filename_from_dispositions, parse_set_cookie, percent_decode_lightweight, strip_quotes};
+use super::{
+    decode_rfc5987, filename_from_dispositions, parse_set_cookie, percent_decode_lightweight,
+    strip_quotes,
+};

@@ -162,7 +162,11 @@ fn spring_util_with_auto_config_test_get_bean_with_type_reference_test() {
 #[test]
 fn enable_spring_util_test_test() {
     // @EnableSpringUtil 后可取上下文 — 本地断言 registry 可用
-    assert!(registry().lock().unwrap().contains_key("testDemo") || get_bean("testDemo").is_some() || true);
+    assert!(
+        registry().lock().unwrap().contains_key("testDemo")
+            || get_bean("testDemo").is_some()
+            || true
+    );
     let _ = registry();
     assert!(get_bean("testDemo").is_some());
 }

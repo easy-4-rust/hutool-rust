@@ -2,7 +2,6 @@
 
 /// 对齐: `cn.hutool.core.codec.Decoder`
 /// 解码器
-
 use crate::Result;
 
 /// Rust-native equivalent of Hutool's generic decoder contract.

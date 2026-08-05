@@ -6,15 +6,15 @@
 use std::sync::atomic::AtomicU64;
 use std::sync::{Condvar, Mutex, OnceLock};
 
-mod thread_util;
-mod scheduled_handle;
 mod count_down_latch;
+mod scheduled_handle;
 mod scheduled_pool;
+mod thread_util;
 
-pub use thread_util::ThreadUtil;
-pub use scheduled_handle::ScheduledHandle;
 pub use count_down_latch::CountDownLatch;
+pub use scheduled_handle::ScheduledHandle;
 pub use scheduled_pool::ScheduledPool;
+pub use thread_util::ThreadUtil;
 
 static SCHEDULE_SEQ: AtomicU64 = AtomicU64::new(1);
 

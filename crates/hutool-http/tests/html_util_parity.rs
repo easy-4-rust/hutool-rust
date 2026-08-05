@@ -105,10 +105,7 @@ fn unwrap_html_tag_test() {
 fn unwrap_test2() {
     let html_string = "<html><img src='aaa'><i>测试文本</i></html>";
     let clean_txt = HtmlUtil::remove_html_tag_with(html_string, false, &["i", "br"]);
-    assert_eq!(
-        clean_txt,
-        "<html><img src='aaa'>测试文本</html>"
-    );
+    assert_eq!(clean_txt, "<html><img src='aaa'>测试文本</html>");
 }
 
 /// 对齐 Java: `HtmlUtilTest.escapeTest()`
@@ -161,7 +158,8 @@ fn remove_html_attr_test() {
         "<div></div><span></span>"
     );
 
-    let html = "<div style=\"margin:100%\" class=test_div></div><span Class='test_div' width=100></span>";
+    let html =
+        "<div style=\"margin:100%\" class=test_div></div><span Class='test_div' width=100></span>";
     assert_eq!(
         HtmlUtil::remove_html_attr(html, &["class"]),
         "<div style=\"margin:100%\"></div><span width=100></span>"
@@ -210,7 +208,10 @@ fn html_filter_issue3433_test() {
     assert!(filter.is_always_make_tags());
     assert!(filter.is_strip_comments());
     assert_eq!(HtmlFilter::chr(65), "A");
-    assert_eq!(HtmlFilter::html_special_chars("<&>\""), "&lt;&amp;&gt;&quot;");
+    assert_eq!(
+        HtmlFilter::html_special_chars("<&>\""),
+        "&lt;&amp;&gt;&quot;"
+    );
     let debug = HtmlFilter::with_debug(true);
     assert!(debug.is_always_make_tags());
     let mut conf = std::collections::HashMap::new();
@@ -225,10 +226,7 @@ fn html_filter_issue3433_test() {
 #[test]
 fn issue_i8_yv0_k_remove_html_attr_test() {
     let str = "<content styleCode=\"xmChange yes\">";
-    assert_eq!(
-        HtmlUtil::remove_html_attr(str, &["styleCode"]),
-        "<content>"
-    );
+    assert_eq!(HtmlUtil::remove_html_attr(str, &["styleCode"]), "<content>");
 }
 
 /// 对齐 Java: `IssueI8YV0KTest.removeHtmlAttrTest2()`

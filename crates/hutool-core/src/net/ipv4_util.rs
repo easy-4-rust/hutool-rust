@@ -123,11 +123,7 @@ impl Ipv4Util {
         if to < from || to - from > 65_536 {
             return None;
         }
-        Some(
-            (from..=to)
-                .map(|v| Self::long_to_ipv4(v as u32))
-                .collect(),
-        )
+        Some((from..=to).map(|v| Self::long_to_ipv4(v as u32)).collect())
     }
 
     /// 对齐 Java: `Ipv4Util.list(String, int, boolean)`
@@ -161,9 +157,7 @@ impl Ipv4Util {
             return false;
         };
         // 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 127.0.0.0/8
-        matches!(ip >> 24, 10 | 127)
-            || (ip >> 20) == 0xAC1
-            || (ip >> 16) == 0xC0A8
+        matches!(ip >> 24, 10 | 127) || (ip >> 20) == 0xAC1 || (ip >> 16) == 0xC0A8
     }
 
     /// 对齐 Java: `Ipv4Util.matches(String wildcard, String ipAddress)`
@@ -211,7 +205,10 @@ mod tests {
     fn round_trip_and_mask() {
         assert_eq!(Ipv4Util::long_to_ipv4(0xC0A80101), "192.168.1.1");
         assert_eq!(Ipv4Util::ipv4_to_long("192.168.1.1"), Some(0xC0A80101));
-        assert_eq!(Ipv4Util::get_mask_by_mask_bit(24).as_deref(), Some("255.255.255.0"));
+        assert_eq!(
+            Ipv4Util::get_mask_by_mask_bit(24).as_deref(),
+            Some("255.255.255.0")
+        );
         assert_eq!(Ipv4Util::get_mask_bit_by_mask("255.255.255.0"), Some(24));
         assert!(Ipv4Util::is_inner_ip("192.168.0.1"));
         assert!(!Ipv4Util::is_inner_ip("8.8.8.8"));

@@ -32,3 +32,23 @@ impl AIResponse {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json::json;
+
+    #[test]
+    fn json_response_into_text_and_bytes() {
+        let response = AIResponse::Json(json!({"answer": 42}));
+        assert_eq!(response.clone().into_text(), r#"{"answer":42}"#);
+        assert_eq!(response.into_bytes(), br#"{"answer":42}"#.to_vec());
+    }
+
+    #[test]
+    fn bytes_response_into_text_and_bytes() {
+        let bytes = AIResponse::Bytes(b"hello".to_vec());
+        assert_eq!(bytes.clone().into_text(), "hello");
+        assert_eq!(bytes.into_bytes(), b"hello".to_vec());
+    }
+}

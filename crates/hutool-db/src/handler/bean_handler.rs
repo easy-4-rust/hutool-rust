@@ -15,9 +15,10 @@ impl BeanHandler {
     }
 
     /// 对齐 Java: `handle` —— 首行转 bean。
-    pub fn handle<T: DeserializeOwned>(&self, rows: &[Entity]) -> Result<Option<T>, serde_json::Error> {
-        rows.first()
-            .map(Entity::to_bean_ignore_case)
-            .transpose()
+    pub fn handle<T: DeserializeOwned>(
+        &self,
+        rows: &[Entity],
+    ) -> Result<Option<T>, serde_json::Error> {
+        rows.first().map(Entity::to_bean_ignore_case).transpose()
     }
 }

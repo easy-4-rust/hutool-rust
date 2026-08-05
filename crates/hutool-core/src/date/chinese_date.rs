@@ -4,15 +4,15 @@
 
 use chrono::{Datelike, NaiveDate};
 
+use crate::Result;
 use crate::date::chinese::chinese_month::ChineseMonth;
 use crate::date::chinese::gan_zhi::GanZhi;
 use crate::date::chinese::lunar_festival::LunarFestival;
-use crate::date::chinese::lunar_info::{LunarInfo, BASE_DAY, BASE_YEAR, MAX_YEAR};
+use crate::date::chinese::lunar_info::{BASE_DAY, BASE_YEAR, LunarInfo, MAX_YEAR};
 use crate::date::chinese::solar_terms::SolarTerms;
 use crate::date::date_time::DateTime;
 use crate::date::date_util::DateUtil;
 use crate::date::zodiac::Zodiac;
-use crate::Result;
 
 /// 对齐 Java: `cn.hutool.core.date.ChineseDate`
 #[derive(Debug, Clone)]
@@ -154,8 +154,15 @@ impl ChineseDate {
 
     /// 公历日期。
     pub fn get_gregorian_date(&self) -> DateTime {
-        DateTime::of_ymd_hms(self.gyear, self.gmonth_base1 as u32, self.gday as u32, 0, 0, 0)
-            .unwrap_or_else(|_| DateUtil::date())
+        DateTime::of_ymd_hms(
+            self.gyear,
+            self.gmonth_base1 as u32,
+            self.gday as u32,
+            0,
+            0,
+            0,
+        )
+        .unwrap_or_else(|_| DateUtil::date())
     }
 
     /// 农历月份（简体）。
@@ -190,7 +197,11 @@ impl ChineseDate {
             _ if day > 30 => String::new(),
             _ => {
                 let n = if day % 10 == 0 { 9 } else { day % 10 - 1 };
-                format!("{}{}", chinese_ten[(day / 10) as usize], chinese_digit(n + 1))
+                format!(
+                    "{}{}",
+                    chinese_ten[(day / 10) as usize],
+                    chinese_digit(n + 1)
+                )
             }
         }
     }

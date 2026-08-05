@@ -2,7 +2,9 @@
 //! 来源: `hutool-system/src/main/java/cn/hutool/system/ManagementInfo.java`
 //! 中文说明: 替代 `java.lang.management.ManagementFactory` 的便携式管理信息聚合。
 
-use crate::{compilation_info::CompilationInfo, os_info::OsInfo, oshi::MemoryInfo, oshi::ProcessInfo};
+use crate::{
+    compilation_info::CompilationInfo, os_info::OsInfo, oshi::MemoryInfo, oshi::ProcessInfo,
+};
 
 /// 对齐: `java.lang.management.ManagementFactory` (替代)
 /// 中文说明: 便携式的原生管理信息集合，替代 JVM 的 ManagementFactory

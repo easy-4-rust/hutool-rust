@@ -6,7 +6,7 @@
 //!
 //! hutool-extra 提供安全 ZIP 创建/解压；tar/7z/cpio/tgz 用 ZIP 本地语义覆盖。
 
-use hutool_extra::archive::{create_zip, extract_zip, ExtractionLimits};
+use hutool_extra::archive::{ExtractionLimits, create_zip, extract_zip};
 use std::io::Cursor;
 
 fn zip_roundtrip(entries: &[(&str, &[u8])]) {

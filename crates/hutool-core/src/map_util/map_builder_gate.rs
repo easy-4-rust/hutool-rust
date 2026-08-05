@@ -16,7 +16,9 @@ pub struct MapBuilderGate<K, V> {
 impl<K: Eq + Hash, V> MapBuilderGate<K, V> {
     /// 创建空 builder。
     pub fn create() -> Self {
-        Self { map: HashMap::new() }
+        Self {
+            map: HashMap::new(),
+        }
     }
     /// 从已有 map 创建。
     pub fn create_from(map: HashMap<K, V>) -> Self {

@@ -6,8 +6,7 @@
 
 /// 对齐: `cn.hutool.crypto.symmetric.SM4`
 /// SM4 加密器
-
-use crate::{sm4_ecb_decrypt, sm4_ecb_encrypt, CryptoError};
+use crate::{CryptoError, sm4_ecb_decrypt, sm4_ecb_encrypt};
 
 /// Hutool `SM4` facade.
 #[derive(Debug, Clone, Copy, Default)]

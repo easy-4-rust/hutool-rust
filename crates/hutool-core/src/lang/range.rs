@@ -55,11 +55,7 @@ pub fn int_range(start: i32, end: i32, step: i32) -> Range<i32> {
     Range::new(start, end, move |cur, end, _| {
         let n = cur + step;
         if step > 0 {
-            if n > *end {
-                None
-            } else {
-                Some(n)
-            }
+            if n > *end { None } else { Some(n) }
         } else if n < *end {
             None
         } else {

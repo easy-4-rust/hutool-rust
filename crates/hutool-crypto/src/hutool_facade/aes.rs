@@ -6,10 +6,9 @@
 
 /// 对齐: `cn.hutool.crypto.symmetric.AES`
 /// AES 加密器
-
 use crate::{
-    aes128_cbc_decrypt, aes128_cbc_encrypt, aes128_ecb_decrypt, aes128_ecb_encrypt,
-    aes256_gcm_decrypt, aes256_gcm_encrypt, CryptoError,
+    CryptoError, aes128_cbc_decrypt, aes128_cbc_encrypt, aes128_ecb_decrypt, aes128_ecb_encrypt,
+    aes256_gcm_decrypt, aes256_gcm_encrypt,
 };
 
 /// Hutool `AES` / `SymmetricCrypto` AES mode facade.

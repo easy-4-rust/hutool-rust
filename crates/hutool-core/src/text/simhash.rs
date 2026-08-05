@@ -62,7 +62,9 @@ impl Simhash {
     /// 对齐 `equals(segList)` — 与已存指纹比较汉明距离
     pub fn equals_segs(&self, segs: &[&str]) -> bool {
         let h = self.hash(segs);
-        self.stored.iter().any(|s| hamming(*s, h) <= self.hamming_thresh)
+        self.stored
+            .iter()
+            .any(|s| hamming(*s, h) <= self.hamming_thresh)
     }
 }
 

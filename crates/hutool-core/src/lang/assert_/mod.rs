@@ -4,6 +4,6 @@
 //! Rust 版本以 [`Result`] + [`AssertError`] 表达 Java 的断言失败抛出；
 //! 成功时返回被检查值，便于链式调用。
 
+mod assert;
 mod assert_error;
 mod assert_result;
-mod assert;

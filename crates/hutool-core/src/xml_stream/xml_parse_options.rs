@@ -2,7 +2,6 @@
 
 /// 对齐: `cn.hutool.core.xml.XmlStream`
 /// XML解析选项
-
 use quick_xml::XmlVersion;
 
 use super::namespace_mode::NamespaceMode;

@@ -2,7 +2,7 @@
 //! 来源: hutool-http/src/main/java/cn/hutool/http/UrlQuery.java
 //! 中文说明: URL查询参数解析和构建，支持有序参数映射和URL编码
 
-use hutool_core::{percent_decode, Rfc3986, UrlUtil};
+use hutool_core::{Rfc3986, UrlUtil, percent_decode};
 use indexmap::IndexMap;
 use std::borrow::Cow;
 

@@ -40,10 +40,9 @@ pub use jwt_util::JWTUtil;
 pub use jwt_validator::JWTValidator;
 
 pub use signers::{
-    AlgorithmUtil, AsymmetricJWTSigner, EllipticCurveJWTSigner,
-    HMacJWTSigner, JWTSigner, JWTSignerUtil, NoneJWTSigner, RegisteredPayload,
+    AlgorithmUtil, AsymmetricJWTSigner, EllipticCurveJWTSigner, HMacJWTSigner, JWTSigner,
+    JWTSignerUtil, NoneJWTSigner, RegisteredPayload,
 };
-
 
 /// Decodes a JWT header/payload segment (URL-safe or standard Base64, optional padding).
 fn decode_jwt_part(part: &str) -> Result<Vec<u8>, JWTException> {

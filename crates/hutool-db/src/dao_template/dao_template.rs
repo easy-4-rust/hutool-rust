@@ -3,10 +3,10 @@
 //! 提供 CRUD 模板：add/del/update/get/find/page/count/exist 等 25 个方法。
 //! 具体数据库操作依赖 Db（基于 SQLx），属于 unsafe-to-copy 的 JDBC 部分。
 
-use crate::entity::Entity;
-use crate::page_result::PageResult;
-use crate::hutool_page::HutoolPage;
 use crate::DbResult;
+use crate::entity::Entity;
+use crate::hutool_page::HutoolPage;
+use crate::page_result::PageResult;
 
 use super::dao_operations::DaoOperations;
 
@@ -42,20 +42,12 @@ impl DaoTemplate {
     }
 
     /// 对齐 `DaoTemplate(String, String, DataSource)`
-    pub fn with_pk_and_ds(
-        table_name: &str,
-        primary_key_field: &str,
-        _ds_name: &str,
-    ) -> Self {
+    pub fn with_pk_and_ds(table_name: &str, primary_key_field: &str, _ds_name: &str) -> Self {
         Self::with_primary_key(table_name, primary_key_field)
     }
 
     /// 对齐 `DaoTemplate(String, String, Db)`
-    pub fn with_pk_and_db(
-        table_name: &str,
-        primary_key_field: &str,
-        _db: &crate::Db,
-    ) -> Self {
+    pub fn with_pk_and_db(table_name: &str, primary_key_field: &str, _db: &crate::Db) -> Self {
         Self::with_primary_key(table_name, primary_key_field)
     }
 
@@ -106,11 +98,7 @@ impl DaoTemplate {
     }
 
     /// 对齐 `del(Entity where)`
-    pub fn del_by_entity(
-        &self,
-        where_entity: &Entity,
-        ops: &dyn DaoOperations,
-    ) -> DbResult<i64> {
+    pub fn del_by_entity(&self, where_entity: &Entity, ops: &dyn DaoOperations) -> DbResult<i64> {
         ops.del_by_entity(&self.table_name, where_entity)
     }
 

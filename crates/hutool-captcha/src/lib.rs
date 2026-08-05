@@ -13,10 +13,10 @@ use thiserror::Error;
 
 pub mod prelude;
 
-#[cfg(feature = "audio")]
-mod audio;
 #[cfg(feature = "raster")]
 mod abstract_captcha;
+#[cfg(feature = "audio")]
+mod audio;
 #[cfg(feature = "raster")]
 mod captcha_util;
 #[cfg(feature = "raster")]
@@ -36,20 +36,20 @@ mod raster;
 #[cfg(feature = "raster")]
 mod shear_captcha;
 
-#[cfg(feature = "audio")]
-pub use audio::{AudioRenderer, AudioSpec, AudioSynthesizer};
 #[cfg(feature = "raster")]
 pub use abstract_captcha::AbstractCaptcha;
+#[cfg(feature = "audio")]
+pub use audio::{AudioRenderer, AudioSpec, AudioSynthesizer};
 #[cfg(feature = "raster")]
 pub use captcha_util::CaptchaUtil;
 #[cfg(feature = "raster")]
 pub use circle_captcha::CircleCaptcha;
 #[cfg(feature = "raster")]
-pub use gif_captcha::GifCaptcha;
-#[cfg(feature = "raster")]
 pub use compat::{CaptchaColor, CaptchaFont, CaptchaStroke};
 #[cfg(feature = "raster")]
 pub use generator::{AbstractGenerator, MathGenerator, RandomGenerator};
+#[cfg(feature = "raster")]
+pub use gif_captcha::GifCaptcha;
 #[cfg(feature = "raster")]
 pub use icaptcha::ICaptcha;
 #[cfg(feature = "raster")]

@@ -5,8 +5,8 @@ pub use metrics::{
     gauge, histogram,
 };
 
-mod prometheus_metrics;
 mod metrics_error;
+mod prometheus_metrics;
 
-pub use prometheus_metrics::PrometheusMetrics;
 pub use metrics_error::MetricsError;
+pub use prometheus_metrics::PrometheusMetrics;

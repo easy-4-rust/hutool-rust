@@ -2,8 +2,10 @@
 
 /// 对齐: `cn.hutool.core.clone.CloneSupport`
 /// 克隆支持
-
-use std::{fmt::Debug, ops::{Deref, DerefMut}};
+use std::{
+    fmt::Debug,
+    ops::{Deref, DerefMut},
+};
 
 /// A transparent clone-support wrapper for values that implement [`Clone`].
 #[repr(transparent)]

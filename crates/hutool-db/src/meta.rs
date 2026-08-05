@@ -1,6 +1,6 @@
 //! 元数据工具 —— 对齐 Hutool `cn.hutool.db.meta.MetaUtil`（SQLite 子集）。
 
-use crate::db::{DbRuntimeError, DbResult};
+use crate::db::{DbResult, DbRuntimeError};
 use sqlx::{AssertSqlSafe, Row, SqlitePool};
 use std::collections::HashSet;
 
@@ -69,19 +69,23 @@ pub async fn get_column_names(pool: &SqlitePool, table: &str) -> DbResult<Vec<St
     let rows = sqlx::query(AssertSqlSafe(format!("PRAGMA table_info(\"{table}\")")))
         .fetch_all(pool)
         .await?;
-    Ok(rows.into_iter().map(|row| row.get::<String, _>(1)).collect())
+    Ok(rows
+        .into_iter()
+        .map(|row| row.get::<String, _>(1))
+        .collect())
 }
 
 /// 对齐 Java: 表不存在时抛出 `DbRuntimeException`。
 pub async fn get_table_meta_or_err(pool: &SqlitePool, table: &str) -> DbResult<Table> {
-    let exists: (i64,) = sqlx::query_as(
-        "SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name = ?",
-    )
-    .bind(table)
-    .fetch_one(pool)
-    .await?;
+    let exists: (i64,) =
+        sqlx::query_as("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name = ?")
+            .bind(table)
+            .fetch_one(pool)
+            .await?;
     if exists.0 == 0 {
-        return Err(DbRuntimeError::Message(format!("Table [{table}] not exists")));
+        return Err(DbRuntimeError::Message(format!(
+            "Table [{table}] not exists"
+        )));
     }
     get_table_meta(pool, table).await
 }

@@ -4,11 +4,11 @@
 
 use indexmap::IndexMap;
 
-mod http_util;
 mod form_map;
+mod http_util;
 
-pub use http_util::HttpUtil;
 pub use form_map::FormMap;
+pub use http_util::HttpUtil;
 
 fn extract_meta_charset(content: &str) -> Option<String> {
     let lower = content.to_ascii_lowercase();

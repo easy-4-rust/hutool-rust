@@ -19,6 +19,8 @@ pub struct FileMagicNumber;
 impl FileMagicNumber {
     /// Sentinel used until the corresponding IO engine is implemented.
     pub fn pending_io_alignment() -> Result<()> {
-        Err(CoreError::PendingEngine("FileMagicNumber::pending_io_alignment"))
+        Err(CoreError::PendingEngine(
+            "FileMagicNumber::pending_io_alignment",
+        ))
     }
 }

@@ -12,4 +12,4 @@ impl DiagnosticsAuthorizer for DenyAll {
     }
 }
 
-use super::{DenyAll};
+use super::DenyAll;

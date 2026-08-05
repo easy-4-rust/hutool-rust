@@ -168,7 +168,10 @@ fn new_instance_vec() {
 fn get_string_from_map() {
     let mut map: HashMap<String, Box<dyn std::any::Any>> = HashMap::new();
     map.insert("name".to_string(), Box::new("Alice".to_string()));
-    assert_eq!(ReflectUtil::get_string(&map, "name"), Some("Alice".to_string()));
+    assert_eq!(
+        ReflectUtil::get_string(&map, "name"),
+        Some("Alice".to_string())
+    );
 }
 
 #[test]
@@ -226,13 +229,19 @@ fn convert_to_string_i32() {
 #[test]
 fn convert_to_string_string() {
     let val = "hello".to_string();
-    assert_eq!(ReflectUtil::convert_to_string(&val), Some("hello".to_string()));
+    assert_eq!(
+        ReflectUtil::convert_to_string(&val),
+        Some("hello".to_string())
+    );
 }
 
 #[test]
 fn convert_to_string_bool() {
     let val = true;
-    assert_eq!(ReflectUtil::convert_to_string(&val), Some("true".to_string()));
+    assert_eq!(
+        ReflectUtil::convert_to_string(&val),
+        Some("true".to_string())
+    );
 }
 
 #[test]

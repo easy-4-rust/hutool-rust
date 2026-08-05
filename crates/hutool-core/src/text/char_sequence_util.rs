@@ -8,22 +8,21 @@
 
 use std::fmt::Display;
 
-use crate::{CoreError, Result};
 use crate::string::{
     clean_blank as string_clean_blank, contains as string_contains,
     contains_ignore_case as string_contains_ignore_case, cut as string_cut,
     end_with as string_end_with, equals as string_equals,
     equals_ignore_case as string_equals_ignore_case, format_template as string_format_template,
-    index_of_ignore_case as string_index_of_ignore_case,
-    indexed_format as string_indexed_format, is_blank as string_is_blank,
-    last_index_of as string_last_index_of, length as string_length,
+    index_of_ignore_case as string_index_of_ignore_case, indexed_format as string_indexed_format,
+    is_blank as string_is_blank, last_index_of as string_last_index_of, length as string_length,
     remove_all as string_remove_all, repeat as string_repeat, replace as string_replace,
-    replace_by_code_point as string_replace_by_code_point,
-    split as string_split, split_to_array as string_split_to_array,
-    split_to_array_limit as string_split_to_array_limit, start_with as string_start_with,
-    strip as string_strip, sub_by_code_point as string_sub_by_code_point, trim as string_trim,
+    replace_by_code_point as string_replace_by_code_point, split as string_split,
+    split_to_array as string_split_to_array, split_to_array_limit as string_split_to_array_limit,
+    start_with as string_start_with, strip as string_strip,
+    sub_by_code_point as string_sub_by_code_point, trim as string_trim,
 };
 use crate::text::str_splitter::StrSplitter;
+use crate::{CoreError, Result};
 
 /// 对齐 Java: `CharSequenceUtil#`
 #[derive(Debug, Clone, Copy, Default)]
@@ -308,7 +307,10 @@ impl CharSequenceUtil {
 
     /// 对齐 Java: `CharSequenceUtil::indexOf#int (CharSequence str, char searchChar)`
     pub fn index_of_char(str: &str, c: char) -> Result<i32> {
-        Ok(str.find(c).map(|i| i as i32).unwrap_or(Self::INDEX_NOT_FOUND))
+        Ok(str
+            .find(c)
+            .map(|i| i as i32)
+            .unwrap_or(Self::INDEX_NOT_FOUND))
     }
 
     /// 对齐 Java: `CharSequenceUtil::indexOf#int (CharSequence str, char searchChar, int start)`
@@ -799,11 +801,7 @@ impl CharSequenceUtil {
     }
 
     /// 对齐 Java: `CharSequenceUtil::replaceIgnoreCase#String (CharSequence str, CharSequence searchStr, CharSequence replacement)`
-    pub fn replace_ignore_case(
-        str: &str,
-        search: &str,
-        replacement: &str,
-    ) -> Result<String> {
+    pub fn replace_ignore_case(str: &str, search: &str, replacement: &str) -> Result<String> {
         if search.is_empty() {
             return Ok(str.to_owned());
         }
@@ -870,8 +868,10 @@ impl CharSequenceUtil {
 
     /// 对齐 Java: `CharSequenceUtil::indexedFormat#String (CharSequence pattern, Object... arguments)`
     pub fn indexed_format(pattern: &str, args: &[&str]) -> Result<String> {
-        let display_args: Vec<&dyn std::fmt::Display> =
-            args.iter().map(|arg| arg as &dyn std::fmt::Display).collect();
+        let display_args: Vec<&dyn std::fmt::Display> = args
+            .iter()
+            .map(|arg| arg as &dyn std::fmt::Display)
+            .collect();
         string_indexed_format(pattern, &display_args)
     }
 
@@ -880,7 +880,10 @@ impl CharSequenceUtil {
         if suffix.is_empty() || string_end_with(str, suffix) {
             return Ok(str.to_owned());
         }
-        if others.iter().any(|s| !s.is_empty() && string_end_with(str, s)) {
+        if others
+            .iter()
+            .any(|s| !s.is_empty() && string_end_with(str, s))
+        {
             return Ok(str.to_owned());
         }
         Ok(format!("{str}{suffix}"))
@@ -1395,9 +1398,7 @@ impl CharSequenceUtil {
     /// 对齐 Java: `CharSequenceUtil::containsAnyIgnoreCase`
     pub fn contains_any_ignore_case(str: &str, test_strs: &[&str]) -> Result<bool> {
         let lower = str.to_lowercase();
-        Ok(test_strs
-            .iter()
-            .any(|t| lower.contains(&t.to_lowercase())))
+        Ok(test_strs.iter().any(|t| lower.contains(&t.to_lowercase())))
     }
 
     /// 对齐 Java: `CharSequenceUtil::appendIfMissingIgnoreCase`
@@ -1409,7 +1410,10 @@ impl CharSequenceUtil {
         let lower = str.to_lowercase();
         let mut candidates = vec![suffix];
         candidates.extend_from_slice(others);
-        if candidates.iter().any(|s| lower.ends_with(&s.to_lowercase())) {
+        if candidates
+            .iter()
+            .any(|s| lower.ends_with(&s.to_lowercase()))
+        {
             Ok(str.to_owned())
         } else {
             Ok(format!("{str}{suffix}"))

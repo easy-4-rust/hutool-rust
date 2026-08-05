@@ -2,7 +2,6 @@
 
 /// 对齐: `cn.hutool.core.util.ByteUtil.LongAdder`
 /// 长整型累加器
-
 use std::sync::atomic::{AtomicI64, Ordering};
 
 /// Concurrent integer adder equivalent to Java's `LongAdder` result branch.
@@ -31,4 +30,3 @@ impl LongAdder {
         self.value.load(Ordering::Relaxed)
     }
 }
-

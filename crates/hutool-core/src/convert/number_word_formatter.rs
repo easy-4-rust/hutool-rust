@@ -7,10 +7,20 @@
 #[derive(Debug, Clone, Default)]
 pub struct NumberWordFormatter;
 
-const NUMBER: [&str; 10] = ["", "ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE"];
+const NUMBER: [&str; 10] = [
+    "", "ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE",
+];
 const NUMBER_TEEN: [&str; 10] = [
-    "TEN", "ELEVEN", "TWELVE", "THIRTEEN", "FOURTEEN", "FIFTEEN", "SIXTEEN", "SEVENTEEN",
-    "EIGHTEEN", "NINETEEN",
+    "TEN",
+    "ELEVEN",
+    "TWELVE",
+    "THIRTEEN",
+    "FOURTEEN",
+    "FIFTEEN",
+    "SIXTEEN",
+    "SEVENTEEN",
+    "EIGHTEEN",
+    "NINETEEN",
 ];
 const NUMBER_TEN: [&str; 10] = [
     "TEN", "TWENTY", "THIRTY", "FORTY", "FIFTY", "SIXTY", "SEVENTY", "EIGHTY", "NINETY", "",
@@ -61,7 +71,11 @@ impl NumberWordFormatter {
             }
             index = STANDARD_UNIT_INDICES[unit_index as usize];
         }
-        format!("{}{}", decimal_format_hash_dot_hash_hash(res), NUMBER_SUFFIX[index])
+        format!(
+            "{}{}",
+            decimal_format_hash_dot_hash_hash(res),
+            NUMBER_SUFFIX[index]
+        )
     }
 
     fn format_str(x: &str) -> String {

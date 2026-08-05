@@ -2,7 +2,6 @@
 //! 来源: hutool-captcha/src/main/java/cn/hutool/captcha/ (扩展)
 //! 中文说明: 语音合成器请求的 PCM 格式规格
 
-
 /// PCM format requested from a speech synthesizer.
 ///
 /// 对齐: Rust 扩展，Java Hutool 无直接对应

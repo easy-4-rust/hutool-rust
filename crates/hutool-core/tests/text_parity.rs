@@ -3,8 +3,8 @@
 //! 对齐: hutool-core text 包 @Test 清单（除 CharSequenceUtilTest，已由 char_sequence_util_parity 覆盖）
 
 use hutool_core::text::csv::{
-    csv_read_config::CsvReadConfig, csv_util::CsvUtil, csv_write_config::CsvWriteConfig,
-    csv_writer::CsvWriter, csv_parser::CsvParser, csv_reader::CsvReader,
+    csv_parser::CsvParser, csv_read_config::CsvReadConfig, csv_reader::CsvReader,
+    csv_util::CsvUtil, csv_write_config::CsvWriteConfig, csv_writer::CsvWriter,
 };
 use hutool_core::text::finder::char_finder::CharFinder;
 use hutool_core::text::finder::length_finder::LengthFinder;
@@ -19,7 +19,9 @@ use indexmap::IndexMap;
 use std::path::PathBuf;
 
 fn resource(name: &str) -> PathBuf {
-    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/resources").join(name)
+    PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("tests/resources")
+        .join(name)
 }
 
 fn resource_str(name: &str) -> String {
@@ -31,7 +33,10 @@ fn resource_str(name: &str) -> String {
 #[test]
 fn ant_path_matcher_matches_test() {
     let m = AntPathMatcher::new();
-    assert!(m.match_path("/api/org/organization/{orgId}", "/api/org/organization/999").unwrap());
+    assert!(
+        m.match_path("/api/org/organization/{orgId}", "/api/org/organization/999")
+            .unwrap()
+    );
 }
 
 /// 对齐 Java: `AntPathMatcherTest.matchesTest2()`
@@ -39,12 +44,20 @@ fn ant_path_matcher_matches_test() {
 fn ant_path_matcher_matches_test2() {
     let m = AntPathMatcher::new();
     assert!(m.match_path("/**/*.xml*", "/WEB-INF/web.xml").unwrap());
-    assert!(m
-        .match_path("org/codelabor/*/**/*Service", "org/codelabor/example/HelloWorldService")
-        .unwrap());
-    assert!(m
-        .match_path("org/codelabor/*/**/*Service?", "org/codelabor/example/HelloWorldServices")
-        .unwrap());
+    assert!(
+        m.match_path(
+            "org/codelabor/*/**/*Service",
+            "org/codelabor/example/HelloWorldService"
+        )
+        .unwrap()
+    );
+    assert!(
+        m.match_path(
+            "org/codelabor/*/**/*Service?",
+            "org/codelabor/example/HelloWorldServices"
+        )
+        .unwrap()
+    );
 }
 
 /// 对齐 Java: `AntPathMatcherTest.matchesTest3()`
@@ -83,25 +96,38 @@ fn ant_path_matcher_matches_test4() {
     assert!(!m.match_path("test*aaa", "testblaaab").unwrap());
     assert!(m.match_path("/*/**", "/testing/testing").unwrap());
     assert!(m.match_path("/**/*", "/testing/testing").unwrap());
-    assert!(m.match_path("/bla/**/bla", "/bla/testing/testing/bla/bla").unwrap());
+    assert!(
+        m.match_path("/bla/**/bla", "/bla/testing/testing/bla/bla")
+            .unwrap()
+    );
     assert!(!m.match_path("/bla*bla/test", "/blaXXXbl/test").unwrap());
     assert!(!m.match_path("/????", "/bala/bla").unwrap());
     assert!(!m.match_path("/**/*bla", "/bla/bla/bla/bbb").unwrap());
-    assert!(m
-        .match_path("/*bla*/**/bla/**", "/XXXblaXXXX/testing/testing/bla/testing/testing/")
-        .unwrap());
-    assert!(m
-        .match_path("/*bla*/**/bla/*", "/XXXblaXXXX/testing/testing/bla/testing")
-        .unwrap());
-    assert!(m
-        .match_path("/*bla*/**/bla/**", "/XXXblaXXXX/testing/testing/bla/testing/testing")
-        .unwrap());
-    assert!(m
-        .match_path(
+    assert!(
+        m.match_path(
+            "/*bla*/**/bla/**",
+            "/XXXblaXXXX/testing/testing/bla/testing/testing/"
+        )
+        .unwrap()
+    );
+    assert!(
+        m.match_path("/*bla*/**/bla/*", "/XXXblaXXXX/testing/testing/bla/testing")
+            .unwrap()
+    );
+    assert!(
+        m.match_path(
+            "/*bla*/**/bla/**",
+            "/XXXblaXXXX/testing/testing/bla/testing/testing"
+        )
+        .unwrap()
+    );
+    assert!(
+        m.match_path(
             "/*bla*/**/bla/**",
             "/XXXblaXXXX/testing/testing/bla/testing/testing.jpg"
         )
-        .unwrap());
+        .unwrap()
+    );
     assert!(m.match_path("/foo/bar/**", "/foo/bar").unwrap());
     assert!(m.match_path("/{bla}.*", "/testing.html").unwrap());
     assert!(!m.match_path("/{bla}.htm", "/testing.html").unwrap());
@@ -112,7 +138,10 @@ fn ant_path_matcher_matches_test4() {
 fn ant_path_matcher_test_extract_uri_template_variables() {
     let m = AntPathMatcher::new();
     let map = m
-        .extract_uri_template_variables("/api/org/organization/{orgId}", "/api/org/organization/999")
+        .extract_uri_template_variables(
+            "/api/org/organization/{orgId}",
+            "/api/org/organization/999",
+        )
         .unwrap();
     assert_eq!(map.len(), 1);
 }
@@ -122,7 +151,10 @@ fn ant_path_matcher_test_extract_uri_template_variables() {
 #[test]
 fn char_finder_start_test() {
     assert_eq!(CharFinder::new('a').set_text("cba123").start(2).unwrap(), 2);
-    assert_eq!(CharFinder::new('c').set_text("cba123").start(2).unwrap(), -1);
+    assert_eq!(
+        CharFinder::new('c').set_text("cba123").start(2).unwrap(),
+        -1
+    );
     assert_eq!(CharFinder::new('3').set_text("cba123").start(2).unwrap(), 5);
 }
 
@@ -130,15 +162,27 @@ fn char_finder_start_test() {
 #[test]
 fn char_finder_negative_start_test() {
     assert_eq!(
-        CharFinder::new('a').set_text("cba123").set_negative(true).start(2).unwrap(),
+        CharFinder::new('a')
+            .set_text("cba123")
+            .set_negative(true)
+            .start(2)
+            .unwrap(),
         2
     );
     assert_eq!(
-        CharFinder::new('2').set_text("cba123").set_negative(true).start(2).unwrap(),
+        CharFinder::new('2')
+            .set_text("cba123")
+            .set_negative(true)
+            .start(2)
+            .unwrap(),
         -1
     );
     assert_eq!(
-        CharFinder::new('c').set_text("cba123").set_negative(true).start(2).unwrap(),
+        CharFinder::new('c')
+            .set_text("cba123")
+            .set_negative(true)
+            .start(2)
+            .unwrap(),
         0
     );
 }
@@ -264,7 +308,9 @@ fn csv_reader_read_test3() {
 /// 对齐 Java: `CsvReaderTest.lineNoTest()`
 #[test]
 fn csv_reader_line_no_test() {
-    let data = CsvReader::new().read_file(resource("test_lines.csv")).unwrap();
+    let data = CsvReader::new()
+        .read_file(resource("test_lines.csv"))
+        .unwrap();
     assert_eq!(data.get_row(0).unwrap().get_original_line_number(), 1);
     assert_eq!(data.get_row(0).unwrap().fields.join(","), "a,b,c,d");
     assert_eq!(data.get_row(2).unwrap().get_original_line_number(), 4);
@@ -322,7 +368,10 @@ fn csv_reader_read_disable_comment_test() {
     let data = CsvUtil::get_reader_with(cfg)
         .read_file(resource("test.csv"))
         .unwrap();
-    assert_eq!(data.get_row(0).unwrap().get(0).unwrap(), "# 这是一行注释，读取时应忽略");
+    assert_eq!(
+        data.get_row(0).unwrap().get(0).unwrap(),
+        "# 这是一行注释，读取时应忽略"
+    );
 }
 
 /// 对齐 Java: `CsvReaderTest.streamTest()`
@@ -339,7 +388,9 @@ fn csv_reader_stream_test() {
 /// 对齐 Java: `CsvUtilTest.readTest()`
 #[test]
 fn csv_util_read_test() {
-    let data = CsvUtil::get_reader().read_file(resource("test.csv")).unwrap();
+    let data = CsvUtil::get_reader()
+        .read_file(resource("test.csv"))
+        .unwrap();
     let row0 = data.get_row(0).unwrap();
     assert_eq!(row0.get(0).unwrap(), "sss,sss");
     assert_eq!(row0.get(1).unwrap(), "姓名");
@@ -403,7 +454,12 @@ fn csv_util_write_test() {
     let path = dir.path().join("testWrite.csv");
     let mut w = CsvUtil::get_writer(&path);
     w.write_rows(&[
-        vec!["a1".into(), "b1".into(), "c1".into(), "123345346456745756756785656".into()],
+        vec![
+            "a1".into(),
+            "b1".into(),
+            "c1".into(),
+            "123345346456745756756785656".into(),
+        ],
         vec!["a2".into(), "b2".into(), "c2".into()],
         vec!["a3".into(), "b3".into(), "c3".into()],
     ])
@@ -491,7 +547,8 @@ fn csv_util_write_data_test() {
 #[test]
 fn csv_writer_write_with_alias_test() {
     let mut cfg = CsvWriteConfig::default();
-    cfg.add_header_alias("name", "姓名").add_header_alias("gender", "性别");
+    cfg.add_header_alias("name", "姓名")
+        .add_header_alias("gender", "性别");
     let dir = tempfile::tempdir().unwrap();
     let path = dir.path().join("csvAliasTest.csv");
     let mut w = CsvUtil::writer_with(&path, cfg);
@@ -563,7 +620,9 @@ fn issue_i91_vf1_csv_read_test() {
 /// 对齐 Java: `IssueIA8WE0Test.csvReadTest()`
 #[test]
 fn issue_ia8_we0_csv_read_test() {
-    let data = CsvReader::new().read_file(resource("issueIA8WE0.csv")).unwrap();
+    let data = CsvReader::new()
+        .read_file(resource("issueIA8WE0.csv"))
+        .unwrap();
     assert_eq!(data.get_rows().len(), 1);
     let row = data.get_row(0).unwrap();
     assert_eq!(row.size(), 3);
@@ -578,7 +637,10 @@ fn issue_ib5_uq8_parse_escape_test() {
     let data = CsvUtil::get_reader()
         .read_from_str("\"Consultancy, 10\"\",, food\"")
         .unwrap();
-    assert_eq!(data.get_row(0).unwrap().get(0).unwrap(), "Consultancy, 10\",, food");
+    assert_eq!(
+        data.get_row(0).unwrap().get(0).unwrap(),
+        "Consultancy, 10\",, food"
+    );
 }
 
 /// 对齐 Java: `IssueICRMKATest.issueICRMAKTest()`
@@ -605,13 +667,18 @@ fn pr1244_csv_read_test() {
     assert_eq!(row.get(3).unwrap(), "f");
 }
 
-
 // ===== NamingCaseTest =====
 /// 对齐 Java: `NamingCaseTest.toCamelCaseTest()`
 #[test]
 fn naming_case_to_camel_case_test() {
-    assert_eq!(NamingCase::to_camel_case("Table_Test_Of_day").unwrap(), "tableTestOfDay");
-    assert_eq!(NamingCase::to_camel_case("TableTestOfDay").unwrap(), "TableTestOfDay");
+    assert_eq!(
+        NamingCase::to_camel_case("Table_Test_Of_day").unwrap(),
+        "tableTestOfDay"
+    );
+    assert_eq!(
+        NamingCase::to_camel_case("TableTestOfDay").unwrap(),
+        "TableTestOfDay"
+    );
     assert_eq!(NamingCase::to_camel_case("abc_1d").unwrap(), "abc1d");
 }
 
@@ -720,11 +787,8 @@ fn str_joiner_no_join_test() {
 #[test]
 fn str_joiner_join_multi_array_test() {
     let mut j = StrJoiner::of(",");
-    j.append_nested_strs(&[
-        vec!["1".into(), "2".into()],
-        vec!["3".into(), "4".into()],
-    ])
-    .unwrap();
+    j.append_nested_strs(&[vec!["1".into(), "2".into()], vec!["3".into(), "4".into()]])
+        .unwrap();
     assert_eq!(j.to_string().unwrap(), "1,2,3,4");
 }
 
@@ -869,26 +933,16 @@ fn split_iter_split_by_char_ignore_case_test() {
 /// 对齐 Java: `SplitIterTest.splitByCharIgnoreEmptyTest()`
 #[test]
 fn split_iter_split_by_char_ignore_empty_test() {
-    let mut it = SplitIter::by_char(
-        "a, ,,efedsfs,   ddf,",
-        CharFinder::new(','),
-        i32::MAX,
-        true,
-    )
-    .unwrap();
+    let mut it =
+        SplitIter::by_char("a, ,,efedsfs,   ddf,", CharFinder::new(','), i32::MAX, true).unwrap();
     assert_eq!(it.to_list(false).unwrap().len(), 4);
 }
 
 /// 对齐 Java: `SplitIterTest.splitByCharTrimTest()`
 #[test]
 fn split_iter_split_by_char_trim_test() {
-    let mut it = SplitIter::by_char(
-        "a, ,,efedsfs,   ddf,",
-        CharFinder::new(','),
-        i32::MAX,
-        true,
-    )
-    .unwrap();
+    let mut it =
+        SplitIter::by_char("a, ,,efedsfs,   ddf,", CharFinder::new(','), i32::MAX, true).unwrap();
     let strings = it.to_list(true).unwrap();
     assert_eq!(strings.len(), 3);
     assert_eq!(strings[0], "a");
@@ -1061,9 +1115,11 @@ fn str_splitter_issue3421_test() {
         StrSplitter::split_by_regex("", "aaa", 0, false, false).unwrap(),
         vec!["".to_string()]
     );
-    assert!(StrSplitter::split_by_regex("", "", 0, false, true)
-        .unwrap()
-        .is_empty());
+    assert!(
+        StrSplitter::split_by_regex("", "", 0, false, true)
+            .unwrap()
+            .is_empty()
+    );
 }
 
 // ===== TextSimilarityTest =====
@@ -1139,7 +1195,10 @@ fn unicode_util_convert_test5() {
 /// 对齐 Java: `UnicodeUtilTest.issueI50MI6Test()`
 #[test]
 fn unicode_util_issue_i50_mi6_test() {
-    assert_eq!(UnicodeUtil::to_unicode_skip_ascii("烟", true).unwrap(), "\\u70df");
+    assert_eq!(
+        UnicodeUtil::to_unicode_skip_ascii("烟", true).unwrap(),
+        "\\u70df"
+    );
 }
 
 /// 对齐 Java: `IssueI96LWHTest.replaceTest()`
@@ -1152,7 +1211,11 @@ fn issue_i96_lwh_replace_test() {
 
 // ===== Round-2 Agent-A: escape / cache / finder / replacer extras =====
 
+use hutool_core::text::CharSequenceUtil;
 use hutool_core::text::ascii_str_cache::AsciiStrCache;
+use hutool_core::text::csv::csv_base_reader::CsvBaseReader;
+use hutool_core::text::csv::csv_data::CsvData;
+use hutool_core::text::csv::csv_row::CsvRow;
 use hutool_core::text::escape::html4_escape::Html4Escape;
 use hutool_core::text::escape::html4_unescape::Html4Unescape;
 use hutool_core::text::escape::internal_escape_util::InternalEscapeUtil;
@@ -1163,10 +1226,6 @@ use hutool_core::text::finder::char_matcher_finder::CharMatcherFinder;
 use hutool_core::text::finder::text_finder::TextFinder;
 use hutool_core::text::replacer::lookup_replacer::LookupReplacer;
 use hutool_core::text::replacer::replacer_chain::ReplacerChain;
-use hutool_core::text::csv::csv_base_reader::CsvBaseReader;
-use hutool_core::text::csv::csv_data::CsvData;
-use hutool_core::text::csv::csv_row::CsvRow;
-use hutool_core::text::CharSequenceUtil;
 
 /// 对齐 Java: `ASCIIStrCache.toString`
 #[test]
@@ -1219,7 +1278,10 @@ fn char_matcher_finder_digit_test() {
 /// 对齐 Java: TextFinder setters
 #[test]
 fn text_finder_setters_test() {
-    let t = TextFinder::new().set_text("abc").set_negative(false).set_end_index(2);
+    let t = TextFinder::new()
+        .set_text("abc")
+        .set_negative(false)
+        .set_end_index(2);
     assert_eq!(t.valid_end_index(), 2);
     assert_eq!(t.start(0).unwrap(), -1);
 }
@@ -1256,7 +1318,12 @@ fn csv_base_reader_and_row_ops_test() {
 fn char_sequence_util_round2_extras_test() {
     assert_eq!(CharSequenceUtil::common_prefix("abc", "abd").unwrap(), "ab");
     assert_eq!(CharSequenceUtil::swap_case("AbC").unwrap(), "aBc");
-    assert_eq!(CharSequenceUtil::brief("abcdefgh", 6).unwrap().contains("..."), true);
+    assert_eq!(
+        CharSequenceUtil::brief("abcdefgh", 6)
+            .unwrap()
+            .contains("..."),
+        true
+    );
     assert_eq!(
         CharSequenceUtil::get_contains_str("hello world", &["xyz", "world"])
             .unwrap()
@@ -1288,7 +1355,6 @@ fn str_splitter_ignore_case_and_length_test() {
         vec!["a", "b", "c"]
     );
 }
-
 
 /// Round2: LookupReplacer longest-match + ReplacerChain composition.
 #[test]

@@ -351,4 +351,7 @@ impl IdcardUtil {
 }
 
 use super::{CHINA_ID_MAX_LENGTH, CHINA_ID_MIN_LENGTH, check_code_18, compact_parenthesized_card};
-use super::{is_blank, parse_birth, parse_birth_component, parse_two_digits, prefix_for_supported_length, province_name, tw_first_code, weighted_check_code};
+use super::{
+    is_blank, parse_birth, parse_birth_component, parse_two_digits, prefix_for_supported_length,
+    province_name, tw_first_code, weighted_check_code,
+};

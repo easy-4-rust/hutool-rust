@@ -1,6 +1,6 @@
 //! AnnotationUtil 缺口 parity 测试。
 
-use hutool_annotation::{fixtures, global_registry, AnnotationUtil, AnnotationValue};
+use hutool_annotation::{AnnotationUtil, AnnotationValue, fixtures, global_registry};
 
 use crate::annotation_common::*;
 
@@ -12,7 +12,10 @@ fn annotation_util_get_combination_annotations_with_class_test() {
     let class = fixtures::class_with_annotation(&mut reg);
     let annotations = AnnotationUtil::get_combination_annotations(class, ANNOTATION_FOR_TEST);
     assert_eq!(1, annotations.len());
-    let v = annotations[0].get_raw("value").and_then(|x| x.as_str()).unwrap();
+    let v = annotations[0]
+        .get_raw("value")
+        .and_then(|x| x.as_str())
+        .unwrap();
     assert!(v == "测试" || v == "repeat-annotation");
 }
 
@@ -22,8 +25,8 @@ fn annotation_util_get_annotation_value_test2() {
     let _guard = reset_all();
     let mut reg = global_registry().write();
     let class = fixtures::class_with_annotation(&mut reg);
-    let names = AnnotationUtil::get_annotation_value_named(class, ANNOTATION_FOR_TEST, "names")
-        .unwrap();
+    let names =
+        AnnotationUtil::get_annotation_value_named(class, ANNOTATION_FOR_TEST, "names").unwrap();
     match names {
         AnnotationValue::Array(items) => {
             assert_eq!(2, items.len());
@@ -41,7 +44,13 @@ fn annotation_util_get_annotation_sync_alias() {
     let mut reg = global_registry().write();
     let class = fixtures::class_with_annotation(&mut reg);
     let direct = AnnotationUtil::get_annotation(class, ANNOTATION_FOR_TEST).unwrap();
-    assert_eq!("", direct.get_raw("retry").and_then(|v| v.as_str()).unwrap_or(""));
+    assert_eq!(
+        "",
+        direct
+            .get_raw("retry")
+            .and_then(|v| v.as_str())
+            .unwrap_or("")
+    );
 
     let alias = AnnotationUtil::get_annotation_alias(class, ANNOTATION_FOR_TEST).unwrap();
     let retry = alias.get_raw("retry").and_then(|v| v.as_str()).unwrap();

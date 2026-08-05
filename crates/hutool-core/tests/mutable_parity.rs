@@ -2,8 +2,8 @@
 //! 对齐: hutool-core MutableTest
 
 use hutool_core::{
-    MutableBool, MutableByte, MutableDouble, MutableFloat, MutableInt, MutableLong,
-    MutableObj, MutablePair, MutableShort,
+    MutableBool, MutableByte, MutableDouble, MutableFloat, MutableInt, MutableLong, MutableObj,
+    MutablePair, MutableShort,
 };
 
 // ── MutableInt ──

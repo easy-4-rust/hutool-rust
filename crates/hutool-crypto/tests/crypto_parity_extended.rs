@@ -47,7 +47,10 @@ fn digest_hash256_test() {
 fn argon2_test() {
     let pw = secrecy::SecretString::from("123456");
     let encoded = hc::hash_password(&pw).unwrap();
-    assert!(encoded.starts_with("$argon2"), "Argon2 输出应以 $argon2 开头");
+    assert!(
+        encoded.starts_with("$argon2"),
+        "Argon2 输出应以 $argon2 开头"
+    );
     assert!(hc::verify_password(&pw, &encoded).unwrap());
 }
 
@@ -77,7 +80,8 @@ fn aes_gcm_round_trip() {
 /// 对齐 Java: AESTest.gcmTest() — 错误密钥
 #[test]
 fn aes_gcm_wrong_key() {
-    let k1 = [0u8; 32]; let k2 = [1u8; 32];
+    let k1 = [0u8; 32];
+    let k2 = [1u8; 32];
     let ct = hc::aes256_gcm_encrypt(&k1, "secret".as_bytes()).unwrap();
     assert!(hc::aes256_gcm_decrypt(&k2, &ct).is_err());
 }
@@ -102,13 +106,15 @@ fn bcrypt_checkpw_test() {
     let pw = secrecy::SecretString::from("correct_password");
     let encoded = hc::hash_password(&pw).unwrap();
     let wrong_pw = secrecy::SecretString::from("wrong_password");
-    assert!(!hc::verify_password(&wrong_pw, &encoded).unwrap(),
-        "错误密码应验证失败 (对齐 Java BCryptTest)");
+    assert!(
+        !hc::verify_password(&wrong_pw, &encoded).unwrap(),
+        "错误密码应验证失败 (对齐 Java BCryptTest)"
+    );
 }
 
 mod common;
 
-use common::{load_resource, rsa_pub_enc_priv_dec, sm2_sign_verify_round_trip, RSA_PLAINTEXT};
+use common::{RSA_PLAINTEXT, load_resource, rsa_pub_enc_priv_dec, sm2_sign_verify_round_trip};
 
 // ===== Hutool parity — previously ignored, now enabled =====
 
@@ -120,7 +126,10 @@ fn digest_md5_test() {
         hc::md5_hex(test_str.as_bytes()),
         "5393554e94bf0eb6436f240a4fd71282"
     );
-    assert_eq!(hc::md5_hex(test_str.as_bytes()), hc::md5_hex(test_str.as_bytes()));
+    assert_eq!(
+        hc::md5_hex(test_str.as_bytes()),
+        hc::md5_hex(test_str.as_bytes())
+    );
 }
 
 /// 对齐 Java: DigestTest.sha1Test()
@@ -181,8 +190,16 @@ fn aes_cts_test() {
 #[test]
 fn rsa_test() {
     let pair = hc::generate_rsa_keypair().expect("keygen");
-    assert!(hc::rsa_private_key_to_pem(&pair.private_key).expect("pem").contains("PRIVATE KEY"));
-    assert!(hc::rsa_public_key_to_pem(&pair.public_key).expect("pem").contains("PUBLIC KEY"));
+    assert!(
+        hc::rsa_private_key_to_pem(&pair.private_key)
+            .expect("pem")
+            .contains("PRIVATE KEY")
+    );
+    assert!(
+        hc::rsa_public_key_to_pem(&pair.public_key)
+            .expect("pem")
+            .contains("PUBLIC KEY")
+    );
     rsa_pub_enc_priv_dec(RSA_PLAINTEXT);
 }
 
@@ -228,7 +245,9 @@ fn sign_and_verify_test() {
 #[test]
 fn otp_gen_key_test() {
     let key = hc::generate_totp_secret_key(8).expect("secret");
-    let decoded = data_encoding::BASE32_NOPAD.decode(key.as_bytes()).expect("b32");
+    let decoded = data_encoding::BASE32_NOPAD
+        .decode(key.as_bytes())
+        .expect("b32");
     assert_eq!(decoded.len(), 8);
 }
 

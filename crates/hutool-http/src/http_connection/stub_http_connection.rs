@@ -76,7 +76,9 @@ impl HttpConnection for StubHttpConnection {
         _verifier: &dyn std::any::Any,
         _ssl_factory: &dyn std::any::Any,
     ) -> Result<(), HttpException> {
-        Err(HttpException::new("set_https_info requires HttpURLConnection"))
+        Err(HttpException::new(
+            "set_https_info requires HttpURLConnection",
+        ))
     }
 
     fn disable_cache(&mut self) -> Result<(), HttpException> {
@@ -125,19 +127,27 @@ impl HttpConnection for StubHttpConnection {
     }
 
     fn get_input_stream(&self) -> Result<Box<dyn io::Read>, HttpException> {
-        Err(HttpException::new("get_input_stream requires HttpURLConnection"))
+        Err(HttpException::new(
+            "get_input_stream requires HttpURLConnection",
+        ))
     }
 
     fn get_output_stream(&self) -> Result<Box<dyn io::Write>, HttpException> {
-        Err(HttpException::new("get_output_stream requires HttpURLConnection"))
+        Err(HttpException::new(
+            "get_output_stream requires HttpURLConnection",
+        ))
     }
 
     fn get_response_code(&self) -> Result<i32, HttpException> {
-        Err(HttpException::new("get_response_code requires HttpURLConnection"))
+        Err(HttpException::new(
+            "get_response_code requires HttpURLConnection",
+        ))
     }
 
     fn get_response(&self) -> Result<String, HttpException> {
-        Err(HttpException::new("get_response requires HttpURLConnection"))
+        Err(HttpException::new(
+            "get_response requires HttpURLConnection",
+        ))
     }
 
     fn get_header(&self, _name: &str) -> Option<String> {

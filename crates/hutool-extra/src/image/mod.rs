@@ -4,14 +4,14 @@
 //! Hutool ImgUtil 在 core；本模块提供同名门面，委托有界 resize/crop/convert。
 
 mod image_limits;
-mod resize_mode;
-mod output_format;
 mod img_util;
+mod output_format;
+mod resize_mode;
 
 pub use image_limits::ImageLimits;
-pub use resize_mode::ResizeMode;
-pub use output_format::OutputFormat;
 pub use img_util::ImgUtil;
+pub use output_format::OutputFormat;
+pub use resize_mode::ResizeMode;
+pub use resize_mode::crop;
 pub use resize_mode::dimensions;
 pub use resize_mode::resize;
-pub use resize_mode::crop;

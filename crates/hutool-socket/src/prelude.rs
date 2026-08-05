@@ -6,6 +6,6 @@
 //! ```
 
 pub use crate::{
-    AioClient, AioServer, AioSession, ChannelHandler, NioClient, NioServer, Protocol,
-    SocketConfig, SocketError,
+    AioClient, AioServer, AioSession, ChannelHandler, NioClient, NioServer, Protocol, SocketConfig,
+    SocketError,
 };

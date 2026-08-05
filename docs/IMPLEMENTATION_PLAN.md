@@ -8,7 +8,7 @@
 > **定位**：一比一复刻 Hutool Java 的 Rust 实现，对象/方法/参数命名严格对齐，Rust 端使用 idiomatic API + 成熟 crate 引擎
 > **状态**：历史实施计划，已按 2026-07-24 代码快照同步关键状态
 >
-> **当前代码事实**：workspace 现有 25 个 crate，其中新增独立 `hutool-observability`。`crates/hutool-poi` 已建立 79 个 Rust 源文件的 API 占位骨架，
+> **当前代码事实**：workspace 现有 26 个 crate，其中新增独立 `hutool-observability`。~~`crates/hutool-poi` 已建立 79 个 Rust 源文件的 API 占位骨架~~（**2026-08-04 已移除**：`git rm -r crates/hutool-poi`，Excel/Word/OFD 能力由独立项目 `easyexcel-rust` 承接），
 > 其中 67 处调用 `unimplemented!()`；该 crate 只依赖 `thiserror`，未由 `hutool` facade 暴露，也未接入任何
 > Excel、Word、OFD 或 PDF 引擎。因此下文所有“创建 hutool-poi 占位”的步骤均视为历史已完成，
 > 但 `hutool-poi` 功能实现仍为 0%，并从完成度与生产能力声明中排除。
@@ -75,7 +75,7 @@ Hutool 是 Java 生态**最受欢迎**的国产基础工具集（`cn.hutool.*`�
 | **文件路径** | `cn.hutool.core.collection.CollUtil` ↔ `hutool-core/src/collection/coll_util.rs` |
 | **对象/方法/参数命名** | 100% 对齐（snake_case 转换除外） |
 | **方法逻辑** | 核心逻辑对齐，错误处理 Rust 化（`Result<T, E>`） |
-| **hutool-poi** | 仅保留对象/方法/参数占位用于 API 登记，不算实现、不计完成度；未来引擎接入需单独立项 |
+| **hutool-poi** | **2026-08-04 已移除**：占位 crate 删除，Excel/Word/OFD 能力由 `easyexcel-rust`（EasyExcel 4.0.3 高保真迁移）承接 |
 | **已有实现** | **不删减**，顺着原思路继续迁移（解决 hutool-core 内部双重路径问题） |
 | **文档注释** | rustdoc 必须标注"原 Java 对应文件/方法" |
 | **Rust 生态** | 充分利用 `chrono`/`uuid`/`reqwest`/`sqlx`/`moka`/`tokio`/`tracing`/`serde`/`regex`/`rustcrypto` |

@@ -94,9 +94,7 @@ impl ThreadLocalConnection {
     {
         CURRENT.with(|c| {
             let borrowed = c.borrow();
-            let conn = borrowed
-                .as_ref()
-                .and_then(|g| g.connections.get(ds_name));
+            let conn = borrowed.as_ref().and_then(|g| g.connections.get(ds_name));
             Ok(f(conn))
         })
     }
@@ -186,7 +184,8 @@ mod tests {
         let handle = std::thread::spawn(|| {
             ThreadLocalConnection::put("main", Box::new(42i32)).unwrap();
             let result: i32 = ThreadLocalConnection::with_connection("main", |c| {
-                c.and_then(|b| b.downcast_ref::<i32>().copied()).unwrap_or(0)
+                c.and_then(|b| b.downcast_ref::<i32>().copied())
+                    .unwrap_or(0)
             })
             .unwrap();
             assert_eq!(result, 42);

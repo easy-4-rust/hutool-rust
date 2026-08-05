@@ -2,7 +2,6 @@
 
 /// 对齐: `cn.hutool.core.codec.Base16Codec`
 /// Base16 编码器
-
 use crate::Result;
 
 use super::decoder::Decoder;

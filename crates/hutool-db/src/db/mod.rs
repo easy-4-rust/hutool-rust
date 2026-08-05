@@ -4,13 +4,13 @@ use crate::entity::Entity;
 use serde_json::Value;
 use sqlx::{Column, Row, SqlitePool, TypeInfo};
 
-mod db_runtime_error;
-mod db_result;
 mod db;
+mod db_result;
+mod db_runtime_error;
 
-pub use db_runtime_error::DbRuntimeError;
-pub use db_result::DbResult;
 pub use db::Db;
+pub use db_result::DbResult;
+pub use db_runtime_error::DbRuntimeError;
 
 fn bind_value<'q>(
     query: sqlx::query::Query<'q, sqlx::Sqlite, sqlx::sqlite::SqliteArguments>,

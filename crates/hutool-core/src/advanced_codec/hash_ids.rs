@@ -2,7 +2,6 @@
 
 /// 对齐: `cn.hutool.core.codec.Hashids`
 /// 哈希ID编码器
-
 use crate::{CoreError, Result};
 
 /// Hashids-compatible reversible identifier codec.
@@ -244,4 +243,7 @@ impl HashIds {
     }
 }
 
-use super::{HASHIDS_ALPHABET, HASHIDS_SEPARATORS, hashids_derive_alphabet, hashids_shuffle, hashids_translate, hashids_untranslate};
+use super::{
+    HASHIDS_ALPHABET, HASHIDS_SEPARATORS, hashids_derive_alphabet, hashids_shuffle,
+    hashids_translate, hashids_untranslate,
+};

@@ -21,7 +21,8 @@ pub trait SynthesizedAggregateAnnotation: AnnotationSynthesizer + Send + Sync {
     fn get_annotations(&self) -> Vec<Arc<AnnotationMirror>>;
 
     /// 按类型合成视图。
-    fn synthesize_view(&self, annotation_type: AnnotationTypeName) -> Option<Arc<AnnotationMirror>>;
+    fn synthesize_view(&self, annotation_type: AnnotationTypeName)
+    -> Option<Arc<AnnotationMirror>>;
 }
 
 /// 聚合注解便捷 trait 别名。
