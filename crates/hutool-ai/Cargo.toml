@@ -28,3 +28,4 @@ url.workspace = true
 [dev-dependencies]
 futures-util.workspace = true
 tokio.workspace = true
+mockall.workspace = true

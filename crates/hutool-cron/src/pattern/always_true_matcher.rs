@@ -26,6 +26,25 @@ impl PartMatcher for AlwaysTrueMatcher {
 
 impl fmt::Display for AlwaysTrueMatcher {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
-        formatter.write_str("*")
+        // 对齐 Java toString: "[Matcher]: always true."
+        formatter.write_str("[Matcher]: always true.")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn always_true_matcher_matches_everything() {
+        let matcher = AlwaysTrueMatcher;
+        assert!(matcher.matches(0));
+        assert!(matcher.matches(i32::MAX));
+        assert!(matcher.matches(-1));
+        // nextAfter 返回原值
+        assert_eq!(matcher.next_after(7), 7);
+        assert_eq!(matcher.next_after(-3), -3);
+        // toString 对齐 Java
+        assert_eq!(matcher.to_string(), "[Matcher]: always true.");
     }
 }

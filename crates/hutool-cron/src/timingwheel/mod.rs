@@ -97,3 +97,54 @@ fn bounded_wait(deadline_ms: i64, now_ms: i64, max_wait: Duration) -> Duration {
     )
     .min(max_wait)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn scheduled_task_equality_by_deadline_and_sequence() {
+        let task = |delay: u64| TimerTask::new(|| {}, Duration::from_millis(delay));
+        let a = ScheduledTask {
+            deadline_ms: 1000,
+            sequence: 0,
+            task: task(1),
+        };
+        let b = ScheduledTask {
+            deadline_ms: 1000,
+            sequence: 1,
+            task: task(1),
+        };
+        // PartialEq：deadline + sequence 都相等才相等（对齐 Java compareTo）
+        assert!(a != b);
+        let c = ScheduledTask {
+            deadline_ms: 1000,
+            sequence: 0,
+            task: task(2),
+        };
+        assert!(a == c);
+        // Ord 是反转的（BinaryHeap 最大堆实现最小堆）：`x < y` 表示 y 先执行。
+        // 同 deadline 时 seq 小者先执行（先进先出）→ a(seq 0) 先于 b(seq 1)。
+        assert!(b < a);
+        // deadline 更小的 d 先执行 → 反转序中 a < d。
+        let d = ScheduledTask {
+            deadline_ms: 999,
+            sequence: 0,
+            task: task(1),
+        };
+        assert!(a < d);
+        assert!(b < d);
+    }
+
+    #[test]
+    fn bounded_wait_clamps_to_max() {
+        assert_eq!(
+            bounded_wait(0, 1000, Duration::from_millis(5)),
+            Duration::from_millis(0)
+        );
+        assert_eq!(
+            bounded_wait(1_000_000, 0, Duration::from_millis(5)),
+            Duration::from_millis(5)
+        );
+    }
+}

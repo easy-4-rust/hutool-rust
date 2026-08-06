@@ -35,7 +35,7 @@
 | hutool-bloomFilter | `crates/hutool-bloom-filter` | ✅ 已迁移 | 命名规范化（kebab-case crate 名） |
 | hutool-cache | `crates/hutool-cache` | ✅ 已迁移 | 基于 moka 实现 |
 | hutool-captcha | `crates/hutool-captcha` | ✅ 已迁移 | 自定义 image renderer |
-| hutool-cron | `crates/hutool-cron` | 🟡 部分迁移 | 仅 4 文件，缺失 pattern/、timingwheel/、task/ 等子包 |
+| hutool-cron | `crates/hutool-cron` | ✅ 已迁移 | 40 文件：pattern/（13）、timingwheel/（5）、task/（4）、listener/（4）子包完整；行覆盖率 99.66%（llvm-cov） |
 | hutool-crypto | `crates/hutool-crypto` | 🟡 部分迁移 | 缺失对称算法枚举、Sign、SignUtil、SmUtil、SpecUtil、asymmetric/digest/symmetric 子包 |
 | hutool-db | `crates/hutool-db` | 🟡 部分迁移 | 仅 connection/ds/pool/row/sql；缺 Entity、Page、Query、SqlBuilder、dialect/、nosql/、ds/ 多个子包 |
 | hutool-dfa | `crates/hutool-dfa` | ✅ 已迁移 | 4 文件完整 |
@@ -236,38 +236,26 @@ hutool 的 `StrUtil` 是核心门面类（1200+ 行，180+ 方法）。hutool-ru
 
 | 维度 | hutool-cron | hutool-cron | 比例 |
 |---|---:|---:|---|
-| 主源文件 | 41 | 4 | **9.8%** |
-| 子包/子模块 | 6（listener/、pattern/、task/、timingwheel/、pattern/matcher/） | 0 | — |
+| 主源文件 | 41 | 40（含 mod/lib/prelude） | **~98%** |
+| 子包/子模块 | 6（listener/、pattern/、task/、timingwheel/、pattern/matcher/） | 5（listener/、pattern/、task/、timingwheel/；matcher 并入 pattern/） | — |
 
-### 2.1 已迁移（4 文件）
+### 2.1 已迁移（40 文件）
 
-| hutool 文件 | hutool 文件 | 说明 |
+| Java 子包 | Rust 目录 | 说明 |
 |---|---|---|
-| `cn.hutool.cron.CronPattern` | `src/expression.rs::CronExpression` | 字段化实现，差异较大 |
-| `cn.hutool.cron.CronPatternUtil` | `src/parser.rs` | 提供 `parse()` 顶层函数 |
-| `cn.hutool.cron.CronUtil` | `src/scheduler.rs::CronScheduler` | 重写为 async scheduler |
-| `cn.hutool.cron.Task` / `Scheduler` / `CronTimer` | 同上 + `src/lib.rs` re-export | — |
+| `cn.hutool.cron`（Scheduler/CronUtil/CronConfig/CronException/CronTimer/TaskTable/…） | `crates/hutool-cron/src/`（`compat.rs` 等） | TaskTable 等由 `compat.rs` 承载 |
+| `cn.hutool.cron.pattern`（CronPattern/CronPatternBuilder/CronPatternUtil/Part/PartParser/PatternParser/PatternUtil） | `crates/hutool-cron/src/pattern/` | 表达式解析完整；`L` 哨兵/别名/负值/逆向范围/步进与 Java `PartParser.parseRange` 语义对齐 |
+| `cn.hutool.cron.pattern.matcher` | `crates/hutool-cron/src/pattern/*_matcher.rs` | `DayOfMonthMatcher.match` 的 L-OR 语义已验证 |
+| `cn.hutool.cron.task`（CronTask/InvokeTask/RunnableTask/Task） | `crates/hutool-cron/src/task/` | — |
+| `cn.hutool.cron.timingwheel`（SystemTimer/TimerTask/TimerTaskList/TimingWheel） | `crates/hutool-cron/src/timingwheel/` | — |
+| `cn.hutool.cron.listener` | `crates/hutool-cron/src/listener/` | — |
 
-### 2.2 **未迁移（37 文件）**
+### 2.2 未迁移（0 文件）
 
-| hutool 文件 | 状态 | 优先级 |
-|---|---|---|
-| `cn.hutool.cron.CronConfig` | ❌ 未迁移 | 中 |
-| `cn.hutool.cron.CronException` | ❌ 未迁移 | 中 |
-| `cn.hutool.cron.CronPatternBuilder` | ❌ 未迁移 | 高 |
-| `cn.hutool.cron.CronTask` | ❌ 未迁移 | 中 |
-| `cn.hutool.cron.CronUtil`（其它静态方法） | 🟡 仅 scheduler 入口 | 中 |
-| `cn.hutool.cron.SystemTimer` | ❌ 未迁移 | 中 |
-| `cn.hutool.cron.TaskExecutor` / `TaskLauncher` / `TaskListener` | ❌ 未迁移 | 高 |
-| `cn.hutool.cron.TaskTable` / `TimerTask` / `TimerTaskList` | ❌ 未迁移 | 中 |
-| `cn.hutool.cron.pattern.Part` / `PartMatcher` / `PartParser` / `PatternMatcher` / `PatternParser` / `PatternUtil` | ❌ 未迁移（pattern 子包整体缺失） | 高 |
-| `cn.hutool.cron.pattern.matcher.AlwaysTrueMatcher` / `BoolArrayMatcher` / `DayOfMonthMatcher` / `YearValueMatcher` | ❌ 未迁移 | 高 |
-| `cn.hutool.cron.task.InvokeTask` / `RunnableTask` | ❌ 未迁移 | 中 |
-| `cn.hutool.cron.timingwheel.TimingWheel` | ❌ 未迁移 | 中 |
-| `cn.hutool.cron.listener.SimpleTaskListener` | ❌ 未迁移 | 低 |
-| `cn.hutool.cron.package-info` × 6 | ❌ 未迁移 | 低 |
+所有 Java 源文件均有 Rust 对应；`package-info` 无代码不迁移。
+Rust 侧 99.66% 行覆盖率（llvm-cov，防御性死代码 2 行未覆盖）。
 
-**完成度：~10%**
+**完成度：~100%（功能）**
 
 ---
 
@@ -668,7 +656,7 @@ pub fn get<T>(values: &[T], index: isize) -> Option<&T>
 
 | 模块 | 未迁移文件数 |
 |---|---:|
-| hutool-cron | 37 |
+| hutool-cron | 0（40/41 文件已迁移） |
 | hutool-crypto 子包 | 50+ |
 | hutool-db 子包 | 80+ |
 | hutool-extra 子包 | 170+ |
@@ -757,7 +745,7 @@ pub fn get<T>(values: &[T], index: isize) -> Option<&T>
 | hutool-bloomFilter | 🟡 简化实现 | 25% |
 | hutool-cache | 🟡 简化实现 | 30% |
 | hutool-captcha | 🟡 部分迁移 | 50% |
-| hutool-cron | 🔴 仅迁移 4 文件 | **10%** |
+| hutool-cron | ✅ 完整迁移（40 文件，行覆盖率 99.66%） | **~98%** |
 | hutool-crypto | 🟡 顶层函数已迁移，OO 抽象层缺失 | 25% |
 | hutool-db | 🟡 仅核心 connection/pool | 15% |
 | hutool-dfa | 🟡 部分迁移 | 70% |

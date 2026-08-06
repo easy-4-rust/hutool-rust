@@ -18,5 +18,6 @@ moka.workspace = true
 parking_lot.workspace = true
 
 [dev-dependencies]
+awaitility.workspace = true
 rand.workspace = true
 tempfile.workspace = true

@@ -45,7 +45,7 @@ impl ProviderRegistry {
     }
 }
 
-/// AIServiceFactory 静态注册表。
+/// `AIServiceFactory` 静态注册表。
 ///
 /// Rust 侧全局单例；首次调用时自动注册全部厂商 provider
 /// （对齐 Java `ServiceLoader.load(AIServiceProvider.class)` 的 SPI 自动加载：
@@ -124,7 +124,7 @@ impl AIServiceFactory {
     }
 }
 
-/// 注册内置 `ProviderService`（OpenAI 兼容）作为兜底实现。
+/// 注册内置 `ProviderService`（`OpenAI` 兼容）作为兜底实现。
 /// 保留为 Java 镜像 API，仅在测试中使用。
 #[allow(dead_code)]
 pub fn register_builtin_provider() {

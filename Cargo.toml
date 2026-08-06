@@ -27,6 +27,7 @@ der = "0.8.1"
 des = "0.9.0"
 ecb = "0.2.0"
 async-trait = "0.1.89"
+awaitility = "0.3.1"
 async-stream = "0.3.6"
 bloomfilter = "3.0.1"
 chrono = { version = "0.4.45", default-features = false, features = ["clock", "std"] }
@@ -75,6 +76,8 @@ sm4 = "0.6.0"
 signature = "3.0.0"
 rc4 = "0.2.0"
 moka = { version = "0.12.15", features = ["sync"] }
+mockall = "0.15.0"
+mockall_double = "0.3.1"
 # 精确锁：0.0.x 每个 patch 都可能改 wire 格式，存储/传输兼容性要求锁死，见 docs/architecture.md（基线例外）
 musli = { version = "=0.0.149", default-features = false, features = ["alloc", "std"] }
 parking_lot = "0.12.5"

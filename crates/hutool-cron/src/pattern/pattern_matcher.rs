@@ -48,3 +48,59 @@ impl PatternMatcher {
         matcher.matches(weekday) || (weekday == 0 && matcher.matches(7))
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::pattern::bool_array_matcher::BoolArrayMatcher;
+
+    fn matcher_for(values: &[i32]) -> Box<dyn PartMatcher> {
+        Box::new(BoolArrayMatcher::new(values.iter().copied()).unwrap())
+    }
+
+    fn all_fields_matcher() -> PatternMatcher {
+        PatternMatcher::new(std::array::from_fn(|_| matcher_for(&[1])))
+    }
+
+    #[test]
+    fn pattern_matcher_matches_all_seven_fields() {
+        let matcher = all_fields_matcher();
+        // [秒, 分, 时, 日, 月, 周, 年] 全为 1 才匹配
+        assert!(matcher.matches([1, 1, 1, 1, 1, 1, 1]));
+        assert!(!matcher.matches([1, 2, 1, 1, 1, 1, 1]));
+        assert!(!matcher.matches([1, 1, 1, 1, 1, 1, 2]));
+    }
+
+    #[test]
+    fn pattern_matcher_get_by_part() {
+        let matcher = all_fields_matcher();
+        assert!(matcher.get(Part::Second).matches(1));
+        assert!(matcher.get(Part::Year).matches(1));
+        assert!(!matcher.get(Part::Hour).matches(0));
+    }
+
+    #[test]
+    fn matches_week_accepts_zero_and_seven_for_sunday() {
+        // 周字段匹配 {0}（周日）时，0 和 7 都匹配
+        let matcher = PatternMatcher::new(std::array::from_fn(|i| {
+            if i == Part::DayOfWeek.calendar_field() {
+                matcher_for(&[0])
+            } else {
+                matcher_for(&[1])
+            }
+        }));
+        assert!(matcher.matches_week(0));
+        assert!(!matcher.matches_week(1));
+        // 7 仅在 matcher 显式包含 7 时匹配（Java matchWeek 防御分支）
+        let seven_matcher = PatternMatcher::new(std::array::from_fn(|i| {
+            if i == Part::DayOfWeek.calendar_field() {
+                matcher_for(&[7])
+            } else {
+                matcher_for(&[1])
+            }
+        }));
+        assert!(seven_matcher.matches_week(7));
+        // 输入 0（周日）且 matcher 含 7 时同样匹配（对齐 Java：0 == dayOfWeek && matchValue(7)）
+        assert!(seven_matcher.matches_week(0));
+    }
+}

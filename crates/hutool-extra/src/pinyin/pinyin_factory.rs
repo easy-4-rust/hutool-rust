@@ -18,3 +18,20 @@ impl PinyinFactory {
         Self::get()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::pinyin::pinyin_engine::PinyinEngine;
+
+    #[test]
+    fn factory_returns_default_engine() {
+        // Java PinyinFactory.get() 返回单例引擎；Rust 固定 DefaultPinyinEngine
+        let engine = PinyinFactory::get();
+        assert_eq!(engine.get_pinyin_char('中', false), "zhong");
+        assert_eq!(
+            PinyinFactory::create().get_pinyin_str("中国", " ", false),
+            "zhong guo"
+        );
+    }
+}

@@ -5,7 +5,7 @@
 
 use std::{fmt, str::FromStr};
 
-use chrono::{DateTime, Duration as ChronoDuration, TimeZone, Timelike, Utc};
+use chrono::{DateTime, Datelike, Duration as ChronoDuration, TimeZone, Timelike, Utc};
 use cron::Schedule;
 
 use crate::CronError;
@@ -21,6 +21,9 @@ pub struct CronPattern {
     minute_schedules: Vec<Schedule>,
     /// Per-alternative flag: day-of-month field used Hutool `L` (last day).
     dom_last: Vec<bool>,
+    /// Per-alternative explicit day values (Java `DayOfMonthMatcher.intValueList`):
+    /// values that match regardless of month length when `L` is also present.
+    dom_explicit: Vec<Vec<i32>>,
 }
 
 impl CronPattern {
@@ -35,21 +38,24 @@ impl CronPattern {
         let mut second_schedules = Vec::with_capacity(alternatives.len());
         let mut minute_schedules = Vec::with_capacity(alternatives.len());
         let mut dom_last = Vec::with_capacity(alternatives.len());
+        let mut dom_explicit = Vec::with_capacity(alternatives.len());
         for alternative in alternatives {
-            let (second_expr, last) = normalize_expanded(alternative, true)?;
-            let (minute_expr, _) = normalize_expanded(alternative, false)?;
+            let (second_expr, last, explicit) = normalize_expanded(alternative, true)?;
+            let (minute_expr, _, _) = normalize_expanded(alternative, false)?;
             second_schedules.push(Schedule::from_str(&second_expr)?);
             minute_schedules.push(
                 Schedule::from_str(&minute_expr)
                     .expect("replacing a valid seconds field with zero remains valid"),
             );
             dom_last.push(last);
+            dom_explicit.push(explicit);
         }
         Ok(Self {
             expression,
             second_schedules,
             minute_schedules,
             dom_last,
+            dom_explicit,
         })
     }
 
@@ -77,12 +83,15 @@ impl CronPattern {
         self.schedules(match_second)
             .iter()
             .zip(self.dom_last.iter().copied())
-            .any(|(schedule, last)| {
+            .zip(self.dom_explicit.iter())
+            .any(|((schedule, last), explicit)| {
                 let hits = schedule
                     .after(&(instant - ChronoDuration::seconds(1)))
                     .next()
                     == Some(instant);
-                hits && (!last || is_last_day_of_month(instant))
+                let day = i32::try_from(instant.day()).unwrap_or_default();
+                // Java DayOfMonthMatcher.match = intValueList 命中 || L 且是当月最后一天。
+                hits && (!last || is_last_day_of_month(instant) || explicit.contains(&day))
             })
     }
 
@@ -117,7 +126,10 @@ impl CronPattern {
         self.schedules(match_second)
             .iter()
             .zip(self.dom_last.iter().copied())
-            .filter_map(|(schedule, last)| next_after_filtered(schedule, start, last))
+            .zip(self.dom_explicit.iter())
+            .filter_map(|((schedule, last), explicit)| {
+                next_after_filtered(schedule, start, last, explicit)
+            })
             .min()
     }
 

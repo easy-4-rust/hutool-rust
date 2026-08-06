@@ -89,7 +89,7 @@ async fn chat_parses_choice_and_sends_bearer_json() {
     let cap = captured.lock().unwrap().clone();
     assert!(cap.start_line.starts_with("POST /chat/completions"));
     assert!(cap.start_line.contains("HTTP/1.1"));
-    assert!(cap.body.contains("Bearer test-key") == false); // 认证在 header，不在 body
+    assert!(!cap.body.contains("Bearer test-key")); // 认证在 header，不在 body
     assert!(cap.body.contains("\"model\":\"gpt-4o\""));
     assert!(cap.body.contains("\"temperature\":0.7"));
     assert!(cap.body.contains("\"max_tokens\":64"));

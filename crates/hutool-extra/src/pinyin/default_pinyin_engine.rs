@@ -16,3 +16,21 @@ impl PinyinEngine for DefaultPinyinEngine {
         PinyinUtil::get_pinyin(str, separator, tone)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::pinyin::pinyin_engine::PinyinEngine;
+
+    #[test]
+    fn default_engine_trait_methods() {
+        let engine = DefaultPinyinEngine;
+        // PinyinEngine::getPinyinChar
+        assert_eq!(engine.get_pinyin_char('你', false), "ni");
+        assert_eq!(engine.get_pinyin_char('你', true), "nǐ");
+        // 非中文返回原字符
+        assert_eq!(engine.get_pinyin_char('A', false), "A");
+        // PinyinEngine::getPinyinStr
+        assert_eq!(engine.get_pinyin_str("你好", " ", false), "ni hao");
+    }
+}

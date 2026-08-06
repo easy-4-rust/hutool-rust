@@ -63,7 +63,10 @@ impl Part {
             Self::Hour => 23,
             Self::DayOfMonth => 32, // Hutool: 32 == last day ("L")
             Self::Month => 12,
-            Self::DayOfWeek => 7,
+            // 对齐 Java Part.DAY_OF_WEEK(SUNDAY.ordinal(), SATURDAY.ordinal()) = 0..6；
+            // 表达式中的 7 由 check_value 拒绝，"0 和 7 都表示周日" 的 7 仅存于
+            // PatternMatcher::matches_week 的防御性查询分支。
+            Self::DayOfWeek => 6,
             Self::Year => 2099,
         }
     }
@@ -93,5 +96,42 @@ impl Part {
         .get(index)
         .copied()
         .ok_or(CronError::InvalidPartIndex(index))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn part_calendar_fields_and_ranges() {
+        assert_eq!(Part::Second.calendar_field(), 0);
+        assert_eq!(Part::Year.calendar_field(), 6);
+        assert_eq!(Part::Second.min(), 0);
+        assert_eq!(Part::Second.max(), 59);
+        assert_eq!(Part::DayOfMonth.min(), 1);
+        // 对齐 Java：DAY_OF_MONTH(1, 32)，32 为 L（月末）哨兵
+        assert_eq!(Part::DayOfMonth.max(), 32);
+        assert_eq!(Part::Year.min(), 1970);
+        assert_eq!(Part::Year.max(), 2099);
+    }
+
+    #[test]
+    fn part_check_value_bounds() {
+        assert_eq!(Part::Hour.check_value(23).unwrap(), 23);
+        assert!(Part::Hour.check_value(24).is_err());
+        assert!(Part::Hour.check_value(-1).is_err());
+        // DayOfMonth 允许 32（L 哨兵）
+        assert_eq!(Part::DayOfMonth.check_value(32).unwrap(), 32);
+        // 对齐 Java：DayOfWeek 范围为 0..=6，7 被拒绝（"7" 仅在 matchWeek 防御分支出现）
+        assert!(Part::DayOfWeek.check_value(7).is_err());
+        assert!(Part::DayOfWeek.check_value(8).is_err());
+    }
+
+    #[test]
+    fn part_of_maps_index() {
+        assert_eq!(Part::of(0).unwrap(), Part::Second);
+        assert_eq!(Part::of(6).unwrap(), Part::Year);
+        assert!(Part::of(7).is_err());
     }
 }

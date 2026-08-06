@@ -54,11 +54,11 @@ impl PartParser {
                 .split_once('-')
                 .filter(|(b, e)| !b.is_empty() && !e.is_empty())
             {
-                let begin = apply_negative(self.part, parse_alias(self.part, begin)?)?;
-                let end = apply_negative(self.part, parse_alias(self.part, end)?)?;
+                let begin = apply_negative(self.part, parse_alias(self.part, begin)?);
+                let end = apply_negative(self.part, parse_alias(self.part, end)?);
                 expand_range(self.part, begin, end, step)?
             } else {
-                let begin = apply_negative(self.part, parse_alias(self.part, base)?)?;
+                let begin = apply_negative(self.part, parse_alias(self.part, base)?);
                 if step > 1 {
                     expand_range(self.part, begin, range_max, step)?
                 } else if self.part == Part::DayOfMonth && begin == 32 {
@@ -86,3 +86,69 @@ impl PartParser {
 }
 
 use super::{apply_negative, checked_schedule_value, expand_range, parse_alias};
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn parse_wildcard_and_question_mark() {
+        let parser = PartParser::new(Part::Hour);
+        let matcher = parser.parse("*").unwrap();
+        assert!(matcher.matches(0));
+        assert!(matcher.matches(23));
+        // Quartz "?" 与 "*" 相同（对齐 Java）
+        let question = parser.parse("?").unwrap();
+        assert!(question.matches(12));
+    }
+
+    #[test]
+    fn parse_single_and_list_values() {
+        let parser = PartParser::new(Part::Minute);
+        let single = parser.parse("5").unwrap();
+        assert!(single.matches(5));
+        assert!(!single.matches(6));
+
+        let list = parser.parse("1,3,5").unwrap();
+        assert!(list.matches(1));
+        assert!(list.matches(3));
+        assert!(list.matches(5));
+        assert!(!list.matches(2));
+    }
+
+    #[test]
+    fn parse_step_and_range() {
+        let parser = PartParser::new(Part::Minute);
+        // 0/15 → 0,15,30,45
+        let step = parser.parse("0/15").unwrap();
+        assert!(step.matches(0));
+        assert!(step.matches(15));
+        assert!(step.matches(45));
+        assert!(!step.matches(10));
+        // 10-30 → 10..=30
+        let range = parser.parse("10-30").unwrap();
+        assert!(range.matches(10));
+        assert!(range.matches(30));
+        assert!(!range.matches(31));
+        assert!(!range.matches(9));
+        // 10-30/5
+        let range_step = parser.parse("10-30/5").unwrap();
+        assert!(range_step.matches(10));
+        assert!(range_step.matches(25));
+        assert!(!range_step.matches(27));
+    }
+
+    #[test]
+    fn parse_special_parts() {
+        // DayOfMonth 返回 DayOfMonthMatcher（支持 L 哨兵）
+        let dom = PartParser::new(Part::DayOfMonth).parse("L").unwrap();
+        assert!(dom.matches(32));
+        // Year 返回 YearValueMatcher
+        let year = PartParser::new(Part::Year).parse("2026").unwrap();
+        assert!(year.matches(2026));
+        // 非法值报错
+        assert!(PartParser::new(Part::Hour).parse("99").is_err());
+        assert!(PartParser::new(Part::Minute).parse("1-").is_err());
+        assert!(PartParser::new(Part::Minute).parse("").is_err());
+    }
+}

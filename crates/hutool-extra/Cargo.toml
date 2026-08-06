@@ -29,6 +29,7 @@ qrcode = { workspace = true, optional = true }
 secrecy = { workspace = true, optional = true }
 emojis = { workspace = true, optional = true }
 pinyin = { workspace = true, optional = true }
+hutool-core.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true

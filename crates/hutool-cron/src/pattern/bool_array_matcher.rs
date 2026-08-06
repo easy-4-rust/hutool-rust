@@ -69,3 +69,46 @@ impl fmt::Display for BoolArrayMatcher {
         formatter.write_str(&values.join(","))
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn bool_array_matcher_match_and_bounds() {
+        let matcher = BoolArrayMatcher::new([2, 5, 9]).unwrap();
+        assert_eq!(matcher.min_value(), 2);
+        assert_eq!(matcher.max_value(), 9);
+        assert!(matcher.matches(2));
+        assert!(matcher.matches(5));
+        assert!(matcher.matches(9));
+        assert!(!matcher.matches(3));
+        assert!(!matcher.matches(10));
+        assert!(!matcher.matches(1));
+    }
+
+    #[test]
+    fn bool_array_matcher_next_after_matches_java() {
+        let matcher = BoolArrayMatcher::new([2, 5, 9]).unwrap();
+        // value == maxValue → value
+        assert_eq!(matcher.next_after(9), 9);
+        // min < value < max：找第一个 >= value 的匹配值
+        assert_eq!(matcher.next_after(3), 5);
+        assert_eq!(matcher.next_after(5), 5);
+        // value <= min：返回最小值
+        assert_eq!(matcher.next_after(1), 2);
+        assert_eq!(matcher.next_after(2), 2);
+        // value > max：回绕到最小值
+        assert_eq!(matcher.next_after(10), 2);
+    }
+
+    #[test]
+    fn bool_array_matcher_empty_rejected_and_deduped() {
+        assert!(BoolArrayMatcher::new([] as [i32; 0]).is_err());
+        let matcher = BoolArrayMatcher::new([3, 1, 3, 2]).unwrap();
+        assert!(matcher.matches(1));
+        assert!(matcher.matches(2));
+        assert!(matcher.matches(3));
+        assert_eq!(matcher.to_string(), "1,2,3");
+    }
+}

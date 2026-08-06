@@ -19,7 +19,7 @@ use std::fmt;
 use std::pin::Pin;
 use std::sync::Arc;
 
-/// OpenAI 兼容 `/chat/completions` provider。
+/// `OpenAI` 兼容 `/chat/completions` provider。
 ///
 /// 对齐 Java 来源: `cn.hutool.ai.model.openai.OpenaiServiceImpl`
 pub struct OpenAiCompatibleProvider {

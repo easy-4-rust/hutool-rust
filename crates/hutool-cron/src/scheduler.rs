@@ -133,10 +133,6 @@ impl Scheduler {
     /// 中文说明: 返回是否匹配秒字段。
     /// 对齐 Java 方法: `isMatchSecond`
     #[must_use]
-    pub const fn is_match_second(&self) -> bool {
-        self.config.is_match_second()
-    }
-
     /// 中文说明: 设置是否匹配秒字段。
     /// 对齐 Java 方法: `setMatchSecond`
     pub fn set_match_second(&mut self, value: bool) -> Result<&mut Self, CronError> {
@@ -162,10 +158,6 @@ impl Scheduler {
 
     /// 中文说明: 返回监听器管理器快照，供同 crate 启动器和执行器复用。
     #[must_use]
-    pub(crate) fn listeners(&self) -> TaskListenerManager {
-        self.listeners.clone()
-    }
-
     /// 中文说明: 调度一个自动分配 ID 的任务。
     /// 对齐 Java 方法: `schedule`
     pub fn schedule<T>(&mut self, pattern: &str, task: T) -> Result<String, CronError>
@@ -242,12 +234,6 @@ impl Scheduler {
             .update_pattern(id, pattern)
     }
 
-    /// 中文说明: 返回共享的任务表（只读检查）。
-    #[must_use]
-    pub fn task_table(&self) -> Arc<RwLock<TaskTable>> {
-        Arc::clone(&self.task_table)
-    }
-
     /// 中文说明: 返回指定任务的调度表达式。
     /// 对齐 Java 方法: `getPattern`
     #[must_use]
@@ -313,7 +299,7 @@ impl Scheduler {
             let period = if match_second {
                 Duration::from_secs(1)
             } else {
-                Duration::from_secs(60)
+                Duration::from_mins(1)
             };
             let mut ticks = time::interval(period);
             loop {
@@ -354,8 +340,109 @@ impl Scheduler {
     }
 }
 
+/// 中文说明: 共享只读资源访问器。测试构建下由 mockall automock 替换为 mock
+/// 版本，配合 `task_launcher.rs` 的 `#[double] use` 做依赖注入测试
+/// （`TaskLauncher::new` 接收注入的 `&Scheduler`，无需真实调度器即可
+/// 验证启动器行为，对齐 Java `TaskLauncher` 与 `Scheduler` 的解耦边界）。
+#[cfg_attr(test, mockall::automock)]
+impl Scheduler {
+    /// 中文说明: 是否匹配秒字段。
+    /// 对齐 Java 方法: `isMatchSecond`
+    pub fn is_match_second(&self) -> bool {
+        self.config.is_match_second()
+    }
+
+    /// 中文说明: 返回监听器管理器副本。
+    pub(crate) fn listeners(&self) -> TaskListenerManager {
+        self.listeners.clone()
+    }
+
+    /// 中文说明: 返回任务表共享句柄。
+    pub fn task_table(&self) -> Arc<RwLock<TaskTable>> {
+        Arc::clone(&self.task_table)
+    }
+}
+
 impl Drop for Scheduler {
     fn drop(&mut self) {
         self.stop(false);
+    }
+}
+
+#[cfg(test)]
+mod double_tests {
+    use super::*;
+    use crate::pattern::CronPattern;
+    use crate::{CronTask, TaskLauncher};
+
+    /// automock 生成的 mock 类型（`#[double]` 在 task_launcher.rs 生效）。
+    use super::MockScheduler as MockSched;
+
+    /// mockall_double 依赖注入：`TaskLauncher::new` 接收 `MockScheduler`，
+    /// `task_table` 返回预置任务表，验证一次性启动器按时间戳执行匹配任务
+    /// （对齐 Java `TaskLauncher.run` 语义，无需真实调度器线程）。
+    #[test]
+    fn task_launcher_uses_mocked_scheduler_resources() {
+        // double 后 `Scheduler::new()` 为 MockScheduler::new()，注入 TaskLauncher
+        let mut scheduler = MockSched::new();
+
+        // 预置任务表：一个匹配 12:34:00 的任务 + 一个不匹配的任务
+        let mut table = TaskTable::new();
+        table
+            .add(CronTask::new(
+                "matching",
+                CronPattern::of("0 34 12 * * *").expect("valid cron"),
+                Arc::new(|| Ok(())),
+            ))
+            .expect("add task");
+        table
+            .add(CronTask::new(
+                "other",
+                CronPattern::of("0 0 0 * * *").expect("valid cron"),
+                Arc::new(|| Err(CronError::InvalidTimestamp)),
+            ))
+            .expect("add task");
+
+        // 精确匹配 "0 34 12 * * *" 的时刻（2026-02-14 12:34:00 UTC）
+        let matched = chrono::TimeZone::with_ymd_and_hms(&chrono::Utc, 2026, 2, 14, 12, 34, 0)
+            .single()
+            .expect("valid instant")
+            .timestamp_millis();
+
+        let shared_table = Arc::new(RwLock::new(table));
+        scheduler
+            .expect_task_table()
+            .times(1)
+            .returning(move || Arc::clone(&shared_table));
+        scheduler
+            .expect_listeners()
+            .times(1)
+            .returning(TaskListenerManager::default);
+        scheduler
+            .expect_is_match_second()
+            .times(1)
+            .returning(|| true);
+
+        let launcher = TaskLauncher::new(&scheduler, matched);
+        let results = launcher.run();
+        // 只有匹配任务被执行且成功；未匹配任务不执行
+        assert_eq!(results.len(), 1);
+        assert!(results[0].is_ok());
+    }
+
+    /// 未设置期望的 mock 资源：任务表为空时启动器返回空结果。
+    #[test]
+    fn task_launcher_empty_table_returns_nothing() {
+        let mut scheduler = MockSched::new();
+        scheduler
+            .expect_task_table()
+            .returning(|| Arc::new(RwLock::new(TaskTable::new())));
+        scheduler
+            .expect_listeners()
+            .returning(TaskListenerManager::default);
+        scheduler.expect_is_match_second().returning(|| false);
+
+        let launcher = TaskLauncher::new(&scheduler, 0);
+        assert!(launcher.run().is_empty());
     }
 }

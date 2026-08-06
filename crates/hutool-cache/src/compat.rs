@@ -928,18 +928,6 @@ mod tests {
         thread::sleep(Duration::from_millis(12));
     }
 
-    /// 有界轮询等待条件成立（事件驱动替代固定 sleep，避免并行负载下的时序抖动）。
-    fn wait_until(mut condition: impl FnMut() -> bool, timeout: Duration) -> bool {
-        let deadline = Instant::now() + timeout;
-        while Instant::now() < deadline {
-            if condition() {
-                return true;
-            }
-            thread::sleep(Duration::from_millis(2));
-        }
-        condition()
-    }
-
     #[test]
     fn fifo_lru_and_lfu_apply_deterministic_eviction() {
         let fifo = FIFOCache::new(2);
@@ -1099,7 +1087,9 @@ mod tests {
         cache.schedule_prune(Duration::from_millis(2)).unwrap();
         cache.schedule_prune(Duration::from_millis(2)).unwrap();
         // 有界轮询等待清理生效（并行负载下 2ms 周期任务可能被调度延迟）
-        assert!(wait_until(|| cache.is_empty(), Duration::from_secs(2)));
+        awaitility::at_most(Duration::from_secs(2))
+            .poll_interval(Duration::from_millis(2))
+            .until(|| cache.is_empty());
         assert!(cache.cancel_prune_schedule());
         assert!(!cache.cancel_prune_schedule());
         assert!(format!("{cache:?}").contains("TimedCache"));
@@ -1131,10 +1121,9 @@ mod tests {
         );
         assert!(format!("{handle:?}").contains("PruneHandle"));
         // 有界轮询等待定时任务执行（并行负载下 2ms 周期可能被调度延迟）
-        assert!(wait_until(
-            || calls.load(Ordering::Relaxed) > 0,
-            Duration::from_secs(2)
-        ));
+        awaitility::at_most(Duration::from_secs(2))
+            .poll_interval(Duration::from_millis(2))
+            .until(|| calls.load(Ordering::Relaxed) > 0);
         drop(handle);
         let calls_after_drop = calls.load(Ordering::Relaxed);
         let zero_delay = GlobalPruneTimer::schedule(|| {}, Duration::ZERO);

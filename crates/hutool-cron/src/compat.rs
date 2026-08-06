@@ -391,7 +391,15 @@ two"
         assert!(scheduler.task(&id).is_some());
         assert!(scheduler.pattern(&id).is_some());
         let now = Utc::now();
-        let launcher = TaskLauncher::new(&scheduler, now.timestamp_millis());
+        // with_parts 直接捕获共享资源（TaskLauncher::new 的签名在测试构建下
+        // 被 mockall_double 替换为 MockScheduler，集成路径用 with_parts 保持
+        // 真实调度器验证；mock 注入路径见 scheduler.rs double_tests）。
+        let launcher = TaskLauncher::with_parts(
+            scheduler.task_table(),
+            scheduler.listeners(),
+            now.timestamp_millis(),
+            scheduler.is_match_second(),
+        );
         assert_eq!(launcher.run().len(), 1);
         let launchers = TaskLauncherManager::new(&scheduler);
         assert_eq!(launchers.launcher(now.timestamp_millis()).run().len(), 1);

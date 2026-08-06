@@ -15,10 +15,10 @@ use std::time::Duration;
 use url::Url;
 
 /// 默认连接超时（毫秒）。对齐 Java `BaseConfig.timeout = 180_000`。
-pub const DEFAULT_TIMEOUT: Duration = Duration::from_secs(180);
+pub const DEFAULT_TIMEOUT: Duration = Duration::from_mins(3);
 
 /// 默认读取超时（毫秒）。对齐 Java `BaseConfig.readTimeout = 300_000`。
-pub const DEFAULT_READ_TIMEOUT: Duration = Duration::from_secs(300);
+pub const DEFAULT_READ_TIMEOUT: Duration = Duration::from_mins(5);
 
 /// 通用 `BaseConfig` 实现。
 ///

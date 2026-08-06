@@ -28,10 +28,10 @@ fn parse_local(s: &str) -> chrono::DateTime<Utc> {
         if let Ok(naive) = chrono::NaiveDateTime::parse_from_str(s, fmt) {
             return Utc.from_utc_datetime(&naive);
         }
-        if fmt == "%Y-%m-%d" {
-            if let Ok(date) = NaiveDate::parse_from_str(s, fmt) {
-                return Utc.from_utc_datetime(&date.and_hms_opt(0, 0, 0).unwrap());
-            }
+        if fmt == "%Y-%m-%d"
+            && let Ok(date) = NaiveDate::parse_from_str(s, fmt)
+        {
+            return Utc.from_utc_datetime(&date.and_hms_opt(0, 0, 0).unwrap());
         }
         if fmt == "%H:%M:%S" {
             // Bare times in CronPatternTest use an arbitrary day; Hutool DateUtil.parse
@@ -54,13 +54,11 @@ fn assert_match(pattern: &CronPattern, date: &str) {
     let instant = parse_local(date);
     assert!(
         pattern.matches(instant, false),
-        "expected match(false) for {date} on {}",
-        pattern
+        "expected match(false) for {date} on {pattern}"
     );
     assert!(
         pattern.matches(instant, true),
-        "expected match(true) for {date} on {}",
-        pattern
+        "expected match(true) for {date} on {pattern}"
     );
 }
 
@@ -437,14 +435,14 @@ fn cron_pattern_test_last_day_of_month_for_every_hour() {
         date += ChronoDuration::seconds(1);
 
         let t = result + ChronoDuration::hours(1);
-        if t.day() != result.day() {
+        if t.day() == result.day() {
+            result = t;
+        } else {
             let next = result + ChronoDuration::days(1);
             let last = last_day_of_month(next);
             result = Utc
                 .with_ymd_and_hms(last.year(), last.month(), last.day(), 0, 0, 0)
                 .unwrap();
-        } else {
-            result = t;
         }
     }
 }

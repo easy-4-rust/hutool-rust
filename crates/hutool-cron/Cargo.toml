@@ -16,6 +16,12 @@ workspace = true
 [dependencies]
 chrono.workspace = true
 cron.workspace = true
+hutool-core.workspace = true
 thiserror.workspace = true
 tokio.workspace = true
 tracing.workspace = true
+
+[dev-dependencies]
+awaitility.workspace = true
+mockall.workspace = true
+mockall_double.workspace = true

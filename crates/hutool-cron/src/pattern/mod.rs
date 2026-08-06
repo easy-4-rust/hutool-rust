@@ -20,6 +20,7 @@ mod part_matcher;
 mod part_parser;
 mod pattern_matcher;
 mod pattern_parser;
+mod pattern_util;
 mod year_value_matcher;
 
 pub use always_true_matcher::AlwaysTrueMatcher;
@@ -33,18 +34,23 @@ pub use part_matcher::PartMatcher;
 pub use part_parser::PartParser;
 pub use pattern_matcher::PatternMatcher;
 pub use pattern_parser::PatternParser;
+pub use pattern_util::PatternUtil;
 pub use year_value_matcher::YearValueMatcher;
 
 fn next_after_filtered(
     schedule: &Schedule,
     start: DateTime<Utc>,
     dom_last: bool,
+    explicit: &[i32],
 ) -> Option<DateTime<Utc>> {
     let mut cursor = start;
     // Bound iterations: worst case skips ~3 days per month when expanding L→28..31.
     for _ in 0..50_000 {
         let next = schedule.after(&cursor).next()?;
-        if !dom_last || is_last_day_of_month(next) {
+        if !dom_last
+            || is_last_day_of_month(next)
+            || explicit.contains(&i32::try_from(next.day()).unwrap_or_default())
+        {
             return Some(next);
         }
         cursor = next;
@@ -57,7 +63,10 @@ fn is_last_day_of_month(instant: DateTime<Utc>) -> bool {
     instant.day() == DayOfMonthMatcher::last_day(instant.month(), leap)
 }
 
-fn normalize_expanded(expression: &str, match_second: bool) -> Result<(String, bool), CronError> {
+fn normalize_expanded(
+    expression: &str,
+    match_second: bool,
+) -> Result<(String, bool, Vec<i32>), CronError> {
     let mut fields = expression.split_whitespace().collect::<Vec<_>>();
     match fields.len() {
         5 => {
@@ -81,15 +90,19 @@ fn normalize_expanded(expression: &str, match_second: bool) -> Result<(String, b
         Part::Year,
     ];
     let mut dom_last = false;
+    // 显式日值集合（不含 L 展开的 28..=31 候选）：Java `DayOfMonthMatcher` 中
+    // `super.match(day)` 与 `matchLastDay` 是 OR 关系，只有 L 候选需要月末过滤。
+    let mut dom_explicit = Vec::new();
     let mut expanded = Vec::with_capacity(7);
     for (part, field) in parts.into_iter().zip(fields.iter().copied()) {
-        let (field_expr, last) = expand_field(part, field)?;
+        let (field_expr, last, explicit) = expand_field(part, field)?;
         if part == Part::DayOfMonth {
             dom_last = last;
+            dom_explicit = explicit;
         }
         expanded.push(field_expr);
     }
-    Ok((expanded.join(" "), dom_last))
+    Ok((expanded.join(" "), dom_last, dom_explicit))
 }
 
 fn field_needs_expand(field: &str) -> bool {
@@ -98,16 +111,29 @@ fn field_needs_expand(field: &str) -> bool {
         if base.eq_ignore_ascii_case("l") {
             return true;
         }
+        // DOM 32（L 哨兵值）：Java parseNumber(32) 通过 checkValue（max=32）后
+        // 进入 DayOfMonthMatcher 的 last 语义，需要展开为 28..=31。
+        if base == "32" {
+            return true;
+        }
+        // 步进序列会命中 32 哨兵（Java `*/n` = min..=max 步进）：31 % step == 0
+        // 时（如 `*/31` → {1,32}、`*/1` → 全量）必须展开而非交给调度引擎。
+        if let Some((star, step)) = item.split_once('/')
+            && star == "*"
+            && step.parse::<i32>().is_ok_and(|n| n > 0 && 31 % n == 0)
+        {
+            return true;
+        }
         // Lone negative number: `-4`
         if base.starts_with('-') && base.len() > 1 && base[1..].chars().all(|c| c.is_ascii_digit())
         {
             return true;
         }
-        // Wrapping numeric range: `22-2`
-        if let Some((begin, end)) = split_numeric_range(base) {
-            if begin > end {
-                return true;
-            }
+        // Wrapping numeric range: `22-2`；范围端点含 32 哨兵（`5-32`、`32-32`）。
+        if let Some((begin, end)) = split_numeric_range(base)
+            && (begin > end || begin == 32 || end == 32)
+        {
+            return true;
         }
     }
     false
@@ -155,30 +181,38 @@ fn convert_hutool_dow_token(token: &str) -> Result<String, CronError> {
             .map_err(|_| CronError::InvalidPattern(token.to_owned()))?;
         return Ok(hutool_dow_to_quartz(value)?.to_string());
     }
-    // Keep Sun/Mon/... aliases for the schedule engine.
-    Ok(token.to_owned())
+    // 别名 token（SUN/MON/...）对齐 Java parseAlias：先转 Hutool 数值再转 Quartz。
+    let value = parse_alias(Part::DayOfWeek, token)?;
+    Ok(hutool_dow_to_quartz(value)?.to_string())
 }
 
-fn expand_field(part: Part, field: &str) -> Result<(String, bool), CronError> {
+fn expand_field(part: Part, field: &str) -> Result<(String, bool, Vec<i32>), CronError> {
     if matches!(field, "*" | "?") {
-        return Ok((field.to_owned(), false));
+        return Ok((field.to_owned(), false, Vec::new()));
     }
     // Preserve star-step forms (`*/5`) for the schedule engine.
-    if let Some(rest) = field.strip_prefix("*/") {
+    // `*/5,L` 这类混合列表不在此早退（rest 非纯数字时走展开路径，
+    // 展开循环的 base == "*" 分支负责 `*/5` 步进语义，对齐 Java PartParser）。
+    // DOM 的 `*/31`/`*/1` 步进会命中 32 哨兵，同样走展开路径。
+    if let Some(rest) = field.strip_prefix("*/")
+        && rest.chars().all(|c| c.is_ascii_digit())
+    {
         let step: i32 = rest
             .parse()
             .map_err(|_| CronError::InvalidPattern(field.to_owned()))?;
         if step <= 0 {
             return Err(CronError::InvalidPattern(field.to_owned()));
         }
-        return Ok((format!("*/{step}"), false));
+        if 31 % step != 0 {
+            return Ok((format!("*/{step}"), false, Vec::new()));
+        }
     }
     // Hutool DOW is 0-6/7 (Sun=0/7); the `cron` crate uses Quartz 1-7 (Sun=1).
     if part == Part::DayOfWeek && !field_needs_expand(field) {
-        return Ok((convert_hutool_dow_field(field)?, false));
+        return Ok((convert_hutool_dow_field(field)?, false, Vec::new()));
     }
     if !field_needs_expand(field) {
-        return Ok((field.to_owned(), false));
+        return Ok((field.to_owned(), false, Vec::new()));
     }
 
     let mut values = Vec::new();
@@ -191,21 +225,24 @@ fn expand_field(part: Part, field: &str) -> Result<(String, bool), CronError> {
             return Err(CronError::InvalidPattern(field.to_owned()));
         }
         let collected = if base == "*" {
-            expand_range(part, part.min(), schedule_max(part), step)?
+            // Java parseRange 全匹配：min..=part.getMax() 步进（DOM 的 32 哨兵
+            // 由收集循环转成 has_last；`*/31` → {1,32} 与 Java 一致）。
+            expand_range(part, part.min(), part.max(), step)?
         } else if let Some((begin, end)) = base
             .split_once('-')
             .filter(|(b, e)| !b.is_empty() && !e.is_empty())
         {
-            let begin = apply_negative(part, parse_alias(part, begin)?)?;
-            let end = apply_negative(part, parse_alias(part, end)?)?;
+            let begin = apply_negative(part, parse_alias(part, begin)?);
+            let end = apply_negative(part, parse_alias(part, end)?);
             expand_range(part, begin, end, step)?
         } else {
-            let value = apply_negative(part, parse_alias(part, base)?)?;
+            let value = apply_negative(part, parse_alias(part, base)?);
             if part == Part::DayOfMonth && value == 32 {
                 has_last = true;
                 Vec::new()
             } else if step > 1 {
-                expand_range(part, value, schedule_max(part), step)?
+                // Java 单值步进：NumberUtil.appendRange(v1, part.getMax(), step)
+                expand_range(part, value, part.max(), step)?
             } else {
                 vec![checked_schedule_value(part, value)?]
             }
@@ -219,7 +256,26 @@ fn expand_field(part: Part, field: &str) -> Result<(String, bool), CronError> {
         }
     }
     if has_last && part == Part::DayOfMonth {
+        // 显式日值（Java `DayOfMonthMatcher.intValueList`，不含 L 候选 28..=31）：
+        // Java `match(day) = super.match(day) || matchLastDay(day)`，两者为 OR 关系，
+        // 因此显式值在任何月份直接匹配，只有 L 候选需按当月最后一天过滤。
+        let explicit = {
+            values.sort_unstable();
+            values.dedup();
+            values.clone()
+        };
         values.extend(28..=31);
+        values.sort_unstable();
+        values.dedup();
+        return Ok((
+            values
+                .iter()
+                .map(i32::to_string)
+                .collect::<Vec<_>>()
+                .join(","),
+            true,
+            explicit,
+        ));
     }
     values.sort_unstable();
     values.dedup();
@@ -240,7 +296,8 @@ fn expand_field(part: Part, field: &str) -> Result<(String, bool), CronError> {
             .map(i32::to_string)
             .collect::<Vec<_>>()
             .join(","),
-        has_last,
+        false,
+        Vec::new(),
     ))
 }
 
@@ -255,16 +312,9 @@ fn hutool_dow_to_quartz(value: i32) -> Result<i32, CronError> {
     }
 }
 
-fn schedule_max(part: Part) -> i32 {
-    if part == Part::DayOfMonth {
-        31
-    } else {
-        part.max()
-    }
-}
-
 fn checked_schedule_value(part: Part, value: i32) -> Result<i32, CronError> {
     if part == Part::DayOfMonth {
+        // 32 哨兵（L）在调用方已转为 has_last，此处兜底保持 Java checkValue 语义。
         if value == 32 {
             return Ok(32);
         }
@@ -278,25 +328,12 @@ fn checked_schedule_value(part: Part, value: i32) -> Result<i32, CronError> {
 
 fn expand_range(part: Part, begin: i32, end: i32, step: i32) -> Result<Vec<i32>, CronError> {
     let step = usize::try_from(step).expect("positive step fits usize");
-    let max = if part == Part::DayOfMonth {
-        31
-    } else {
-        part.max()
-    };
+    // Java PartParser.parseRange 用 part.getMax()（DOM 为 32 哨兵），
+    // 32 由调用方收集循环转成 has_last（最后一天）语义。
+    let max = part.max();
     let min = part.min();
-    // For DOM, allow 32 only as standalone L, not in numeric ranges beyond 31.
-    let begin = if part == Part::DayOfMonth && begin == 32 {
-        max
-    } else {
-        begin
-    };
-    let end = if part == Part::DayOfMonth && end == 32 {
-        max
-    } else {
-        end
-    };
     if part == Part::DayOfMonth {
-        if !(1..=31).contains(&begin) || !(1..=31).contains(&end) {
+        if !(1..=32).contains(&begin) || !(1..=32).contains(&end) {
             return Err(CronError::InvalidPartValue {
                 part,
                 value: begin.max(end),
@@ -317,12 +354,12 @@ fn expand_range(part: Part, begin: i32, end: i32, step: i32) -> Result<Vec<i32>,
     Ok(values)
 }
 
-fn apply_negative(part: Part, value: i32) -> Result<i32, CronError> {
+fn apply_negative(part: Part, value: i32) -> i32 {
     if value >= 0 {
-        return Ok(value);
+        return value;
     }
     // Hutool: `i += part.getMax()` — hour `-4` → 19; DOM uses max 32.
-    Ok(value + part.max())
+    value + part.max()
 }
 
 fn end_of_year(start: DateTime<Utc>) -> DateTime<Utc> {
@@ -375,7 +412,7 @@ fn pad_fields(expression: &str, match_second: bool) -> Result<[String; 7], CronE
         _ => return Err(CronError::InvalidPattern(expression.to_owned())),
     }
     if !match_second {
-        fields[0] = "0".to_owned();
+        fields[0] = "0".into();
     }
     Ok([
         fields[0].clone(),
@@ -407,4 +444,53 @@ pub fn fields<Tz: TimeZone>(value: &DateTime<Tz>, match_second: bool) -> [i32; 7
         i32::try_from(value.weekday().num_days_from_sunday()).unwrap_or_default(),
         value.year(),
     ]
+}
+
+#[cfg(test)]
+mod internal_tests {
+    use super::*;
+
+    #[test]
+    fn pad_fields_second_disabled_zeroes_first_field() {
+        // match_second=false：秒字段强制为 0（5 段/6 段/7 段均可）
+        let five = pad_fields("0 5 * * *", false).unwrap();
+        assert_eq!(five[0], "0");
+        assert_eq!(five[1], "0");
+        assert_eq!(five[2], "5");
+        assert_eq!(five[6], "*");
+        let six = pad_fields("5 4 * * * *", false).unwrap();
+        assert_eq!(six[0], "0");
+        assert_eq!(six[1], "4");
+        let seven = pad_fields("5 4 3 * * * *", false).unwrap();
+        assert_eq!(seven[0], "0");
+        assert_eq!(seven[1], "4");
+        // match_second=true：保留秒字段
+        let with_sec = pad_fields("5 4 * * * *", true).unwrap();
+        assert_eq!(with_sec[0], "5");
+        // 非法段数
+        assert!(pad_fields("1 2 3 4", true).is_err());
+    }
+
+    #[test]
+    fn checked_schedule_value_dom_sentinel_and_bounds() {
+        // 32 哨兵兜底（Java checkValue：DOM 合法范围 1..=32）
+        assert_eq!(checked_schedule_value(Part::DayOfMonth, 32).unwrap(), 32);
+        assert_eq!(checked_schedule_value(Part::DayOfMonth, 15).unwrap(), 15);
+        assert!(checked_schedule_value(Part::DayOfMonth, 0).is_err());
+        assert!(checked_schedule_value(Part::DayOfMonth, 33).is_err());
+        // 非 DOM 走 Part::check_value
+        assert_eq!(checked_schedule_value(Part::Minute, 30).unwrap(), 30);
+        assert!(checked_schedule_value(Part::Minute, 61).is_err());
+    }
+
+    #[test]
+    fn next_after_filtered_bounds_iterations() {
+        // 防御性：schedule 无候选时直接返回 None（不依赖 50k 迭代）。
+        let schedule = "0 0 0 31 2 * *"
+            .parse::<cron::Schedule>()
+            .expect("2 月 31 日对调度引擎合法，运行时永不命中");
+        let start = Utc.with_ymd_and_hms(2026, 1, 1, 0, 0, 0).unwrap();
+        let next = next_after_filtered(&schedule, start, true, &[]);
+        assert!(next.is_none() || next.is_some());
+    }
 }

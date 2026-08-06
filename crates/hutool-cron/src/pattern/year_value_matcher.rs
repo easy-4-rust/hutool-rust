@@ -41,3 +41,25 @@ impl PartMatcher for YearValueMatcher {
         self.0.next_after(value)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn year_matcher_match_and_next() {
+        let matcher = YearValueMatcher::new([2026, 2030]).unwrap();
+        assert!(matcher.matches(2026));
+        assert!(matcher.matches(2030));
+        assert!(!matcher.matches(2027));
+        assert_eq!(matcher.next_after(2027), 2030);
+        assert_eq!(matcher.next_after(2031), 2026);
+    }
+
+    #[test]
+    fn year_matcher_validates_range() {
+        // 年份越界（超出 Part::Year 范围）报错
+        assert!(YearValueMatcher::new([0]).is_err());
+        assert!(YearValueMatcher::new([i32::MAX]).is_err());
+    }
+}

@@ -7,7 +7,12 @@
 
 use std::sync::{Arc, RwLock};
 
-use crate::{CronError, Scheduler, TaskExecutor, TaskListenerManager, TaskTable};
+/// 测试构建下由 mockall_double 替换为 `MockScheduler`（依赖注入式 mock：
+/// `TaskLauncher::new` 接收调用方注入的 `&Scheduler`，单元测试可设置
+/// `task_table`/`listeners`/`is_match_second` 期望而无需真实调度器）。
+#[cfg_attr(test, mockall_double::double)]
+use crate::scheduler::Scheduler;
+use crate::{CronError, TaskExecutor, TaskListenerManager, TaskTable};
 
 /// 对齐: `cn.hutool.cron.TaskLauncher`
 /// 中文说明: 执行匹配指定时间戳的所有任务。

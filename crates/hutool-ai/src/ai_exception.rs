@@ -124,11 +124,11 @@ mod tests {
         let missing = AIException::formatted("hello {}", &[]);
         assert_eq!(missing.to_string(), "hello {}");
 
-        let io = std::io::Error::new(std::io::ErrorKind::Other, "io-error");
+        let io = std::io::Error::other("io-error");
         let wrapped = AIException::from_error(io);
         assert!(wrapped.to_string().contains("io-error"));
 
-        let cause = std::io::Error::new(std::io::ErrorKind::Other, "io");
+        let cause = std::io::Error::other("io");
         let combined = AIException::formatted_with("fail {}", &[&"retry"], cause);
         assert!(combined.to_string().contains("fail retry"));
         assert!(combined.to_string().contains("io"));

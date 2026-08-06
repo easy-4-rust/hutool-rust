@@ -1,4 +1,4 @@
-//! 对齐: `cn.hutool.cron` (CronUtil / Cron)
+//! 对齐: `cn.hutool.cron` (`CronUtil` / Cron)
 //! 来源: hutool-cron/src/main/java/cn/hutool/cron/CronUtil.java
 //! 中文说明: Hutool 定时任务模块的 Rust 入口，提供 cron 表达式解析、
 //! 调度器、时间轮等核心功能的对外导出。
@@ -38,6 +38,7 @@ where
 
 mod compat;
 mod cron_config;
+mod cron_exception;
 mod cron_timer;
 mod cron_util;
 pub mod listener;
@@ -53,6 +54,7 @@ pub mod timingwheel;
 
 pub use compat::{InvokeRegistry, TaskTable};
 pub use cron_config::CronConfig;
+pub use cron_exception::CronException;
 pub use cron_timer::CronTimer;
 pub use cron_util::CronUtil;
 pub use listener::{SimpleTaskListener, TaskListener, TaskListenerManager};
