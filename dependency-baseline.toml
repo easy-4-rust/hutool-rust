@@ -1,0 +1,64 @@
+# hutool-rust 依赖基线（dependency-baseline）
+#
+# 用途：记录 workspace 中「精确锁（=x.y.z）」依赖的版本、锁因与升级前置条件。
+# 原则（对齐 RocketMQ Rust client 的依赖治理实践）：
+#   - 版本约束必须带原因；锁版本是「基线例外」，不是默认策略
+#   - 默认策略：workspace 统一声明 + 按需特性裁剪（default-features = false）
+#   - 升级流程：修改本文件对应条目 → 单独评审 → 全量测试 + llvm-cov 对比
+#
+# 格式：
+#   [依赖名]
+#   version = "=x.y.z"        # 与 Cargo.toml 保持一致
+#   reason = "锁定原因"
+#   upgrade_precondition = "允许升级的前置条件"
+
+# ── 组 1：elliptic-curve 生态（p256 / p384 / sm2 / signature / rsa）─────────────
+# 该组共享 generic-array / pkcs8 / signature 的 trait 版本，单点升级会导致
+# 类型不兼容（不同 signature 大版本间 ECDSA/SM2 签名验证互不实现）。
+
+[p256]
+version = "=0.13.2"
+reason = "elliptic-curve 生态整组联动：单点升级与 p384/sm2/signature 类型不兼容"
+upgrade_precondition = "p256/p384/sm2/signature/rsa 五者同批升级并全量回归（含 JWT 验签差分测试）"
+
+[p384]
+version = "=0.13.1"
+reason = "同 p256：elliptic-curve 生态整组联动"
+upgrade_precondition = "同 p256"
+
+[sm2]
+version = "=0.13.3"
+reason = "同 p256：elliptic-curve 生态整组联动（sm2 依赖 ecdsa/pkcs8 同版本）"
+upgrade_precondition = "同 p256"
+
+[rsa]
+version = "=0.9.10"
+reason = "与 signature/pkcs8 生态版本耦合：RSA-PSS 验签与 p256 侧共用 signature trait"
+upgrade_precondition = "同 p256"
+
+# ── 组 2：行为敏感单点 ─────────────────────────────────────────────────────────
+
+[jsonwebtoken]
+version = "=10.3.0"
+reason = "JWT 验签行为敏感（alg 白名单/时间窗口/密钥解析），升级可能改变安全边界"
+upgrade_precondition = "单独评审 + JWT 验签/伪造 token 拒绝差分测试通过"
+
+[image]
+version = "=0.25.9"
+reason = "0.25.x patch 版本间存在解码行为差异，captcha/图片处理要求结果可复现"
+upgrade_precondition = "captcha 生成快照测试与图片解码回归全绿"
+
+# ── 组 3：wire 格式 ────────────────────────────────────────────────────────────
+
+[musli]
+version = "=0.0.149"
+reason = "0.0.x 每个 patch 都可能改 wire 格式，存储/传输兼容性要求锁死（见 docs/architecture.md）"
+upgrade_precondition = "确认新版 wire 格式向后兼容，或提供迁移路径后整批升级"
+
+# ── 兼容性窗口备忘（暂未启用）─────────────────────────────────────────────────
+# RocketMQ client 用「范围 pin + 原因注释」处理 MSRV 兼容（如
+# hashbrown = ">=0.12, <0.16" 因为 0.17+ 要求 Rust 2024）。
+# hutool-rust 当前 rust-version = "1.94"（edition 2024）不受此类约束；
+# 若未来下调 MSRV，需为下列依赖补充范围 pin：
+#   - indexmap（>=2.0 时 hashbrown 上游要求）
+#   - tempfile（getrandom 0.4+ 的 edition 要求）
