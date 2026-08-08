@@ -1,7 +1,7 @@
 //! Spring POJO facade，对齐 hutool 的 `cn.hutool.extra.spring.*`。
 //!
-//! **仅提供 trait 抽象**。具体 Spring Framework 依赖（ApplicationContext / BeanFactory）
-//! 是 Java-only，属于 unsafe-to-copy。Rust 用户应使用依赖注入框架（如 axum::Extension、
+//! **仅提供 trait 抽象**。具体 Spring Framework 依赖（ApplicationContext / `BeanFactory`）
+//! 是 Java-only，属于 unsafe-to-copy。Rust 用户应使用依赖注入框架（如 `axum::Extension`、
 //! shaku、self-rs 等）替代。
 
 use super::application_context_ext::ApplicationContextExt;
@@ -14,10 +14,10 @@ use crate::HutoolException;
 use super::application_context::ApplicationContext;
 use super::configurable_bean_factory::ConfigurableBeanFactory;
 
-/// SpringUtil 工具类（Java 版是 BeanFactoryPostProcessor + ApplicationContextAware），
+/// `SpringUtil` 工具类（Java 版是 `BeanFactoryPostProcessor` + `ApplicationContextAware`），
 /// 对齐 `cn.hutool.extra.spring.SpringUtil`。
 ///
-/// Rust 版用 trait + 全局 OnceLock 持有 `dyn ApplicationContext`，避免依赖 Spring。
+/// Rust 版用 trait + 全局 `OnceLock` 持有 `dyn ApplicationContext`，避免依赖 Spring。
 pub struct SpringUtil;
 
 impl SpringUtil {
@@ -48,14 +48,14 @@ impl SpringUtil {
     pub fn get_bean(type_name: &str) -> Result<Arc<dyn Any>, HutoolException> {
         let ctx = Self::get_bean_factory()?;
         ctx.get_bean(type_name)
-            .ok_or_else(|| HutoolException::Message(format!("No bean of type: {}", type_name)))
+            .ok_or_else(|| HutoolException::Message(format!("No bean of type: {type_name}")))
     }
 
     /// 对齐 `SpringUtil.getBean(String)`：按名称获取 Bean
     pub fn get_bean_by_name(name: &str) -> Result<Arc<dyn Any>, HutoolException> {
         let ctx = Self::get_bean_factory()?;
         ctx.get_bean_by_name(name)
-            .ok_or_else(|| HutoolException::Message(format!("No bean named: {}", name)))
+            .ok_or_else(|| HutoolException::Message(format!("No bean named: {name}")))
     }
 
     /// 对齐 `SpringUtil.getBeansOfType(Class)`
@@ -113,11 +113,11 @@ impl SpringUtil {
         Ok(())
     }
 
-    /// 对齐 `SpringUtil.getProperty(String)`：读取配置（委托到 ApplicationContext）
+    /// 对齐 `SpringUtil.getProperty(String)`：读取配置（委托到 `ApplicationContext`）
     pub fn get_property(key: &str) -> Result<String, HutoolException> {
         let ctx = Self::get_bean_factory()?;
         ctx.get_property_or(key)
-            .ok_or_else(|| HutoolException::Message(format!("No property: {}", key)))
+            .ok_or_else(|| HutoolException::Message(format!("No property: {key}")))
     }
 
     /// 对齐 `SpringUtil.postProcessBeanFactory(ConfigurableListableBeanFactory)`

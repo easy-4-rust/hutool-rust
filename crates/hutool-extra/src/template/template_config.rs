@@ -17,7 +17,7 @@ use super::resource_mode::ResourceMode;
 ///
 /// 默认值：
 /// - charset = UTF-8
-/// - path = `None`（ClassPath 根）
+/// - path = `None`（`ClassPath` 根）
 /// - resourceMode = `ResourceMode::String`
 /// - useCache = `true`
 #[derive(Debug, Clone, PartialEq, Eq)]

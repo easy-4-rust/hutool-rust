@@ -61,7 +61,7 @@ pub enum TemplateException {
 }
 
 impl TemplateException {
-    /// 格式化 message，参考 `StrUtil.format`（Phase 1.4 完成后用 hutool-core::StrUtil.format）。
+    /// 格式化 message，参考 `StrUtil.format`（Phase 1.4 完成后用 `hutool-core::StrUtil.format`）。
     fn format_message(template: &str, params: &[&dyn fmt::Display]) -> String {
         let mut out = String::new();
         let mut param_idx = 0;

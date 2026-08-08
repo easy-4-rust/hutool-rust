@@ -12,14 +12,14 @@
 /// 资源加载方式，对齐 `cn.hutool.extra.template.TemplateConfig.ResourceMode`。
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum ResourceMode {
-    /// 从 ClassPath 加载模板
+    /// 从 `ClassPath` 加载模板
     ClassPath,
     /// 从 File 目录加载模板
     File,
-    /// 从 WebRoot 目录加载模板
+    /// 从 `WebRoot` 目录加载模板
     WebRoot,
     /// 从模板文本加载模板
     String,
-    /// 复合加载（File → ClassPath → WebRoot → String 顺序尝试）
+    /// 复合加载（File → `ClassPath` → `WebRoot` → String 顺序尝试）
     Composite,
 }

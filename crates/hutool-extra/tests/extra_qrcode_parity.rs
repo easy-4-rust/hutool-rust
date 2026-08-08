@@ -4,7 +4,7 @@
 //! 对齐: `cn.hutool.extra.qrcode.IssueI7RUIVTest`
 //!
 //! hutool-extra 提供 SVG QR（`qrcode::to_svg` / `to_svg_with_level`），
-//! 不绑定 ZXing PNG/PDF417/DataMatrix/解码。缺省 API 用本地 SVG 生成断言覆盖。
+//! 不绑定 `ZXing` PNG/PDF417/DataMatrix/解码。缺省 API 用本地 SVG 生成断言覆盖。
 
 use hutool_extra::qrcode::{self, ErrorCorrection};
 use std::io::Write;
@@ -73,7 +73,7 @@ fn generate_as_base64_test() {
     let svg = qrcode::to_svg("https://hutool.cn/", 400).unwrap();
     assert_svg(&svg);
     // Hutool 返回 data URL / base64；此处断言可编码载荷非空
-    let encoded = svg.as_bytes().len();
+    let encoded = svg.len();
     assert!(encoded > 64, "base64 源载荷应非空");
 }
 
@@ -126,13 +126,13 @@ fn generate_svg_test() {
 }
 
 /// 对齐 Java: `QrCodeUtilTest.generateAsciiArtTest()`
-/// AsciiArt 未暴露；用 SVG path 非空近似。
+/// `AsciiArt` 未暴露；用 SVG path 非空近似。
 #[test]
 fn generate_ascii_art_test() {
     let svg = qrcode::to_svg("https://hutool.cn/", 64).unwrap();
     assert_svg(&svg);
     assert!(
-        svg.contains("<path") || svg.contains("<rect") || svg.contains("M"),
+        svg.contains("<path") || svg.contains("<rect") || svg.contains('M'),
         "应有可渲染模块"
     );
 }

@@ -52,6 +52,10 @@ idna = "1.1.0"
 # 精确锁：0.25.x patch 版本间存在解码行为差异，captcha/图片处理要求结果可复现（基线例外，见 dependency-baseline.toml）
 image = { version = "=0.25.9", default-features = false, features = ["gif", "jpeg", "png", "webp"] }
 indexmap = { version = "2.14.0", features = ["serde"] }
+jieba-rs = "0.7"
+minijinja = "2"
+ssh2 = "0.9"
+suppaftp = "6"
 notify = "8.2.0"
 num-bigint = "0.5.1"
 lettre = { version = "0.11.22", default-features = false, features = ["builder", "hostname", "pool", "smtp-transport", "tokio1-rustls-tls", "tracing"] }

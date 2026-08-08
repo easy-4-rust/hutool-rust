@@ -26,13 +26,22 @@ impl TemplateUtil {
     /// 对齐 `TemplateUtil.createEngine(TemplateConfig config)`：根据指定配置创建引擎。
     ///
     /// Rust 用 `dyn TemplateEngine` trait object 而非 Java `Class<? extends TemplateEngine>` 反射。
+    /// 启用 `template` feature 时返回 `MinijinjaEngine`（Java 默认走 Freemarker）。
+    #[cfg(feature = "template")]
+    pub fn create_engine_with_config(
+        config: &TemplateConfig,
+    ) -> Result<Box<dyn TemplateEngine>, TemplateException> {
+        let mut engine = super::MinijinjaEngine::new();
+        engine.init(config)?;
+        Ok(Box::new(engine))
+    }
+
+    #[cfg(not(feature = "template"))]
     pub fn create_engine_with_config(
         _config: &TemplateConfig,
     ) -> Result<Box<dyn TemplateEngine>, TemplateException> {
-        // Phase 1.4 子任务：根据 config.custom_engine 选择具体引擎
-        // 当前返回 Err 直到具体 engine 实现到位
         Err(TemplateException::Message(
-            "TemplateUtil::create_engine requires at least one concrete TemplateEngine implementation (engine/<name>.rs)".into(),
+            "template feature not enabled; add `hutool-extra/template` to create engine".into(),
         ))
     }
 }

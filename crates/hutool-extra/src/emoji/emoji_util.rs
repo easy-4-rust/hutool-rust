@@ -70,8 +70,8 @@ impl EmojiUtil {
         let mut i = 0;
         while i < chars.len() {
             // `:shortcode:` or `:shortcode|type_N:`
-            if chars[i] == ':' {
-                if let Some(end) = chars[i + 1..].iter().position(|&c| c == ':') {
+            if chars[i] == ':'
+                && let Some(end) = chars[i + 1..].iter().position(|&c| c == ':') {
                     let inner: String = chars[i + 1..i + 1 + end].iter().collect();
                     let alias = inner.split('|').next().unwrap_or(&inner);
                     if let Some(emoji) = emojis::get_by_shortcode(alias) {
@@ -80,20 +80,17 @@ impl EmojiUtil {
                         continue;
                     }
                 }
-            }
             // &#123; or &#x1f600;
-            if chars[i] == '&' && i + 2 < chars.len() && chars[i + 1] == '#' {
-                if let Some(semi) = chars[i + 2..].iter().position(|&c| c == ';') {
+            if chars[i] == '&' && i + 2 < chars.len() && chars[i + 1] == '#'
+                && let Some(semi) = chars[i + 2..].iter().position(|&c| c == ';') {
                     let body: String = chars[i + 2..i + 2 + semi].iter().collect();
-                    if let Some(cp) = parse_html_codepoint(&body) {
-                        if let Some(ch) = char::from_u32(cp) {
+                    if let Some(cp) = parse_html_codepoint(&body)
+                        && let Some(ch) = char::from_u32(cp) {
                             out.push(ch);
                             i += semi + 3;
                             continue;
                         }
-                    }
                 }
-            }
             out.push(chars[i]);
             i += 1;
         }

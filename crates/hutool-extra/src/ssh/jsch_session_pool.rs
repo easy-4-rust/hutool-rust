@@ -10,7 +10,7 @@ pub trait JschSessionPool: Send + Sync {
     /// 对齐 `JschSessionPool.get(String)`
     fn get(&self, key: &str) -> Option<Box<dyn std::any::Any>>;
 
-    /// 对齐 `JschSessionPool.put(...)`（已在 JschUtil 中实现）
+    /// 对齐 `JschSessionPool.put(...)`（已在 `JschUtil` 中实现）
     fn put_session(&self, key: &str, session: Box<dyn std::any::Any>);
 
     /// 对齐 `JschSessionPool.remove(Session)`

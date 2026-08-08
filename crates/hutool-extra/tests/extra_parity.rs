@@ -12,7 +12,7 @@ fn extra_module_exists() {
 fn create_zip_test() {
     let entries = vec![("test.txt", b"hello world" as &[u8])];
     let zip_bytes = he::archive::create_zip(&entries).unwrap();
-    assert!(zip_bytes.len() > 0, "ZIP 应非空");
+    assert!(!zip_bytes.is_empty(), "ZIP 应非空");
 }
 
 #[test]

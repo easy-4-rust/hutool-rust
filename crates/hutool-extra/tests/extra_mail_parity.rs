@@ -4,7 +4,7 @@
 //! 对齐: `cn.hutool.extra.mail.JakartaMailTest`
 //! 对齐: `cn.hutool.extra.mail.MailAccountTest`
 //!
-//! 网络 SMTP 用本地 MIME 构建 + SmtpConfig 校验替代真实投递。
+//! 网络 SMTP 用本地 MIME 构建 + `SmtpConfig` 校验替代真实投递。
 
 #![cfg(feature = "mail")]
 

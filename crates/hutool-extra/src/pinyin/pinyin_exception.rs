@@ -98,13 +98,13 @@ mod tests {
         assert!(wrapped.source.is_some());
 
         // PinyinException(String, Throwable)
-        let cause2 = std::io::Error::new(std::io::ErrorKind::Other, "inner");
+        let cause2 = std::io::Error::other("inner");
         let with_cause = PinyinException::with_cause("outer", cause2);
         assert_eq!(with_cause.to_string(), "outer");
         assert!(with_cause.source.is_some());
 
         // PinyinException(Throwable, String, Object...)
-        let cause3 = std::io::Error::new(std::io::ErrorKind::Other, "inner2");
+        let cause3 = std::io::Error::other("inner2");
         let templated_cause =
             PinyinException::with_cause_template(cause3, "engine {} failed", &[&"pinyin4j"]);
         assert_eq!(templated_cause.to_string(), "engine pinyin4j failed");

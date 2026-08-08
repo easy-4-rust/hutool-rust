@@ -39,7 +39,7 @@
 | hutool-crypto | `crates/hutool-crypto` | 🟡 部分迁移 | 缺失对称算法枚举、Sign、SignUtil、SmUtil、SpecUtil、asymmetric/digest/symmetric 子包 |
 | hutool-db | `crates/hutool-db` | 🟡 部分迁移 | 仅 connection/ds/pool/row/sql；缺 Entity、Page、Query、SqlBuilder、dialect/、nosql/、ds/ 多个子包 |
 | hutool-dfa | `crates/hutool-dfa` | ✅ 已迁移 | 4 文件完整 |
-| hutool-extra | `crates/hutool-extra` | 🟡 部分迁移 | 仅 codec/compression/invocation/qrcode/template；缺 mail/ftp/ssh/pinyin/tokenizer/expression/servlet/spring |
+| hutool-extra | `crates/hutool-extra` | ✅ 已迁移 | 15 模块全整合：mail(lettre)/image/qrcode/pinyin/emoji/archive(zip) + expression(rhai)/tokenizer(jieba-rs)/ftp(suppaftp)/ssh(ssh2)/template(minijinja)，可选 feature 控制；spring/servlet 为 Java 特有保留占位 |
 | hutool-http | `crates/hutool-http` | ✅ 已迁移 | 22 文件，含 body/html 子模块 |
 | hutool-json | `crates/hutool-json` | ✅ 已迁移 | 6 文件（兼容 facade 完整） |
 | hutool-jwt | `crates/hutool-jwt` | ✅ 已迁移 | 2 文件（lib + compat），结构紧凑 |

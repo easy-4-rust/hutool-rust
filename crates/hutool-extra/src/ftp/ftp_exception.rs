@@ -6,5 +6,5 @@
 
 use crate::HutoolException;
 
-/// FTP 异常，对齐 `cn.hutool.extra.ftp.FtpException`（统一委托到 HutoolException）。
+/// FTP 异常，对齐 `cn.hutool.extra.ftp.FtpException`（统一委托到 `HutoolException`）。
 pub type FtpException = HutoolException;
