@@ -8,7 +8,7 @@
 
 [![Crates.io](https://img.shields.io/crates/v/hutool)](https://crates.io/crates/hutool)
 [![docs.rs](https://img.shields.io/docsrs/hutool)](https://docs.rs/hutool)
-[![MSRV](https://img.shields.io/badge/MSRV-1.85-orange)](#3-rust-基线与平台支持)
+[![MSRV](https://img.shields.io/badge/MSRV-1.94-orange)](#3-rust-基线与平台支持)
 [![License](https://img.shields.io/badge/license-Apache_2.0-green)](LICENSE)
 
 [English](./README.md) | [简体中文](./README.zh-CN.md)
@@ -23,11 +23,12 @@
 ---
 
 > **当前版本**：`0.1.0`
-> **MSRV**：Rust `1.85`
+> **MSRV**：Rust `1.94`
 > **Edition**：`2024`
 > **Workspace Resolver**：`3`
-> **成熟度**：实验性 — 大部分核心 crate 1:1 对齐 hutool，少量依赖 PendingEngine stub 等待上层引擎
-> **最后核验**：2026-07-21
+> **成熟度**：实验性 — cron/ai/extra/cache/json/aop/dfa/bloom-filter 已完整迁移，core/db/http/crypto 进行中
+> **架构文档**：见 [docs/hutool-rust-Architecture.zh_CN.md](docs/hutool-rust-Architecture.zh_CN.md)
+> **最后核验**：2026-08-12
 
 > hutool-rust 顶多承诺与上游 hutool 的 1:1 行为/接口等价，**不**承诺字节级二进制完全一致。所有实现均使用纯 Rust 标准库 + 主流 Rust 生态，不依赖 FFI 也不使用 `unsafe` 代码。
 
@@ -45,7 +46,7 @@ hutool-rust 是按 hutool 模块划分的 Cargo workspace，每个 hutool-* 模�
 |---|---|
 | 根 crate | `hutool`（Facade，按 feature 重新导出 hutool-* 子 crate） |
 | 当前版本 | `0.1.0` |
-| MSRV / Edition | `1.85` / `2024` |
+| MSRV / Edition | `1.94` / `2024` |
 | 默认 features | `core`、`json` |
 | unsafe 策略 | `#![forbid(unsafe_code)]` 全部 crate 强制 |
 | 发布状态 | 未发布到 crates.io（仍为实验性） |
@@ -66,7 +67,7 @@ hutool-rust 是按 hutool 模块划分的 Cargo workspace，每个 hutool-* 模�
 | 单元测试 | ✅ 2000+ | `cargo test --tests` 2347 passed / 0 failed |
 | hutool-crypto 字节级对比 | ✅ 364 测试 | `crypto_byte_level_parity.rs` + `sm_byte_level_parity.rs` |
 | 1:1 facade 对齐 | ✅ POI 已处置 | `hutool-poi` 占位 crate 已于 2026-08-04 移除，Excel 能力由 `easyexcel-rust` 承接 |
-| MSRV CI | `1.85` | `rust-version = "1.85"` |
+| MSRV CI | `1.94` | `rust-version = "1.94"` |
 
 ## 2. 功能与成熟度
 
@@ -140,7 +141,7 @@ hutool-rust 的设计目标是与 hutool Java 的**使用习惯一致**：相同
 
 | 项目 | 值 | 来源 |
 |---|---|---|
-| MSRV | `1.85` | `rust-version = "1.85"` |
+| MSRV | `1.94` | `rust-version = "1.94"` |
 | Edition | `2024` | `edition = "2024"` |
 | Resolver | `3` | `[workspace]` |
 | rustfmt | stable | CI |
@@ -278,7 +279,7 @@ hutool-rust 的核心原则是**与 hutool Java 版本的 API、行为、参数�
 
 ### 5.3 自实现 vs 依赖
 
-**原则：依赖主流 Rust 生态 crate，不自实现底层算法。** 详细理由见 [docs/architecture.md](docs/architecture.md)。
+**原则：依赖主流 Rust 生态 crate，不自实现底层算法。** 详细理由见 [docs/hutool-rust-Architecture.zh_CN.md](docs/hutool-rust-Architecture.zh_CN.md)。
 
 | 算法 | 实现 |
 |---|---|
@@ -402,7 +403,7 @@ let is_empty = StrUtil::isEmpty(""); // 1:1 对齐 hutool Java API
 
 ## 9. 加密算法详细支持
 
-详见 [docs/architecture.md §3 加密与国密](docs/architecture.md)。
+详见 [docs/hutool-rust-Architecture.zh_CN.md §12 安全、隐私与信任边界](docs/hutool-rust-Architecture.zh_CN.md)。
 
 | 算法 | Rust crate | hutool Java 对应 |
 |---|---|---|
@@ -492,17 +493,17 @@ CI 门禁：
 |---|---|
 | [README.md](README.md) | 英文版 README |
 | [README.zh-CN.md](README.zh-CN.md) | 本文档（中文版） |
-| [docs/architecture.md](docs/architecture.md) | 系统架构设计 |
-| [docs/feature-matrix.md](docs/feature-matrix.md) | 完整功能矩阵 |
-| [docs/observability.md](docs/observability.md) | tracing、metrics、health 与授权诊断工具链 |
-| [docs/xml.md](docs/xml.md) | 有界 XML 流式处理、DOM 兼容、Serde 与安全策略 |
-| [docs/hutool-parity.md](docs/hutool-parity.md) | 与 hutool 的 1:1 对齐状态 |
-| [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md) | 实施计划 |
-| [docs/MIGRATION_STATUS.md](docs/MIGRATION_STATUS.md) | 迁移进度 |
-| [docs/production-readiness.md](docs/production-readiness.md) | 生产就绪度 |
-| [docs/PHASE_BASELINE.md](docs/PHASE_BASELINE.md) | 阶段基线 |
-| [docs/provenance.md](docs/provenance.md) | 来源与历史 |
-| [docs/security.md](docs/security.md) | 安全策略 |
+| [docs/hutool-rust-Architecture.zh_CN.md](docs/hutool-rust-Architecture.zh_CN.md) | 系统架构设计（中文） |
+| [docs/hutool-rust-Architecture.md](docs/hutool-rust-Architecture.md) | System architecture (English) |
+| [docs/superpowers/specs/2026-08-12-feature-matrix.md](docs/superpowers/specs/2026-08-12-feature-matrix.md) | 完整功能矩阵 |
+| [docs/superpowers/specs/2026-08-12-observability-strategy.md](docs/superpowers/specs/2026-08-12-observability-strategy.md) | tracing、metrics、health 与授权诊断工具链 |
+| [docs/superpowers/specs/2026-08-12-xml-support.md](docs/superpowers/specs/2026-08-12-xml-support.md) | 有界 XML 流式处理、DOM 兼容、Serde 与安全策略 |
+| [docs/superpowers/specs/2026-08-12-java-rust-parity-methodology.md](docs/superpowers/specs/2026-08-12-java-rust-parity-methodology.md) | 与 hutool 的 1:1 对齐状态 |
+| [docs/superpowers/README.md](docs/superpowers/README.md) | Superpowers SDD plans & specs 索引 |
+| [docs/superpowers/specs/2026-08-12-migration-status-baseline.md](docs/superpowers/specs/2026-08-12-migration-status-baseline.md) | 迁移进度与阶段基线 |
+| [docs/superpowers/specs/2026-08-12-production-readiness.md](docs/superpowers/specs/2026-08-12-production-readiness.md) | 生产就绪度 |
+| [docs/superpowers/specs/2026-08-12-provenance-and-attribution.md](docs/superpowers/specs/2026-08-12-provenance-and-attribution.md) | 来源与历史 |
+| [docs/superpowers/specs/2026-08-12-security-baseline.md](docs/superpowers/specs/2026-08-12-security-baseline.md) | 安全策略 |
 | [CHANGELOG.md](CHANGELOG.md) | 变更日志 |
 | [SECURITY.md](SECURITY.md) | 安全报告 |
 
