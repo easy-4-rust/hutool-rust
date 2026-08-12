@@ -2,11 +2,7 @@
 //! 来源: hutool-http/src/main/java/cn/hutool/http/body/BytesBody.java
 //! 中文说明: 字节数组请求体实现，用于发送原始字节数据
 
-use crate::http_util::HttpUtil;
-use indexmap::IndexMap;
-use std::fmt;
 use std::io::Write;
-use std::path::{Path, PathBuf};
 
 use super::request_body::RequestBody;
 

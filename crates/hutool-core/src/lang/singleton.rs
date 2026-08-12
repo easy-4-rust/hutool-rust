@@ -1,6 +1,8 @@
 //! 对齐: `cn.hutool.core.lang.Singleton`
 //! `ReentrantMutex` + `RefCell`：同线程构造嵌套 `get` 不死锁，且同类型只创建一次。
 
+#![allow(dead_code)] // 对齐 Java Singleton，暂未接线，预留
+
 use parking_lot::ReentrantMutex;
 use std::any::{Any, TypeId};
 use std::cell::RefCell;

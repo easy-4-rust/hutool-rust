@@ -1,5 +1,7 @@
 //! 对齐: `cn.hutool.core.lang.SimpleCache`
 
+#![allow(dead_code)] // 对齐 Java SimpleCache，暂未接线，预留
+
 use parking_lot::RwLock;
 use std::collections::HashMap;
 use std::hash::Hash;

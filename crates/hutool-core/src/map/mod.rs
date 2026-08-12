@@ -21,6 +21,8 @@ pub mod map_builder;
 pub mod map_proxy;
 pub mod map_util;
 pub mod map_wrapper;
+pub mod multi;
+pub mod reference;
 pub mod reference_concurrent_map;
 pub mod safe_concurrent_hash_map;
 pub mod table_map;
@@ -28,8 +30,6 @@ pub mod tolerant_map;
 pub mod trans_map;
 pub mod tree_entry;
 pub mod weak_concurrent_map;
-pub mod multi;
-pub mod reference;
 
 pub use abs_entry::AbsEntry;
 pub use bi_map::BiMap;
@@ -38,24 +38,15 @@ pub use camel_case_map::CamelCaseMap;
 pub use case_insensitive_linked_map::CaseInsensitiveLinkedMap;
 pub use case_insensitive_map::CaseInsensitiveMap;
 pub use case_insensitive_tree_map::CaseInsensitiveTreeMap;
-pub use custom_key_map::{custom_key_map, CustomKeyMap};
+pub use custom_key_map::{CustomKeyMap, custom_key_map};
 pub use fixed_linked_hash_map::FixedLinkedHashMap;
-pub use forest_map::{ForestMap, LinkedForestMap, TreeEntry};
+pub use forest_map::LinkedForestMap;
 pub use func_key_map::FuncKeyMap;
 pub use func_map::FuncMap;
 pub use map_builder::MapBuilder;
-pub use map_proxy::MapProxy;
-pub use map_util::{
-    CreateMapKind, EmptyMapKind, EitherMap, LinkedOrHashMap, MapBuilderGate, MapUtil, NestedMapValue,
-};
 pub use map_wrapper::MapWrapper;
-pub use reference_concurrent_map::ReferenceConcurrentMap;
+pub use multi::{ListValueMap, RowKeyTable, SetValueMap};
 pub use safe_concurrent_hash_map::SafeConcurrentHashMap;
 pub use table_map::TableMap;
 pub use tolerant_map::TolerantMap;
 pub use trans_map::TransMap;
-pub use weak_concurrent_map::WeakConcurrentMap;
-pub use multi::{
-    AbsCollValueMap, AbsTable, CollectionValueMap, ListValueMap, RowKeyTable, SetValueMap, Table,
-    TableCell,
-};

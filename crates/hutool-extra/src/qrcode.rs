@@ -147,10 +147,7 @@ pub fn to_ascii_art(data: impl AsRef<[u8]>) -> Result<String> {
 }
 
 /// Renders ASCII-art with an explicit correction level.
-pub fn to_ascii_art_with_level(
-    data: impl AsRef<[u8]>,
-    level: ErrorCorrection,
-) -> Result<String> {
+pub fn to_ascii_art_with_level(data: impl AsRef<[u8]>, level: ErrorCorrection) -> Result<String> {
     let code = QrCode::with_error_correction_level(data.as_ref(), level.to_ec_level())?;
     Ok(code
         .render::<char>()
@@ -171,7 +168,8 @@ pub fn to_png_with_config(data: impl AsRef<[u8]>, config: &QrConfig) -> Result<V
     use ::image::{ImageBuffer, ImageFormat, Luma};
     use std::io::Cursor;
 
-    let code = QrCode::with_error_correction_level(data.as_ref(), config.error_correction.to_ec_level())?;
+    let code =
+        QrCode::with_error_correction_level(data.as_ref(), config.error_correction.to_ec_level())?;
     let colors = code.to_colors();
     let modules = code.width();
     let dim = config.min_dimension().max(modules as u32);

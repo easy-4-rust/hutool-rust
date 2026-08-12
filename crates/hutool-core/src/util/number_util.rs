@@ -14,7 +14,7 @@
 )]
 
 use crate::{CoreError, Result};
-use rand::Rng;
+use rand::RngExt;
 use rust_decimal::Decimal;
 use rust_decimal::RoundingStrategy;
 use std::str::FromStr;
@@ -792,10 +792,10 @@ impl NumberUtil {
             });
         }
         let mut seed: Vec<i32> = (begin..end).collect();
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let mut ran = Vec::with_capacity(size as usize);
         for i in 0..size as usize {
-            let j = rng.gen_range(0..seed.len() - i);
+            let j = rng.random_range(0..seed.len() - i);
             ran.push(seed[j]);
             let last = seed.len() - 1 - i;
             seed.swap(j, last);
@@ -827,9 +827,9 @@ impl NumberUtil {
             });
         }
         let mut set = std::collections::HashSet::new();
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         while (set.len() as i32) < size {
-            set.insert(rng.gen_range(begin..end));
+            set.insert(rng.random_range(begin..end));
         }
         Ok(set.into_iter().collect())
     }

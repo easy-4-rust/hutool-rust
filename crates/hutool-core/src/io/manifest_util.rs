@@ -19,6 +19,8 @@ pub struct ManifestUtil;
 impl ManifestUtil {
     /// Sentinel used until the corresponding IO engine is implemented.
     pub fn pending_io_alignment() -> Result<()> {
-        Err(CoreError::PendingEngine("ManifestUtil::pending_io_alignment"))
+        Err(CoreError::PendingEngine(
+            "ManifestUtil::pending_io_alignment",
+        ))
     }
 }

@@ -11,7 +11,7 @@ pub struct ConditionBuilder {
 }
 
 #[derive(Debug, Clone)]
-enum ConditionItem {
+pub(crate) enum ConditionItem {
     Condition(Condition),
     Group(ConditionGroup),
 }
@@ -31,6 +31,7 @@ impl ConditionBuilder {
 
     /// 支持条件组与条件的混合构建（ConditionGroupTest 用例）。
     #[must_use]
+    #[allow(private_bounds)]
     pub fn of_mixed(items: impl IntoIterator<Item = ConditionItem>) -> Self {
         Self {
             items: items.into_iter().collect(),

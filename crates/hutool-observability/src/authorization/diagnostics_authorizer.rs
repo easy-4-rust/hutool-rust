@@ -1,9 +1,3 @@
-use std::{fmt, sync::Arc};
-
-use subtle::ConstantTimeEq;
-use thiserror::Error;
-use zeroize::Zeroizing;
-
 use super::diagnostic_action::DiagnosticAction;
 
 /// Application-supplied authorization policy for diagnostic operations.
@@ -18,4 +12,4 @@ impl DiagnosticsAuthorizer for DenyAll {
     }
 }
 
-use super::{DenyAll};
+use super::DenyAll;

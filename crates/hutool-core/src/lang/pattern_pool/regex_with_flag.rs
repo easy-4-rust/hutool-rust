@@ -3,16 +3,6 @@
 //!
 //! 编译正则缓存；flags 对齐 Java `Pattern` 位掩码的常用子集（CASE_INSENSITIVE=2）。
 
-use std::collections::HashMap;
-use std::sync::Arc;
-
-use parking_lot::Mutex;
-use regex::{Regex, RegexBuilder};
-
-use crate::lang::regex_pool::RegexPool;
-
-use super::pattern_pool::PatternPool;
-
 /// 对齐 Java: `PatternPool.RegexWithFlag`
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct RegexWithFlag {
@@ -30,5 +20,3 @@ impl RegexWithFlag {
         }
     }
 }
-
-use super::{FLAG_CASE_INSENSITIVE, compile, pool};

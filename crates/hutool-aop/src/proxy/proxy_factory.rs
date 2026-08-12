@@ -3,11 +3,10 @@
 //! 中文说明: 代理工厂，选择并构建类型化的切面代理实例。
 
 use crate::{
-    HandlerProxy, Method,
     aspects::Aspect,
     interceptor::{CglibInterceptor, JdkInterceptor, SpringCglibInterceptor},
 };
-use std::{fmt, sync::Arc};
+use std::sync::Arc;
 
 use super::proxy::Proxy;
 use super::proxy_backend::ProxyBackend;

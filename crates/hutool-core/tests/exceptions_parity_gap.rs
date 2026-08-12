@@ -7,7 +7,7 @@ use hutool_core::convert::ConvertValue;
 use hutool_core::exceptions::{CheckedUtil, ExceptionUtil, WrappedError, sleep_checked};
 use std::error::Error;
 use std::io;
-use std::panic::{catch_unwind, AssertUnwindSafe};
+use std::panic::{AssertUnwindSafe, catch_unwind};
 
 #[derive(Debug)]
 struct IoErr(String);

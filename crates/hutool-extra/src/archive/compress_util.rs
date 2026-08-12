@@ -3,13 +3,11 @@
 //! 对齐: `cn.hutool.extra.compress.CompressUtil`
 //! 对齐: `cn.hutool.core.util.ZipUtil`（extra 侧安全 ZIP 子集）
 
-use crate::{ExtraError, Result};
+use crate::Result;
 use std::{
-    fs::{self, File},
-    io::{Cursor, Read, Seek, Write},
-    path::{Component, Path},
+    io::{Read, Seek},
+    path::Path,
 };
-use zip::{CompressionMethod, ZipArchive, ZipWriter, write::SimpleFileOptions};
 
 use super::extraction_limits::ExtractionLimits;
 
@@ -36,4 +34,4 @@ impl CompressUtil {
     }
 }
 
-use super::{create_zip, ensure_beneath_root, extract_zip, validate_relative_path};
+use super::{create_zip, extract_zip};

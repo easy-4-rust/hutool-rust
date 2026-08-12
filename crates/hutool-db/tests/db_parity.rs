@@ -15,7 +15,7 @@ fn page_request_invalid_size_test() {
 #[test]
 fn page_test() {
     let request = hd::PageRequest::new(2, 10, 100).unwrap();
-    let page = hd::Page::new(vec![1,2,3], request, 30);
+    let page = hd::Page::new(vec![1, 2, 3], request, 30);
     assert_eq!(page.total_pages(), 3);
     assert!(page.has_next());
 }

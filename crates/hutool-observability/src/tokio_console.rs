@@ -52,3 +52,23 @@ pub fn tokio_console_parts(
 
 /// Authorized console components. The application must add `layer` to its
 /// subscriber and spawn `server.serve()` on its own Tokio runtime.
+pub struct TokioConsoleParts {
+    /// Console layer to add to the tracing subscriber.
+    pub layer: console_subscriber::ConsoleLayer,
+    /// Console server to spawn on the application's own Tokio runtime.
+    pub server: console_subscriber::Server,
+}
+
+/// Tokio console setup failures.
+#[derive(Debug, Error, Clone, PartialEq, Eq)]
+pub enum TokioConsoleError {
+    /// The operation was not authorized.
+    #[error(transparent)]
+    Authorization(#[from] AuthorizationError),
+    /// The console gRPC server must bind to a loopback address.
+    #[error("tokio console bind address must be loopback, got {0}")]
+    NonLoopback(SocketAddr),
+    /// The retention window must be non-zero.
+    #[error("tokio console retention must be non-zero")]
+    ZeroRetention,
+}

@@ -35,18 +35,14 @@ impl SynthesizedAnnotationPostProcessor for MirrorLinkAnnotationPostProcessor {
                     Arc::clone(&original_attribute),
                     Arc::clone(&linked_attribute),
                 );
-                original_annotation.set_attribute(
-                    &original_attribute.get_attribute_name(),
-                    mirrored_original,
-                );
+                original_annotation
+                    .set_attribute(&original_attribute.get_attribute_name(), mirrored_original);
                 let mirrored_linked = MirroredAnnotationAttribute::new(
                     Arc::clone(&linked_attribute),
                     Arc::clone(&original_attribute),
                 );
-                linked_annotation.set_attribute(
-                    &linked_attribute.get_attribute_name(),
-                    mirrored_linked,
-                );
+                linked_annotation
+                    .set_attribute(&linked_attribute.get_attribute_name(), mirrored_linked);
             },
         );
     }

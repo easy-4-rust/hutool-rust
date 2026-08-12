@@ -28,11 +28,7 @@ fn mask_bit_by_mask(mask: &str) -> Option<u8> {
     // 连续 1 后跟连续 0
     let ones = bits.leading_ones() as u8;
     let zeros = bits.trailing_zeros() as u8;
-    if ones + zeros == 32 {
-        Some(ones)
-    } else {
-        None
-    }
+    if ones + zeros == 32 { Some(ones) } else { None }
 }
 
 /// 前缀长度 → 掩码字符串。
@@ -67,7 +63,9 @@ fn ipv4_matches(pattern: &str, ip: &str) -> bool {
     if p.len() != 4 || a.len() != 4 {
         return false;
     }
-    p.iter().zip(a.iter()).all(|(pp, aa)| *pp == "*" || *pp == *aa)
+    p.iter()
+        .zip(a.iter())
+        .all(|(pp, aa)| *pp == "*" || *pp == *aa)
 }
 
 /// CIDR 包含判断（对齐 NetUtil.isInRange）。
@@ -112,11 +110,7 @@ fn biginteger_to_ipv6(dec: &str) -> String {
     let n: u128 = dec.parse().expect("u128 ipv6 decimal");
     let addr = Ipv6Addr::from(n);
     // hutool 示例："0:115:85f1:5eb3:c74d:a870:11c6:7eea" —— 全小写、不压缩 ::
-    let segs: Vec<String> = addr
-        .segments()
-        .iter()
-        .map(|s| format!("{:x}", s))
-        .collect();
+    let segs: Vec<String> = addr.segments().iter().map(|s| format!("{:x}", s)).collect();
     segs.join(":")
 }
 
@@ -157,10 +151,9 @@ fn percent_decode_strict(s: &str) -> String {
     while i < bytes.len() {
         match bytes[i] {
             b'%' if i + 2 < bytes.len() => {
-                if let Ok(b) = u8::from_str_radix(
-                    std::str::from_utf8(&bytes[i + 1..i + 3]).unwrap_or(""),
-                    16,
-                ) {
+                if let Ok(b) =
+                    u8::from_str_radix(std::str::from_utf8(&bytes[i + 1..i + 3]).unwrap_or(""), 16)
+                {
                     out.push(b);
                     i += 3;
                     continue;
@@ -182,7 +175,6 @@ fn percent_decode_utf8(s: &str) -> String {
     percent_decode_strict(s)
 }
 
-
 // ===== FormUrlencodedTest (1 @Test) =====
 /// 对齐 Java: `FormUrlencodedTest.encodeParamTest()`
 #[test]
@@ -190,7 +182,6 @@ fn form_urlencoded_encode_param_test() {
     assert_eq!(form_encode("a+b"), "a%2Bb");
     assert_eq!(form_encode("a b"), "a+b");
 }
-
 
 // ===== Ipv4UtilTest (13 @Test) =====
 /// 对齐 Java: `Ipv4UtilTest.getMaskBitByMaskTest()`
@@ -223,7 +214,10 @@ fn ipv_4_util_long_to_ip_test() {
 #[test]
 fn ipv_4_util_get_end_ip_str_test() {
     let mask = mask_bit_by_mask("255.255.255.0").unwrap();
-    assert_eq!(end_ip_str("192.168.1.1", mask).as_deref(), Some("192.168.1.255"));
+    assert_eq!(
+        end_ip_str("192.168.1.1", mask).as_deref(),
+        Some("192.168.1.255")
+    );
 }
 
 /// 对齐 Java: `Ipv4UtilTest.listTest()`
@@ -287,10 +281,15 @@ fn ipv_4_util_ipv_4_to_long_test() {
 #[test]
 fn ipv_4_util_ipv_4_to_long_with_default_test() {
     let default_v = 0u32;
-    assert_eq!(ipv4_to_long("不正确的 IP 地址").unwrap_or(default_v), default_v);
-    assert_eq!(ipv4_to_long("255.255.255.255").unwrap_or(default_v), 4294967295);
+    assert_eq!(
+        ipv4_to_long("不正确的 IP 地址").unwrap_or(default_v),
+        default_v
+    );
+    assert_eq!(
+        ipv4_to_long("255.255.255.255").unwrap_or(default_v),
+        4294967295
+    );
 }
-
 
 // ===== IssueI70UPUTest (1 @Test) =====
 /// 对齐 Java: `IssueI70UPUTest.encodeQueryTest()`
@@ -300,7 +299,6 @@ fn issue_i_70_upu_encode_query_test() {
     let enc = form_encode(json);
     assert!(!enc.is_empty());
 }
-
 
 // ===== NetUtilTest (15 @Test) =====
 /// 对齐 Java: `NetUtilTest.getLocalhostStrTest()`
@@ -394,7 +392,9 @@ fn net_util_ping_test() {
 fn net_util_is_open_test() {
     let listener = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
     let addr = listener.local_addr().unwrap();
-    assert!(std::net::TcpStream::connect_timeout(&addr, std::time::Duration::from_millis(200)).is_ok());
+    assert!(
+        std::net::TcpStream::connect_timeout(&addr, std::time::Duration::from_millis(200)).is_ok()
+    );
 }
 
 /// 对齐 Java: `NetUtilTest.getDnsInfoTest()`
@@ -432,13 +432,17 @@ fn net_util_big_integer_to_i_pv_6_test() {
     assert_eq!(got, "0:115:85f1:5eb3:c74d:a870:11c6:7eea");
 }
 
-
 // ===== RFC3986Test (4 @Test) =====
 /// 对齐 Java: `RFC3986Test.encodeQueryTest()`
 #[test]
 fn rfc_3986_encode_query_test() {
     // QUERY_PARAM_VALUE: '=' 与 '+' 可保留
-    assert_eq!(UrlUtil::encode("a=b").replace("%3D", "=").replace("%3d", "="), "a=b".replace("=", "="));
+    assert_eq!(
+        UrlUtil::encode("a=b")
+            .replace("%3D", "=")
+            .replace("%3d", "="),
+        "a=b".replace("=", "=")
+    );
     // 用 form 风格校验 a=b 原样可作为 query value 语义
     assert_eq!("a=b", "a=b");
     assert_eq!("a+1=b", "a+1=b");
@@ -469,7 +473,6 @@ fn rfc_3986_encode_all_test() {
     assert!(enc.contains('%') || enc.chars().any(|c| c.is_ascii_alphanumeric()));
 }
 
-
 // ===== UrlBuilderTest (47 @Test) =====
 /// 对齐 Java: `UrlBuilderTest.buildTest()`
 #[test]
@@ -482,15 +485,24 @@ fn url_builder_build_test() {
 /// 对齐 Java: `UrlBuilderTest.buildWithoutSlashTest()`
 #[test]
 fn url_builder_build_without_slash_test() {
-    assert_eq!(format!("http://{}:{}", "192.168.1.1", 8080), "http://192.168.1.1:8080");
+    assert_eq!(
+        format!("http://{}:{}", "192.168.1.1", 8080),
+        "http://192.168.1.1:8080"
+    );
     let built = "http://192.168.1.1:8080?url=http://192.168.1.1/test/1";
-    assert_eq!(built, "http://192.168.1.1:8080?url=http://192.168.1.1/test/1");
+    assert_eq!(
+        built,
+        "http://192.168.1.1:8080?url=http://192.168.1.1/test/1"
+    );
 }
 
 /// 对齐 Java: `UrlBuilderTest.buildTest2()`
 #[test]
 fn url_builder_build_test_2() {
-    assert_eq!("http://www.hutool.cn/+8618888888888", "http://www.hutool.cn/+8618888888888");
+    assert_eq!(
+        "http://www.hutool.cn/+8618888888888",
+        "http://www.hutool.cn/+8618888888888"
+    );
 }
 
 /// 对齐 Java: `UrlBuilderTest.testHost()`
@@ -520,14 +532,20 @@ fn url_builder_test_path_and_query() {
 #[test]
 fn url_builder_test_query_with_chinese() {
     let wd = percent_encode_bytes("测试".as_bytes());
-    assert_eq!(format!("https://www.hutool.cn/aaa/bbb?ie=UTF-8&wd={wd}"), "https://www.hutool.cn/aaa/bbb?ie=UTF-8&wd=%E6%B5%8B%E8%AF%95");
+    assert_eq!(
+        format!("https://www.hutool.cn/aaa/bbb?ie=UTF-8&wd={wd}"),
+        "https://www.hutool.cn/aaa/bbb?ie=UTF-8&wd=%E6%B5%8B%E8%AF%95"
+    );
 }
 
 /// 对齐 Java: `UrlBuilderTest.testMultiQueryWithChinese()`
 #[test]
 fn url_builder_test_multi_query_with_chinese() {
     let wd = percent_encode_bytes("测试".as_bytes());
-    assert_eq!(format!("https://www.hutool.cn/s?ie=UTF-8&ie=GBK&wd={wd}"), "https://www.hutool.cn/s?ie=UTF-8&ie=GBK&wd=%E6%B5%8B%E8%AF%95");
+    assert_eq!(
+        format!("https://www.hutool.cn/s?ie=UTF-8&ie=GBK&wd={wd}"),
+        "https://www.hutool.cn/s?ie=UTF-8&ie=GBK&wd=%E6%B5%8B%E8%AF%95"
+    );
 }
 
 /// 对齐 Java: `UrlBuilderTest.testFragment()`
@@ -540,21 +558,30 @@ fn url_builder_test_fragment() {
 #[test]
 fn url_builder_test_chinese_fragment() {
     let f = percent_encode_bytes("测试".as_bytes());
-    assert_eq!(format!("https://www.hutool.cn/#{f}"), "https://www.hutool.cn/#%E6%B5%8B%E8%AF%95");
+    assert_eq!(
+        format!("https://www.hutool.cn/#{f}"),
+        "https://www.hutool.cn/#%E6%B5%8B%E8%AF%95"
+    );
 }
 
 /// 对齐 Java: `UrlBuilderTest.testChineseFragmentWithPath()`
 #[test]
 fn url_builder_test_chinese_fragment_with_path() {
     let f = percent_encode_bytes("测试".as_bytes());
-    assert_eq!(format!("https://www.hutool.cn/s#{f}"), "https://www.hutool.cn/s#%E6%B5%8B%E8%AF%95");
+    assert_eq!(
+        format!("https://www.hutool.cn/s#{f}"),
+        "https://www.hutool.cn/s#%E6%B5%8B%E8%AF%95"
+    );
 }
 
 /// 对齐 Java: `UrlBuilderTest.testChineseFragmentWithPathAndQuery()`
 #[test]
 fn url_builder_test_chinese_fragment_with_path_and_query() {
     let f = percent_encode_bytes("测试".as_bytes());
-    assert_eq!(format!("https://www.hutool.cn/s?wd=test#{f}"), "https://www.hutool.cn/s?wd=test#%E6%B5%8B%E8%AF%95");
+    assert_eq!(
+        format!("https://www.hutool.cn/s?wd=test#{f}"),
+        "https://www.hutool.cn/s?wd=test#%E6%B5%8B%E8%AF%95"
+    );
 }
 
 /// 对齐 Java: `UrlBuilderTest.ofTest()`
@@ -605,19 +632,28 @@ fn url_builder_end_with_slash_test() {
 /// 对齐 Java: `UrlBuilderTest.blankEncodeTest()`
 #[test]
 fn url_builder_blank_encode_test() {
-    assert_eq!("http://a.com/aaa bbb.html".replace(' ', "%20"), "http://a.com/aaa%20bbb.html");
+    assert_eq!(
+        "http://a.com/aaa bbb.html".replace(' ', "%20"),
+        "http://a.com/aaa%20bbb.html"
+    );
 }
 
 /// 对齐 Java: `UrlBuilderTest.dotEncodeTest()`
 #[test]
 fn url_builder_dot_encode_test() {
-    assert_eq!("http://xtbgyy.digitalgd.com.cn/ebus/../../..", "http://xtbgyy.digitalgd.com.cn/ebus/../../..");
+    assert_eq!(
+        "http://xtbgyy.digitalgd.com.cn/ebus/../../..",
+        "http://xtbgyy.digitalgd.com.cn/ebus/../../.."
+    );
 }
 
 /// 对齐 Java: `UrlBuilderTest.multiSlashTest()`
 #[test]
 fn url_builder_multi_slash_test() {
-    assert_eq!("https://hutool.cn//file/test.jpg", "https://hutool.cn//file/test.jpg");
+    assert_eq!(
+        "https://hutool.cn//file/test.jpg",
+        "https://hutool.cn//file/test.jpg"
+    );
 }
 
 /// 对齐 Java: `UrlBuilderTest.toURITest()`
@@ -636,7 +672,10 @@ fn url_builder_test_encode_in_query() {
 /// 对齐 Java: `UrlBuilderTest.encodePathTest()`
 #[test]
 fn url_builder_encode_path_test() {
-    assert_eq!("http://hq.sinajs.cn/list=sh600519", "http://hq.sinajs.cn/list=sh600519");
+    assert_eq!(
+        "http://hq.sinajs.cn/list=sh600519",
+        "http://hq.sinajs.cn/list=sh600519"
+    );
 }
 
 /// 对齐 Java: `UrlBuilderTest.encodePathTest2()`
@@ -656,7 +695,10 @@ fn url_builder_gimg_2_test() {
 #[test]
 fn url_builder_fragment_encode_test() {
     let enc = percent_encode_bytes("简介".as_bytes());
-    assert_eq!(format!("https://hutool.cn/docs/#/?id={enc}"), "https://hutool.cn/docs/#/?id=%E7%AE%80%E4%BB%8B");
+    assert_eq!(
+        format!("https://hutool.cn/docs/#/?id={enc}"),
+        "https://hutool.cn/docs/#/?id=%E7%AE%80%E4%BB%8B"
+    );
 }
 
 /// 对齐 Java: `UrlBuilderTest.slashEncodeTest()`
@@ -668,13 +710,19 @@ fn url_builder_slash_encode_test() {
 /// 对齐 Java: `UrlBuilderTest.addPathEncodeTest()`
 #[test]
 fn url_builder_add_path_encode_test() {
-    assert_eq!("https://domain.cn/api/xxx/bbb", "https://domain.cn/api/xxx/bbb");
+    assert_eq!(
+        "https://domain.cn/api/xxx/bbb",
+        "https://domain.cn/api/xxx/bbb"
+    );
 }
 
 /// 对齐 Java: `UrlBuilderTest.addPathEncodeTest2()`
 #[test]
 fn url_builder_add_path_encode_test_2() {
-    assert_eq!("https://domain.cn/api/xxx/bbb", "https://domain.cn/api/xxx/bbb");
+    assert_eq!(
+        "https://domain.cn/api/xxx/bbb",
+        "https://domain.cn/api/xxx/bbb"
+    );
 }
 
 /// 对齐 Java: `UrlBuilderTest.percent2BTest()`
@@ -698,7 +746,10 @@ fn url_builder_fragment_test() {
 /// 对齐 Java: `UrlBuilderTest.fragmentAppendParamTest()`
 #[test]
 fn url_builder_fragment_append_param_test() {
-    assert_eq!("https://www.hutool.cn/#/a/b?timestamp=1640391380204", "https://www.hutool.cn/#/a/b?timestamp=1640391380204");
+    assert_eq!(
+        "https://www.hutool.cn/#/a/b?timestamp=1640391380204",
+        "https://www.hutool.cn/#/a/b?timestamp=1640391380204"
+    );
 }
 
 /// 对齐 Java: `UrlBuilderTest.paramWithPlusTest()`
@@ -733,7 +784,10 @@ fn url_builder_issue_i_50_nhq_test() {
         Rfc3986::encode_query_param_value("2022-03-31 00:00:00"),
         Rfc3986::encode_query_param_value("2022-03-31 23:59:59")
     );
-    assert_eq!(built, "http://127.0.0.1/devicerecord/list?start=2022-03-31%2000:00:00&end=2022-03-31%2023:59:59&page=1&limit=10");
+    assert_eq!(
+        built,
+        "http://127.0.0.1/devicerecord/list?start=2022-03-31%2000:00:00&end=2022-03-31%2023:59:59&page=1&limit=10"
+    );
 }
 
 /// 对齐 Java: `UrlBuilderTest.issue2242Test()`
@@ -759,7 +813,10 @@ fn url_builder_issue_i_51_t_0_v_test() {
 fn url_builder_issues_2503_test() {
     let enc_field = percent_encode_bytes("param[0].field".as_bytes());
     let enc_val = percent_encode_bytes("编码".as_bytes());
-    assert_eq!(format!("http://127.0.0.1:8080?{enc_field}={enc_val}"), "http://127.0.0.1:8080?param%5B0%5D.field=%E7%BC%96%E7%A0%81");
+    assert_eq!(
+        format!("http://127.0.0.1:8080?{enc_field}={enc_val}"),
+        "http://127.0.0.1:8080?param%5B0%5D.field=%E7%BC%96%E7%A0%81"
+    );
 }
 
 /// 对齐 Java: `UrlBuilderTest.addPathTest()`（Java 无断言，仅 smoke 不 panic）
@@ -789,7 +846,6 @@ fn url_builder_issue_iaaoc_1_test() {
     );
 }
 
-
 // ===== UrlDecoderTest (3 @Test) =====
 /// 对齐 Java: `UrlDecoderTest.decodeForPathTest()`
 #[test]
@@ -816,7 +872,6 @@ fn url_decoder_issue_3063_test() {
     assert_eq!(percent_decode_utf8(&mix), "测试你好");
 }
 
-
 // ===== UrlQueryTest (14 @Test) =====
 /// 对齐 Java: `UrlQueryTest.parseTest()`
 #[test]
@@ -830,7 +885,10 @@ fn url_query_parse_test() {
 /// 对齐 Java: `UrlQueryTest.ofHttpWithoutEncodeTest()`
 #[test]
 fn url_query_of_http_without_encode_test() {
-    assert_eq!("imageMogr2/auto-orient/thumbnail/500&pid=259848", "imageMogr2/auto-orient/thumbnail/500&pid=259848");
+    assert_eq!(
+        "imageMogr2/auto-orient/thumbnail/500&pid=259848",
+        "imageMogr2/auto-orient/thumbnail/500&pid=259848"
+    );
 }
 
 /// 对齐 Java: `UrlQueryTest.parseTest2()`
@@ -857,7 +915,10 @@ fn url_query_parse_test_4() {
 /// 对齐 Java: `UrlQueryTest.buildWithMapTest()`
 #[test]
 fn url_query_build_with_map_test() {
-    assert_eq!("username=SSM&password=123456", "username=SSM&password=123456");
+    assert_eq!(
+        "username=SSM&password=123456",
+        "username=SSM&password=123456"
+    );
 }
 
 /// 对齐 Java: `UrlQueryTest.buildHasNullTest()`
@@ -889,7 +950,10 @@ fn url_query_parse_plus_test() {
 /// 对齐 Java: `UrlQueryTest.spaceTest()`
 #[test]
 fn url_query_space_test() {
-    assert_eq!(UrlUtil::encode("a b").contains("%20") || UrlUtil::encode("a b").contains("+"), true);
+    assert_eq!(
+        UrlUtil::encode("a b").contains("%20") || UrlUtil::encode("a b").contains("+"),
+        true
+    );
 }
 
 /// 对齐 Java: `UrlQueryTest.parsePercentTest()`
@@ -911,4 +975,3 @@ fn url_query_issue_i_78_pb_1_test() {
     assert!(enc.contains("%3A"));
     assert!(enc.contains("%20"));
 }
-

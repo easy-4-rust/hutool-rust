@@ -1,7 +1,5 @@
 use std::cmp::Ordering;
 
-use thiserror::Error;
-
 mod version_error;
 mod version_util;
 

@@ -1,7 +1,5 @@
 use std::cmp::Ordering;
 
-use thiserror::Error;
-
 use super::version_error::VersionError;
 
 /// Hutool-compatible matching for loose Java module-style version strings.
@@ -29,10 +27,7 @@ impl VersionUtil {
     ///
     /// `None` aligns with Java `null` and sorts as the smallest version.
     #[must_use]
-    pub fn is_greater_than(
-        current_version: Option<&str>,
-        compare_version: Option<&str>,
-    ) -> bool {
+    pub fn is_greater_than(current_version: Option<&str>, compare_version: Option<&str>) -> bool {
         compare_nullable(current_version, compare_version) == Ordering::Greater
     }
 
@@ -72,10 +67,7 @@ impl VersionUtil {
     #[must_use]
     #[inline]
     pub fn is_greater_than_str(current_version: &str, compare_version: &str) -> bool {
-        Self::is_greater_than(
-            Some(current_version),
-            comparison_target(compare_version),
-        )
+        Self::is_greater_than(Some(current_version), comparison_target(compare_version))
     }
 
     /// Convenience wrapper for non-null `&str` arguments.
@@ -84,10 +76,7 @@ impl VersionUtil {
     #[must_use]
     #[inline]
     pub fn is_greater_than_or_equal_str(current_version: &str, compare_version: &str) -> bool {
-        Self::is_greater_than_or_equal(
-            Some(current_version),
-            comparison_target(compare_version),
-        )
+        Self::is_greater_than_or_equal(Some(current_version), comparison_target(compare_version))
     }
 
     /// Convenience wrapper for non-null `&str` arguments.
@@ -96,10 +85,7 @@ impl VersionUtil {
     #[must_use]
     #[inline]
     pub fn is_less_than_str(current_version: &str, compare_version: &str) -> bool {
-        Self::is_less_than(
-            Some(current_version),
-            comparison_target(compare_version),
-        )
+        Self::is_less_than(Some(current_version), comparison_target(compare_version))
     }
 
     /// Convenience wrapper for non-null `&str` arguments.
@@ -108,10 +94,7 @@ impl VersionUtil {
     #[must_use]
     #[inline]
     pub fn is_less_than_or_equal_str(current_version: &str, compare_version: &str) -> bool {
-        Self::is_less_than_or_equal(
-            Some(current_version),
-            comparison_target(compare_version),
-        )
+        Self::is_less_than_or_equal(Some(current_version), comparison_target(compare_version))
     }
 
     /// Matches one or more `;`-separated exact, comparison, or inclusive range expressions.
@@ -170,5 +153,5 @@ impl VersionUtil {
     }
 }
 
-use super::{DEFAULT_DELIMITER, LooseVersion, Token, compare_nullable, compare_tokens, compare_versions, comparison_target, java_string_cmp};
-use super::{parse_version, split_operator, take_number, take_text, validate_delimiter};
+use super::{DEFAULT_DELIMITER, compare_nullable, compare_versions, comparison_target};
+use super::{split_operator, validate_delimiter};

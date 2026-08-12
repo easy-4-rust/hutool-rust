@@ -75,12 +75,7 @@ impl StrBuilder {
     }
 
     /// 对齐 Java: `StrBuilder::append#StrBuilder (char[] src, int srcPos, int length)`
-    pub fn append_chars_range(
-        &mut self,
-        src: &[char],
-        pos: i32,
-        len: i32,
-    ) -> Result<&mut Self> {
+    pub fn append_chars_range(&mut self, src: &[char], pos: i32, len: i32) -> Result<&mut Self> {
         let start = pos.max(0) as usize;
         let end = (start + len.max(0) as usize).min(src.len());
         self.buf.extend_from_slice(&src[start..end]);
@@ -94,12 +89,7 @@ impl StrBuilder {
     }
 
     /// 对齐 Java: `StrBuilder::append#StrBuilder (CharSequence csq, int start, int end)`
-    pub fn append_str_range(
-        &mut self,
-        cs: &str,
-        start: i32,
-        end: i32,
-    ) -> Result<&mut Self> {
+    pub fn append_str_range(&mut self, cs: &str, start: i32, end: i32) -> Result<&mut Self> {
         let chars: Vec<char> = cs.chars().collect();
         let s = start.max(0) as usize;
         let e = (end.max(0) as usize).min(chars.len());
@@ -110,11 +100,7 @@ impl StrBuilder {
     }
 
     /// 对齐 Java: `StrBuilder::insert#StrBuilder (int index, Object obj)`
-    pub fn insert_object(
-        &mut self,
-        index: i32,
-        obj: &dyn std::fmt::Display,
-    ) -> Result<&mut Self> {
+    pub fn insert_object(&mut self, index: i32, obj: &dyn std::fmt::Display) -> Result<&mut Self> {
         self.insert_str(index, &obj.to_string())
     }
 
@@ -261,13 +247,7 @@ impl StrBuilder {
     }
 
     /// 对齐 Java: `StrBuilder::getChars#void (int srcBegin, int srcEnd, char[] dst, int dstBegin)`
-    pub fn get_chars(
-        &self,
-        begin: i32,
-        end: i32,
-        dst: &mut [char],
-        dst_begin: i32,
-    ) -> Result<()> {
+    pub fn get_chars(&self, begin: i32, end: i32, dst: &mut [char], dst_begin: i32) -> Result<()> {
         let s = begin.max(0) as usize;
         let e = (end.max(0) as usize).min(self.buf.len());
         let d = dst_begin.max(0) as usize;

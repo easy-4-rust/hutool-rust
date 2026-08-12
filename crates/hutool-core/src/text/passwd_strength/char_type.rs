@@ -3,17 +3,15 @@
 //!
 //! 密码强度检测。
 
-use crate::Result;
-
-use super::passwd_strength::PasswdStrength;
-
 /// 对齐 Java: `PasswdStrength#CHAR_TYPE` 枚举
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum CharType {
+    /// 数字
     Num,
+    /// 小写字母
     SmallLetter,
+    /// 大写字母
     CapitalLetter,
+    /// 其他字符
     OtherChar,
 }
-
-use super::{DICTIONARY, SIZE_TABLE, check_character_type, count_letter, is_char_equals, is_numeric, size_of_int};

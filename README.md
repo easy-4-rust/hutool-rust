@@ -8,26 +8,27 @@
 
 [![Crates.io](https://img.shields.io/crates/v/hutool)](https://crates.io/crates/hutool)
 [![docs.rs](https://img.shields.io/docsrs/hutool)](https://docs.rs/hutool)
-[![MSRV](https://img.shields.io/badge/MSRV-1.85-orange)](#3-rust-基线与平台支持)
+[![MSRV](https://img.shields.io/badge/MSRV-1.94-orange)](#3-rust-baseline--platform-support)
 [![License](https://img.shields.io/badge/license-Apache_2.0-green)](LICENSE)
 
 [English](./README.md) | [简体中文](./README.zh-CN.md)
 
 [Project Position](#1-project-position-and-status) · [Features](#2-features-and-maturity) ·
-[Architecture](#4-workspace--and-crate-architecture) · [Quick Start](#6-quick-start) ·
-[Features](#7-cargo-features) · [Quality](#13-build-test--and-quality-gates) ·
-[Release](#17-cratesio-release) · [Contributing](#19-contributing-security--and-license)
+[Architecture](#4-workspace-and-crate-architecture) · [Quick Start](#6-quick-start) ·
+[Features](#7-cargo-features) · [Quality](#13-build-test-and-quality-gates) ·
+[Release](#17-cratesio-release) · [Contributing](#19-contributing-security-and-license)
 
 </div>
 
 ---
 
 > **Current version**: `0.1.0`
-> **MSRV**: Rust `1.85`
+> **MSRV**: Rust `1.94`
 > **Edition**: `2024`
 > **Workspace Resolver**: `3`
-> **Maturity**: Experimental — most core crates 1:1 aligned with Hutool; a few `PendingEngine` stubs await upper-layer engines
-> **Last verified**: 2026-07-21
+> **Maturity**: Experimental — most core crates 1:1 aligned with Hutool; cron/ai/extra/cache/json/aop/dfa/bloom-filter fully migrated
+> **Architecture**: see [docs/hutool-rust-Architecture.md](docs/hutool-rust-Architecture.md)
+> **Last verified**: 2026-08-12
 
 > hutool-rust at most promises 1:1 API/behavior equivalence with upstream Hutool; **no** byte-for-byte binary compatibility with the Java implementation. All implementations use pure Rust std + mainstream Rust ecosystem, no FFI, and no `unsafe` code.
 
@@ -45,7 +46,7 @@
 |---|---|
 | Root crate | `hutool` (Facade, re-exports `hutool-*` sub-crates via features) |
 | Current version | `0.1.0` |
-| MSRV / Edition | `1.85` / `2024` |
+| MSRV / Edition | `1.94` / `2024` |
 | Default features | `core`, `json` |
 | unsafe policy | `#![forbid(unsafe_code)]` enforced in every crate |
 | Release status | Not released to crates.io (still experimental) |
@@ -65,8 +66,8 @@
 | workspace builds | ✅ | `cargo check` |
 | Unit tests | ✅ 2000+ | `cargo test --tests` 2347 passed / 0 failed |
 | hutool-crypto byte-level parity | ✅ 364 tests | `crypto_byte_level_parity.rs` + `sm_byte_level_parity.rs` |
-| 1:1 facade alignment | 🟡 POI excluded from implementation scope | `crates/hutool-poi/` is an API-only placeholder crate and is not exposed by the `hutool` facade |
-| MSRV CI | `1.85` | `rust-version = "1.85"` |
+| 1:1 facade alignment | ✅ POI resolved | The `hutool-poi` placeholder crate was removed on 2026-08-04; Excel capability is provided by the `easyexcel-rust` project |
+| MSRV CI | `1.94` | `rust-version = "1.94"` |
 
 ## 2. Features and Maturity
 
@@ -90,7 +91,7 @@
 | Vernal integration | `hutool-vernal` | 🧪 Experimental | Context-local utility components | Vernal Framework |
 | DFA | `hutool-dfa` | ✅ Stable | DFA state machine | — |
 | Script | `hutool-script` | ✅ Stable | ScriptUtil script execution | rhai |
-| POI | `hutool-poi` | ⚪ Not implemented | API/file placeholders only; constructors panic | thiserror only |
+| POI | ~~`hutool-poi`~~ (removed) | ✅ Resolved | Placeholder crate deleted; Excel/Word/OFD capability provided by `easyexcel-rust` (faithful migration of EasyExcel 4.0.3) | — |
 | Captcha | `hutool-captcha` | 🧪 Preview | Captcha generation | — |
 | BloomFilter | `hutool-bloom-filter` | ✅ Stable | BloomFilter | bloomfilter |
 | Socket | `hutool-socket` | 🧪 Experimental | SocketUtil | — |
@@ -140,7 +141,7 @@ If you need these capabilities, use dedicated Rust crates (e.g., `redis-rs`, `la
 
 | Item | Value | Source |
 |---|---|---|
-| MSRV | `1.85` | `rust-version = "1.85"` |
+| MSRV | `1.94` | `rust-version = "1.94"` |
 | Edition | `2024` | `edition = "2024"` |
 | Resolver | `3` | `[workspace]` |
 | rustfmt | stable | CI |
@@ -239,7 +240,7 @@ flowchart TB
 | `hutool-jwt` | `crates/hutool-jwt` | 🧪 | JWT auth |
 | `hutool-log` | `crates/hutool-log` | 🧪 | Logging |
 | `hutool-observability` | `crates/hutool-observability` | 🧪 | Default tracing/metrics/health; diagnostic backends require a feature and authorization |
-| `hutool-poi` | `crates/hutool-poi` | ⚪ | API registration skeleton only; no Office engine implementation and no facade feature |
+| `hutool-poi` | ~~`crates/hutool-poi`~~ (removed 2026-08-04) | ✅ | Skeleton removed; capability provided by `easyexcel-rust` |
 | `hutool-script` | `crates/hutool-script` | ✅ | Script execution |
 | `hutool-setting` | `crates/hutool-setting` | ✅ | Settings/config |
 | `hutool-socket` | `crates/hutool-socket` | 🧪 | Socket |
@@ -278,7 +279,7 @@ hutool-rust's core principle is **1:1 alignment with the Hutool Java version's A
 
 ### 5.3 Implement vs Depend
 
-**Principle: depend on mainstream Rust ecosystem crates, do not implement underlying algorithms.** See [docs/architecture.md](docs/architecture.md) for details.
+**Principle: depend on mainstream Rust ecosystem crates, do not implement underlying algorithms.** See [docs/hutool-rust-Architecture.md](docs/hutool-rust-Architecture.md) for details.
 
 | Algorithm | Implementation |
 |---|---|
@@ -402,7 +403,7 @@ This crate's naming style (`isEmpty`/`md5Hex`) is **not** Rust idiomatic; it's o
 
 ## 9. Crypto Algorithm Detailed Support
 
-See [docs/architecture.md §3 Crypto & National Crypto](docs/architecture.md).
+See [docs/hutool-rust-Architecture.md §12 Security, Privacy & Trust Boundaries](docs/hutool-rust-Architecture.md).
 
 | Algorithm | Rust crate | Hutool Java equivalent |
 |---|---|---|
@@ -446,7 +447,7 @@ Why hutool-rust chooses RustCrypto over openssl: pure Rust, zero FFI, `#![forbid
 - **V0.2**: Fill in hutool-db (missing 75 files), hutool-extra (missing 170 files)
 - **V0.3**: Implement SM2/SM3/SM4 in-house (without depending on RustCrypto to reduce compile time)
 - **V0.4**: Publish to crates.io, add complete rustdoc
-- **V1.0**: All implemented capability crates stable and aligned with Hutool; `hutool-poi` remains outside completion claims until real engines are integrated
+- **V1.0**: All implemented capability crates stable and aligned with Hutool; `hutool-poi` was removed on 2026-08-04, with Excel capability provided by `easyexcel-rust`
 
 ## 13. Build Test and Quality Gates
 
@@ -482,7 +483,7 @@ CI gates:
 
 ## 14. Known Issues
 
-- `hutool-poi` exists only as an API/file placeholder skeleton. It is not exposed by the `hutool` facade, has no `poi` feature, depends only on `thiserror`, and contains no usable Excel/Word/OFD/PDF engine implementation.
+- The `hutool-poi` placeholder skeleton was removed from the workspace on 2026-08-04 (`git rm -r crates/hutool-poi`); Rust-side Excel capability is provided by the standalone `easyexcel-rust` project (faithful migration of EasyExcel 4.0.3) instead of being duplicated here.
 - Some Hutool APIs are not ported due to Rust semantic differences (e.g. `RuntimeException` → `Result<T, E>`)
 - Some stub functions use `PendingEngine` error placeholders, awaiting upper-layer engine completion
 
@@ -492,17 +493,17 @@ CI gates:
 |---|---|
 | [README.md](README.md) | English README (this file) |
 | [README.zh-CN.md](README.zh-CN.md) | Chinese README |
-| [docs/architecture.md](docs/architecture.md) | System architecture design |
-| [docs/feature-matrix.md](docs/feature-matrix.md) | Complete feature matrix |
-| [docs/observability.md](docs/observability.md) | Tracing, metrics, health, and authorized diagnostics |
-| [docs/xml.md](docs/xml.md) | Bounded XML streaming, DOM compatibility, Serde and security policy |
-| [docs/hutool-parity.md](docs/hutool-parity.md) | 1:1 alignment status with Hutool |
-| [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md) | Implementation plan |
-| [docs/MIGRATION_STATUS.md](docs/MIGRATION_STATUS.md) | Migration progress |
-| [docs/production-readiness.md](docs/production-readiness.md) | Production readiness |
-| [docs/PHASE_BASELINE.md](docs/PHASE_BASELINE.md) | Phase baseline |
-| [docs/provenance.md](docs/provenance.md) | Source and history |
-| [docs/security.md](docs/security.md) | Security policy |
+| [docs/hutool-rust-Architecture.md](docs/hutool-rust-Architecture.md) | System architecture design (English) |
+| [docs/hutool-rust-Architecture.zh_CN.md](docs/hutool-rust-Architecture.zh_CN.md) | 系统架构设计（中文） |
+| [docs/superpowers/README.md](docs/superpowers/README.md) | Superpowers SDD plans & specs index |
+| [docs/superpowers/specs/2026-08-12-feature-matrix.md](docs/superpowers/specs/2026-08-12-feature-matrix.md) | Complete feature matrix |
+| [docs/superpowers/specs/2026-08-12-migration-status-baseline.md](docs/superpowers/specs/2026-08-12-migration-status-baseline.md) | Migration progress & phase baseline |
+| [docs/superpowers/specs/2026-08-12-java-rust-parity-methodology.md](docs/superpowers/specs/2026-08-12-java-rust-parity-methodology.md) | 1:1 alignment status with Hutool |
+| [docs/superpowers/specs/2026-08-12-production-readiness.md](docs/superpowers/specs/2026-08-12-production-readiness.md) | Production readiness |
+| [docs/superpowers/specs/2026-08-12-security-baseline.md](docs/superpowers/specs/2026-08-12-security-baseline.md) | Security policy |
+| [docs/superpowers/specs/2026-08-12-observability-strategy.md](docs/superpowers/specs/2026-08-12-observability-strategy.md) | Tracing, metrics, health, and diagnostics |
+| [docs/superpowers/specs/2026-08-12-xml-support.md](docs/superpowers/specs/2026-08-12-xml-support.md) | Bounded XML streaming, DOM, Serde, security |
+| [docs/superpowers/specs/2026-08-12-provenance-and-attribution.md](docs/superpowers/specs/2026-08-12-provenance-and-attribution.md) | Source and history |
 | [CHANGELOG.md](CHANGELOG.md) | Changelog |
 | [SECURITY.md](SECURITY.md) | Security report |
 

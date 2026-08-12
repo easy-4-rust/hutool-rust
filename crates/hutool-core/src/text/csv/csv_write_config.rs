@@ -7,10 +7,15 @@ use indexmap::IndexMap;
 /// 对齐 Java: `CsvWriteConfig#`
 #[derive(Debug, Clone)]
 pub struct CsvWriteConfig {
+    /// 公共配置。
     pub base: CsvConfig,
+    /// 是否始终用引号包裹文本。
     pub always_delimit_text: bool,
+    /// 行分隔符。
     pub line_delimiter: String,
+    /// 是否以换行结尾。
     pub ending_line_break: bool,
+    /// 表头别名映射。
     pub header_alias: IndexMap<String, String>,
 }
 

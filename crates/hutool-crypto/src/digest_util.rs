@@ -2,9 +2,9 @@
 //! 来源: hutool-crypto/src/main/java/cn/hutool/crypto/digest/DigestUtil.java
 //! 中文说明: 消息摘要工具（MD5/SHA1/SHA256/SHA512/SM3），对齐 Hutool DigestUtil
 
-use md5::{Digest as _, Md5};
-use sha1::{Digest as _, Sha1};
-use sha2::{Digest as _, Sha256, Sha512};
+use md5::Md5;
+use sha1::Sha1;
+use sha2::{Sha256, Sha512};
 use sm3::{Digest as Sm3Digest, Sm3};
 
 /// Returns lowercase MD5 hex (Hutool `DigestUtil.md5Hex`).

@@ -33,7 +33,10 @@ impl CookieJar {
     /// Returns every cookie across all URIs.
     #[must_use]
     pub fn get_cookies(&self) -> Vec<HttpCookie> {
-        self.by_uri.values().flat_map(|v| v.iter().cloned()).collect()
+        self.by_uri
+            .values()
+            .flat_map(|v| v.iter().cloned())
+            .collect()
     }
 
     /// Returns all stored URI keys.
@@ -106,10 +109,7 @@ impl GlobalCookieManager {
     #[must_use]
     pub fn get_cookies(url: &str) -> Vec<HttpCookie> {
         let manager = Self::get_cookie_manager();
-        manager
-            .lock()
-            .unwrap_or_else(|e| e.into_inner())
-            .get(url)
+        manager.lock().unwrap_or_else(|e| e.into_inner()).get(url)
     }
 
     /// Adds cookies parsed from `Set-Cookie` style `name=value` pairs for `url`.
@@ -211,10 +211,7 @@ mod tests {
     #[test]
     fn global_cookie_manager_store_and_close() {
         GlobalCookieManager::close_cookie();
-        GlobalCookieManager::store(
-            "https://b.test/",
-            &[HttpCookie::new("sid", "xyz")],
-        );
+        GlobalCookieManager::store("https://b.test/", &[HttpCookie::new("sid", "xyz")]);
         let cookies = GlobalCookieManager::get_cookies("https://b.test/");
         assert_eq!(cookies.len(), 1);
         assert_eq!(cookies[0].name(), "sid");

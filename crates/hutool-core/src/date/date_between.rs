@@ -2,11 +2,11 @@
 
 #![allow(dead_code)]
 
-use chrono::{Datelike, Duration};
+use chrono::Datelike;
 
+use crate::Result;
 use crate::date::date_time::DateTime;
 use crate::date::date_unit::DateUnit;
-use crate::Result;
 
 /// 对齐 Java: `cn.hutool.core.date.DateBetween`
 #[derive(Debug, Clone, Copy)]
@@ -24,7 +24,10 @@ impl DateBetween {
     /// 构造。
     pub fn new(begin: DateTime, end: DateTime, is_abs: bool) -> Self {
         if is_abs && begin > end {
-            Self { begin: end, end: begin }
+            Self {
+                begin: end,
+                end: begin,
+            }
         } else {
             Self { begin, end }
         }
@@ -43,7 +46,6 @@ impl DateBetween {
             (e.year() as i64 - b.year() as i64) * 12 + (e.month() as i64 - b.month() as i64);
         if !is_reset {
             // 不足整月则减 1
-            let mut e2 = e;
             // compare day-time within month
             let b_day = b.day();
             let e_day = e.day();
@@ -52,7 +54,6 @@ impl DateBetween {
             if e_day < b_day || (e_day == b_day && e_tod < b_tod) {
                 result -= 1;
             }
-            let _ = e2;
         }
         result
     }

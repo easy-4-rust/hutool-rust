@@ -4,6 +4,8 @@
 //! 移植自 `java.lang.module.ModuleDescriptor.Version` 风格的三段解析：
 //! sequence / pre / build，数字按数值比较，字符串按字典序。
 
+#![allow(dead_code)] // 对齐 Java Version，暂未接线，预留
+
 use std::cmp::Ordering;
 use std::fmt;
 

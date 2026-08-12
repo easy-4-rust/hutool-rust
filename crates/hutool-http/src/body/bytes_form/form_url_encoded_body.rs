@@ -6,7 +6,6 @@ use crate::http_util::HttpUtil;
 use indexmap::IndexMap;
 use std::fmt;
 use std::io::Write;
-use std::path::{Path, PathBuf};
 
 use super::request_body::RequestBody;
 
@@ -16,6 +15,8 @@ use super::request_body::RequestBody;
 #[derive(Debug, Clone)]
 pub struct FormUrlEncodedBody {
     encoded: String,
+    /// Java 构造器字符集参数，当前仅保存不读取。
+    #[allow(dead_code)]
     charset: String,
 }
 

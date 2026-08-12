@@ -2,7 +2,7 @@
 
 use std::sync::Arc;
 
-use super::abstract_type_annotation_scanner::{type_handle_of, AbstractTypeAnnotationScanner};
+use super::abstract_type_annotation_scanner::{AbstractTypeAnnotationScanner, type_handle_of};
 use super::annotation_scanner::{AnnotationScanner, ScanConsumer};
 use crate::element::{ElementHandle, ElementKind, global_registry};
 
@@ -38,7 +38,10 @@ impl AnnotationScanner for TypeAnnotationScanner {
 
 impl TypeAnnotationScanner {
     /// 获取注解列表。
-    pub fn get_annotations(&self, element: ElementHandle) -> Vec<Arc<super::super::mirror::AnnotationMirror>> {
+    pub fn get_annotations(
+        &self,
+        element: ElementHandle,
+    ) -> Vec<Arc<super::super::mirror::AnnotationMirror>> {
         AnnotationScanner::get_annotations(self, element)
     }
 }

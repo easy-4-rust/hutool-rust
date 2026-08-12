@@ -1,8 +1,8 @@
 //! Wave-2 非反射 annotation helper 冒烟测试
 //! 对齐: Alias / AliasFor / ForceAliasFor / MirrorFor / PropIgnore / RelationType
 
-use hutool_core::annotation::{
-    Alias, AliasFor, ForceAliasFor, MirrorFor, PropIgnore, RelationType, ALIAS_TYPE_NAME,
+use hutool_annotation::{
+    ALIAS_TYPE_NAME, Alias, AliasFor, ForceAliasFor, MirrorFor, PropIgnore, RelationType,
 };
 
 /// 对齐 Java: 元注解类型名与非反射描述符

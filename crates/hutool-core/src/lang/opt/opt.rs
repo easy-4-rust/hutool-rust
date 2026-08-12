@@ -3,6 +3,8 @@
 //!
 //! Hutool `Opt` 的 idiomatic Rust 实现：在 [`Option`] 之上附加可选异常上下文。
 
+#![allow(dead_code)] // 对齐 Java Opt，暂未接线，预留
+
 use crate::string::is_blank;
 use std::fmt;
 
@@ -120,11 +122,7 @@ impl<T> Opt<T> {
     }
 
     /// 对齐 Java: `Opt.mapOrElse(Function, VoidFunc0)`
-    pub fn map_or_else<U>(
-        self,
-        mapper: impl FnOnce(T) -> U,
-        empty: impl FnOnce(),
-    ) -> Opt<U> {
+    pub fn map_or_else<U>(self, mapper: impl FnOnce(T) -> U, empty: impl FnOnce()) -> Opt<U> {
         match self.value {
             Some(v) => Opt {
                 value: Some(mapper(v)),
@@ -205,11 +203,7 @@ impl<T> Opt<T> {
 
     /// 对齐 Java: `Opt.or(Supplier)`
     pub fn or(self, supplier: impl FnOnce() -> Opt<T>) -> Opt<T> {
-        if self.is_present() {
-            self
-        } else {
-            supplier()
-        }
+        if self.is_present() { self } else { supplier() }
     }
 
     /// 对齐 Java: `Opt.stream()` — 0 或 1 个元素的迭代器。
@@ -227,7 +221,8 @@ impl<T> Opt<T> {
         if self.is_fail() {
             other
         } else {
-            self.value.expect("Opt.exceptionOrElse on empty without fail")
+            self.value
+                .expect("Opt.exceptionOrElse on empty without fail")
         }
     }
 

@@ -2,8 +2,8 @@
 
 use crate::sql::condition::{Condition, ConditionValue};
 use indexmap::IndexMap;
-use serde::de::DeserializeOwned;
 use serde::Serialize;
+use serde::de::DeserializeOwned;
 use serde_json::{Map, Value};
 
 /// Hutool 兼容的不可变键值实体。
@@ -49,7 +49,10 @@ impl Entity {
     }
 
     /// 对齐 Java: `Entity.setFieldNames(String...)`.
-    pub fn set_field_names(&mut self, fields: impl IntoIterator<Item = impl Into<String>>) -> &mut Self {
+    pub fn set_field_names(
+        &mut self,
+        fields: impl IntoIterator<Item = impl Into<String>>,
+    ) -> &mut Self {
         self.field_names = fields.into_iter().map(|f| f.into()).collect();
         self
     }
@@ -107,11 +110,7 @@ impl Entity {
         if self.case_insensitive {
             self.fields.contains_key(&key.to_ascii_lowercase())
         } else {
-            self.fields.contains_key(key)
-                || self
-                    .fields
-                    .keys()
-                    .any(|k| k.eq_ignore_ascii_case(key))
+            self.fields.contains_key(key) || self.fields.keys().any(|k| k.eq_ignore_ascii_case(key))
         }
     }
 
@@ -311,9 +310,7 @@ mod tests {
             .unwrap();
         assert!(!entity3.contains_key("id"));
 
-        let from = Entity::create()
-            .with("ID", 2)
-            .with("NAME", "testName");
+        let from = Entity::create().with("ID", 2).with("NAME", "testName");
         let bean: User = from.to_bean_ignore_case().unwrap();
         assert_eq!(bean.id, Some(2));
         assert_eq!(bean.name, "testName");

@@ -1,14 +1,11 @@
 //! Spring POJO facade，对齐 hutool 的 `cn.hutool.extra.spring.*`。
 //!
-//! **仅提供 trait 抽象**。具体 Spring Framework 依赖（ApplicationContext / BeanFactory）
-//! 是 Java-only，属于 unsafe-to-copy。Rust 用户应使用依赖注入框架（如 axum::Extension、
+//! **仅提供 trait 抽象**。具体 Spring Framework 依赖（ApplicationContext / `BeanFactory`）
+//! 是 Java-only，属于 unsafe-to-copy。Rust 用户应使用依赖注入框架（如 `axum::Extension`、
 //! shaku、self-rs 等）替代。
 
 use std::any::Any;
-use std::collections::HashMap;
-use std::sync::{Arc, OnceLock};
-
-use crate::HutoolException;
+use std::sync::Arc;
 
 /// Bean 注册接口，对齐 `org.springframework.beans.factory.config.ConfigurableListableBeanFactory`。
 pub trait ConfigurableBeanFactory: Send + Sync {
@@ -21,5 +18,3 @@ pub trait ConfigurableBeanFactory: Send + Sync {
     /// 对齐 `ConfigurableListableBeanFactory.getProperty(String)`：读取配置
     fn get_property(&self, key: &str) -> Option<String>;
 }
-
-use super::{APPLICATION_CONTEXT, enable_spring_util};

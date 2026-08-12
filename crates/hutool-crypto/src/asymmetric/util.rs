@@ -21,11 +21,13 @@ fn is_hex(s: &str) -> bool {
 }
 
 /// Parses an OpenSSH / PKCS#8 / SEC1 private key blob from Base64 or hex.
+#[allow(dead_code)] // 对齐 Hutool `SecureUtil` 的密钥 blob 解析入口，供后续接入使用
 pub(crate) fn decode_private_key_blob(key: &str) -> Result<Vec<u8>, crate::CryptoError> {
     decode(key)
 }
 
 /// Parses a SubjectPublicKeyInfo / PKCS#1 public key blob from Base64 or hex.
+#[allow(dead_code)] // 对齐 Hutool `SecureUtil` 的密钥 blob 解析入口，供后续接入使用
 pub(crate) fn decode_public_key_blob(key: &str) -> Result<Vec<u8>, crate::CryptoError> {
     decode(key)
 }

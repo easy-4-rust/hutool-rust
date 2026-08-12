@@ -1,7 +1,5 @@
 //! 对齐: `cn.hutool.core.annotation.Hierarchical`
 
-use std::cmp::Ordering;
-
 use super::choose_side::ChooseSide;
 use super::hierarchical::Hierarchical;
 use super::hierarchical_selector::HierarchicalSelector;

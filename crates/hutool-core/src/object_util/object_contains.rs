@@ -3,8 +3,7 @@
 //!
 //! Rust 版本提供对象操作的 idiomatic 实现。
 
-use std::any::Any;
-use std::collections::{BTreeMap, HashMap};
+use std::collections::HashMap;
 use std::hash::Hash;
 
 use super::object_util::ObjectUtil;

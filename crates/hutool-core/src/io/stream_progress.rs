@@ -16,6 +16,8 @@ use crate::{CoreError, Result};
 pub trait StreamProgress {
     /// 对齐 Java 接口，等待具体实现。
     fn pending_io_alignment() -> Result<()> {
-        Err(CoreError::PendingEngine("StreamProgress::pending_io_alignment"))
+        Err(CoreError::PendingEngine(
+            "StreamProgress::pending_io_alignment",
+        ))
     }
 }

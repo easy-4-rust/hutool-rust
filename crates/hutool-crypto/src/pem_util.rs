@@ -3,7 +3,7 @@
 //! 中文说明: PEM 格式密钥读写工具，对齐 Hutool PemUtil
 
 use crate::CryptoError;
-use rsa::pkcs8::{DecodePrivateKey, EncodePrivateKey, LineEnding};
+use rsa::pkcs8::{EncodePrivateKey, LineEnding};
 use rsa::{RsaPrivateKey, RsaPublicKey};
 
 /// Parsed PEM object kind.
@@ -54,7 +54,11 @@ pub fn read_pem_key(pem: &str) -> Result<PemKind, CryptoError> {
 }
 
 /// RSA encrypt/decrypt round-trip (`PemUtil.validateKey`).
-pub fn rsa_validate_key_pem(private_pem: &str, public_pem: &str, message: &str) -> Result<bool, CryptoError> {
+pub fn rsa_validate_key_pem(
+    private_pem: &str,
+    public_pem: &str,
+    message: &str,
+) -> Result<bool, CryptoError> {
     let private = read_pem_private_key(private_pem)?;
     let public = read_pem_public_key(public_pem)?;
     let enc = crate::rsa_encrypt_pkcs1v15(&public, message.as_bytes())?;
@@ -87,18 +91,18 @@ pub fn write_pkcs8_private_pem(key: &RsaPrivateKey) -> Result<String, CryptoErro
 
 /// Extracts RSA public key from X.509 certificate DER.
 pub fn rsa_public_key_from_cert_der(der: &[u8]) -> Result<RsaPublicKey, CryptoError> {
+    use der::Encode;
     use rsa::pkcs8::DecodePublicKey;
     use x509_cert::der::Decode;
-    use der::Encode;
-    let cert = x509_cert::certificate::Certificate::from_der(der).map_err(|_| CryptoError::InvalidPem)?;
-    let spki = cert.tbs_certificate.subject_public_key_info;
+    let cert =
+        x509_cert::certificate::Certificate::from_der(der).map_err(|_| CryptoError::InvalidPem)?;
+    let spki = cert.tbs_certificate().subject_public_key_info();
     let der = spki.to_der().map_err(|_| CryptoError::InvalidPem)?;
     RsaPublicKey::from_public_key_der(&der).map_err(|_| CryptoError::InvalidPem)
 }
 
 /// Reads EC SEC1 private key PEM and returns raw scalar bytes (`PemUtil.readECPrivateKeyTest`).
 pub fn read_ec_private_key_pem(pem: &str) -> Result<Vec<u8>, CryptoError> {
-    use p256::pkcs8::DecodePrivateKey as _;
     let key = p256::SecretKey::from_sec1_pem(pem).map_err(|_| CryptoError::InvalidPem)?;
     Ok(key.to_bytes().to_vec())
 }

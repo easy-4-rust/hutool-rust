@@ -3,13 +3,7 @@
 //! 来源: hutool-cron/src/main/java/cn/hutool/cron/pattern/matcher/AlwaysTrueMatcher.java
 //! 中文说明: 匹配所有值的通配字段匹配器。
 
-
-use std::{fmt, str::FromStr};
-
-use chrono::{DateTime, Datelike, Duration as ChronoDuration, TimeZone, Timelike, Utc};
-use cron::Schedule;
-
-use crate::CronError;
+use std::fmt;
 
 use super::part_matcher::PartMatcher;
 
@@ -32,10 +26,25 @@ impl PartMatcher for AlwaysTrueMatcher {
 
 impl fmt::Display for AlwaysTrueMatcher {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
-        formatter.write_str("*")
+        // 对齐 Java toString: "[Matcher]: always true."
+        formatter.write_str("[Matcher]: always true.")
     }
 }
 
-use super::{apply_negative, checked_schedule_value, convert_hutool_dow_field, convert_hutool_dow_token, end_of_year, expand_field, expand_range, field_needs_expand};
-use super::{fields, hutool_dow_to_quartz, is_last_day_of_month, next_after_filtered, normalize_expanded, pad_fields, parse_alias, schedule_max};
-use super::{split_numeric_range};
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn always_true_matcher_matches_everything() {
+        let matcher = AlwaysTrueMatcher;
+        assert!(matcher.matches(0));
+        assert!(matcher.matches(i32::MAX));
+        assert!(matcher.matches(-1));
+        // nextAfter 返回原值
+        assert_eq!(matcher.next_after(7), 7);
+        assert_eq!(matcher.next_after(-3), -3);
+        // toString 对齐 Java
+        assert_eq!(matcher.to_string(), "[Matcher]: always true.");
+    }
+}

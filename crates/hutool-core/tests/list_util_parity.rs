@@ -48,7 +48,11 @@ fn split_avg_test() {
     let list2 = vec![1, 2, 3];
     let p = ListUtil::split_avg(&list2, 2).unwrap();
     let collected: Vec<Vec<i32>> = p.iter().map(|s| s.to_vec()).collect();
-    assert_eq!(collected, vec![vec![1, 2], vec![3]], "splitAvg limit=2 size=3 (对齐 Java)");
+    assert_eq!(
+        collected,
+        vec![vec![1, 2], vec![3]],
+        "splitAvg limit=2 size=3 (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `ListUtilTest.splitAvgTest2()` (行 77-81)
@@ -57,7 +61,11 @@ fn split_avg_test_2() {
     let list = vec![1, 2, 3];
     let p = ListUtil::split_avg(&list, 5).unwrap();
     let collected: Vec<Vec<i32>> = p.iter().map(|s| s.to_vec()).collect();
-    assert_eq!(collected, vec![vec![1], vec![2], vec![3], vec![], vec![]], "splitAvg limit=5 size=3 (对齐 Java)");
+    assert_eq!(
+        collected,
+        vec![vec![1], vec![2], vec![3], vec![], vec![]],
+        "splitAvg limit=5 size=3 (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `ListUtilTest.splitAvgNotZero()` (行 83-89)
@@ -112,7 +120,11 @@ fn swap_element_test() {
     let map3 = list[2].clone();
     let swapped = ListUtil::swap_element(&mut list, &map2, &map3);
     assert!(swapped, "swap_element 应成功 (对齐 Java)");
-    assert_eq!(list[2].get("2"), Some(&"李四"), "swapElement 后 list[2]=\"李四\" (对齐 Java)");
+    assert_eq!(
+        list[2].get("2"),
+        Some(&"李四"),
+        "swapElement 后 list[2]=\"李四\" (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `ListUtilTest.setOrPaddingNullTest()` (行 239-255)
@@ -125,15 +137,27 @@ fn set_or_padding_null_test() {
 
     // 替换原值
     ListUtil::set_or_padding(&mut list, 0, "a".to_string(), String::new()).unwrap();
-    assert_eq!(list, vec!["a".to_string()], "setOrPadding(0, a) 替换 (对齐 Java)");
+    assert_eq!(
+        list,
+        vec!["a".to_string()],
+        "setOrPadding(0, a) 替换 (对齐 Java)"
+    );
 
     // append 值
     ListUtil::set_or_padding(&mut list, 1, "a".to_string(), String::new()).unwrap();
-    assert_eq!(list, vec!["a".to_string(), "a".to_string()], "setOrPadding(1, a) append (对齐 Java)");
+    assert_eq!(
+        list,
+        vec!["a".to_string(), "a".to_string()],
+        "setOrPadding(1, a) append (对齐 Java)"
+    );
 
     // padding null 后加入值
     ListUtil::set_or_padding(&mut list, 3, "a".to_string(), String::new()).unwrap();
-    assert_eq!(list.len(), 4, "setOrPadding(3, a) padding 后 size=4 (对齐 Java)");
+    assert_eq!(
+        list.len(),
+        4,
+        "setOrPadding(3, a) padding 后 size=4 (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `ListUtilTest.reverseNewTest()` (行 257-262)
@@ -141,7 +165,11 @@ fn set_or_padding_null_test() {
 fn reverse_new_test() {
     let view = vec![1, 2, 3];
     let reverse = ListUtil::reverse_new(&view);
-    assert_eq!(reverse, vec![3, 2, 1], "reverseNew([1,2,3]) = [3,2,1] (对齐 Java)");
+    assert_eq!(
+        reverse,
+        vec![3, 2, 1],
+        "reverseNew([1,2,3]) = [3,2,1] (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `ListUtilTest.testMoveElementToPosition()` (行 264-283)
@@ -170,7 +198,13 @@ fn test_move_element_to_position() {
     ListUtil::move_element(&mut list, "E".to_string(), 1).unwrap();
     assert_eq!(
         list,
-        vec!["A".to_string(), "E".into(), "B".into(), "C".into(), "D".into()],
+        vec![
+            "A".to_string(),
+            "E".into(),
+            "B".into(),
+            "C".into(),
+            "D".into()
+        ],
         "move E (不在列表) → 1 (对齐 Java)"
     );
 }
@@ -271,7 +305,10 @@ fn last_index_of_basic() {
 fn index_of_all_basic() {
     let items = vec![1, 2, 3, 2, 1];
     assert_eq!(ListUtil::index_of_all(&items, |x| *x == 2), vec![1, 3]);
-    assert_eq!(ListUtil::index_of_all(&items, |x| *x == 5), Vec::<usize>::new());
+    assert_eq!(
+        ListUtil::index_of_all(&items, |x| *x == 5),
+        Vec::<usize>::new()
+    );
 }
 
 #[test]
@@ -291,7 +328,6 @@ fn split_avg_basic() {
     assert_eq!(p.get(1), Some(&[3, 4][..]));
     assert_eq!(p.get(2), Some(&[5][..]));
 }
-
 
 /// 对齐 Java: `ListUtilTest.editTest()`
 #[test]
@@ -322,7 +358,9 @@ fn page_test() {
 #[test]
 fn sort_by_property_test() {
     #[derive(Debug, Clone, PartialEq, Eq)]
-    struct Bean { name: String }
+    struct Bean {
+        name: String,
+    }
     let mut list = vec![
         Bean { name: "c".into() },
         Bean { name: "a".into() },

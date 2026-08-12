@@ -12,6 +12,7 @@ use crate::CryptoError;
 use super::cipher_wrapper::CipherWrapper;
 
 /// CipherWrapper 桩实现：所有 JCE 操作返回 Err
+#[allow(dead_code)] // 保留 Java CipherWrapper 的 params/random/cipher_raw 字段，作为迁移镜像
 pub struct StubCipherWrapper {
     algorithm: String,
     params: Option<Box<dyn Any + Send + Sync>>,

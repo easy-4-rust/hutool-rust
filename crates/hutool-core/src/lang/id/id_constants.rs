@@ -1,7 +1,9 @@
 //! 对齐: `cn.hutool.core.lang.id.IdConstants`
 //! 来源: hutool-core/src/main/java/cn/hutool/core/lang/id/IdConstants.java
 
-use crate::lang::snowflake::{Snowflake, MAX_DATA_CENTER_ID, MAX_WORKER_ID};
+#![allow(dead_code)] // 对齐 Java IdConstants，暂未接线，预留
+
+use crate::lang::snowflake::{MAX_DATA_CENTER_ID, MAX_WORKER_ID, Snowflake};
 use std::sync::OnceLock;
 
 /// 对齐 Java: `IdConstants.DEFAULT_DATACENTER_ID` — 由进程号派生并截断到合法范围。

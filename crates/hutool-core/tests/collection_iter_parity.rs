@@ -50,8 +50,8 @@ fn iter_chain_basic() {
     let a = vec![1, 2];
     let b = vec![3, 4];
     let chain = IterChain::with_iterators(vec![
-        Box::new(a.into_iter()) as Box<dyn Iterator<Item=i32>>,
-        Box::new(b.into_iter()) as Box<dyn Iterator<Item=i32>>,
+        Box::new(a.into_iter()) as Box<dyn Iterator<Item = i32>>,
+        Box::new(b.into_iter()) as Box<dyn Iterator<Item = i32>>,
     ]);
     let collected: Vec<i32> = chain.collect();
     assert_eq!(collected, vec![1, 2, 3, 4]);

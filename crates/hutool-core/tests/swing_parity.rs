@@ -5,7 +5,7 @@
 
 #[cfg(feature = "swing")]
 mod swing_tests {
-    use hutool_core::swing::{DesktopUtil, RobotUtil, ScreenUtil, MouseButton, RobotError, ScreenError, ScreenRect};
+    use hutool_core::swing::{MouseButton, RobotError, ScreenError, ScreenRect};
 
     #[test]
     fn desktop_util_browse_exists() {
@@ -17,7 +17,12 @@ mod swing_tests {
 
     #[test]
     fn screen_rect_fields() {
-        let rect = ScreenRect { x: 0, y: 0, width: 1920, height: 1080 };
+        let rect = ScreenRect {
+            x: 0,
+            y: 0,
+            width: 1920,
+            height: 1080,
+        };
         assert_eq!(rect.width, 1920);
         assert_eq!(rect.height, 1080);
     }
@@ -31,13 +36,13 @@ mod swing_tests {
 
     #[test]
     fn robot_error_display() {
-        let e = RobotError::Platform("test error".to_string());
+        let e = RobotError::Robot("test error".to_string());
         assert!(e.to_string().contains("test error"));
     }
 
     #[test]
     fn screen_error_display() {
-        let e = ScreenError::Platform("test error".to_string());
+        let e = ScreenError::Screen("test error".to_string());
         assert!(e.to_string().contains("test error"));
     }
 }

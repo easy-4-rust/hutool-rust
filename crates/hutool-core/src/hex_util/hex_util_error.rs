@@ -2,15 +2,9 @@
 
 /// 对齐: `cn.hutool.core.util.HexUtil`
 /// 十六进制错误
-
 use std::num::ParseIntError;
 
-use encoding_rs::{Encoding, UTF_8, UTF_16BE, UTF_16LE};
-use num_bigint::BigInt;
-
-use crate::{Base16Codec, CoreError};
-
-use super::hex_util::HexUtil;
+use crate::CoreError;
 
 /// Errors produced by [`HexUtil`] conversions.
 #[derive(Debug, thiserror::Error)]

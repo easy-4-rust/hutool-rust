@@ -2,35 +2,30 @@
 
 use std::sync::Arc;
 
-use hutool_core::annotation::{
-    fixtures, global_registry, AliasAnnotationPostProcessor, AnnotationAttribute,
-    AnnotationSynthesizer, AnnotationTypeName, ForceAliasedAnnotationAttribute,
-    GenericSynthesizedAggregateAnnotation, GenericSynthesizedAnnotation,
-    SynthesizedAnnotation, SynthesizedAnnotationPostProcessor, WrappedAnnotationAttribute,
+use hutool_annotation::fixtures_aggregate::{self, types as agg};
+use hutool_annotation::{
+    AliasAnnotationPostProcessor, AnnotationSynthesizer, AnnotationTypeName,
+    GenericSynthesizedAggregateAnnotation, GenericSynthesizedAnnotation, SynthesizedAnnotation,
+    SynthesizedAnnotationPostProcessor, fixtures, global_registry,
 };
-use hutool_core::annotation::fixtures_aggregate::{self, types as agg};
 
 use crate::annotation_common::*;
 
 struct NoOpSynthesizer;
 
 impl AnnotationSynthesizer for NoOpSynthesizer {
-    fn get_source(&self) -> Vec<Arc<hutool_core::annotation::AnnotationMirror>> {
+    fn get_source(&self) -> Vec<Arc<hutool_annotation::AnnotationMirror>> {
         vec![]
     }
-    fn get_annotation_selector(
-        &self,
-    ) -> Arc<dyn hutool_core::annotation::SynthesizedAnnotationSelector> {
+    fn get_annotation_selector(&self) -> Arc<dyn hutool_annotation::SynthesizedAnnotationSelector> {
         nearest_selector()
     }
     fn get_annotation_attribute_processor(
         &self,
-    ) -> Arc<dyn hutool_core::annotation::SynthesizedAnnotationAttributeProcessor> {
+    ) -> Arc<dyn hutool_annotation::SynthesizedAnnotationAttributeProcessor> {
         Arc::new(processor_cache())
     }
-    fn get_annotation_post_processors(
-        &self,
-    ) -> Vec<Arc<dyn SynthesizedAnnotationPostProcessor>> {
+    fn get_annotation_post_processors(&self) -> Vec<Arc<dyn SynthesizedAnnotationPostProcessor>> {
         vec![]
     }
     fn get_synthesized_annotation(
@@ -47,14 +42,14 @@ impl AnnotationSynthesizer for NoOpSynthesizer {
     fn synthesize(
         &self,
         _annotation_type: AnnotationTypeName,
-    ) -> Option<Arc<hutool_core::annotation::AnnotationMirror>> {
+    ) -> Option<Arc<hutool_annotation::AnnotationMirror>> {
         None
     }
     fn get_attribute_value(
         &self,
         _attribute_name: &str,
-        _attribute_type: hutool_core::annotation::ValueKind,
-    ) -> Option<hutool_core::annotation::AnnotationValue> {
+        _attribute_type: hutool_annotation::ValueKind,
+    ) -> Option<hutool_annotation::AnnotationValue> {
         None
     }
 }
@@ -65,12 +60,8 @@ fn alias_annotation_post_processor_process_test() {
     let _guard = reset_all();
     let mut reg = global_registry().write();
     let annotation = fixtures::alias_post_processor_annotation(&mut reg);
-    let syn: Arc<dyn SynthesizedAnnotation> = GenericSynthesizedAnnotation::new(
-        Arc::clone(&annotation),
-        Arc::clone(&annotation),
-        0,
-        0,
-    );
+    let syn: Arc<dyn SynthesizedAnnotation> =
+        GenericSynthesizedAnnotation::new(Arc::clone(&annotation), Arc::clone(&annotation), 0, 0);
     let processor = AliasAnnotationPostProcessor;
     processor.process(Arc::clone(&syn), &NoOpSynthesizer);
     let attrs = syn.get_attributes();
@@ -112,7 +103,10 @@ fn alias_link_annotation_post_processor_process_alias_for_test() {
     let annotation = reg.annotation(agg::ALIAS_FOR, Default::default());
     let aggregate = GenericSynthesizedAggregateAnnotation::new(Arc::clone(&annotation));
     let meta = aggregate.synthesize(agg::META_ALIAS_FOR).unwrap();
-    assert_eq!("Meta", meta.get_raw("name").and_then(|v| v.as_str()).unwrap());
+    assert_eq!(
+        "Meta",
+        meta.get_raw("name").and_then(|v| v.as_str()).unwrap()
+    );
     let child = aggregate.synthesize(agg::ALIAS_FOR).unwrap();
     assert_eq!("", child.get_raw("value").and_then(|v| v.as_str()).unwrap());
 }

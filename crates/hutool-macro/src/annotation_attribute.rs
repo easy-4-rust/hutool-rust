@@ -2,7 +2,9 @@
 
 use std::sync::Arc;
 
-use super::mirror::{AnnotationMirror, AnnotationTypeName, AnnotationValue, AttributeRef, ValueKind};
+use super::mirror::{
+    AnnotationMirror, AnnotationTypeName, AnnotationValue, AttributeRef, ValueKind,
+};
 
 /// 对齐 Java interface: `cn.hutool.core.annotation.AnnotationAttribute`
 pub trait AnnotationAttribute: Send + Sync {
@@ -43,7 +45,9 @@ pub trait AnnotationAttribute: Send + Sync {
     }
 
     /// 尝试转为 WrappedAnnotationAttribute。
-    fn as_wrapped(&self) -> Option<&dyn super::wrapped_annotation_attribute::WrappedAnnotationAttribute> {
+    fn as_wrapped(
+        &self,
+    ) -> Option<&dyn super::wrapped_annotation_attribute::WrappedAnnotationAttribute> {
         None
     }
 }

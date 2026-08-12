@@ -67,16 +67,9 @@ fn generic_builder_test() {
     assert_eq!(box_modified.height, 5);
 
     // 多参数构造 + alis
-    let box1 = GenericBuilder::of5(
-        BoxObj::new5,
-        2048,
-        "Hello Partner!".into(),
-        222,
-        333,
-        444,
-    )
-    .with(BoxObj::alis)
-    .build();
+    let box1 = GenericBuilder::of5(BoxObj::new5, 2048, "Hello Partner!".into(), 222, 333, 444)
+        .with(BoxObj::alis)
+        .build();
 
     assert_eq!(box1.id, 2048);
     assert_eq!(box1.title, "Hello Partner!");

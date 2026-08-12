@@ -9,11 +9,6 @@
 //!   在各自的 `engine/<name>.rs` 子模块；本文件只提供配置 + facade。
 //! - 迁移状态：✅ 已实现（Phase 1.4 工作）
 
-use std::fmt;
-use std::path::Path;
-
-use thiserror::Error;
-
 use super::template::Template;
 use super::template_config::TemplateConfig;
 use super::template_exception::TemplateException;
@@ -30,10 +25,5 @@ pub trait TemplateEngine: Send + Sync {
     fn raw_engine(&self) -> Option<&dyn std::any::Any>;
 
     /// 根据资源名获取模板
-    fn get_template(
-        &self,
-        resource: &str,
-    ) -> Result<Box<dyn Template>, TemplateException>;
+    fn get_template(&self, resource: &str) -> Result<Box<dyn Template>, TemplateException>;
 }
-
-use super::{DEFAULT_CONFIG, default_config};

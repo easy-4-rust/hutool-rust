@@ -1,5 +1,7 @@
 //! 对齐: `cn.hutool.core.lang.Console`
 
+#![allow(dead_code)] // 对齐 Java Console，暂未接线，预留
+
 use crate::text::str_formatter::StrFormatter;
 
 /// 对齐 Java: `Console` — 格式化后写入缓冲区（测试可断言）

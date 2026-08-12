@@ -173,12 +173,7 @@ impl StrJoiner {
     }
 
     /// 对齐 Java: `StrJoiner::append#StrJoiner (CharSequence csq, int startInclude, int endExclude)`
-    pub fn append_str_range(
-        &mut self,
-        cs: &str,
-        start: i32,
-        end: i32,
-    ) -> Result<&mut Self> {
+    pub fn append_str_range(&mut self, cs: &str, start: i32, end: i32) -> Result<&mut Self> {
         let chars: Vec<char> = cs.chars().collect();
         let s = start.max(0) as usize;
         let e = (end.max(0) as usize).min(chars.len());

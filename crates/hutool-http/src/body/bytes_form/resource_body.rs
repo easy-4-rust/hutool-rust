@@ -2,8 +2,6 @@
 //! 来源: hutool-http/src/main/java/cn/hutool/http/body/ResourceBody.java
 //! 中文说明: 资源请求体实现，支持文件和字节资源上传
 
-use crate::http_util::HttpUtil;
-use indexmap::IndexMap;
 use std::fmt;
 use std::io::Write;
 use std::path::{Path, PathBuf};
@@ -39,9 +37,7 @@ impl ResourceBody {
     pub fn from_path(path: impl AsRef<Path>) -> std::io::Result<Self> {
         let path = path.as_ref();
         let bytes = std::fs::read(path)?;
-        let name = path
-            .file_name()
-            .map(|n| n.to_string_lossy().into_owned());
+        let name = path.file_name().map(|n| n.to_string_lossy().into_owned());
         Ok(Self {
             name,
             content_type: None,

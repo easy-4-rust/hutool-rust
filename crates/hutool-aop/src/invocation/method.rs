@@ -2,7 +2,7 @@
 //! 来源: hutool-aop/src/main/java/cn/hutool/aop/
 //! 中文说明: 方法元数据，表示一个被代理操作的稳定描述信息。
 
-use std::{borrow::Cow, fmt};
+use std::borrow::Cow;
 
 /// 对齐: `java.lang.reflect.Method`
 /// 中文说明: 单个被代理操作的稳定元数据，包含操作名称。

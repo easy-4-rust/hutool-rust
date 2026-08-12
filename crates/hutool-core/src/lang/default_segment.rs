@@ -1,6 +1,8 @@
 //! 对齐: `cn.hutool.core.lang.DefaultSegment`
 //! 来源: hutool-core/src/main/java/cn/hutool/core/lang/DefaultSegment.java
 
+#![allow(dead_code)] // 对齐 Java DefaultSegment，暂未接线，预留
+
 use super::segment::Segment;
 
 /// 对齐 Java: `cn.hutool.core.lang.DefaultSegment`

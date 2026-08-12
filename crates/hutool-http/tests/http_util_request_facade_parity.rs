@@ -3,7 +3,7 @@
 
 mod support;
 
-use hutool_http::{form_map, AllowAllUrls, HttpRequest, HttpUtil, Method};
+use hutool_http::{AllowAllUrls, HttpRequest, HttpUtil, Method, form_map};
 use std::sync::Arc;
 use support::mock_server::{http_ok, http_response, request_path, serve_fn, serve_once};
 
@@ -129,12 +129,17 @@ fn http_request_method_factories() {
     assert_eq!(HttpRequest::head("https://e").get_method(), &Method::HEAD);
     assert_eq!(HttpRequest::put("https://e").get_method(), &Method::PUT);
     assert_eq!(HttpRequest::patch("https://e").get_method(), &Method::PATCH);
-    assert_eq!(HttpRequest::delete("https://e").get_method(), &Method::DELETE);
-    assert_eq!(HttpRequest::options("https://e").get_method(), &Method::OPTIONS);
+    assert_eq!(
+        HttpRequest::delete("https://e").get_method(),
+        &Method::DELETE
+    );
+    assert_eq!(
+        HttpRequest::options("https://e").get_method(),
+        &Method::OPTIONS
+    );
     assert_eq!(HttpRequest::trace("https://e").get_method(), &Method::TRACE);
     assert_eq!(
-        HttpUtil::create_request(Method::PUT, "https://e")
-            .get_method(),
+        HttpUtil::create_request(Method::PUT, "https://e").get_method(),
         &Method::PUT
     );
 }

@@ -10,8 +10,8 @@ use crate::{
 };
 use indexmap::IndexMap;
 use reqwest::header::{
-    HeaderMap, HeaderName, HeaderValue, AUTHORIZATION, CONNECTION, CONTENT_LENGTH, CONTENT_TYPE,
-    COOKIE,
+    AUTHORIZATION, CONNECTION, CONTENT_LENGTH, CONTENT_TYPE, COOKIE, HeaderMap, HeaderName,
+    HeaderValue,
 };
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
@@ -628,10 +628,8 @@ impl HttpRequest {
     #[must_use]
     pub fn proxy_auth(mut self, content: impl AsRef<str>) -> Self {
         if let Ok(value) = HeaderValue::from_str(content.as_ref()) {
-            self.headers.insert(
-                HeaderName::from_static("proxy-authorization"),
-                value,
-            );
+            self.headers
+                .insert(HeaderName::from_static("proxy-authorization"), value);
         }
         self
     }
@@ -757,10 +755,7 @@ impl HttpRequest {
                 let bytes = std::fs::read(path)?;
                 let file_name = file_name
                     .clone()
-                    .or_else(|| {
-                        path.file_name()
-                            .map(|n| n.to_string_lossy().into_owned())
-                    })
+                    .or_else(|| path.file_name().map(|n| n.to_string_lossy().into_owned()))
                     .unwrap_or_else(|| "file".to_string());
                 let part = reqwest::multipart::Part::bytes(bytes).file_name(file_name);
                 form = form.part(name.clone(), part);

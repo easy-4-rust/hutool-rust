@@ -1,7 +1,6 @@
 use pprof::{ProfilerGuard, ProfilerGuardBuilder, protos::Message};
-use thiserror::Error;
 
-use crate::{AuthorizationError, DiagnosticAction, DiagnosticPermit};
+use crate::{DiagnosticAction, DiagnosticPermit};
 
 use super::cpu_profile_config::CpuProfileConfig;
 use super::cpu_profile_error::CpuProfileError;

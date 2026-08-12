@@ -51,7 +51,8 @@ fn get_processor_count_test() {
 /// 对齐 Java: `RuntimeUtilTest.issueIAB5LWTest()` — Java @Disabled/netstat；Mac 用 sh 管道等价
 #[test]
 fn issue_i_a_b5_l_w_test() {
-    let output = RuntimeUtil::exec_for_str(&["sh", "-c", "echo 8080 | grep 8080"]).expect("exec pipe");
+    let output =
+        RuntimeUtil::exec_for_str(&["sh", "-c", "echo 8080 | grep 8080"]).expect("exec pipe");
     assert!(output.contains("8080"));
 }
 
@@ -152,14 +153,18 @@ const ANIMAL_KIND_IN_ZOO: [AnimalKindInZoo; 3] = [
 /// 对齐 Java: `IssueI9NSZ4Test.getByTest()`
 #[test]
 fn get_by_test() {
-    let found = EnumUtil::get_by(&ANIMAL_KIND_IN_ZOO, |v| v.mapped_value() == Some(AnimalKind::Dog));
+    let found = EnumUtil::get_by(&ANIMAL_KIND_IN_ZOO, |v| {
+        v.mapped_value() == Some(AnimalKind::Dog)
+    });
     assert!(found.is_none(), "无 DOG 映射时应返回 null (对齐 Java)");
 }
 
 /// 对齐 Java: `IssueI9NSZ4Test.getByTest2()`
 #[test]
 fn get_by_test2() {
-    let found = EnumUtil::get_by(&ANIMAL_KIND_IN_ZOO, |v| v.mapped_value() == Some(AnimalKind::Bird));
+    let found = EnumUtil::get_by(&ANIMAL_KIND_IN_ZOO, |v| {
+        v.mapped_value() == Some(AnimalKind::Bird)
+    });
     assert_eq!(found, Some(AnimalKindInZoo::Bird));
 }
 
@@ -207,8 +212,7 @@ where
 /// 对齐 Java: `Issue3136Test.xmlToBeanTest()`
 #[test]
 fn issue3136_xml_to_bean_test() {
-    let xml_str =
-        "<?xml version=\"1.0\" encoding=\"gbk\" ?><response><code>02</code><message></message></response>";
+    let xml_str = "<?xml version=\"1.0\" encoding=\"gbk\" ?><response><code>02</code><message></message></response>";
     let doc = XmlUtil::parse_xml(xml_str).expect("parse xml");
     let sms: Issue3136SmsRes = XmlUtil::xml_to_bean(&doc).expect("xml_to_bean");
     assert_eq!(sms.code, "02");
@@ -288,7 +292,11 @@ fn is_mac_test() {
 fn test() {
     let a = "ENUM{\\ndisable ~ 0\\nenable ~ 1\\n}";
     let split: Vec<&str> = a.split("\\n").collect();
-    assert_eq!(split.len(), 4, "StrUtil.split(a, \"\\\\n\") → 4 项 (对齐 Java)");
+    assert_eq!(
+        split.len(),
+        4,
+        "StrUtil.split(a, \"\\\\n\") → 4 项 (对齐 Java)"
+    );
 }
 
 // ── IssueICOJVZTest ──

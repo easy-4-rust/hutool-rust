@@ -5,8 +5,8 @@ use std::sync::Arc;
 
 use parking_lot::RwLock;
 
-use super::element::{global_registry, ElementHandle};
-use super::mirror::{is_not_jdk_meta_annotation, AnnotationMirror, AnnotationTypeName};
+use super::element::{ElementHandle, global_registry};
+use super::mirror::{AnnotationMirror, AnnotationTypeName, is_not_jdk_meta_annotation};
 
 /// 对齐 Java 类: `cn.hutool.core.annotation.CombinationAnnotationElement`
 pub struct CombinationAnnotationElement {
@@ -78,7 +78,10 @@ impl CombinationAnnotationElement {
     }
 
     /// 获取指定注解。
-    pub fn get_annotation(&self, annotation_type: AnnotationTypeName) -> Option<Arc<AnnotationMirror>> {
+    pub fn get_annotation(
+        &self,
+        annotation_type: AnnotationTypeName,
+    ) -> Option<Arc<AnnotationMirror>> {
         self.annotation_map.get(&annotation_type).cloned()
     }
 
@@ -89,10 +92,12 @@ impl CombinationAnnotationElement {
 }
 
 /// 组合元素缓存。
-static COMBINATION_CACHE: std::sync::OnceLock<RwLock<HashMap<ElementHandle, Arc<CombinationAnnotationElement>>>> =
-    std::sync::OnceLock::new();
+static COMBINATION_CACHE: std::sync::OnceLock<
+    RwLock<HashMap<ElementHandle, Arc<CombinationAnnotationElement>>>,
+> = std::sync::OnceLock::new();
 
-fn combination_cache() -> &'static RwLock<HashMap<ElementHandle, Arc<CombinationAnnotationElement>>> {
+fn combination_cache() -> &'static RwLock<HashMap<ElementHandle, Arc<CombinationAnnotationElement>>>
+{
     COMBINATION_CACHE.get_or_init(|| RwLock::new(HashMap::new()))
 }
 
@@ -107,6 +112,8 @@ pub fn to_combination(element: ElementHandle) -> Arc<CombinationAnnotationElemen
         return cached;
     }
     let combo = Arc::new(CombinationAnnotationElement::new(element));
-    combination_cache().write().insert(element, Arc::clone(&combo));
+    combination_cache()
+        .write()
+        .insert(element, Arc::clone(&combo));
     combo
 }

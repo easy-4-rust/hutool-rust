@@ -142,8 +142,7 @@ impl PasswdStrength {
         {
             level -= 1;
         }
-        if is_numeric(passwd)
-            && ("01234567890".contains(passwd) || "09876543210".contains(passwd))
+        if is_numeric(passwd) && ("01234567890".contains(passwd) || "09876543210".contains(passwd))
         {
             level -= 1;
         }
@@ -231,4 +230,4 @@ impl PasswdStrength {
     }
 }
 
-use super::{DICTIONARY, SIZE_TABLE, check_character_type, count_letter, is_char_equals, is_numeric, size_of_int};
+use super::{DICTIONARY, count_letter, is_char_equals, is_numeric, size_of_int};

@@ -1,11 +1,6 @@
 //! Key/parameter spec helpers aligned with Hutool `SpecUtil`.
 
-use crate::{generate_random_key_bytes, CryptoError};
-use base64::Engine as _;
-use base64::engine::general_purpose::STANDARD;
 use num_bigint::BigUint;
-
-use super::spec_util::SpecUtil;
 
 /// RSA CRT components from C# XML key export (`SpecUtil.xmlToRSAPrivateCrtKeySpec`).
 #[derive(Debug, Clone, PartialEq, Eq)]

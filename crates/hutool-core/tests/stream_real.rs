@@ -1,7 +1,7 @@
 //! stream module real functional tests
 //! 对齐: hutool-core StreamUtilTest/CollectorUtilTest
 
-use hutool_core::{CollectorUtil, StreamUtil, SimpleCollector};
+use hutool_core::{CollectorUtil, SimpleCollector, StreamUtil};
 use indexmap::IndexMap;
 
 #[test]
@@ -72,13 +72,9 @@ fn collector_util_joining_by() {
 
 #[test]
 fn collector_util_joining_wrapped() {
-    let result = CollectorUtil::joining_wrapped(
-        vec!["a", "b", "c"],
-        ", ",
-        "[",
-        "]",
-        |s: &str| s.to_uppercase(),
-    );
+    let result = CollectorUtil::joining_wrapped(vec!["a", "b", "c"], ", ", "[", "]", |s: &str| {
+        s.to_uppercase()
+    });
     assert_eq!(result, "[A, B, C]");
 }
 
@@ -93,11 +89,8 @@ fn collector_util_grouping_by() {
 
 #[test]
 fn collector_util_grouping_map_by() {
-    let result = CollectorUtil::grouping_map_by(
-        vec![1, 2, 3, 4, 5, 6],
-        |x: &i32| x % 2,
-        |x: i32| x * 10,
-    );
+    let result =
+        CollectorUtil::grouping_map_by(vec![1, 2, 3, 4, 5, 6], |x: &i32| x % 2, |x: i32| x * 10);
     let evens = result.get(&0).unwrap();
     assert!(evens.contains(&20));
     assert!(evens.contains(&40));
@@ -158,7 +151,10 @@ fn simple_collector_identity() {
     let collector = SimpleCollector::identity(
         Vec::<i32>::new,
         Vec::push,
-        |mut left: Vec<i32>, right: Vec<i32>| { left.extend(right); left },
+        |mut left: Vec<i32>, right: Vec<i32>| {
+            left.extend(right);
+            left
+        },
     );
     let result = collector.collect(vec![1, 2, 3]);
     assert_eq!(result, vec![1, 2, 3]);

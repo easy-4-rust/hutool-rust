@@ -17,7 +17,10 @@ fn trim_test() {
     // 此字符串中的第一个字符为不可见字符: '\u202a'
     let s = "\u{202a}C:/Users/maple/Desktop/tone.txt";
     let first: Vec<char> = s.chars().collect();
-    assert_eq!(first[0], '\u{202a}', "首字符应为 U+202A (对齐 Java trimTest)");
+    assert_eq!(
+        first[0], '\u{202a}',
+        "首字符应为 U+202A (对齐 Java trimTest)"
+    );
     assert!(
         CharUtil::is_blank_char(first[0]),
         "is_blank_char(U+202A) 应为 true (对齐 Java trimTest)"
@@ -77,7 +80,9 @@ fn is_char_test() {
 /// ```
 #[test]
 fn is_blank_char_test() {
-    for ch in ['\u{00A0}', '\u{0020}', '\u{3000}', '\u{0000}', ' ', '\u{200c}'] {
+    for ch in [
+        '\u{00A0}', '\u{0020}', '\u{3000}', '\u{0000}', ' ', '\u{200c}',
+    ] {
         assert!(
             CharUtil::is_blank_char(ch),
             "is_blank_char({ch:?}) 应为 true (对齐 Java isBlankCharTest)"

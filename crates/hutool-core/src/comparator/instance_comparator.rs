@@ -22,7 +22,10 @@ impl InstanceComparator {
 
     /// 对齐 Java: `InstanceComparator(boolean atEndIfMiss, Class<?>...)`
     #[must_use]
-    pub fn with_miss(at_end_if_miss: bool, instance_order: impl IntoIterator<Item = TypeId>) -> Self {
+    pub fn with_miss(
+        at_end_if_miss: bool,
+        instance_order: impl IntoIterator<Item = TypeId>,
+    ) -> Self {
         Self {
             at_end_if_miss,
             order: instance_order.into_iter().collect(),

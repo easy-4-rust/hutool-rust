@@ -10,7 +10,6 @@
 //! - 迁移状态：✅ 已实现（Phase 1.4 工作）
 
 use std::fmt;
-use std::path::Path;
 
 use thiserror::Error;
 
@@ -26,19 +25,26 @@ pub enum TemplateException {
     /// 对齐 `TemplateException(Throwable e)`（cause 链）
     #[error("{message}")]
     WithCause {
+        /// 错误消息文本
         message: String,
+        /// 底层错误来源
         #[source]
         source: Box<dyn std::error::Error + Send + Sync>,
     },
 
     /// 对齐 `TemplateException(String messageTemplate, Object... params)`（带格式化的 message）
     #[error("{message}")]
-    Formatted { message: String },
+    Formatted {
+        /// 格式化后的消息文本
+        message: String,
+    },
 
     /// 对齐 `TemplateException(String message, Throwable throwable)`
     #[error("{message}")]
     WithThrowable {
+        /// 错误消息文本
         message: String,
+        /// 底层错误来源
         #[source]
         source: Box<dyn std::error::Error + Send + Sync>,
     },
@@ -46,14 +52,16 @@ pub enum TemplateException {
     /// 对齐 `TemplateException(Throwable throwable, String messageTemplate, Object... params)`
     #[error("{message}")]
     FormattedWithCause {
+        /// 格式化后的消息文本
         message: String,
+        /// 底层错误来源
         #[source]
         source: Box<dyn std::error::Error + Send + Sync>,
     },
 }
 
 impl TemplateException {
-    /// 格式化 message，参考 `StrUtil.format`（Phase 1.4 完成后用 hutool-core::StrUtil.format）。
+    /// 格式化 message，参考 `StrUtil.format`（Phase 1.4 完成后用 `hutool-core::StrUtil.format`）。
     fn format_message(template: &str, params: &[&dyn fmt::Display]) -> String {
         let mut out = String::new();
         let mut param_idx = 0;
@@ -107,7 +115,11 @@ impl TemplateException {
     }
 
     /// 对齐 `TemplateException(Throwable throwable, String messageTemplate, Object... params)`
-    pub fn formatted_with_cause<E>(throwable: E, template: &str, params: &[&dyn fmt::Display]) -> Self
+    pub fn formatted_with_cause<E>(
+        throwable: E,
+        template: &str,
+        params: &[&dyn fmt::Display],
+    ) -> Self
     where
         E: std::error::Error + Send + Sync + 'static,
     {
@@ -128,5 +140,3 @@ impl TemplateException {
         }
     }
 }
-
-use super::{DEFAULT_CONFIG, default_config};

@@ -1,6 +1,6 @@
 //! 对齐: `cn.hutool.core.lang.ObjectId`
 
-use rand::Rng;
+use rand::RngExt;
 use std::sync::atomic::{AtomicU32, Ordering};
 use std::time::{SystemTime, UNIX_EPOCH};
 
@@ -14,14 +14,15 @@ pub struct ObjectId;
 impl ObjectId {
     fn machine() -> u32 {
         *MACHINE.get_or_init(|| {
-            let mut rng = rand::thread_rng();
-            let m: u32 = rng.r#gen();
+            let mut rng = rand::rng();
+            let m: u32 = rng.random();
             let pid = std::process::id() & 0xffff;
             (m & 0xffff_0000) | pid
         })
     }
 
     /// 对齐 `ObjectId.isValid`
+    #[allow(dead_code)] // 对齐 Java ObjectId.isValid，暂未接线，预留
     pub fn is_valid(s: &str) -> bool {
         let s: String = s.chars().filter(|c| *c != '-').collect();
         if s.len() != 24 {
@@ -90,6 +91,6 @@ mod object_id_idiomatic_parity {
 // init NEXT_INC randomly once
 #[allow(dead_code)]
 fn init_inc() {
-    let v: u32 = rand::thread_rng().r#gen();
+    let v: u32 = rand::rng().random();
     NEXT_INC.store(v, Ordering::SeqCst);
 }

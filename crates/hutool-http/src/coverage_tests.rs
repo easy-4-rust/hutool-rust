@@ -4,8 +4,9 @@
 
 use super::*;
 use serde::Deserialize;
+#[cfg(feature = "blocking")]
+use std::io::{Read as _, Write as _};
 use std::{
-    io::{Read as _, Write as _},
     pin::Pin,
     task::{Context, Poll},
 };

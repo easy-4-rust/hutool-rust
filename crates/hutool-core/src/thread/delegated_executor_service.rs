@@ -2,8 +2,8 @@
 //! 来源: hutool-core/src/main/java/cn/hutool/core/thread/DelegatedExecutorService.java
 
 use crate::thread::executor_builder::SimpleExecutor;
-use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::thread::JoinHandle;
 use std::time::{Duration, Instant};
 

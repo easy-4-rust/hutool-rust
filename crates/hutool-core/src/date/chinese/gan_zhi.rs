@@ -4,12 +4,14 @@
 
 use chrono::NaiveDate;
 
-use crate::date::chinese::lunar_info::{LunarInfo, BASE_DAY, BASE_YEAR};
-use crate::date::chinese::solar_terms::SolarTerms;
 use crate::Result;
+use crate::date::chinese::lunar_info::{BASE_DAY, BASE_YEAR, LunarInfo};
+use crate::date::chinese::solar_terms::SolarTerms;
 
 const GAN: &[&str] = &["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"];
-const ZHI: &[&str] = &["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"];
+const ZHI: &[&str] = &[
+    "子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥",
+];
 
 /// 对齐 Java: `cn.hutool.core.date.chinese.GanZhi`
 #[derive(Debug, Clone, Copy, Default)]

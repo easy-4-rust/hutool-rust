@@ -3,8 +3,8 @@
 //!
 //! 一致性哈希环：`BTreeMap` 模拟 Java `TreeMap`，默认 FNV32 哈希。
 
-use crate::hash_util::HashUtil;
-use std::collections::BTreeMap;
+#![allow(dead_code)] // 对齐 Java ConsistentHash，暂未接线，预留
+
 use std::fmt::Display;
 use std::hash::{Hash, Hasher};
 

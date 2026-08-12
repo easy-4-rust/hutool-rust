@@ -1,7 +1,10 @@
 //! Crypto util parity tests
 //! 对齐: hutool-crypto DigestTest/HmacTest/AESTest/BCryptTest
 
-use hutool_crypto::{sha256_hex, hmac_sha256, verify_hmac_sha256, hash_password, verify_password, aes256_gcm_encrypt, aes256_gcm_decrypt};
+use hutool_crypto::{
+    aes256_gcm_decrypt, aes256_gcm_encrypt, hash_password, hmac_sha256, sha256_hex,
+    verify_hmac_sha256, verify_password,
+};
 use secrecy::SecretString;
 
 // ── SHA-256 ──

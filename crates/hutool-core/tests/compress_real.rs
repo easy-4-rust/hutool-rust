@@ -1,7 +1,7 @@
 //! compress module real functional tests
 //! 对齐: hutool-core ZipUtilTest/GzipTest
 
-use hutool_core::{Deflate, Gzip, ZipWriter, ZipLimits};
+use hutool_core::{Deflate, Gzip, ZipLimits, ZipWriter};
 use std::io::Cursor;
 
 #[test]

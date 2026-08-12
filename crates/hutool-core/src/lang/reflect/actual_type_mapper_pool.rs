@@ -1,5 +1,7 @@
 //! 对齐: `cn.hutool.core.lang.reflect.ActualTypeMapperPool`
 
+#![allow(dead_code)] // 对齐 Java ActualTypeMapperPool，暂未接线，预留
+
 use std::collections::HashMap;
 
 /// 对齐 Java: `ActualTypeMapperPool`

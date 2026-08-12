@@ -192,7 +192,7 @@ fn ant_pattern_to_regex(pattern: &str, sep: &str, case_sensitive: bool) -> Strin
                 // Pattern like /foo/bar/** should match /foo/bar
                 let preceded_by_sep = out.ends_with(&regex_escape(sep));
                 if preceded_by_sep {
-                    // remove trailing sep from out and emit (?:/.*)? 
+                    // remove trailing sep from out and emit (?:/.*)?
                     let esc = regex_escape(sep);
                     out.truncate(out.len() - esc.len());
                     out.push_str(&format!("(?:{}.*)?", esc));

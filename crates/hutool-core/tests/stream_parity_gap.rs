@@ -11,10 +11,7 @@ use std::collections::{HashMap, HashSet};
 #[test]
 fn collector_util_reduce_list_map_test() {
     let maps = vec![
-        IndexMap::from([
-            ("苏格拉底".to_string(), 1),
-            ("特拉叙马霍斯".to_string(), 3),
-        ]),
+        IndexMap::from([("苏格拉底".to_string(), 1), ("特拉叙马霍斯".to_string(), 3)]),
         IndexMap::from([("苏格拉底".to_string(), 2)]),
         IndexMap::from([("特拉叙马霍斯".to_string(), 1)]),
         IndexMap::from([("特拉叙马霍斯".to_string(), 2)]),
@@ -61,11 +58,7 @@ fn collector_util_test_grouping_by_after_value_mapped() {
     );
     assert_eq!(
         map.get(&false).cloned().unwrap_or_default(),
-        vec![
-            "1".to_string(),
-            "1".to_string(),
-            "3".to_string()
-        ]
+        vec!["1".to_string(), "1".to_string(), "3".to_string()]
     );
 
     // LinkedHashSet 语义：同 key 下去重后的映射值集合

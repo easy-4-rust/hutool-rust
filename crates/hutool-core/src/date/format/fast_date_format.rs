@@ -1,8 +1,8 @@
 //! 对齐: `cn.hutool.core.date.format.FastDateFormat`
 
+use crate::Result;
 use crate::date::date_time::DateTime;
 use crate::date::date_util::DateUtil;
-use crate::Result;
 
 /// 对齐 Java: `FastDateFormat`
 #[derive(Debug, Clone)]

@@ -2,7 +2,6 @@
 
 /// 对齐: `cn.hutool.core.collection.ListUtil`
 /// 列表工具类
-
 use std::{cmp::Ordering, collections::VecDeque};
 
 use crate::{AvgPartition, CoreError, Partition, Result};

@@ -2,12 +2,15 @@
 
 #![allow(dead_code)]
 
-use crate::date::chinese::lunar_info::LunarInfo;
 use crate::Result;
+use crate::date::chinese::lunar_info::LunarInfo;
 
-const MONTH_NAME: &[&str] = &["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"];
-const MONTH_NAME_TRADITIONAL: &[&str] =
-    &["正", "二", "三", "四", "五", "六", "七", "八", "九", "寒", "冬", "腊"];
+const MONTH_NAME: &[&str] = &[
+    "一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二",
+];
+const MONTH_NAME_TRADITIONAL: &[&str] = &[
+    "正", "二", "三", "四", "五", "六", "七", "八", "九", "寒", "冬", "腊",
+];
 
 /// 对齐 Java: `cn.hutool.core.date.chinese.ChineseMonth`
 #[derive(Debug, Clone, Copy, Default)]

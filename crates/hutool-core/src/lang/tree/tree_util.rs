@@ -1,5 +1,7 @@
 //! 对齐: `cn.hutool.core.lang.tree.TreeUtil`
 
+#![allow(dead_code)] // 对齐 Java TreeUtil，暂未接线，预留
+
 use crate::lang::tree::tree::Tree;
 use crate::lang::tree::tree_node::TreeNode;
 use crate::lang::tree::tree_node_config::TreeNodeConfig;

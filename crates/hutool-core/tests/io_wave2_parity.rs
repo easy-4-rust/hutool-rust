@@ -134,7 +134,10 @@ fn file_util_wave2_portable() {
     let mut cur = Cursor::new(b"streamed");
     let out = base.join("from_stream.bin");
     FileUtil::write_from_stream(out.to_str().unwrap(), &mut cur).unwrap();
-    assert_eq!(FileUtil::read_bytes(out.to_str().unwrap()).unwrap(), b"streamed");
+    assert_eq!(
+        FileUtil::read_bytes(out.to_str().unwrap()).unwrap(),
+        b"streamed"
+    );
     assert_eq!(
         FileUtil::read_line(f.to_str().unwrap()).unwrap().as_deref(),
         Some("hello")

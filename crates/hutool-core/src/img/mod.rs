@@ -7,9 +7,9 @@
 pub mod background_removal;
 pub mod color_util;
 pub mod font_util;
+pub mod gif;
 pub mod graphics_util;
 pub mod img;
 pub mod img_util;
 pub mod lab_color;
 pub mod scale_type;
-pub mod gif;

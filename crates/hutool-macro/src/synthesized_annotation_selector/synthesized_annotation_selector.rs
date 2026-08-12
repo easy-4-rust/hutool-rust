@@ -2,11 +2,8 @@
 
 use std::sync::Arc;
 
-use crate::hierarchical::{
-    ChooseSide, FarthestAndNewestPrioritySelector, FarthestAndOldestPrioritySelector,
-    Hierarchical, HierarchicalSelector, NearestAndNewestPrioritySelector,
-    NearestAndOldestPrioritySelector,
-};
+use crate::hierarchical::ChooseSide;
+
 use crate::synthesized_annotation::SynthesizedAnnotation;
 
 /// 对齐 Java interface: `cn.hutool.core.annotation.SynthesizedAnnotationSelector`
@@ -25,11 +22,14 @@ impl SynthesizedAnnotationSelector for SelectorAdapter {
         old_annotation: Arc<dyn SynthesizedAnnotation>,
         new_annotation: Arc<dyn SynthesizedAnnotation>,
     ) -> Arc<dyn SynthesizedAnnotation> {
-        match self.inner.choose(old_annotation.as_ref(), new_annotation.as_ref()) {
+        match self
+            .inner
+            .choose(old_annotation.as_ref(), new_annotation.as_ref())
+        {
             ChooseSide::Next => new_annotation,
             ChooseSide::Prev => old_annotation,
         }
     }
 }
 
-use super::{SelectorAdapter, wrap};
+use super::SelectorAdapter;

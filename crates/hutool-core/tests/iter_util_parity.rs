@@ -16,7 +16,11 @@ fn get_first_test() {
     );
 
     let first = IterUtil::first(["1".to_string(), "2".to_string(), "3".to_string()]);
-    assert_eq!(first, Some("1".to_string()), "first([\"1\",\"2\",\"3\"]) (对齐 Java)");
+    assert_eq!(
+        first,
+        Some("1".to_string()),
+        "first([\"1\",\"2\",\"3\"]) (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `IterUtilTest.getFirstNonNullTest()` (行 36-40)
@@ -53,7 +57,10 @@ fn join_test() {
     // 包装每个节点
     let list2 = vec!["1", "2", "3", "4"];
     let joined2 = IterUtil::join_wrapped(list2, ":", "\"", "\"");
-    assert_eq!(joined2, "\"1\":\"2\":\"3\":\"4\"", "join_wrapped (对齐 Java)");
+    assert_eq!(
+        joined2, "\"1\":\"2\":\"3\":\"4\"",
+        "join_wrapped (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `IterUtilTest.joinWithFuncTest()` (行 68-73)
@@ -81,8 +88,16 @@ fn test_to_list_map() {
         |s: &String| s.chars().next().unwrap().to_string(),
         |s: String| s,
     );
-    assert_eq!(map.get("a"), Some(&vec!["and".to_string()]), "a → [and] (对齐 Java)");
-    assert_eq!(map.get("b"), Some(&vec!["brave".to_string(), "back".to_string()]), "b → [brave, back] (对齐 Java)");
+    assert_eq!(
+        map.get("a"),
+        Some(&vec!["and".to_string()]),
+        "a → [and] (对齐 Java)"
+    );
+    assert_eq!(
+        map.get("b"),
+        Some(&vec!["brave".to_string(), "back".to_string()]),
+        "b → [brave, back] (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `IterUtilTest.testToMap()` (行 93-105)
@@ -119,8 +134,15 @@ fn filtered_test() {
     let obj = vec!["1".to_string(), "3".to_string()];
     let mut filtered = IterUtil::filtered(obj.into_iter(), Some(|s: &String| s == "3"));
     let next = filtered.next();
-    assert_eq!(next, Some("3".to_string()), "filtered.next() (对齐 Java): got {next:?}");
-    assert!(filtered.next().is_none(), "filtered.hasNext() false (对齐 Java)");
+    assert_eq!(
+        next,
+        Some("3".to_string()),
+        "filtered.next() (对齐 Java): got {next:?}"
+    );
+    assert!(
+        filtered.next().is_none(),
+        "filtered.hasNext() false (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `IterUtilTest.filterToListTest()` (行 143-152)
@@ -230,7 +252,10 @@ fn first_some_basic() {
 
 #[test]
 fn first_match_basic() {
-    assert_eq!(IterUtil::first_match(vec![1, 2, 3, 4, 5], |x| *x > 3), Some(4));
+    assert_eq!(
+        IterUtil::first_match(vec![1, 2, 3, 4, 5], |x| *x > 3),
+        Some(4)
+    );
     assert_eq!(IterUtil::first_match(vec![1, 2, 3], |x| *x > 10), None);
 }
 

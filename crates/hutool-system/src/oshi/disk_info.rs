@@ -2,10 +2,6 @@
 //! 来源: hutool-system/src/main/java/cn/hutool/system/oshi/HWDiskStore.java
 //! 中文说明: 磁盘存储快照，包含设备名称、挂载点、总空间和可用空间
 
-use std::{thread, time::Duration};
-
-use sysinfo::{Components, Disks, Networks, Pid, System};
-
 /// 对齐: `cn.hutool.system.oshi.HWDiskStore`
 /// 中文说明: 磁盘存储快照，包含设备名称、挂载点、总空间和可用空间
 #[derive(Debug, Clone, PartialEq, Eq)]

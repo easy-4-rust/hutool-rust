@@ -202,7 +202,10 @@ fn count_basic() {
 
 #[test]
 fn count_step() {
-    assert_eq!(NumberUtil::count(0, 10, 2).unwrap(), vec![0, 2, 4, 6, 8, 10]);
+    assert_eq!(
+        NumberUtil::count(0, 10, 2).unwrap(),
+        vec![0, 2, 4, 6, 8, 10]
+    );
 }
 
 #[test]
@@ -239,7 +242,6 @@ fn lcm_basic() {
     assert_eq!(NumberUtil::lcm(4, 6), 12);
     assert_eq!(NumberUtil::lcm(3, 5), 15);
 }
-
 
 // ── 对齐 Hutool NumberUtilTest ──
 
@@ -298,7 +300,10 @@ fn factorial_test() {
     assert_eq!(1, NumberUtil::factorial(0).unwrap());
     assert_eq!(1, NumberUtil::factorial(1).unwrap());
     assert_eq!(1_307_674_368_000, NumberUtil::factorial(15).unwrap());
-    assert_eq!(2_432_902_008_176_640_000, NumberUtil::factorial(20).unwrap());
+    assert_eq!(
+        2_432_902_008_176_640_000,
+        NumberUtil::factorial(20).unwrap()
+    );
 }
 
 /// 对齐 Java: `NumberUtilTest.issue4237Test()`
@@ -320,7 +325,7 @@ fn is_odd_or_even_test() {
     // Rust 侧用位运算对齐 Java NumberUtil.isOdd / isEven 语义
     let a = [0, 32, -32, 123, -123];
     assert_eq!(a[0] & 1 != 0, false); // isOdd(0)
-    assert_eq!(a[0] & 1 == 0, true);  // isEven(0)
+    assert_eq!(a[0] & 1 == 0, true); // isEven(0)
     assert_eq!(a[1] & 1 != 0, false);
     assert_eq!(a[1] & 1 == 0, true);
     assert_eq!(a[3] & 1 != 0, true);
@@ -334,7 +339,6 @@ fn is_double_test() {
     assert!(!NumberUtil::is_number(""));
     assert!(!NumberUtil::is_number("  "));
 }
-
 
 /// 对齐 Java: `NumberUtilTest.addTest2()`
 #[test]
@@ -409,7 +413,10 @@ fn round_test() {
     assert_eq!(NumberUtil::round_str_f64(2.675, 2).unwrap(), "2.68");
     assert_eq!(NumberUtil::round_str("2.675", 2).unwrap(), "2.68");
     assert_eq!(NumberUtil::round_str_half_even("4.245", 2).unwrap(), "4.24");
-    assert_eq!(NumberUtil::round_str_half_even("4.2451", 2).unwrap(), "4.25");
+    assert_eq!(
+        NumberUtil::round_str_half_even("4.2451", 2).unwrap(),
+        "4.25"
+    );
     assert_eq!(NumberUtil::round_str_f64(2.6005, 2).unwrap(), "2.60");
     assert_eq!(NumberUtil::round_str("2.6005", 2).unwrap(), "2.60");
     assert_eq!(NumberUtil::round_str_f64(2.600, 2).unwrap(), "2.60");
@@ -452,7 +459,10 @@ fn round_half_even_test() {
 #[test]
 fn decimal_format_test() {
     let c = 299_792_458_f64;
-    assert_eq!(NumberUtil::decimal_format(",###", c).unwrap(), "299,792,458");
+    assert_eq!(
+        NumberUtil::decimal_format(",###", c).unwrap(),
+        "299,792,458"
+    );
 }
 
 /// 对齐 Java: `NumberUtilTest.decimalFormatNaNTest()`
@@ -508,11 +518,15 @@ fn to_big_decimal_test() {
     let big_decimal = NumberUtil::to_big_decimal_f64(a).unwrap();
     assert_eq!(big_decimal.to_string(), "3.14");
     assert_eq!(
-        NumberUtil::to_big_decimal_str("1,234.55").unwrap().to_string(),
+        NumberUtil::to_big_decimal_str("1,234.55")
+            .unwrap()
+            .to_string(),
         "1234.55"
     );
     assert_eq!(
-        NumberUtil::to_big_decimal_str("1,234.56D").unwrap().to_string(),
+        NumberUtil::to_big_decimal_str("1,234.56D")
+            .unwrap()
+            .to_string(),
         "1234.56"
     );
     assert_eq!(
@@ -565,10 +579,7 @@ fn parse_number_test_4() {
 /// 对齐 Java: `NumberUtilTest.parseNumberTest()`
 #[test]
 fn parse_number_test() {
-    assert_eq!(
-        NumberUtil::parse_number("1,482.00").unwrap().as_i64(),
-        1482
-    );
+    assert_eq!(NumberUtil::parse_number("1,482.00").unwrap().as_i64(), 1482);
     assert_eq!(
         NumberUtil::parse_number("1,482.00D").unwrap().as_i64(),
         1482
@@ -601,11 +612,14 @@ fn parse_number_test_3() {
             .as_i64(),
         123
     );
+    assert!((NumberUtil::parse_number_or("123.3", None).unwrap().as_f64() - 123.3).abs() < 1e-9);
     assert!(
-        (NumberUtil::parse_number_or("123.3", None).unwrap().as_f64() - 123.3).abs() < 1e-9
-    );
-    assert!(
-        (NumberUtil::parse_number_or("0.123.3", None).unwrap().as_f64() - 0.123).abs() < 1e-9
+        (NumberUtil::parse_number_or("0.123.3", None)
+            .unwrap()
+            .as_f64()
+            - 0.123)
+            .abs()
+            < 1e-9
     );
 }
 
@@ -645,7 +659,10 @@ fn parse_long_test() {
 fn parse_long_test_2() {
     assert_eq!(NumberUtil::parse_long_or(None, None), None);
     assert_eq!(NumberUtil::parse_long_or(Some(""), None), None);
-    assert_eq!(NumberUtil::parse_long_or(Some("L3221"), Some(1233)), Some(1233));
+    assert_eq!(
+        NumberUtil::parse_long_or(Some("L3221"), Some(1233)),
+        Some(1233)
+    );
     assert_eq!(NumberUtil::parse_long_or(Some("1233L"), None), Some(1233));
 }
 
@@ -677,7 +694,10 @@ fn factorial_test_2() {
     assert_eq!(1, NumberUtil::factorial(0).unwrap());
     assert_eq!(1, NumberUtil::factorial(1).unwrap());
     assert_eq!(1_307_674_368_000, NumberUtil::factorial(15).unwrap());
-    assert_eq!(2_432_902_008_176_640_000, NumberUtil::factorial(20).unwrap());
+    assert_eq!(
+        2_432_902_008_176_640_000,
+        NumberUtil::factorial(20).unwrap()
+    );
 }
 
 /// 对齐 Java: `NumberUtilTest.mulTest()`
@@ -826,21 +846,30 @@ fn test_pow_zero() {
 #[test]
 fn test_pow_negative() {
     let number = Decimal::from_str("2.5").unwrap();
-    assert_eq!(NumberUtil::pow(number, -2), Decimal::from_str("0.16").unwrap());
+    assert_eq!(
+        NumberUtil::pow(number, -2),
+        Decimal::from_str("0.16").unwrap()
+    );
 }
 
 /// 对齐 Java: `NumberUtilTest.testPowSmallNumber()`
 #[test]
 fn test_pow_small_number() {
     let number = Decimal::from_str("0.1").unwrap();
-    assert_eq!(NumberUtil::pow(number, -3), Decimal::from_str("1000.00").unwrap());
+    assert_eq!(
+        NumberUtil::pow(number, -3),
+        Decimal::from_str("1000.00").unwrap()
+    );
 }
 
 /// 对齐 Java: `NumberUtilTest.testPowSmallNumberScale()`
 #[test]
 fn test_pow_small_number_scale() {
     let number = Decimal::from_str("1.2").unwrap();
-    assert_eq!(NumberUtil::pow(number, -3), Decimal::from_str("0.58").unwrap());
+    assert_eq!(
+        NumberUtil::pow(number, -3),
+        Decimal::from_str("0.58").unwrap()
+    );
 }
 
 /// 对齐 Java: `NumberUtilTest.issue3636Test()`

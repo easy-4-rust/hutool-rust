@@ -2,14 +2,10 @@
 //! 对齐: hutool-core Base32Test/Base58Test/Base62Test/BCDTest/CaesarTest/MorseTest/PunyCodeTest/RotTest
 
 use hutool_core::{
-    base32_decode, base32_encode, base32_hex_decode, base32_hex_encode,
-    base58_decode, base58_encode,
-    base62_decode, base62_encode, base62_inverted_decode, base62_inverted_encode,
-    bcd_decode, bcd_encode,
-    caesar_decode, caesar_encode,
-    punycode_decode, punycode_encode,
-    rot_decode, rot_encode,
-    HashIds, MorseCodec,
+    HashIds, MorseCodec, base32_decode, base32_encode, base32_hex_decode, base32_hex_encode,
+    base58_decode, base58_encode, base62_decode, base62_encode, base62_inverted_decode,
+    base62_inverted_encode, bcd_decode, bcd_encode, caesar_decode, caesar_encode, punycode_decode,
+    punycode_encode, rot_decode, rot_encode,
 };
 
 // ── Base32 ──

@@ -215,7 +215,11 @@ impl DbConfig {
     }
 
     /// 对齐 Java: `addConnProps`。
-    pub fn add_conn_props(&mut self, key: impl Into<String>, value: impl Into<String>) -> &mut Self {
+    pub fn add_conn_props(
+        &mut self,
+        key: impl Into<String>,
+        value: impl Into<String>,
+    ) -> &mut Self {
         self.conn_props.insert(key.into(), value.into());
         self
     }
@@ -315,7 +319,11 @@ pub struct SimpleDataSource {
 impl SimpleDataSource {
     /// 对齐 Java: `getDataSource()` 静态工厂的本地等价。
     #[must_use]
-    pub fn get_data_source(url: impl Into<String>, user: impl Into<String>, pass: impl Into<String>) -> Self {
+    pub fn get_data_source(
+        url: impl Into<String>,
+        user: impl Into<String>,
+        pass: impl Into<String>,
+    ) -> Self {
         Self::new(url, user, pass)
     }
 
@@ -404,7 +412,11 @@ impl SimpleDataSource {
     }
 
     /// 追加连接属性。
-    pub fn add_conn_props(&mut self, key: impl Into<String>, value: impl Into<String>) -> &mut Self {
+    pub fn add_conn_props(
+        &mut self,
+        key: impl Into<String>,
+        value: impl Into<String>,
+    ) -> &mut Self {
         self.config.add_conn_props(key, value);
         self
     }

@@ -5,15 +5,15 @@
 
 mod annotation_common;
 
+#[path = "annotation_parity_gap/gap_aggregate.rs"]
+mod gap_aggregate;
 #[path = "annotation_parity_gap/gap_attributes.rs"]
 mod gap_attributes;
 #[path = "annotation_parity_gap/gap_processors.rs"]
 mod gap_processors;
-#[path = "annotation_parity_gap/gap_aggregate.rs"]
-mod gap_aggregate;
-#[path = "annotation_parity_gap/gap_selectors.rs"]
-mod gap_selectors;
 #[path = "annotation_parity_gap/gap_scanners.rs"]
 mod gap_scanners;
+#[path = "annotation_parity_gap/gap_selectors.rs"]
+mod gap_selectors;
 #[path = "annotation_parity_gap/gap_util.rs"]
 mod gap_util;

@@ -3,14 +3,10 @@
 //!
 //! 异常链处理与包装工具。
 
-use std::error::Error;
-use std::fmt;
-use std::panic::Location;
-
 mod exception_util;
-mod wrapped_error;
 mod stack_frame;
+mod wrapped_error;
 
 pub use exception_util::ExceptionUtil;
-pub use wrapped_error::WrappedError;
 pub use stack_frame::StackFrame;
+pub use wrapped_error::WrappedError;

@@ -3,7 +3,7 @@
 //! 中文说明: HOTP/TOTP 一次性密码工具（RFC 4226/6238），对齐 Hutool OTP
 
 use crate::CryptoError;
-use hmac::{Hmac, Mac};
+use hmac::{Hmac, KeyInit, Mac};
 use sha1::Sha1;
 use sha2::{Sha256, Sha512};
 

@@ -181,19 +181,23 @@ fn is_map_not_i32() {
 // ── Hutool TypeUtilTest remaining gaps ──
 
 struct Level1<T> {
+    #[allow(dead_code)] // 对齐 Java 测试字段，仅用于类型推断，预留
     id: T,
 }
 
 struct Level2<E> {
+    #[allow(dead_code)] // 对齐 Java 测试字段，仅用于类型推断，预留
     id: i64,
     _marker: std::marker::PhantomData<E>,
 }
 
 struct Level3 {
+    #[allow(dead_code)] // 对齐 Java 测试字段，仅用于类型推断，预留
     id: i64,
 }
 
 struct GenericArrayEle {
+    #[allow(dead_code)] // 对齐 Java 测试字段，仅用于类型推断，预留
     uid: i64,
 }
 
@@ -201,21 +205,33 @@ struct GenericArrayEle {
 #[test]
 fn get_ele_type_test() {
     assert!(TypeUtil::type_name::<Vec<String>>().contains("Vec"));
-    assert_eq!(TypeUtil::ele_type_name::<String>(), TypeUtil::type_name::<String>());
+    assert_eq!(
+        TypeUtil::ele_type_name::<String>(),
+        TypeUtil::type_name::<String>()
+    );
 }
 
 /// 对齐 Java: `TypeUtilTest.getParamTypeTest()`
 #[test]
 fn get_param_type_test() {
-    assert_eq!(TypeUtil::param_type_name::<i32>(), TypeUtil::type_name::<i32>());
-    assert_eq!(TypeUtil::class_type_name::<i32>(), TypeUtil::type_name::<i32>());
+    assert_eq!(
+        TypeUtil::param_type_name::<i32>(),
+        TypeUtil::type_name::<i32>()
+    );
+    assert_eq!(
+        TypeUtil::class_type_name::<i32>(),
+        TypeUtil::type_name::<i32>()
+    );
 }
 
 /// 对齐 Java: `TypeUtilTest.getClasses()`
 #[test]
 fn get_classes() {
     assert!(TypeUtil::class_type_name::<Level1<i64>>().contains("Level1"));
-    assert_eq!(TypeUtil::class_type_name::<Level3>(), TypeUtil::type_name::<Level3>());
+    assert_eq!(
+        TypeUtil::class_type_name::<Level3>(),
+        TypeUtil::type_name::<Level3>()
+    );
 }
 
 /// 对齐 Java: `TypeUtilTest.getClassForGenericArrayTypeTest()`
@@ -236,13 +252,19 @@ fn get_class_for_parameterized_array_type_test() {
 /// 对齐 Java: `TypeUtilTest.getTypeArgumentTest()`
 #[test]
 fn get_type_argument_test() {
-    assert_eq!(TypeUtil::type_argument_name::<String>(), TypeUtil::type_name::<String>());
+    assert_eq!(
+        TypeUtil::type_argument_name::<String>(),
+        TypeUtil::type_name::<String>()
+    );
 }
 
 /// 对齐 Java: `TypeUtilTest.getActualTypesTest()`
 #[test]
 fn get_actual_types_test() {
-    assert_eq!(TypeUtil::actual_type_name::<i64>(), TypeUtil::type_name::<i64>());
+    assert_eq!(
+        TypeUtil::actual_type_name::<i64>(),
+        TypeUtil::type_name::<i64>()
+    );
     let _level: Level2<Level3> = Level2 {
         id: 1,
         _marker: std::marker::PhantomData,
@@ -254,5 +276,11 @@ fn get_actual_types_test() {
 #[test]
 fn get_actual_type_for_generic_array_test() {
     let array_type = TypeUtil::actual_array_type_name::<GenericArrayEle>();
-    assert_eq!(array_type, format!("[{}]", TypeUtil::short_type_name(TypeUtil::type_name::<GenericArrayEle>())));
+    assert_eq!(
+        array_type,
+        format!(
+            "[{}]",
+            TypeUtil::short_type_name(TypeUtil::type_name::<GenericArrayEle>())
+        )
+    );
 }

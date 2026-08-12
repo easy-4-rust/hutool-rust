@@ -71,7 +71,10 @@ fn write_der_length(out: &mut Vec<u8>, len: usize) {
         return;
     }
     let bytes = len.to_be_bytes();
-    let start = bytes.iter().position(|&b| b != 0).unwrap_or(bytes.len() - 1);
+    let start = bytes
+        .iter()
+        .position(|&b| b != 0)
+        .unwrap_or(bytes.len() - 1);
     let significant = &bytes[start..];
     out.push(0x80 | significant.len() as u8);
     out.extend_from_slice(significant);

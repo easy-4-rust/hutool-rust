@@ -7,7 +7,6 @@ use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 use std::thread;
 
-
 // ── BiMapTest ──
 // 对齐: `BiMapTest`
 
@@ -523,7 +522,9 @@ fn weak_concurrent_map_get_concurrency_test() {
             map.lock().unwrap().insert(i, i * 10);
         }));
     }
-    for h in handles { h.join().unwrap(); }
+    for h in handles {
+        h.join().unwrap();
+    }
     assert_eq!(map.lock().unwrap().len(), 8);
 }
 

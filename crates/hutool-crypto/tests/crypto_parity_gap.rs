@@ -8,7 +8,10 @@
 
 mod common;
 
-use common::{load_resource, rsa_oaep_round_trip, rsa_pub_enc_priv_dec, sm2_sign_verify_round_trip, RSA_PLAINTEXT};
+use common::{
+    RSA_PLAINTEXT, load_resource, rsa_oaep_round_trip, rsa_pub_enc_priv_dec,
+    sm2_sign_verify_round_trip,
+};
 use hutool_crypto as hc;
 use std::sync::Arc;
 use std::thread;
@@ -50,7 +53,8 @@ fn bc_util_create_ec_public_key_parameters_test() {
     let params = hc::sm2_public_from_xy(
         "706AD9DAA3E5CEAC3DA59F583429E8043BAFC576BE10092C4EA4D8E19846CA62",
         "F7E938B02EED7280277493B8556E5B01CB436E018A562DFDC53342BF41FDF728",
-    ).expect("public params");
+    )
+    .expect("public params");
     assert!(params.x_valid && params.y_valid);
 }
 
@@ -59,7 +63,8 @@ fn bc_util_create_ec_public_key_parameters_test() {
 fn bc_util_create_ec_private_key_parameters_test() {
     let params = hc::sm2_private_from_hex(
         "5F6CA5BB044C40ED2355F0372BF72A5B3AE6943712F9FDB7C1FFBAECC06F3829",
-    ).expect("private params");
+    )
+    .expect("private params");
     assert!(params.valid);
 }
 
@@ -125,7 +130,10 @@ fn pem_util_read_public_key_test() {
 #[test]
 fn pem_util_read_pem_key_test() {
     let pem = load_resource("test_public_key.csr");
-    assert_eq!(hc::read_pem_key(&pem).expect("kind"), hc::PemKind::Certificate);
+    assert_eq!(
+        hc::read_pem_key(&pem).expect("kind"),
+        hc::PemKind::Certificate
+    );
 }
 
 /// 对齐 Java: `PemUtilTest.validateKey()`
@@ -161,8 +169,12 @@ fn secure_util_get_algorithm_after_with_test() {
         let upper = name.to_uppercase();
         let idx = upper.find("WITH").expect("with");
         let mut algo = name[idx + 4..].to_string();
-        if algo.eq_ignore_ascii_case("ECDSA") { algo = "EC".into(); }
-        if algo.eq_ignore_ascii_case("ECIES") { algo = "EC".into(); }
+        if algo.eq_ignore_ascii_case("ECDSA") {
+            algo = "EC".into();
+        }
+        if algo.eq_ignore_ascii_case("ECIES") {
+            algo = "EC".into();
+        }
         algo
     }
     assert_eq!(after_with("SHA256withRSA"), "RSA");
@@ -473,7 +485,8 @@ fn sm2_key_pair_oid_test() {
 #[test]
 fn sm2_sm2_custom_key_test() {
     let (secret, public) = hc::generate_sm2_keypair().expect("sm2");
-    let pt = hc::sm2_encrypt_decrypt_roundtrip(&secret, &public, RSA_PLAINTEXT.as_bytes()).expect("rt");
+    let pt =
+        hc::sm2_encrypt_decrypt_roundtrip(&secret, &public, RSA_PLAINTEXT.as_bytes()).expect("rt");
     assert_eq!(pt, RSA_PLAINTEXT.as_bytes());
 }
 
@@ -498,7 +511,8 @@ fn sm2_sm2_sign_test() {
     let sig = hc::sm2_sign_hex(
         "1ebf8b341c695ee456fd1a41b82645724bc25d79935437d30e7e4b0a554baa5e",
         "我是一段测试aaaa".as_bytes(),
-    ).expect("sign");
+    )
+    .expect("sign");
     assert_eq!(sig.len(), 64);
 }
 
@@ -557,7 +571,11 @@ fn sm2_sm2_public_key_encode_decode_test() {
 #[test]
 fn sm2_sm2_with_point_test() {
     let d = "FAB8BBE670FAE338C9E9382B9FB6485225C11A3ECB84C938F10F20A93B6215F0";
-    let sig = hc::sm2_sign_hex(d, b"434477813974bf58f94bcf760833c2b40f77a5fc360485b0b9ed1bd9682edb45").expect("sign");
+    let sig = hc::sm2_sign_hex(
+        d,
+        b"434477813974bf58f94bcf760833c2b40f77a5fc360485b0b9ed1bd9682edb45",
+    )
+    .expect("sign");
     assert_eq!(sig.len(), 64);
 }
 
@@ -574,7 +592,8 @@ fn sm2_sm2_with_null_pri_point_test() {
 /// 对齐 Java: `SM2Test.sm2PlainWithPointTest()`
 #[test]
 fn sm2_sm2_plain_with_point_test() {
-    let data = hex::decode("434477813974bf58f94bcf760833c2b40f77a5fc360485b0b9ed1bd9682edb45").expect("data");
+    let data = hex::decode("434477813974bf58f94bcf760833c2b40f77a5fc360485b0b9ed1bd9682edb45")
+        .expect("data");
     let sign_hex = "DCA0E80A7F46C93714B51C3EFC55A922BCEF7ECF0FE9E62B53BA6A7438B543A76C145A452CA9036F3CB70D7E6C67D4D9D7FE114E5367A2F6F5A4D39F2B10F3D6";
     let x = "9EF573019D9A03B16B0BE44FC8A5B4E8E098F56034C97B312282DD0B4810AFC3";
     let y = "CC759673ED0FC9B9DC7E6FA38F0E2B121E02654BF37EA6B63FAF2A0D6013EADF";
@@ -620,7 +639,10 @@ fn sm2_d_length_test() {
     assert_eq!(hc::sm2_private_hex_len(&secret), 64);
     assert_eq!(hc::sm2_private_scalar_len(), 32);
     use sm2::elliptic_curve::sec1::ToEncodedPoint;
-    assert_eq!(public.as_affine().to_encoded_point(false).as_bytes().len(), 65);
+    assert_eq!(
+        public.as_affine().to_encoded_point(false).as_bytes().len(),
+        65
+    );
 }
 
 /// 对齐 Java: `SM2Test.issueI6ROLTTest()`
@@ -780,7 +802,9 @@ fn md5_md5_thread_safe_test() {
         handles.push(thread::spawn(move || hc::sha256_hex(s.as_bytes())));
     }
     let first = handles.pop().unwrap().join().unwrap();
-    for h in handles { assert_eq!(h.join().unwrap(), first); }
+    for h in handles {
+        assert_eq!(h.join().unwrap(), first);
+    }
     assert_eq!(first.len(), 64);
 }
 
@@ -792,10 +816,21 @@ fn otp_valid_test() {
     let key = hc::decode_base32_secret("VYCFSW2QZ3WZO").expect("base32 key");
     let epoch = 1_625_135_394u64;
     let code = 106_659u32;
-    assert!(hc::totp_validate(&key, epoch, 30, 0, code, 6, hc::OtpAlgorithm::HmacSha1).expect("v0"));
-    assert!(hc::totp_validate(&key, epoch + 30, 30, 1, code, 6, hc::OtpAlgorithm::HmacSha1).expect("v1"));
-    assert!(hc::totp_validate(&key, epoch + 60, 30, 2, code, 6, hc::OtpAlgorithm::HmacSha1).expect("v2"));
-    assert!(!hc::totp_validate(&key, epoch + 60, 30, 1, code, 6, hc::OtpAlgorithm::HmacSha1).expect("v3"));
+    assert!(
+        hc::totp_validate(&key, epoch, 30, 0, code, 6, hc::OtpAlgorithm::HmacSha1).expect("v0")
+    );
+    assert!(
+        hc::totp_validate(&key, epoch + 30, 30, 1, code, 6, hc::OtpAlgorithm::HmacSha1)
+            .expect("v1")
+    );
+    assert!(
+        hc::totp_validate(&key, epoch + 60, 30, 2, code, 6, hc::OtpAlgorithm::HmacSha1)
+            .expect("v2")
+    );
+    assert!(
+        !hc::totp_validate(&key, epoch + 60, 30, 1, code, 6, hc::OtpAlgorithm::HmacSha1)
+            .expect("v3")
+    );
 }
 
 /// 对齐 Java: `OTPTest.googleAuthTest()`
@@ -819,7 +854,18 @@ fn otp_long_password_length_test() {
 #[test]
 fn otp_generate_hopt_test() {
     let key = b"12345678901234567890";
-    let cases = [(0,755224),(1,287082),(2,359152),(3,969429),(4,338314),(5,254676),(6,287922),(7,162583),(8,399871),(9,520489)];
+    let cases = [
+        (0, 755224),
+        (1, 287082),
+        (2, 359152),
+        (3, 969429),
+        (4, 338314),
+        (5, 254676),
+        (6, 287922),
+        (7, 162583),
+        (8, 399871),
+        (9, 520489),
+    ];
     for (counter, expect) in cases {
         assert_eq!(hc::hotp(key, counter, 6).expect("hotp"), expect);
     }
@@ -836,9 +882,19 @@ fn otp_get_time_step_test() {
 #[test]
 fn otp_generate_hmac_sha1_topt_test() {
     let key = b"12345678901234567890";
-    let cases = [(59,94287082),(1111111109,7081804),(1111111111,14050471),(1234567890,89005924),(2000000000,69279037),(20000000000,65353130)];
+    let cases = [
+        (59, 94287082),
+        (1111111109, 7081804),
+        (1111111111, 14050471),
+        (1234567890, 89005924),
+        (2000000000, 69279037),
+        (20000000000, 65353130),
+    ];
     for (epoch, expect) in cases {
-        assert_eq!(hc::totp(key, epoch, 30, 8, hc::OtpAlgorithm::HmacSha1).expect("totp"), expect);
+        assert_eq!(
+            hc::totp(key, epoch, 30, 8, hc::OtpAlgorithm::HmacSha1).expect("totp"),
+            expect
+        );
     }
 }
 
@@ -866,9 +922,19 @@ fn otp_generate_hmac_sha256_topt_test() {
 #[test]
 fn otp_generate_hmac_sha512_topt_test() {
     let key = b"1234567890123456789012345678901234567890123456789012345678901234";
-    let cases = [(59,90693936),(1111111109,25091201),(1111111111,99943326),(1234567890,93441116),(2000000000,38618901),(20000000000,47863826)];
+    let cases = [
+        (59, 90693936),
+        (1111111109, 25091201),
+        (1111111111, 99943326),
+        (1234567890, 93441116),
+        (2000000000, 38618901),
+        (20000000000, 47863826),
+    ];
     for (epoch, expect) in cases {
-        assert_eq!(hc::totp(key, epoch, 30, 8, hc::OtpAlgorithm::HmacSha512).expect("totp"), expect);
+        assert_eq!(
+            hc::totp(key, epoch, 30, 8, hc::OtpAlgorithm::HmacSha512).expect("totp"),
+            expect
+        );
     }
 }
 
@@ -1076,4 +1142,3 @@ fn fpe_ff3_test() {
     // 安全默认 AES-256-GCM round-trip（Hutool 明文: "1234567890123456"）
     aes_gcm_round_trip("1234567890123456".as_bytes());
 }
-

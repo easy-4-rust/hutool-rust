@@ -123,6 +123,27 @@ impl ContentType {
         }
     }
 
+    /// 将内置内容类型转换为 Rust 生态通用的 [`mime::Mime`]。
+    ///
+    /// 返回值：已完成语法校验的 MIME 类型。对应 Java:
+    /// `ContentType#toString` 后交由 MIME 解析器处理。
+    #[must_use]
+    pub fn mime(self) -> mime::Mime {
+        self.value()
+            .parse()
+            .expect("built-in content types must be valid MIME values")
+    }
+
+    /// 解析任意媒体类型，并保留 `charset` 等参数。
+    ///
+    /// 参数：`value` 为待解析的 Content-Type 字符串。
+    ///
+    /// 返回：解析成功时返回 [`mime::Mime`]；语法非法时返回
+    /// [`mime::FromStrError`]。
+    pub fn parse_mime(value: &str) -> Result<mime::Mime, mime::FromStrError> {
+        value.parse()
+    }
+
     /// Adds a charset parameter using Hutool's compact formatting.
     #[must_use]
     pub fn with_charset(self, charset: &str) -> String {
@@ -499,6 +520,12 @@ mod tests {
             ContentType::build_type(ContentType::TextPlain, "GBK"),
             "text/plain;charset=GBK"
         );
+        assert_eq!(ContentType::Json.mime(), mime::APPLICATION_JSON);
+        let parsed = ContentType::parse_mime("application/json; charset=utf-8").unwrap();
+        assert_eq!(parsed.type_(), mime::APPLICATION);
+        assert_eq!(parsed.subtype(), mime::JSON);
+        assert_eq!(parsed.get_param(mime::CHARSET).unwrap(), mime::UTF_8);
+        assert!(ContentType::parse_mime("not a mime type").is_err());
         assert!(ContentType::is_default(None));
         assert!(ContentType::is_default(Some(
             "Application/X-Www-Form-Urlencoded;charset=UTF-8"

@@ -47,7 +47,10 @@ fn parse_bytes_test() {
 #[test]
 fn to_bean_test() {
     #[derive(serde::Deserialize, Debug)]
-    struct User { name: String, age: u32 }
+    struct User {
+        name: String,
+        age: u32,
+    }
     let result: Result<User, _> = hj::JSONUtil::to_bean(r#"{"name":"alice","age":25}"#);
     assert!(result.is_ok(), "to_bean 应成功");
     let user = result.unwrap();
@@ -85,8 +88,14 @@ fn put_all_test() {
 #[test]
 fn parse_from_bean_test() {
     #[derive(serde::Serialize)]
-    struct Bean { name: String, age: u32 }
-    let bean = Bean { name: "alice".into(), age: 25 };
+    struct Bean {
+        name: String,
+        age: u32,
+    }
+    let bean = Bean {
+        name: "alice".into(),
+        age: 25,
+    };
     let result = hj::to_string(&bean);
     assert!(result.is_ok(), "to_string 应成功");
     let s = result.unwrap();

@@ -1,11 +1,12 @@
 //! Facade parity for planned→idiomatic Hutool-named surfaces.
 
 use hutool_db::{
-    dialect::Dialect, AbstractDb, AnsiSqlDialect, BeanHandler, Column, ColumnIndexInfo, DbConfig,
-    DbSetting, DialectName, DialectRunner, DsFactory, Entity, EntityHandler, EntityListHandler,
+    AbstractDb, AnsiSqlDialect, BeanHandler, Column, ColumnIndexInfo, DbConfig, DbSetting,
+    DialectName, DialectRunner, DsFactory, Entity, EntityHandler, EntityListHandler,
     EntitySetHandler, HandleHelper, HutoolPage, IndexInfo, MysqlDialect, NumberHandler,
     OracleDialect, PageResultHandler, PooledDataSource, Query, SimpleDataSource, SqlConnRunner,
     SqlExecutor, SqlLog, StringHandler, TableType, TransactionLevel, ValueListHandler, Wrapper,
+    dialect::Dialect,
 };
 use serde::Deserialize;
 use serde_json::json;
@@ -13,7 +14,10 @@ use serde_json::json;
 #[test]
 fn dialect_name_and_impls_align() {
     assert!(DialectName::Mysql.match_name("mysql"));
-    assert_eq!(DialectName::from_product_info("jdbc:postgresql:"), Some(DialectName::Postgresql));
+    assert_eq!(
+        DialectName::from_product_info("jdbc:postgresql:"),
+        Some(DialectName::Postgresql)
+    );
     let mysql = MysqlDialect::new();
     assert_eq!(mysql.dialect_name(), DialectName::Mysql);
     assert_eq!(mysql.wrapper().wrap("id"), "`id`");
@@ -35,7 +39,11 @@ fn query_and_sql_log_facades() {
     log.init(true, false, true);
     let line = log.log_with_params("select 1", &[json!(1)]).unwrap();
     assert!(line.contains("[SQL]"));
-    assert!(log.log_for_batch("insert", 3).unwrap().contains("batchSize=3"));
+    assert!(
+        log.log_for_batch("insert", 3)
+            .unwrap()
+            .contains("batchSize=3")
+    );
 }
 
 #[test]
@@ -84,14 +92,24 @@ fn meta_column_index_and_handlers() {
         HandleHelper::handle_row([("name", json!("a")), ("age", json!(1))]),
         HandleHelper::handle_row([("name", json!("b")), ("age", json!(2))]),
     ];
-    assert_eq!(EntityHandler::create().handle(&rows).unwrap().get_str("name").as_deref(), Some("a"));
+    assert_eq!(
+        EntityHandler::create()
+            .handle(&rows)
+            .unwrap()
+            .get_str("name")
+            .as_deref(),
+        Some("a")
+    );
     assert_eq!(EntityListHandler::create().handle(&rows).len(), 2);
     assert_eq!(EntitySetHandler::create().handle(&rows).len(), 2);
     let page = PageResultHandler::create(0, 10, 2).handle(rows.clone());
     assert_eq!(page.total(), 2);
     let num_rows = vec![HandleHelper::handle_row([("c", json!(9))])];
     assert_eq!(NumberHandler::create().handle(&num_rows), Some(9));
-    assert_eq!(StringHandler::create().handle(&num_rows).as_deref(), Some("9"));
+    assert_eq!(
+        StringHandler::create().handle(&num_rows).as_deref(),
+        Some("9")
+    );
     assert_eq!(ValueListHandler::create().handle(&num_rows)[0].len(), 1);
 
     #[derive(Debug, Deserialize, PartialEq)]
@@ -120,8 +138,7 @@ async fn runners_delegate_to_db() {
         .unwrap();
     assert_eq!(found[0].get_str("name").as_deref(), Some("王五"));
 
-    let dialect_runner =
-        DialectRunner::from_dialect(pool.clone(), &MysqlDialect::new());
+    let dialect_runner = DialectRunner::from_dialect(pool.clone(), &MysqlDialect::new());
     assert_eq!(dialect_runner.dialect_name(), DialectName::Mysql);
     let page = dialect_runner
         .page("select * from user", &HutoolPage::of(0, 2), &[])

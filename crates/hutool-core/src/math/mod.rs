@@ -14,4 +14,4 @@ pub use bit_status_util::BitStatusUtil;
 pub use calculator::Calculator;
 pub use combination::{ArithmeticOverflow, Combination};
 pub use math_util::MathUtil;
-pub use money::{Money, DEFAULT_CURRENCY_CODE};
+pub use money::{DEFAULT_CURRENCY_CODE, Money};

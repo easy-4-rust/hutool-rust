@@ -19,12 +19,6 @@
 //! Hutool 只返回"主屏幕"信息,`xcap` 提供所有显示器枚举,Rust 版本通过
 //! [`ScreenUtil::primary_monitor`] 选择主显示器,其余显示器可由调用方自行枚举。
 
-use crate::swing::{Result, SwingError};
-use image::RgbaImage;
-use std::path::Path;
-
-use super::screen_util::ScreenUtil;
-
 /// 屏幕矩形区域,对应 Java `java.awt.Rectangle`。
 ///
 /// 对齐 Java: `java.awt.Rectangle` 在 ScreenUtil/RobotUtil 路径中的用法

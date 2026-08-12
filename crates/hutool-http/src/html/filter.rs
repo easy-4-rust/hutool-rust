@@ -154,7 +154,10 @@ impl HtmlFilter {
     #[must_use]
     pub fn with_conf(conf: &HashMap<String, String>) -> Self {
         let mut filter = Self::new();
-        if let Some(value) = conf.get("stripComment").or_else(|| conf.get("strip_comment")) {
+        if let Some(value) = conf
+            .get("stripComment")
+            .or_else(|| conf.get("strip_comment"))
+        {
             filter.strip_comment = value.eq_ignore_ascii_case("true") || value == "1";
         }
         if let Some(value) = conf
@@ -241,8 +244,7 @@ impl HtmlFilter {
             result = regex_replace(P_BODY_TO_END.get().unwrap(), "<$1>", &result);
             regex_replace(P_XML_CONTENT.get().unwrap(), "$1<$2", &result)
         } else {
-            let mut result =
-                regex_replace(P_STRAY_LEFT_ARROW.get().unwrap(), "&lt;$1", s);
+            let mut result = regex_replace(P_STRAY_LEFT_ARROW.get().unwrap(), "&lt;$1", s);
             result = regex_replace(P_STRAY_RIGHT_ARROW.get().unwrap(), "$1$2&gt;<", &result);
             regex_replace(P_BOTH_ARROWS.get().unwrap(), "", &result)
         }

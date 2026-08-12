@@ -3,9 +3,7 @@ use std::{
     sync::atomic::{AtomicBool, Ordering},
 };
 
-use thiserror::Error;
-
-use crate::{AuthorizationError, DiagnosticAction, DiagnosticPermit};
+use crate::{DiagnosticAction, DiagnosticPermit};
 
 use super::heap_profile_error::HeapProfileError;
 

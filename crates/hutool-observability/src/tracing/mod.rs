@@ -1,13 +1,11 @@
 //! Reloadable tracing configuration owned by the final application.
 
 use std::{env, ffi::OsString};
-
-use thiserror::Error;
 pub use tracing::{Level, debug, error, event, info, instrument, span, trace, warn};
 use tracing_subscriber::{
     EnvFilter, Registry, fmt,
     layer::SubscriberExt,
-    reload::{self, Handle},
+    reload::{self},
     util::SubscriberInitExt,
 };
 
@@ -19,6 +17,8 @@ pub use filter_reload_handle::FilterReloadHandle;
 pub use tracing_config::TracingConfig;
 pub use tracing_error::TracingError;
 
+/// Installs the global tracing subscriber from `config` and returns a handle
+/// that can later reload the active filter.
 pub fn install(config: &TracingConfig) -> Result<FilterReloadHandle, TracingError> {
     let (filter, handle) = reloadable_filter(config)?;
     tracing_subscriber::registry()
@@ -29,6 +29,8 @@ pub fn install(config: &TracingConfig) -> Result<FilterReloadHandle, TracingErro
     Ok(handle)
 }
 
+/// Builds a reloadable filter layer from `config` without installing it. The
+/// returned handle can be used by [`reload_filter`].
 pub fn reloadable_filter(
     config: &TracingConfig,
 ) -> Result<(reload::Layer<EnvFilter, Registry>, FilterReloadHandle), TracingError> {
@@ -36,6 +38,7 @@ pub fn reloadable_filter(
     Ok(reload::Layer::new(filter))
 }
 
+/// Reloads the active tracing filter to the given `filter` expression.
 pub fn reload_filter(handle: &FilterReloadHandle, filter: &str) -> Result<(), TracingError> {
     let filter =
         EnvFilter::try_new(filter).map_err(|error| TracingError::Filter(error.to_string()))?;

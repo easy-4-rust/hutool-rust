@@ -1,10 +1,3 @@
-use std::{
-    collections::BTreeMap,
-    sync::{Arc, RwLock},
-    time::{SystemTime, UNIX_EPOCH},
-};
-
-use serde::Serialize;
 use thiserror::Error;
 
 /// Health registry failures.
@@ -20,5 +13,3 @@ pub enum HealthError {
     #[error("health registry lock is poisoned")]
     Poisoned,
 }
-
-use super::{unix_time_ms};

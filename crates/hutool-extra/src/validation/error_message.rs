@@ -5,8 +5,6 @@
 //!
 //! `ValidationUtil` / Hibernate Validator remain planned — Java bean-validation SPI.
 
-use super::bean_validation_result::BeanValidationResult;
-
 /// Single property validation failure (Hutool `BeanValidationResult.ErrorMessage`).
 ///
 /// 对齐 Java 内部类: `cn.hutool.extra.validation.BeanValidationResult.ErrorMessage`

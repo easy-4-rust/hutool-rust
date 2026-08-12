@@ -1,8 +1,6 @@
 //! 对齐: `cn.hutool.core.comparator.PropertyComparator` / `FieldsComparator`
 //! 来源: hutool-core PropertyComparator / FieldsComparator / FuncComparator
 
-use std::cmp::Ordering;
-
 /// 多字段比较器 —— 对齐 Java `FieldsComparator`。
 pub struct FieldsComparator<T> {
     extractors: Vec<Box<dyn Fn(&T) -> Option<i32> + Send + Sync>>,
@@ -28,4 +26,4 @@ impl<T> FieldsComparator<T> {
     }
 }
 
-use super::{compare_nullable_i32, compare_nullable_str};
+use super::compare_nullable_i32;

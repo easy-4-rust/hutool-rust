@@ -11,7 +11,7 @@
 //! 来源: hutool-setting/src/test/java/cn/hutool/setting/**
 
 use hutool_setting::{
-    GroupedMap, Props, PropsUtil, Setting, SettingUtil, YamlUtil, DEFAULT_ENCODING,
+    DEFAULT_ENCODING, GroupedMap, Props, PropsUtil, Setting, SettingUtil, YamlUtil,
 };
 use serde::Deserialize;
 use std::collections::HashMap;
@@ -85,9 +85,8 @@ fn setting_loader_test() {
 /// 对齐 Java: `SettingTest.settingTest()`
 #[test]
 fn setting_test() {
-    let setting =
-        Setting::from_path_with_options(resource("test.setting"), DEFAULT_ENCODING, true)
-            .expect("load test.setting");
+    let setting = Setting::from_path_with_options(resource("test.setting"), DEFAULT_ENCODING, true)
+        .expect("load test.setting");
 
     let driver = setting.get_by_group("driver", "demo");
     assert_eq!(driver.as_deref(), Some("com.mysql.jdbc.Driver"));
@@ -110,8 +109,8 @@ fn setting_test() {
 fn setting_test_for_abs_path() {
     let abs = resource("test.setting");
     assert!(abs.is_absolute());
-    let setting = Setting::from_path_with_options(&abs, DEFAULT_ENCODING, true)
-        .expect("absolute path load");
+    let setting =
+        Setting::from_path_with_options(&abs, DEFAULT_ENCODING, true).expect("absolute path load");
     assert_eq!(
         setting.get_by_group("driver", "demo").as_deref(),
         Some("com.mysql.jdbc.Driver")

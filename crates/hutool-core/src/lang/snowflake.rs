@@ -2,7 +2,7 @@
 //! 来源: hutool-core/src/main/java/cn/hutool/core/lang/Snowflake.java
 
 use parking_lot::Mutex;
-use rand::Rng;
+use rand::RngExt;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 /// 默认起始时间（Thu, 04 Nov 2010 01:42:54 GMT）
@@ -51,7 +51,10 @@ impl Snowflake {
         time_offset: i64,
         random_sequence_limit: i64,
     ) -> Self {
-        assert!((0..=MAX_WORKER_ID).contains(&worker_id), "workerId out of range");
+        assert!(
+            (0..=MAX_WORKER_ID).contains(&worker_id),
+            "workerId out of range"
+        );
         assert!(
             (0..=MAX_DATA_CENTER_ID).contains(&data_center_id),
             "dataCenterId out of range"
@@ -109,7 +112,7 @@ impl Snowflake {
             }
             g.sequence = sequence;
         } else if self.random_sequence_limit > 1 {
-            g.sequence = rand::thread_rng().gen_range(0..self.random_sequence_limit);
+            g.sequence = rand::rng().random_range(0..self.random_sequence_limit);
         } else {
             g.sequence = 0;
         }
@@ -180,7 +183,8 @@ mod snowflake_idiomatic_parity {
         assert!(sf.get_generate_date_time(id) > DEFAULT_TWEPOCH);
         let s = sf.next_id_str();
         assert!(!s.is_empty());
-        let (lo, hi) = sf.get_id_scope_by_timestamp(DEFAULT_TWEPOCH + 1000, DEFAULT_TWEPOCH + 2000, true);
+        let (lo, hi) =
+            sf.get_id_scope_by_timestamp(DEFAULT_TWEPOCH + 1000, DEFAULT_TWEPOCH + 2000, true);
         assert!(hi >= lo);
     }
 }

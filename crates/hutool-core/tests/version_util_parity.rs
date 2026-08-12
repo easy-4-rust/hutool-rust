@@ -27,18 +27,36 @@ use hutool_core::VersionUtil;
 #[test]
 fn is_greater_than_test() {
     let cur = " 1.0.2";
-    assert!(VersionUtil::is_greater_than_str(cur, "1.0.1"), "(对齐 Java isGreaterThan 第 1 组)");
-    assert!(VersionUtil::is_greater_than_str(cur, "1"), "(对齐 Java isGreaterThan 第 2 组)");
-    assert!(!VersionUtil::is_greater_than_str(cur, "1.1"), "(对齐 Java isGreaterThan 第 3 组)");
+    assert!(
+        VersionUtil::is_greater_than_str(cur, "1.0.1"),
+        "(对齐 Java isGreaterThan 第 1 组)"
+    );
+    assert!(
+        VersionUtil::is_greater_than_str(cur, "1"),
+        "(对齐 Java isGreaterThan 第 2 组)"
+    );
+    assert!(
+        !VersionUtil::is_greater_than_str(cur, "1.1"),
+        "(对齐 Java isGreaterThan 第 3 组)"
+    );
 }
 
 /// 对齐 Java: `VersionUtilTest.isGreaterThanOrEqual()` (行 22-28)
 #[test]
 fn is_greater_than_or_equal_test() {
     let cur = "1.0.2 ";
-    assert!(VersionUtil::is_greater_than_or_equal_str(cur, "1.0.1"), "(对齐 Java)");
-    assert!(VersionUtil::is_greater_than_or_equal_str(cur, "1.0.2"), "(对齐 Java)");
-    assert!(!VersionUtil::is_greater_than_or_equal_str(cur, "1.1"), "(对齐 Java)");
+    assert!(
+        VersionUtil::is_greater_than_or_equal_str(cur, "1.0.1"),
+        "(对齐 Java)"
+    );
+    assert!(
+        VersionUtil::is_greater_than_or_equal_str(cur, "1.0.2"),
+        "(对齐 Java)"
+    );
+    assert!(
+        !VersionUtil::is_greater_than_or_equal_str(cur, "1.1"),
+        "(对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `VersionUtilTest.isLessThan()` (行 30-37)
@@ -55,19 +73,40 @@ fn is_less_than_test() {
 #[test]
 fn is_less_than_or_equal_test() {
     let cur = "1.0.2";
-    assert!(VersionUtil::is_less_than_or_equal_str(cur, "1.0.2"), "(对齐 Java)");
-    assert!(!VersionUtil::is_less_than_or_equal_str(cur, "1.0.1"), "(对齐 Java)");
-    assert!(VersionUtil::is_less_than_or_equal_str(cur, "1.1"), "(对齐 Java)");
+    assert!(
+        VersionUtil::is_less_than_or_equal_str(cur, "1.0.2"),
+        "(对齐 Java)"
+    );
+    assert!(
+        !VersionUtil::is_less_than_or_equal_str(cur, "1.0.1"),
+        "(对齐 Java)"
+    );
+    assert!(
+        VersionUtil::is_less_than_or_equal_str(cur, "1.1"),
+        "(对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `VersionUtilTest.matchEl()` (行 47-56)
 #[test]
 fn match_el_test() {
     let cur = "1.0.2";
-    assert!(VersionUtil::match_el(cur, "1.0.1;1.0.2").unwrap(), "(对齐 Java 第 1 组)");
-    assert!(!VersionUtil::match_el(cur, "1.0.1;1.0.3").unwrap(), "(对齐 Java 第 2 组)");
-    assert!(VersionUtil::match_el(cur, "1.0.9;1.0.1-1.0.2").unwrap(), "(对齐 Java 第 3 组)");
-    assert!(VersionUtil::match_el(cur, "1.0.9;1.0.1-1.0.3").unwrap(), "(对齐 Java 第 4 组)");
+    assert!(
+        VersionUtil::match_el(cur, "1.0.1;1.0.2").unwrap(),
+        "(对齐 Java 第 1 组)"
+    );
+    assert!(
+        !VersionUtil::match_el(cur, "1.0.1;1.0.3").unwrap(),
+        "(对齐 Java 第 2 组)"
+    );
+    assert!(
+        VersionUtil::match_el(cur, "1.0.9;1.0.1-1.0.2").unwrap(),
+        "(对齐 Java 第 3 组)"
+    );
+    assert!(
+        VersionUtil::match_el(cur, "1.0.9;1.0.1-1.0.3").unwrap(),
+        "(对齐 Java 第 4 组)"
+    );
     assert!(
         VersionUtil::match_el_with_delimiter(cur, "1.0.9,1.0.1-1.0.3", ",").unwrap(),
         "自定义分隔符 ,(对齐 Java 第 5 组)"
@@ -125,19 +164,43 @@ fn match_el_range_boundary_cases() {
     let cur = "1.0.2";
 
     // 左边界为空
-    assert!(VersionUtil::match_el(cur, "-1.0.3").unwrap(), "-1.0.3 (对齐 Java)");
-    assert!(VersionUtil::match_el(cur, "-1.0.2").unwrap(), "-1.0.2 (对齐 Java)");
-    assert!(!VersionUtil::match_el(cur, "-1.0.0").unwrap(), "-1.0.0 (对齐 Java)");
+    assert!(
+        VersionUtil::match_el(cur, "-1.0.3").unwrap(),
+        "-1.0.3 (对齐 Java)"
+    );
+    assert!(
+        VersionUtil::match_el(cur, "-1.0.2").unwrap(),
+        "-1.0.2 (对齐 Java)"
+    );
+    assert!(
+        !VersionUtil::match_el(cur, "-1.0.0").unwrap(),
+        "-1.0.0 (对齐 Java)"
+    );
 
     // 右边界为空
-    assert!(VersionUtil::match_el(cur, "1.0.0-").unwrap(), "1.0.0- (对齐 Java)");
-    assert!(VersionUtil::match_el(cur, "1.0.2-").unwrap(), "1.0.2- (对齐 Java)");
-    assert!(!VersionUtil::match_el(cur, "1.0.3-").unwrap(), "1.0.3- (对齐 Java)");
+    assert!(
+        VersionUtil::match_el(cur, "1.0.0-").unwrap(),
+        "1.0.0- (对齐 Java)"
+    );
+    assert!(
+        VersionUtil::match_el(cur, "1.0.2-").unwrap(),
+        "1.0.2- (对齐 Java)"
+    );
+    assert!(
+        !VersionUtil::match_el(cur, "1.0.3-").unwrap(),
+        "1.0.3- (对齐 Java)"
+    );
 
     // 双边界为空
     assert!(VersionUtil::match_el(cur, "-").unwrap(), "- (对齐 Java)");
-    assert!(VersionUtil::match_el("0.0.1", "-").unwrap(), "0.0.1 vs - (对齐 Java)");
-    assert!(VersionUtil::match_el("999.999.999", "-").unwrap(), "999.999.999 vs - (对齐 Java)");
+    assert!(
+        VersionUtil::match_el("0.0.1", "-").unwrap(),
+        "0.0.1 vs - (对齐 Java)"
+    );
+    assert!(
+        VersionUtil::match_el("999.999.999", "-").unwrap(),
+        "999.999.999 vs - (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `VersionUtilTest.issueIJNFQZTest()` (行 108-113)

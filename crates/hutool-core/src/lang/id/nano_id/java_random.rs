@@ -1,7 +1,7 @@
 //! 对齐: `cn.hutool.core.lang.id.NanoId`
 //! 来源: hutool-core/src/main/java/cn/hutool/core/lang/id/NanoId.java
 
-use rand::RngCore;
+use rand::Rng;
 
 use super::nano_id::NanoId;
 
@@ -73,7 +73,8 @@ impl NanoId {
         } else {
             (2usize << (((alphabet.len() - 1) as f64).log2().floor() as u32)) - 1
         };
-        let step = ((1.6 * mask as f64 * size as f64 / alphabet.len() as f64).ceil() as usize).max(1);
+        let step =
+            ((1.6 * mask as f64 * size as f64 / alphabet.len() as f64).ceil() as usize).max(1);
         let mut id = String::with_capacity(size);
         let mut count = 0usize;
         loop {
@@ -81,7 +82,7 @@ impl NanoId {
             if let Some(rng) = java_rng.as_mut() {
                 rng.next_bytes(&mut bytes);
             } else {
-                rand::thread_rng().fill_bytes(&mut bytes);
+                rand::rng().fill_bytes(&mut bytes);
             }
             for b in bytes {
                 let alphabet_index = (b as usize) & mask;

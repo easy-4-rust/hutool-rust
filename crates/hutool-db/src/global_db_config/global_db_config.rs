@@ -54,11 +54,24 @@ impl GlobalDbConfig {
     }
 
     /// 对齐 `GlobalDbConfig.setShowSql(boolean, boolean, boolean, Level)`
-    pub fn set_show_sql(is_show_sql: bool, is_format_sql: bool, is_show_params: bool, level: LogLevel) {
-        if let Ok(mut g) = SHOW_SQL.lock() { *g = is_show_sql; }
-        if let Ok(mut g) = FORMAT_SQL.lock() { *g = is_format_sql; }
-        if let Ok(mut g) = SHOW_PARAMS.lock() { *g = is_show_params; }
-        if let Ok(mut g) = SQL_LOG_LEVEL.lock() { *g = level; }
+    pub fn set_show_sql(
+        is_show_sql: bool,
+        is_format_sql: bool,
+        is_show_params: bool,
+        level: LogLevel,
+    ) {
+        if let Ok(mut g) = SHOW_SQL.lock() {
+            *g = is_show_sql;
+        }
+        if let Ok(mut g) = FORMAT_SQL.lock() {
+            *g = is_format_sql;
+        }
+        if let Ok(mut g) = SHOW_PARAMS.lock() {
+            *g = is_show_params;
+        }
+        if let Ok(mut g) = SQL_LOG_LEVEL.lock() {
+            *g = level;
+        }
     }
 
     /// 读取 show_sql

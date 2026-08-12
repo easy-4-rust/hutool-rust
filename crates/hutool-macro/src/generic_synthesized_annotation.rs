@@ -7,7 +7,9 @@ use super::annotation_attribute::AnnotationAttribute;
 use super::cacheable_annotation_attribute::CacheableAnnotationAttribute;
 use super::element::global_registry;
 use super::hierarchical::Hierarchical;
-use super::mirror::{AnnotationMirror, AnnotationTypeName, AnnotationValue, AttributeRef, ValueKind};
+use super::mirror::{
+    AnnotationMirror, AnnotationTypeName, AnnotationValue, AttributeRef, ValueKind,
+};
 use super::synthesized_annotation::SynthesizedAnnotation;
 
 /// 对齐 Java 类: `cn.hutool.core.annotation.GenericSynthesizedAnnotation`
@@ -37,7 +39,9 @@ impl GenericSynthesizedAnnotation {
         })
     }
 
-    fn load_attributes(annotation: &Arc<AnnotationMirror>) -> HashMap<String, Arc<dyn AnnotationAttribute>> {
+    fn load_attributes(
+        annotation: &Arc<AnnotationMirror>,
+    ) -> HashMap<String, Arc<dyn AnnotationAttribute>> {
         let registry = global_registry().read();
         let Some(schema) = registry.schema(annotation.annotation_type()) else {
             return HashMap::new();
@@ -96,7 +100,9 @@ impl SynthesizedAnnotation for GenericSynthesizedAnnotation {
     fn replace_attribute(
         &self,
         attribute_name: &str,
-        operator: Box<dyn Fn(Arc<dyn AnnotationAttribute>) -> Arc<dyn AnnotationAttribute> + Send + Sync>,
+        operator: Box<
+            dyn Fn(Arc<dyn AnnotationAttribute>) -> Arc<dyn AnnotationAttribute> + Send + Sync,
+        >,
     ) {
         let mut map = self.attributes.write().unwrap();
         if let Some(old) = map.get(attribute_name).cloned() {

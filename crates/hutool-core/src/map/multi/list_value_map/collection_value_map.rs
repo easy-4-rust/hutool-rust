@@ -1,8 +1,7 @@
 //! 对齐: `cn.hutool.core.map.multi.AbsCollValueMap`
 //! 来源: hutool-core/src/main/java/cn/hutool/core/map/multi/AbsCollValueMap.java
 
-use std::collections::HashMap;
-use std::hash::Hash;
+#![allow(dead_code)] // 对齐 Java CollectionValueMap，暂未接线，预留
 
 use super::list_value_map::ListValueMap;
 

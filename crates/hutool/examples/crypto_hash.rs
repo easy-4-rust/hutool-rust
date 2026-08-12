@@ -3,9 +3,7 @@
 //! 演示 RustCrypto 安全默认：SHA-256、HMAC-SHA256、AES-256-GCM 往返。
 //! 密码哈希（Argon2id）见库 API `hash_password` / `verify_password`。
 
-use hutool::crypto::{
-    aes256_gcm_decrypt, aes256_gcm_encrypt, hmac_sha256_hex, sha256_hex,
-};
+use hutool::crypto::{aes256_gcm_decrypt, aes256_gcm_encrypt, hmac_sha256_hex, sha256_hex};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let digest = sha256_hex("abc");

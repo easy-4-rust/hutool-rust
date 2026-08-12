@@ -4,8 +4,8 @@
 //! opaque SM2/P-256 byte params; no BouncyCastle provider is linked.
 
 use crate::{
-    read_pem_private_key, read_pem_public_key, sm2_private_from_hex, sm2_public_from_xy, CryptoError,
-    Sm2PrivateParams, Sm2PublicParams,
+    CryptoError, Sm2PrivateParams, Sm2PublicParams, read_pem_private_key, read_pem_public_key,
+    sm2_private_from_hex, sm2_public_from_xy,
 };
 use p256::elliptic_curve::sec1::{FromEncodedPoint, ToEncodedPoint};
 use p256::{EncodedPoint, PublicKey, SecretKey};
@@ -50,7 +50,11 @@ impl BcUtil {
     /// Encodes EC public key Q with compression flag.
     #[must_use]
     pub fn encode_ec_public_key_ex(public: &PublicKey, compressed: bool) -> Vec<u8> {
-        public.as_affine().to_encoded_point(compressed).as_bytes().to_vec()
+        public
+            .as_affine()
+            .to_encoded_point(compressed)
+            .as_bytes()
+            .to_vec()
     }
 
     /// Decodes SEC1 EC point from hex/base64 text (Hutool `BCUtil.decodeECPoint(String,…)`).
@@ -105,7 +109,10 @@ impl BcUtil {
     }
 
     /// Private params from raw `d` and domain.
-    pub fn to_private_params(d: &[u8], domain: EcDomainParams) -> Result<EcPrivateParams, CryptoError> {
+    pub fn to_private_params(
+        d: &[u8],
+        domain: EcDomainParams,
+    ) -> Result<EcPrivateParams, CryptoError> {
         if d.is_empty() || d.len() > 32 {
             return Err(CryptoError::InvalidPem);
         }

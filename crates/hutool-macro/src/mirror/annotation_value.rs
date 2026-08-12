@@ -2,8 +2,6 @@
 //!
 //! Rust 无 JVM 运行时注解，通过 [`AnnotationMirror`] + [`ElementHandle`] 表达注解实例与被注解元素。
 
-use std::collections::HashMap;
-use std::fmt;
 use std::sync::Arc;
 
 use super::annotation_mirror::AnnotationMirror;
@@ -12,14 +10,23 @@ use super::value_kind::ValueKind;
 /// 注解属性值。
 #[derive(Debug, Clone, PartialEq)]
 pub enum AnnotationValue {
+    /// 空值。
     Unit,
+    /// 布尔值。
     Bool(bool),
+    /// 32 位整数。
     I32(i32),
+    /// 64 位整数。
     I64(i64),
+    /// 浮点数。
     F64(f64),
+    /// 字符串。
     String(String),
+    /// Class 类型名。
     Class(String),
+    /// 值数组。
     Array(Vec<AnnotationValue>),
+    /// 嵌套注解。
     Annotation(Arc<AnnotationMirror>),
 }
 

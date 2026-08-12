@@ -2,10 +2,8 @@
 
 use std::sync::Arc;
 
-use crate::abstract_wrapped_annotation_attribute::AbstractWrappedAnnotationAttribute;
 use crate::annotation_attribute::AnnotationAttribute;
 use crate::mirror::AnnotationValue;
-use crate::wrapped_annotation_attribute::WrappedAnnotationAttribute;
 
 mod mirror_value_conflict_error;
 mod mirrored_annotation_attribute;
@@ -13,7 +11,10 @@ mod mirrored_annotation_attribute;
 pub use mirror_value_conflict_error::MirrorValueConflictError;
 pub use mirrored_annotation_attribute::MirroredAnnotationAttribute;
 
-fn mirror_value(original: &Arc<dyn AnnotationAttribute>, linked: &Arc<dyn AnnotationAttribute>) -> AnnotationValue {
+fn mirror_value(
+    original: &Arc<dyn AnnotationAttribute>,
+    linked: &Arc<dyn AnnotationAttribute>,
+) -> AnnotationValue {
     mirror_value_result(original, linked).unwrap_or_else(|e| panic!("{}", e.message))
 }
 

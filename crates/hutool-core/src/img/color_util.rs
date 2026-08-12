@@ -38,7 +38,11 @@ impl ColorUtil {
     /// 对齐 Java: `ColorUtil.getColor(int)` — packed RGB int。
     pub fn from_rgb_int(rgb: i32) -> (u8, u8, u8) {
         let v = rgb as u32;
-        (((v >> 16) & 0xff) as u8, ((v >> 8) & 0xff) as u8, (v & 0xff) as u8)
+        (
+            ((v >> 16) & 0xff) as u8,
+            ((v >> 8) & 0xff) as u8,
+            (v & 0xff) as u8,
+        )
     }
 
     /// 对齐 Java: `ColorUtil.toInt(Color)`
@@ -48,8 +52,8 @@ impl ColorUtil {
 
     /// 对齐 Java: `ColorUtil.randomColor()`
     pub fn random_color() -> (u8, u8, u8) {
-        use rand::Rng;
-        let mut rng = rand::thread_rng();
+        use rand::RngExt;
+        let mut rng = rand::rng();
         (rng.random(), rng.random(), rng.random())
     }
 

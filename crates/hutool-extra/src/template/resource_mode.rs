@@ -9,26 +9,17 @@
 //!   在各自的 `engine/<name>.rs` 子模块；本文件只提供配置 + facade。
 //! - 迁移状态：✅ 已实现（Phase 1.4 工作）
 
-use std::fmt;
-use std::path::Path;
-
-use thiserror::Error;
-
-use super::template_config::TemplateConfig;
-
 /// 资源加载方式，对齐 `cn.hutool.extra.template.TemplateConfig.ResourceMode`。
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum ResourceMode {
-    /// 从 ClassPath 加载模板
+    /// 从 `ClassPath` 加载模板
     ClassPath,
     /// 从 File 目录加载模板
     File,
-    /// 从 WebRoot 目录加载模板
+    /// 从 `WebRoot` 目录加载模板
     WebRoot,
     /// 从模板文本加载模板
     String,
-    /// 复合加载（File → ClassPath → WebRoot → String 顺序尝试）
+    /// 复合加载（File → `ClassPath` → `WebRoot` → String 顺序尝试）
     Composite,
 }
-
-use super::{DEFAULT_CONFIG, default_config};

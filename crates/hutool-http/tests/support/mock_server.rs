@@ -59,6 +59,9 @@ where
 }
 
 /// Serves multiple sequential requests on one listener.
+///
+/// 对齐测试脚手架中连续响应场景的辅助函数，当前未被测试直接调用。
+#[allow(dead_code)]
 pub async fn serve_sequence(responses: Vec<Vec<u8>>) -> (String, tokio::task::JoinHandle<()>) {
     let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
     let addr = listener.local_addr().unwrap();
@@ -74,6 +77,9 @@ pub async fn serve_sequence(responses: Vec<Vec<u8>>) -> (String, tokio::task::Jo
 }
 
 /// Returns a client configured for local mock servers.
+///
+/// 对齐测试脚手架中共享客户端配置的辅助函数，当前未被测试直接调用。
+#[allow(dead_code)]
 pub fn local_client() -> hutool_http::HttpClient {
     hutool_http::HttpClient::builder()
         .timeout(Duration::from_secs(5))
@@ -94,6 +100,9 @@ pub fn request_path(req: &str) -> &str {
 }
 
 /// Reads a header value from a raw HTTP request.
+///
+/// 对齐测试脚手架中原始请求头解析的辅助函数，当前未被测试直接调用。
+#[allow(dead_code)]
 pub fn request_header<'a>(req: &'a str, name: &str) -> Option<&'a str> {
     let needle = format!("{}:", name.to_ascii_lowercase());
     req.lines().find_map(|line| {

@@ -3,8 +3,8 @@
 //!
 //! 委托 `EscapeUtil::escape_html4`，避免与 util 层实现分叉。
 
-use crate::escape_util::EscapeUtil;
 use crate::Result;
+use crate::escape_util::EscapeUtil;
 
 /// 对齐 Java: `Html4Escape#`
 #[derive(Debug, Clone, Copy, Default)]

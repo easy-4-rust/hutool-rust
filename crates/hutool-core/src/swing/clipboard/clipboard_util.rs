@@ -25,7 +25,10 @@ pub struct ClipboardUtil;
 impl ClipboardUtil {
     /// 对齐 Java: `setStr(String)`
     pub fn set_str(value: &str) {
-        text_store().lock().expect("clipboard lock").replace(value.to_string());
+        text_store()
+            .lock()
+            .expect("clipboard lock")
+            .replace(value.to_string());
         let snapshot = Self::get_str().unwrap_or_default();
         for listener in listeners().lock().expect("listener lock").iter() {
             listener(&snapshot);

@@ -88,10 +88,6 @@ impl CharMatcherFinder {
 
     /// 对齐 Java: `CharMatcherFinder::end#int (int)`
     pub fn end(&self, start: i32) -> i32 {
-        if start < 0 {
-            -1
-        } else {
-            start + 1
-        }
+        if start < 0 { -1 } else { start + 1 }
     }
 }

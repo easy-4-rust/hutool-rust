@@ -3,9 +3,7 @@
 use std::collections::HashMap;
 use std::sync::Arc;
 
-use parking_lot::RwLock;
-
-use crate::mirror::{AnnotationMirror, AnnotationSchema, AnnotationTypeName, AnnotationValue};
+use crate::mirror::AnnotationMirror;
 
 pub use crate::mirror::ElementHandle;
 
@@ -68,5 +66,3 @@ impl<'a> TypeBuilder<'a> {
         self.registry.register_type(element)
     }
 }
-
-use super::{GLOBAL_REGISTRY, global_registry};

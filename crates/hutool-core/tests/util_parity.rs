@@ -106,10 +106,18 @@ fn page_trans_to_start_end_test() {
     // PageUtil 默认 first_page_no = 0(对齐 Java PageUtil 静态约定)
     let page_util = PageUtil::new(0);
     let start_end1 = page_util.start_end(0, 10);
-    assert_eq!(start_end1, [0, 10], "start_end(0, 10) = [0, 10] (对齐 Java transToStartEnd 第 1 组)");
+    assert_eq!(
+        start_end1,
+        [0, 10],
+        "start_end(0, 10) = [0, 10] (对齐 Java transToStartEnd 第 1 组)"
+    );
 
     let start_end2 = page_util.start_end(1, 10);
-    assert_eq!(start_end2, [10, 20], "start_end(1, 10) = [10, 20] (对齐 Java transToStartEnd 第 2 组)");
+    assert_eq!(
+        start_end2,
+        [10, 20],
+        "start_end(1, 10) = [10, 20] (对齐 Java transToStartEnd 第 2 组)"
+    );
 }
 
 /// 对齐 Java: `PageUtilTest.totalPage()`

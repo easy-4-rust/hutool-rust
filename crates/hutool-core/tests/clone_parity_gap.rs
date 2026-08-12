@@ -3,7 +3,7 @@
 //! 对齐: `cn.hutool.core.clone.CloneTest` / `DefaultCloneTest`
 //! 基于 hutool-core `CloneSupport` / `DefaultCloneable` / `Cloneable` 真实实现。
 
-use hutool_core::{CloneSupport, Cloneable, DefaultCloneable};
+use hutool_core::{CloneSupport, DefaultCloneable};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 struct Cat {
@@ -53,7 +53,7 @@ struct Car {
 fn clone_test_clone_test() {
     // 实现 Cloneable（Rust Clone）方式
     let cat = Cat::new();
-    let cat2: Cat = Cloneable::clone(&cat);
+    let cat2: Cat = cat.clone();
     assert_eq!(cat, cat2);
 }
 

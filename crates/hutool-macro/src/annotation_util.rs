@@ -8,11 +8,11 @@ use parking_lot::RwLock;
 
 use super::annotation_synthesizer::AnnotationSynthesizer;
 use super::combination_annotation_element::to_combination as combination_of;
-use super::element::{global_registry, ElementHandle};
+use super::element::{ElementHandle, global_registry};
 use super::generic_synthesized_aggregate_annotation::GenericSynthesizedAggregateAnnotation;
 use super::mirror::{
-    is_jdk_meta_annotation, is_not_jdk_meta_annotation, AnnotationMirror, AnnotationTypeName,
-    AnnotationValue, ValueKind,
+    AnnotationMirror, AnnotationTypeName, AnnotationValue, ValueKind, is_jdk_meta_annotation,
+    is_not_jdk_meta_annotation,
 };
 use super::scanner::annotation_scanner::{AnnotationScanner, Scanners};
 use super::scanner::meta_annotation_scanner::MetaAnnotationScanner;
@@ -62,7 +62,10 @@ impl AnnotationUtil {
     }
 
     /// 获取组合注解数组。
-    pub fn get_annotations(element: ElementHandle, to_combination: bool) -> Vec<Arc<AnnotationMirror>> {
+    pub fn get_annotations(
+        element: ElementHandle,
+        to_combination: bool,
+    ) -> Vec<Arc<AnnotationMirror>> {
         if to_combination {
             return combination_of(element).get_annotations();
         }
@@ -223,7 +226,10 @@ impl AnnotationUtil {
 /// AnnotationScanner 扩展。
 pub trait AnnotationScannerExt: AnnotationScanner {
     /// 扫描注解类型并返回列表。
-    fn get_annotations_for_type(&self, annotation_type: AnnotationTypeName) -> Vec<Arc<AnnotationMirror>> {
+    fn get_annotations_for_type(
+        &self,
+        annotation_type: AnnotationTypeName,
+    ) -> Vec<Arc<AnnotationMirror>> {
         MetaAnnotationScanner::new(true).get_meta_annotations(annotation_type)
     }
 }

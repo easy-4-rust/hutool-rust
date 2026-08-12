@@ -16,6 +16,8 @@ use crate::{CoreError, Result};
 pub trait LineHandler {
     /// 对齐 Java 接口，等待具体实现。
     fn pending_io_alignment() -> Result<()> {
-        Err(CoreError::PendingEngine("LineHandler::pending_io_alignment"))
+        Err(CoreError::PendingEngine(
+            "LineHandler::pending_io_alignment",
+        ))
     }
 }

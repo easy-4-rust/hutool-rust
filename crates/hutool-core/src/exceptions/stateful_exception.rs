@@ -51,7 +51,10 @@ impl StatefulException {
     }
 
     /// 对齐 Java: `StatefulException(String, Throwable)`
-    pub fn with_cause(message: impl Into<String>, cause: impl std::error::Error + Send + Sync + 'static) -> Self {
+    pub fn with_cause(
+        message: impl Into<String>,
+        cause: impl std::error::Error + Send + Sync + 'static,
+    ) -> Self {
         Self {
             status: 0,
             message: message.into(),

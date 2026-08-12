@@ -2,11 +2,8 @@
 
 use std::sync::Arc;
 
-use crate::hierarchical::{
-    ChooseSide, FarthestAndNewestPrioritySelector, FarthestAndOldestPrioritySelector,
-    Hierarchical, HierarchicalSelector, NearestAndNewestPrioritySelector,
-    NearestAndOldestPrioritySelector,
-};
+use crate::hierarchical::Hierarchical;
+
 use crate::synthesized_annotation::SynthesizedAnnotation;
 
 /// 测试用合成注解桩。
@@ -47,19 +44,36 @@ impl PartialEq for TestSynthesizedAnnotation {
 
 impl SynthesizedAnnotation for TestSynthesizedAnnotation {
     fn get_annotation(&self) -> Arc<crate::mirror::AnnotationMirror> {
-        Arc::new(crate::mirror::AnnotationMirror::new("test.Test", Default::default()))
+        Arc::new(crate::mirror::AnnotationMirror::new(
+            "test.Test",
+            Default::default(),
+        ))
     }
     fn has_attribute(&self, _attribute_name: &str, _return_type: crate::mirror::ValueKind) -> bool {
         false
     }
-    fn get_attributes(&self) -> std::collections::HashMap<String, Arc<dyn crate::annotation_attribute::AnnotationAttribute>> {
+    fn get_attributes(
+        &self,
+    ) -> std::collections::HashMap<String, Arc<dyn crate::annotation_attribute::AnnotationAttribute>>
+    {
         Default::default()
     }
-    fn set_attribute(&self, _attribute_name: &str, _attribute: Arc<dyn crate::annotation_attribute::AnnotationAttribute>) {}
+    fn set_attribute(
+        &self,
+        _attribute_name: &str,
+        _attribute: Arc<dyn crate::annotation_attribute::AnnotationAttribute>,
+    ) {
+    }
     fn replace_attribute(
         &self,
         _attribute_name: &str,
-        _operator: Box<dyn Fn(Arc<dyn crate::annotation_attribute::AnnotationAttribute>) -> Arc<dyn crate::annotation_attribute::AnnotationAttribute> + Send + Sync>,
+        _operator: Box<
+            dyn Fn(
+                    Arc<dyn crate::annotation_attribute::AnnotationAttribute>,
+                ) -> Arc<dyn crate::annotation_attribute::AnnotationAttribute>
+                + Send
+                + Sync,
+        >,
     ) {
     }
     fn get_attribute_value(&self, _attribute_name: &str) -> Option<crate::mirror::AnnotationValue> {
@@ -69,5 +83,3 @@ impl SynthesizedAnnotation for TestSynthesizedAnnotation {
         "test.Test"
     }
 }
-
-use super::{SelectorAdapter, wrap};

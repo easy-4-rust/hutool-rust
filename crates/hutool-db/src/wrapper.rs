@@ -30,7 +30,11 @@ impl Wrapper {
             return field.to_string();
         }
         let lower = field.to_ascii_lowercase();
-        if lower.contains('*') || field.contains('(') || field.contains(' ') || lower.contains(" as ") {
+        if lower.contains('*')
+            || field.contains('(')
+            || field.contains(' ')
+            || lower.contains(" as ")
+        {
             return field.to_string();
         }
         if field.contains('.') {
@@ -53,7 +57,11 @@ impl Wrapper {
             return field.to_string();
         }
         let lower = field.to_ascii_lowercase();
-        if lower.contains('*') || field.contains('(') || field.contains(' ') || lower.contains(" as ") {
+        if lower.contains('*')
+            || field.contains('(')
+            || field.contains(' ')
+            || lower.contains(" as ")
+        {
             return field.to_string();
         }
         if field.contains('.') {

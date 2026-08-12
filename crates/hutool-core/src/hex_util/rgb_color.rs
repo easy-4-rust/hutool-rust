@@ -3,13 +3,6 @@
 /// 对齐: `cn.hutool.core.util.HexUtil.RGBColor`
 /// RGB 颜色
 
-use std::num::ParseIntError;
-
-use encoding_rs::{Encoding, UTF_8, UTF_16BE, UTF_16LE};
-use num_bigint::BigInt;
-
-use crate::{Base16Codec, CoreError};
-
 /// An RGB color whose channels are always in the valid `0..=255` range.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct RgbColor {

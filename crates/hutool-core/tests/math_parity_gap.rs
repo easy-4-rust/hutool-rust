@@ -3,7 +3,9 @@
 //! 对齐: `cn.hutool.core.math.*` 未覆盖 @Test
 //! 来源: hutool-core/src/test/java/cn/hutool/core/math/**
 
-use hutool_core::math::{Arrangement, Calculator, Combination, MathUtil, Money, ArithmeticOverflow};
+use hutool_core::math::{
+    ArithmeticOverflow, Arrangement, Calculator, Combination, MathUtil, Money,
+};
 use num_bigint::BigInt;
 
 /// 浮点近似相等断言。
@@ -129,7 +131,11 @@ fn calculator_conversation_test4() {
 /// 对齐 Java: `CalculatorTest.conversationTest5()`
 #[test]
 fn calculator_conversation_test5() {
-    assert_f64_eq(Calculator::conversion("((1/1) / (1/1) -1) * 100"), 0.0, 0.001);
+    assert_f64_eq(
+        Calculator::conversion("((1/1) / (1/1) -1) * 100"),
+        0.0,
+        0.001,
+    );
 }
 
 /// 对齐 Java: `CalculatorTest.conversationTest6()`
@@ -210,7 +216,10 @@ fn combination_count_test() {
     assert_eq!(list.len() as i64, Combination::count(5, 2));
     assert_eq!(list[0], vec!["1", "2"]);
     assert_eq!(list[9], vec!["4", "5"]);
-    assert_eq!(combination.select_all().len() as i64, Combination::count_all(5));
+    assert_eq!(
+        combination.select_all().len() as i64,
+        Combination::count_all(5)
+    );
     assert_eq!(combination.select(0).len(), 1);
 }
 
@@ -248,7 +257,10 @@ fn combination_test_count_big_negative_input() {
 /// 对齐 Java: `CombinationTest.testCountBig_symmetry()`
 #[test]
 fn combination_test_count_big_symmetry() {
-    assert_eq!(Combination::count_big(20, 3), Combination::count_big(20, 17));
+    assert_eq!(
+        Combination::count_big(20, 3),
+        Combination::count_big(20, 17)
+    );
 }
 
 /// 对齐 Java: `CombinationTest.testCountBig_largeNumbers()`
@@ -319,7 +331,11 @@ fn money_yuan_to_cent_test() {
 #[test]
 fn money_cent_to_yuan_test() {
     let money = Money::from_yuan_cent(1234, 56);
-    assert_f64_eq(money.get_amount().to_string().parse::<f64>().unwrap(), 1234.56, 0.001);
+    assert_f64_eq(
+        money.get_amount().to_string().parse::<f64>().unwrap(),
+        1234.56,
+        0.001,
+    );
     assert_f64_eq(MathUtil::cent_to_yuan(123_456), 1234.56, 0.001);
 }
 

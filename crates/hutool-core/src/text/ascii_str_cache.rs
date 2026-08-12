@@ -19,8 +19,7 @@ impl AsciiStrCache {
     fn cache() -> &'static [String; ASCII_LENGTH] {
         static CACHE: OnceLock<[String; ASCII_LENGTH]> = OnceLock::new();
         CACHE.get_or_init(|| {
-            let mut arr: [String; ASCII_LENGTH] =
-                std::array::from_fn(|_| String::new());
+            let mut arr: [String; ASCII_LENGTH] = std::array::from_fn(|_| String::new());
             for (i, slot) in arr.iter_mut().enumerate() {
                 *slot = (i as u8 as char).to_string();
             }

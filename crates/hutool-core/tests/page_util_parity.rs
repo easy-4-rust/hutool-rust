@@ -22,7 +22,10 @@ fn total_page_zero() {
 
 #[test]
 fn total_page_i64() {
-    assert_eq!(PageUtil::total_page_i64(1000000000000, 1000).unwrap(), 1000000000);
+    assert_eq!(
+        PageUtil::total_page_i64(1000000000000, 1000).unwrap(),
+        1000000000
+    );
 }
 
 // ── segment (instance method) ──

@@ -159,14 +159,14 @@ impl PathUtil {
 
     /// 对齐 Java: `PathUtil.copyFile(Path, Path)`
     pub fn copy_file(src: &Path, target: &Path) -> io::Result<PathBuf> {
-        let target_path = if Self::is_directory(target) {
-            target.join(
-                src.file_name()
-                    .ok_or_else(|| io::Error::new(io::ErrorKind::InvalidInput, "empty source name"))?,
-            )
-        } else {
-            target.to_path_buf()
-        };
+        let target_path =
+            if Self::is_directory(target) {
+                target.join(src.file_name().ok_or_else(|| {
+                    io::Error::new(io::ErrorKind::InvalidInput, "empty source name")
+                })?)
+            } else {
+                target.to_path_buf()
+            };
         Self::mk_parent_dirs(&target_path)?;
         fs::copy(src, &target_path)?;
         Ok(target_path)
@@ -175,10 +175,10 @@ impl PathUtil {
     /// 对齐 Java: `PathUtil.copy(Path, Path)`
     pub fn copy(src: &Path, target: &Path) -> io::Result<PathBuf> {
         if Self::is_directory(src) {
-            let nested = target.join(
-                src.file_name()
-                    .ok_or_else(|| io::Error::new(io::ErrorKind::InvalidInput, "empty source name"))?,
-            );
+            let nested =
+                target.join(src.file_name().ok_or_else(|| {
+                    io::Error::new(io::ErrorKind::InvalidInput, "empty source name")
+                })?);
             Self::copy_content(src, &nested)
         } else {
             Self::copy_file(src, target)
@@ -219,14 +219,14 @@ impl PathUtil {
 
     /// 对齐 Java: `PathUtil.move(Path, Path, boolean)`
     pub fn move_path(src: &Path, target: &Path) -> io::Result<PathBuf> {
-        let dest = if Self::is_directory(target) {
-            target.join(
-                src.file_name()
-                    .ok_or_else(|| io::Error::new(io::ErrorKind::InvalidInput, "empty source name"))?,
-            )
-        } else {
-            target.to_path_buf()
-        };
+        let dest =
+            if Self::is_directory(target) {
+                target.join(src.file_name().ok_or_else(|| {
+                    io::Error::new(io::ErrorKind::InvalidInput, "empty source name")
+                })?)
+            } else {
+                target.to_path_buf()
+            };
         Self::mk_parent_dirs(&dest)?;
         fs::rename(src, &dest)?;
         Ok(dest)

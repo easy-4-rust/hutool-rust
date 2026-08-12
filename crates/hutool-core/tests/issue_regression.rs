@@ -1,11 +1,7 @@
 //! hutool-core Issue 回归测试
 //! 对齐: hutool-core Issue*Test 系列
 
-use hutool_core::{
-    CollUtil, ListUtil, BooleanUtil, HexUtil, HashUtil, IdcardUtil, PhoneUtil,
-    CoordinateUtil, Coordinate, DesensitizedUtil, VersionUtil, PageUtil,
-    CreditCodeUtil, NumberUtil, RandomUtil, ReflectUtil, ReUtil,
-};
+use hutool_core::{BooleanUtil, CollUtil, HashUtil, HexUtil, IdcardUtil, ListUtil, PhoneUtil};
 
 // ── Issue: 字符串处理 ──
 

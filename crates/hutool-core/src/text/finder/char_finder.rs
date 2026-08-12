@@ -75,10 +75,6 @@ impl CharFinder {
 
     /// Finder 匹配到的结束位置（单字符 +1）。
     pub fn end(&self, start: i32) -> i32 {
-        if start < 0 {
-            -1
-        } else {
-            start + 1
-        }
+        if start < 0 { -1 } else { start + 1 }
     }
 }

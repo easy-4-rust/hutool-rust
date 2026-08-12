@@ -1,7 +1,3 @@
-use std::collections::HashSet;
-
-use thiserror::Error;
-
 use super::radix_error::RadixError;
 
 /// Arbitrary-alphabet integer conversion compatible with Hutool's `RadixUtil`.
@@ -68,4 +64,4 @@ impl RadixUtil {
     }
 }
 
-use super::{MAX_RADIX, encode_unsigned, validate_alphabet};
+use super::{encode_unsigned, validate_alphabet};

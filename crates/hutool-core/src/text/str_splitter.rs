@@ -1,10 +1,10 @@
 //! 对齐: `cn.hutool.core.text.StrSplitter`
 //! 来源: hutool-core/src/main/java/cn/hutool/core/text/StrSplitter.java
 
+use crate::Result;
 use crate::text::finder::char_finder::CharFinder;
 use crate::text::finder::str_finder::StrFinder;
 use crate::text::split::split_iter::SplitIter;
-use crate::Result;
 use regex::Regex;
 
 /// 对齐 Java: `StrSplitter#`

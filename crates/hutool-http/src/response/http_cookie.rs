@@ -2,14 +2,6 @@
 //! 来源: hutool-http/src/main/java/cn/hutool/http/HttpCookie.java
 //! 中文说明: HTTP Cookie实现，解析Set-Cookie头部的名称/值对
 
-use crate::{HttpError, StatusCode, header};
-use encoding_rs::Encoding;
-use std::{
-    fmt,
-    io::Cursor,
-    path::{Path, PathBuf},
-};
-
 /// Simple cookie name/value pair parsed from `Set-Cookie` (Hutool `HttpCookie` subset).
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct HttpCookie {
@@ -41,5 +33,3 @@ impl HttpCookie {
         &self.value
     }
 }
-
-use super::{decode_rfc5987, filename_from_dispositions, from_hex, parse_set_cookie, percent_decode_lightweight, strip_quotes};

@@ -1,18 +1,16 @@
 //! Spring POJO facade，对齐 hutool 的 `cn.hutool.extra.spring.*`。
 //!
-//! **仅提供 trait 抽象**。具体 Spring Framework 依赖（ApplicationContext / BeanFactory）
-//! 是 Java-only，属于 unsafe-to-copy。Rust 用户应使用依赖注入框架（如 axum::Extension、
+//! **仅提供 trait 抽象**。具体 Spring Framework 依赖（ApplicationContext / `BeanFactory`）
+//! 是 Java-only，属于 unsafe-to-copy。Rust 用户应使用依赖注入框架（如 `axum::Extension`、
 //! shaku、self-rs 等）替代。
 
 use std::any::Any;
 use std::collections::HashMap;
-use std::sync::{Arc, OnceLock};
-
-use crate::HutoolException;
+use std::sync::Arc;
 
 /// Spring 应用上下文 trait，对齐 `org.springframework.context.ApplicationContext`。
 ///
-/// Rust 没有原生 Spring，此 trait 用作"通用 IoC 容器"抽象。
+/// Rust 没有原生 Spring，此 trait 用作"通用 `IoC` 容器"抽象。
 /// 用户可以提供自己的实现（基于任何 Rust DI 框架）。
 pub trait ApplicationContext: Send + Sync {
     /// 对齐 `ApplicationContext.getBean(Class)`：按类型获取 Bean
@@ -39,5 +37,3 @@ pub trait ApplicationContext: Send + Sync {
     /// 对齐 `ApplicationContext.publishEvent(Object)`：发布事件
     fn publish_event(&self, event: Arc<dyn Any + Send + Sync>);
 }
-
-use super::{APPLICATION_CONTEXT, enable_spring_util};

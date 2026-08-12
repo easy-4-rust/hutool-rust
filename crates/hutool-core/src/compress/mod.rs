@@ -184,7 +184,7 @@ impl<W: Write + Seek> ZipWriter<W> {
 
     /// Sets the archive comment.
     pub fn set_comment(&mut self, comment: impl Into<Box<str>>) -> &mut Self {
-        self.inner.set_comment(comment);
+        let _ = self.inner.set_comment(comment);
         self
     }
 

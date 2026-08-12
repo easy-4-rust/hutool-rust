@@ -4,7 +4,6 @@
 //! 异常链处理与包装工具。
 
 use std::error::Error;
-use std::fmt;
 use std::panic::Location;
 
 use super::exception_util::ExceptionUtil;
@@ -94,10 +93,7 @@ impl ExceptionUtil {
             return true;
         }
         if check_cause {
-            return err
-                .source()
-                .map(|source| source.is::<E>())
-                .unwrap_or(false);
+            return err.source().map(|source| source.is::<E>()).unwrap_or(false);
         }
         false
     }

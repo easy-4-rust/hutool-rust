@@ -1,8 +1,7 @@
 //! 对齐: `cn.hutool.core.map.multi.RowKeyTable` / `Table` / `AbsTable`
 //! 来源: hutool-core/.../multi/RowKeyTable.java
 
-use std::collections::HashMap;
-use std::hash::Hash;
+#![allow(dead_code)] // 对齐 Java AbsTable，暂未接线，预留
 
 use super::row_key_table::RowKeyTable;
 

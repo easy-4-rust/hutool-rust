@@ -76,7 +76,6 @@ impl CsvWriter {
         Ok(self)
     }
 
-
     /// 对齐 Java: `writeHeaderLine`
     pub fn write_header_line(&mut self, fields: &[&str]) -> Result<&mut Self> {
         let owned: Vec<String> = fields.iter().map(|s| (*s).to_string()).collect();

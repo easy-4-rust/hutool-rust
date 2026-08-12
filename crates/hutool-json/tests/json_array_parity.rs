@@ -34,7 +34,9 @@ fn add_null_test() {
 #[test]
 fn to_list_test() {
     let arr = hj::JSONUtil::parse(r#"[{"name":"a"},{"name":"b"}]"#).unwrap();
-    let list: Vec<String> = arr.as_array().unwrap()
+    let list: Vec<String> = arr
+        .as_array()
+        .unwrap()
         .iter()
         .map(|v| v["name"].as_str().unwrap().to_string())
         .collect();
@@ -54,7 +56,10 @@ fn get_by_path_test() {
 #[test]
 fn filter_include_test() {
     let arr = hj::JSONUtil::parse(r#"[{"name":"a","age":1},{"name":"b","age":2}]"#).unwrap();
-    let filtered: Vec<_> = arr.as_array().unwrap().iter()
+    let filtered: Vec<_> = arr
+        .as_array()
+        .unwrap()
+        .iter()
         .filter(|v| v.get("age") == Some(&json!(1)))
         .collect();
     assert_eq!(filtered.len(), 1, "filter include 应只保留 1 个");

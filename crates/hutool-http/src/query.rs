@@ -2,7 +2,7 @@
 //! 来源: hutool-http/src/main/java/cn/hutool/http/UrlQuery.java
 //! 中文说明: URL查询参数解析和构建，支持有序参数映射和URL编码
 
-use hutool_core::{percent_decode, Rfc3986, UrlUtil};
+use hutool_core::{Rfc3986, UrlUtil, percent_decode};
 use indexmap::IndexMap;
 use std::borrow::Cow;
 
@@ -121,6 +121,9 @@ impl QueryMap {
     }
 
     /// Inserts pairs from a string-keyed map (values use `Display`).
+    ///
+    /// 对齐 Java `QueryString` 批量插入的脚手架方法，当前未被直接调用。
+    #[allow(dead_code)]
     pub fn add_all<I, V>(mut self, params: I) -> Self
     where
         I: IntoIterator<Item = (String, V)>,

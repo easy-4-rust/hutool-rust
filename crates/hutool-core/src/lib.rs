@@ -14,55 +14,51 @@ mod char_util;
 mod charset_util;
 mod clone_support;
 mod codec;
-mod coll_stream_util;
-mod coll_util;
 mod collection;
-mod collection_adapters;
-mod collection_iter;
-mod collection_partition;
-mod collection_types;
+/// Hutool `cn.hutool.core.comparator` 对齐（Fn/Ord 包装；反射 Field 构造为 planned）。
+pub mod comparator;
 mod compiler;
 mod compress;
 mod coordinate_util;
+#[path = "util/credit_code_util.rs"]
 mod credit_code_util;
-mod date;
+pub mod date;
 mod desensitized_util;
 mod error;
+pub mod exceptions;
 mod getter;
 mod hash_util;
 mod hex_util;
 mod hutool_codec;
 mod id;
 mod idcard_util;
+#[cfg(feature = "img")]
+pub mod img;
+/// Hutool `cn.hutool.core.io` 子包（File/Path 工具等）。
+pub mod io;
 mod iter_util;
+mod lang;
 mod list_util;
+/// Hutool `cn.hutool.core.math` 对齐（排列组合 / Money / Calculator / BitStatus）。
+pub mod math;
 mod mutable;
+mod net;
 mod page_util;
 mod phone_util;
 mod radix_codec;
 mod radix_util;
 pub mod serialize_util;
 mod stream;
+#[path = "text/str_util.rs"]
 mod string;
 #[cfg(feature = "swing")]
 pub mod swing;
-mod text;
-mod version_util;
-mod lang;
-mod net;
-#[cfg(feature = "img")]
-pub mod img;
-pub mod exceptions;
-/// Hutool `cn.hutool.core.comparator` 对齐（Fn/Ord 包装；反射 Field 构造为 planned）。
-pub mod comparator;
-/// Hutool `cn.hutool.core.math` 对齐（排列组合 / Money / Calculator / BitStatus）。
-pub mod math;
-/// Hutool `cn.hutool.core.io` 子包（File/Path 工具等）。
-pub mod io;
+pub mod text;
 /// Hutool `cn.hutool.core.thread` 对齐（std::thread / 显式线程池构建；无 JVM ThreadLocal 全局）。
 pub mod thread;
-// annotation 模块已迁移到独立 crate hutool-macro
-// hutool-core 不再内嵌 annotation；facade crate (hutool) 负责 re-export
+mod version_util;
+// annotation 模块已迁移到独立 crate hutool-annotation。
+// 当前 workspace 仍由 hutool-macro 承载实现，facade crate (hutool) 负责统一 re-export。
 
 pub use advanced_codec::{
     HashIds, MorseCodec, base32_decode, base32_encode, base32_hex_decode, base32_hex_encode,
@@ -86,23 +82,13 @@ pub use codec::{
     base64_decode, base64_encode, base64_url_decode, base64_url_encode, hex_decode, hex_encode,
     percent_decode, percent_encode_component,
 };
-pub use coll_stream_util::CollStreamUtil;
-pub use coll_util::{BlockingQueue, CollUtil, CollectionKind, CreatedCollection};
-pub use collection::{distinct, group_by, partition};
-pub use collection_adapters::{
-    CollectionUtil, ComputeIter, LineIter, NodeListIter, SpliteratorUtil, TransCollection,
-    TransSpliterator,
-};
-pub use collection_iter::{
-    ArrayIter, CopiedIter, EnumerationIter, FilterIter, IterChain, IterableIter,
-    IteratorEnumeration, ResettableIter, TransIter,
-};
-pub use collection_partition::{
-    AvgPartition, Partition, PartitionIter, RandomAccessAvgPartition, RandomAccessPartition,
-};
-pub use collection_types::{
-    BoundedPriorityQueue, ConcurrentHashSet, UniqueKeySet, ring_next_for_len, ring_next_index,
-    ring_next_u64,
+pub use collection::{
+    ArrayIter, AvgPartition, BlockingQueue, BoundedPriorityQueue, CollStreamUtil, CollUtil,
+    CollectionKind, CollectionUtil, ComputeIter, ConcurrentHashSet, CopiedIter, CreatedCollection,
+    EnumerationIter, FilterIter, IterChain, IterableIter, IteratorEnumeration, LineIter,
+    NodeListIter, Partition, PartitionIter, RandomAccessAvgPartition, RandomAccessPartition,
+    ResettableIter, SpliteratorUtil, TransCollection, TransIter, TransSpliterator, UniqueKeySet,
+    distinct, group_by, partition, ring_next_for_len, ring_next_index, ring_next_u64,
 };
 pub use compiler::{
     ClassFileManager, ClassFileObject, CompileOutput, CompilerException, DEFAULT_MAX_SOURCE_BYTES,
@@ -154,12 +140,13 @@ pub use serialize_util::{
 };
 pub use stream::{CollectorCharacteristic, CollectorUtil, SimpleCollector, StreamUtil};
 pub use string::{
-    StrExt, clean_blank, contains, contains_ignore_case, cut, end_with, equals,
-    equals_ignore_case, fill, fill_after, fill_before, format_map, format_map_optional,
-    format_template, index_of_ignore_case, is_blank, last_index_of, last_index_of_ignore_case,
-    levenshtein_distance, length, lower_first, remove_all, remove_chars, repeat, replace,
-    reverse, reverse_by_code_point, similarity, similarity_str, split, start_with, str_or_empty,
-    strip, strip_ignore_case, truncate_by_byte_length, truncate_utf8, trim, upper_first,
+    StrExt, clean_blank, contains, contains_ignore_case, cut, end_with, equals, equals_ignore_case,
+    fill, fill_after, fill_before, format_map, format_map_optional, format_template,
+    index_of_ignore_case, indexed_format, is_blank, last_index_of, last_index_of_ignore_case,
+    length, levenshtein_distance, lower_first, remove_all, remove_chars, repeat, replace,
+    replace_by_code_point, reverse, reverse_by_code_point, similarity, similarity_str, split,
+    split_to_array, split_to_array_limit, start_with, str_or_empty, strip, strip_ignore_case,
+    sub_by_code_point, trim, truncate_by_byte_length, truncate_utf8, upper_first,
 };
 pub use version_util::{VersionError, VersionUtil};
 
@@ -173,7 +160,6 @@ pub mod prelude {
         PhoneUtil, RadixUtil, RgbColor, SerializationCodec, SerializeUtil, StrExt, VersionUtil,
     };
 }
-
 
 // ── 新增 util 模块 ──
 mod number_util;
@@ -216,9 +202,78 @@ pub use file_util::FileUtil;
 mod io_util;
 pub use io_util::IoUtil;
 mod random_util;
-pub use random_util::RandomUtil;
 pub use net::rfc3986::Rfc3986;
+pub use random_util::RandomUtil;
 
 /// 对齐 `cn.hutool.core.util.StrUtil`（高阶便捷方法，委托 `crate::string`）。
 #[path = "util/str_util.rs"]
 pub mod str_util;
+
+/// 对齐 `cn.hutool.core.bean` 子包（Bean 描述 / 属性拷贝 / 动态 Bean 等）。
+pub mod bean;
+pub use bean::copier::{
+    AbsCopier, BeanCopier, BeanCopierException, BeanCopierFactory, BeanToBeanCopier,
+    BeanToMapCopier, CopyOptions, IJSONTypeConverter, MapToBeanCopier, MapToMapCopier, ValueKind,
+    ValueProvider, ValueProviderToBeanCopier,
+};
+pub use bean::{BeanException, BeanUtil};
+
+// ── 补齐 1:1 API re-export（修复下游 crate 的 E0432 解析失败）──────────────
+mod map;
+pub use map::custom_key_map;
+pub use map::{
+    AbsEntry, BiMap, CamelCaseLinkedMap, CamelCaseMap, CaseInsensitiveLinkedMap,
+    CaseInsensitiveMap, CaseInsensitiveTreeMap, CustomKeyMap, FixedLinkedHashMap, FuncKeyMap,
+    FuncMap, LinkedForestMap, ListValueMap, MapBuilder, MapWrapper, RowKeyTable,
+    SafeConcurrentHashMap, SetValueMap, TableMap, TolerantMap, TransMap,
+};
+mod clone;
+pub mod convert;
+pub use clone::cloneable::Cloneable;
+mod zip_util;
+pub use zip_util::ZipUtil;
+mod runtime_util;
+pub use runtime_util::RuntimeUtil;
+mod primitive_array_util;
+pub use comparator::CompareUtil;
+pub use date::between_formatter::{BetweenFormatter, Level as BetweenFormatterLevel};
+pub use date::date_between::DateBetween;
+pub use date::date_field::DateField;
+pub use date::date_pattern::DatePattern;
+pub use date::date_range::DateRange;
+pub use date::date_time::DateTime;
+pub use date::date_unit::DateUnit;
+pub use date::group_time_interval::GroupTimeInterval;
+pub use date::local_date_time_util::LocalDateTimeUtil;
+pub use date::month::Month;
+pub use date::quarter::Quarter;
+pub use date::stop_watch::StopWatch;
+pub use date::temporal_accessor_util::TemporalAccessorUtil;
+pub use date::temporal_util::TemporalUtil;
+pub use date::time_interval::TimeInterval;
+pub use date::week::Week;
+pub use date::year_quarter::YearQuarter;
+pub use date::zodiac::Zodiac;
+pub use io::buffer_util::BufferUtil;
+pub use io::fast_byte_array_output_stream::FastByteArrayOutputStream;
+pub use io::fast_byte_buffer::FastByteBuffer;
+pub use io::file::file_name_util::FileNameUtil;
+pub use io::file::file_reader::FileReader;
+pub use io::file::file_writer::FileWriter;
+pub use io::file::line_separator::LineSeparator;
+pub use io::file::path_util::PathUtil;
+pub use io::io_runtime_exception::IORuntimeException;
+pub use io::null_output_stream::NullOutputStream;
+pub use io::unit::data_size::DataSize;
+pub use io::unit::data_size_util::DataSizeUtil;
+pub use io::unit::data_unit::DataUnit;
+pub use map_util::{CreateMapKind, EmptyMapKind, LinkedOrHashMap, NestedMapValue};
+pub use net::ipv4_util::Ipv4Util;
+pub use net::local_port_generater::LocalPortGenerater;
+pub use net::net_util::NetUtil;
+pub use net::url::url_builder::UrlBuilder;
+pub use net::url_decoder::UrlDecoder;
+pub use net::url_encode_util::UrlEncodeUtil;
+pub use net::url_encoder::UrlEncoder;
+pub use object_util::CharSequenceElement;
+pub use primitive_array_util::PrimitiveArrayUtil;

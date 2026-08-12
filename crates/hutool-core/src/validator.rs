@@ -232,7 +232,10 @@ impl Validator {
     }
 
     /// 对齐 Java: `Validator.checkIndexLimit(int, int)`
-    pub fn check_index_limit(index: usize, size: usize) -> std::result::Result<(), ValidateException> {
+    pub fn check_index_limit(
+        index: usize,
+        size: usize,
+    ) -> std::result::Result<(), ValidateException> {
         if index < size {
             Ok(())
         } else {
@@ -598,7 +601,9 @@ impl Validator {
 
     /// 对齐 Java: `Validator.hasChinese`
     pub fn has_chinese(value: &str) -> bool {
-        value.chars().any(|c| ('\u{4e00}'..='\u{9fff}').contains(&c))
+        value
+            .chars()
+            .any(|c| ('\u{4e00}'..='\u{9fff}').contains(&c))
     }
 
     /// 对齐 Java: `Validator.validateChinese`
@@ -709,9 +714,8 @@ impl Validator {
     /// 对齐 Java: `Validator.isChineseName`
     pub fn is_chinese_name(value: &str) -> bool {
         static RE: std::sync::OnceLock<regex::Regex> = std::sync::OnceLock::new();
-        let re = RE.get_or_init(|| {
-            regex::Regex::new("^[\u{3400}-\u{9FFF}\u{00b7}]{2,60}$").expect("cn")
-        });
+        let re = RE
+            .get_or_init(|| regex::Regex::new("^[\u{3400}-\u{9FFF}\u{00b7}]{2,60}$").expect("cn"));
         re.is_match(value)
     }
 

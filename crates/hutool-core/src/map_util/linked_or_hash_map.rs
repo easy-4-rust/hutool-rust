@@ -4,13 +4,10 @@
 //! Rust 版本提供 Map 操作的 idiomatic 实现。保留既有 `&HashMap` API，
 //! 并补充 Option / IndexMap / BTreeMap / 可变就地编辑等 Hutool 同名能力。
 
-use std::collections::{BTreeMap, HashMap};
-use std::fmt::Display;
+use std::collections::HashMap;
 use std::hash::Hash;
 
 use indexmap::IndexMap;
-
-use crate::{CoreError, Result};
 
 /// `newHashMap(isLinked)` 的 Rust 表达：有序用 IndexMap，无序用 HashMap。
 #[derive(Debug, Clone)]
@@ -51,5 +48,3 @@ impl<K: Eq + Hash, V> LinkedOrHashMap<K, V> {
         self.len() == 0
     }
 }
-
-use super::{DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR, simple_to_camel_case};

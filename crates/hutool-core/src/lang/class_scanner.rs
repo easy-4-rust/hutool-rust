@@ -1,5 +1,7 @@
 //! 对齐: `cn.hutool.core.lang.ClassScanner`（Rust 无可运行 classpath 扫描，提供可断言占位）
 
+#![allow(dead_code)] // 对齐 Java ClassScanner，暂未接线，预留
+
 /// 对齐 Java: `ClassScanner`
 pub struct ClassScanner;
 

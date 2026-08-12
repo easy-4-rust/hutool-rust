@@ -1,11 +1,6 @@
-use std::io::Write;
+use serde::Serialize;
 
-use serde::{Serialize, de::DeserializeOwned};
-use serde_json::Value;
-
-use crate::{
-    JSONArray, JSONConfig, JSONObject, JsonContainer, JsonError, Result, get_by_path, put_by_path,
-};
+use crate::{JSONArray, JSONConfig, JSONObject, Result};
 
 use super::json_util::JSONUtil;
 
@@ -28,5 +23,3 @@ impl ObjectMapper {
         JSONUtil::array_from(value, config)
     }
 }
-
-use super::{WriterMode, normalize_writer_value};

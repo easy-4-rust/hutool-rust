@@ -3,8 +3,6 @@
 //! Backed by the [`emojis`] crate (GitHub gemoji shortcodes) rather than
 //! emoji-java, with the same facade shapes Hutool callers expect.
 
-use std::collections::BTreeSet;
-
 /// Lightweight emoji metadata returned by lookup helpers.
 ///
 /// Java: `com.vdurmont.emoji.Emoji` stand-in (unicode + shortcode only).
@@ -34,5 +32,3 @@ impl Emoji {
         &self.name
     }
 }
-
-use super::{from_static, match_emoji_prefix, parse_html_codepoint, replace_emojis, skin_tone_type};

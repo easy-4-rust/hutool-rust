@@ -1,6 +1,4 @@
-use std::any::{Any, TypeId};
-
-use unicode_general_category::{GeneralCategory, get_general_category};
+use unicode_general_category::GeneralCategory;
 
 mod char_error;
 mod char_util;

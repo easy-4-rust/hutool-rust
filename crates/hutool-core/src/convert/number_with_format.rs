@@ -19,6 +19,7 @@ impl Default for NumberWithFormat {
 }
 
 impl NumberWithFormat {
+    /// 兼容 sentinel。
     pub fn pending_alignment() -> &'static str {
         "pending"
     }
@@ -28,10 +29,12 @@ impl NumberWithFormat {
         Self { value, format }
     }
 
+    /// 数值。
     pub fn value(&self) -> i64 {
         self.value
     }
 
+    /// 格式。
     pub fn format(&self) -> Option<&str> {
         self.format.as_deref()
     }

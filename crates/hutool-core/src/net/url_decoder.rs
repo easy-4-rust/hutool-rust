@@ -34,10 +34,7 @@ impl UrlDecoder {
             }
 
             if index > begin {
-                result.push_str(&Self::decode_sub(
-                    &chars[begin..index],
-                    is_plus_to_space,
-                ));
+                result.push_str(&Self::decode_sub(&chars[begin..index], is_plus_to_space));
             }
 
             let mut output = ch;
@@ -49,10 +46,7 @@ impl UrlDecoder {
         }
 
         if begin < length {
-            result.push_str(&Self::decode_sub(
-                &chars[begin..length],
-                is_plus_to_space,
-            ));
+            result.push_str(&Self::decode_sub(&chars[begin..length], is_plus_to_space));
         }
 
         result

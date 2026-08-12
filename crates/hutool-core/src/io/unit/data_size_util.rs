@@ -18,8 +18,7 @@ impl DataSizeUtil {
         if size <= 0 {
             return "0".to_string();
         }
-        let digit_groups = ((size as f64).log10() / 1024_f64.log10())
-            .floor() as usize;
+        let digit_groups = ((size as f64).log10() / 1024_f64.log10()).floor() as usize;
         let digit_groups = digit_groups.min(DataUnit::UNIT_NAMES.len() - 1);
         let value = size as f64 / 1024_f64.powi(digit_groups as i32);
         format!(

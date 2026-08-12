@@ -3,17 +3,8 @@
 //! 来源: hutool-cron/src/main/java/cn/hutool/cron/pattern/matcher/PatternMatcher.java
 //! 中文说明: 由 `PatternParser` 组装的七字段匹配器。
 
-
-use std::{fmt, str::FromStr};
-
-use chrono::{DateTime, Datelike, Duration as ChronoDuration, TimeZone, Timelike, Utc};
-use cron::Schedule;
-
-use crate::CronError;
-
 use super::part::Part;
 use super::part_matcher::PartMatcher;
-use super::pattern_parser::PatternParser;
 
 /// 对齐: `cn.hutool.cron.pattern.matcher.PatternMatcher`
 /// 中文说明: 由 `PatternParser` 组装的七字段匹配器。
@@ -58,6 +49,58 @@ impl PatternMatcher {
     }
 }
 
-use super::{apply_negative, checked_schedule_value, convert_hutool_dow_field, convert_hutool_dow_token, end_of_year, expand_field, expand_range, field_needs_expand};
-use super::{fields, hutool_dow_to_quartz, is_last_day_of_month, next_after_filtered, normalize_expanded, pad_fields, parse_alias, schedule_max};
-use super::{split_numeric_range};
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::pattern::bool_array_matcher::BoolArrayMatcher;
+
+    fn matcher_for(values: &[i32]) -> Box<dyn PartMatcher> {
+        Box::new(BoolArrayMatcher::new(values.iter().copied()).unwrap())
+    }
+
+    fn all_fields_matcher() -> PatternMatcher {
+        PatternMatcher::new(std::array::from_fn(|_| matcher_for(&[1])))
+    }
+
+    #[test]
+    fn pattern_matcher_matches_all_seven_fields() {
+        let matcher = all_fields_matcher();
+        // [秒, 分, 时, 日, 月, 周, 年] 全为 1 才匹配
+        assert!(matcher.matches([1, 1, 1, 1, 1, 1, 1]));
+        assert!(!matcher.matches([1, 2, 1, 1, 1, 1, 1]));
+        assert!(!matcher.matches([1, 1, 1, 1, 1, 1, 2]));
+    }
+
+    #[test]
+    fn pattern_matcher_get_by_part() {
+        let matcher = all_fields_matcher();
+        assert!(matcher.get(Part::Second).matches(1));
+        assert!(matcher.get(Part::Year).matches(1));
+        assert!(!matcher.get(Part::Hour).matches(0));
+    }
+
+    #[test]
+    fn matches_week_accepts_zero_and_seven_for_sunday() {
+        // 周字段匹配 {0}（周日）时，0 和 7 都匹配
+        let matcher = PatternMatcher::new(std::array::from_fn(|i| {
+            if i == Part::DayOfWeek.calendar_field() {
+                matcher_for(&[0])
+            } else {
+                matcher_for(&[1])
+            }
+        }));
+        assert!(matcher.matches_week(0));
+        assert!(!matcher.matches_week(1));
+        // 7 仅在 matcher 显式包含 7 时匹配（Java matchWeek 防御分支）
+        let seven_matcher = PatternMatcher::new(std::array::from_fn(|i| {
+            if i == Part::DayOfWeek.calendar_field() {
+                matcher_for(&[7])
+            } else {
+                matcher_for(&[1])
+            }
+        }));
+        assert!(seven_matcher.matches_week(7));
+        // 输入 0（周日）且 matcher 含 7 时同样匹配（对齐 Java：0 == dayOfWeek && matchValue(7)）
+        assert!(seven_matcher.matches_week(0));
+    }
+}

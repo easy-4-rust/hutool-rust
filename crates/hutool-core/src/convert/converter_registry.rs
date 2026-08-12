@@ -17,14 +17,17 @@ pub struct ConverterRegistry {
 static INSTANCE: OnceLock<ConverterRegistry> = OnceLock::new();
 
 impl ConverterRegistry {
+    /// 兼容 sentinel。
     pub fn pending_alignment() -> &'static str {
         "pending"
     }
 
+    /// 全局单例。
     pub fn get_instance() -> &'static ConverterRegistry {
         INSTANCE.get_or_init(ConverterRegistry::default)
     }
 
+    /// 创建空注册表。
     pub fn new() -> Self {
         Self::default()
     }
@@ -42,6 +45,11 @@ impl ConverterRegistry {
         self.custom_i32 = Some(f);
     }
 
+    /// 转换值到 int。
+    ///
+    /// # Errors
+    ///
+    /// 转换失败时返回 [`ConvertException`]。
     pub fn convert_i32(&self, value: &ConvertValue) -> Result<i32, ConvertException> {
         if let Some(f) = self.custom_i32 {
             return f(value).ok_or_else(|| ConvertException::new("custom convert failed"));
@@ -50,11 +58,17 @@ impl ConverterRegistry {
             .ok_or_else(|| ConvertException::new("convert to int failed"))
     }
 
+    /// 转换值到 long。
+    ///
+    /// # Errors
+    ///
+    /// 转换失败时返回 [`ConvertException`]。
     pub fn convert_i64(&self, value: &ConvertValue) -> Result<i64, ConvertException> {
         NumberConverter::convert_i64(value)
             .ok_or_else(|| ConvertException::new("convert to long failed"))
     }
 
+    /// 获取 Double 目标转换器。
     pub fn number_converter_double(&self) -> NumberConverter {
         NumberConverter::new(NumberTarget::Double)
     }

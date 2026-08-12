@@ -3,10 +3,6 @@
 //!
 //! 字符串拼接器(类似 Java `StringJoiner`,支持前缀/后缀/`null` 模式)。
 
-use crate::Result;
-
-use super::str_joiner::StrJoiner;
-
 /// 对齐 Java: `StrJoiner#NullMode` 枚举
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum NullMode {

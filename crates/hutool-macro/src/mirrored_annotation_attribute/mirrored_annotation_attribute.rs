@@ -16,7 +16,10 @@ pub struct MirroredAnnotationAttribute {
 
 impl MirroredAnnotationAttribute {
     /// 构造镜像属性。
-    pub fn new(original: Arc<dyn AnnotationAttribute>, linked: Arc<dyn AnnotationAttribute>) -> Arc<Self> {
+    pub fn new(
+        original: Arc<dyn AnnotationAttribute>,
+        linked: Arc<dyn AnnotationAttribute>,
+    ) -> Arc<Self> {
         Arc::new(Self {
             inner: AbstractWrappedAnnotationAttribute::new(
                 original,

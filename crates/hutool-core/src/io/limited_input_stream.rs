@@ -19,6 +19,8 @@ pub struct LimitedInputStream;
 impl LimitedInputStream {
     /// Sentinel used until the corresponding IO engine is implemented.
     pub fn pending_io_alignment() -> Result<()> {
-        Err(CoreError::PendingEngine("LimitedInputStream::pending_io_alignment"))
+        Err(CoreError::PendingEngine(
+            "LimitedInputStream::pending_io_alignment",
+        ))
     }
 }

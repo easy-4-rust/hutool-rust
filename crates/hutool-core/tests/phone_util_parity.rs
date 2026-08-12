@@ -29,15 +29,30 @@ fn test_check() {
     let err_mobile = "136123456781";
     let err_tel = "010-889931081";
 
-    assert!(PhoneUtil::is_mobile(mobile), "is_mobile(mobile) (对齐 Java)");
+    assert!(
+        PhoneUtil::is_mobile(mobile),
+        "is_mobile(mobile) (对齐 Java)"
+    );
     assert!(PhoneUtil::is_tel(tel), "is_tel(tel) (对齐 Java)");
     assert!(PhoneUtil::is_phone(mobile), "is_phone(mobile) (对齐 Java)");
     assert!(PhoneUtil::is_phone(tel), "is_phone(tel) (对齐 Java)");
 
-    assert!(!PhoneUtil::is_mobile(err_mobile), "is_mobile(errMobile) 应 false (对齐 Java)");
-    assert!(!PhoneUtil::is_tel(err_tel), "is_tel(errTel) 应 false (对齐 Java)");
-    assert!(!PhoneUtil::is_phone(err_mobile), "is_phone(errMobile) 应 false (对齐 Java)");
-    assert!(!PhoneUtil::is_phone(err_tel), "is_phone(errTel) 应 false (对齐 Java)");
+    assert!(
+        !PhoneUtil::is_mobile(err_mobile),
+        "is_mobile(errMobile) 应 false (对齐 Java)"
+    );
+    assert!(
+        !PhoneUtil::is_tel(err_tel),
+        "is_tel(errTel) 应 false (对齐 Java)"
+    );
+    assert!(
+        !PhoneUtil::is_phone(err_mobile),
+        "is_phone(errMobile) 应 false (对齐 Java)"
+    );
+    assert!(
+        !PhoneUtil::is_phone(err_tel),
+        "is_phone(errTel) 应 false (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `PhoneUtilTest.testTel()` (行 33-50)
@@ -45,11 +60,22 @@ fn test_check() {
 fn test_tel() {
     // 有效固定电话
     for s in ["010-12345678", "020-9999999", "0755-7654321"] {
-        assert!(PhoneUtil::is_tel(s), "is_tel({s:?}) 应 true (对齐 Java testTel 有效组)");
+        assert!(
+            PhoneUtil::is_tel(s),
+            "is_tel({s:?}) 应 true (对齐 Java testTel 有效组)"
+        );
     }
     // 无效固定电话
-    for s in ["010 12345678", "A20-9999999", "0755-7654.321", "13619887123"] {
-        assert!(!PhoneUtil::is_tel(s), "is_tel({s:?}) 应 false (对齐 Java testTel 无效组)");
+    for s in [
+        "010 12345678",
+        "A20-9999999",
+        "0755-7654.321",
+        "13619887123",
+    ] {
+        assert!(
+            !PhoneUtil::is_tel(s),
+            "is_tel({s:?}) 应 false (对齐 Java testTel 无效组)"
+        );
     }
 }
 
@@ -57,18 +83,42 @@ fn test_tel() {
 #[test]
 fn test_hide() {
     let mobile = "13612345678";
-    assert_eq!(PhoneUtil::hide_before(mobile), "*******5678", "hide_before (对齐 Java)");
-    assert_eq!(PhoneUtil::hide_between(mobile), "136****5678", "hide_between (对齐 Java)");
-    assert_eq!(PhoneUtil::hide_after(mobile), "1361234****", "hide_after (对齐 Java)");
+    assert_eq!(
+        PhoneUtil::hide_before(mobile),
+        "*******5678",
+        "hide_before (对齐 Java)"
+    );
+    assert_eq!(
+        PhoneUtil::hide_between(mobile),
+        "136****5678",
+        "hide_between (对齐 Java)"
+    );
+    assert_eq!(
+        PhoneUtil::hide_after(mobile),
+        "1361234****",
+        "hide_after (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `PhoneUtilTest.testSubString()` (行 61-67)
 #[test]
 fn test_sub_string() {
     let mobile = "13612345678";
-    assert_eq!(PhoneUtil::sub_before(mobile), "136", "sub_before (对齐 Java)");
-    assert_eq!(PhoneUtil::sub_between(mobile), "1234", "sub_between (对齐 Java)");
-    assert_eq!(PhoneUtil::sub_after(mobile), "5678", "sub_after (对齐 Java)");
+    assert_eq!(
+        PhoneUtil::sub_before(mobile),
+        "136",
+        "sub_before (对齐 Java)"
+    );
+    assert_eq!(
+        PhoneUtil::sub_between(mobile),
+        "1234",
+        "sub_between (对齐 Java)"
+    );
+    assert_eq!(
+        PhoneUtil::sub_after(mobile),
+        "5678",
+        "sub_after (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `PhoneUtilTest.testNewTel()` (行 69-98)
@@ -76,15 +126,29 @@ fn test_sub_string() {
 fn test_new_tel() {
     // 有效固定电话(含可选 - 分隔符)
     for s in [
-        "010-12345678", "01012345678",
-        "020-9999999", "0209999999",
-        "0755-7654321", "07557654321",
+        "010-12345678",
+        "01012345678",
+        "020-9999999",
+        "0209999999",
+        "0755-7654321",
+        "07557654321",
     ] {
-        assert!(PhoneUtil::is_tel(s), "is_tel({s:?}) 应 true (对齐 Java testNewTel 有效组)");
+        assert!(
+            PhoneUtil::is_tel(s),
+            "is_tel({s:?}) 应 true (对齐 Java testNewTel 有效组)"
+        );
     }
     // 无效
-    for s in ["010 12345678", "A20-9999999", "0755-7654.321", "13619887123"] {
-        assert!(!PhoneUtil::is_tel(s), "is_tel({s:?}) 应 false (对齐 Java testNewTel 无效组)");
+    for s in [
+        "010 12345678",
+        "A20-9999999",
+        "0755-7654.321",
+        "13619887123",
+    ] {
+        assert!(
+            !PhoneUtil::is_tel(s),
+            "is_tel({s:?}) 应 false (对齐 Java testNewTel 无效组)"
+        );
     }
 
     // subTelBefore / subTelAfter

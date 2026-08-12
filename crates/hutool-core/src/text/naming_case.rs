@@ -29,7 +29,11 @@ impl NamingCase {
             let mut c = chars[i];
             if c.is_uppercase() {
                 let pre = if i > 0 { Some(chars[i - 1]) } else { None };
-                let next = if i + 1 < length { Some(chars[i + 1]) } else { None };
+                let next = if i + 1 < length {
+                    Some(chars[i + 1])
+                } else {
+                    None
+                };
                 if let Some(pre_char) = pre {
                     if symbol == pre_char {
                         if next.is_none() || next.map(|n| n.is_lowercase()).unwrap_or(false) {
@@ -38,7 +42,9 @@ impl NamingCase {
                     } else if pre_char.is_lowercase() {
                         sb.push(symbol);
                         if next.is_none()
-                            || next.map(|n| n.is_lowercase() || n.is_ascii_digit()).unwrap_or(false)
+                            || next
+                                .map(|n| n.is_lowercase() || n.is_ascii_digit())
+                                .unwrap_or(false)
                         {
                             c = c.to_lowercase().next().unwrap_or(c);
                         }

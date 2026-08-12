@@ -1,24 +1,16 @@
 //! Explicit, injectable SMTP and MIME mail support.
 
-use std::{fmt, time::Duration};
-
-pub use lettre::message::Mailbox;
-use lettre::{
-    AsyncSmtpTransport, AsyncTransport, Message, Tokio1Executor,
-    message::{Attachment, MultiPart, SinglePart, header::ContentType},
-    transport::smtp::{authentication::Credentials, response::Response},
-};
-use secrecy::{ExposeSecret, SecretString};
+use lettre::message::header::ContentType;
 
 use crate::{ExtraError, Result};
 
 /// Owned MIME attachment or inline resource.
 #[derive(Debug, Clone)]
 pub struct MailAttachment {
-    name_or_cid: String,
-    content_type: ContentType,
-    bytes: Vec<u8>,
-    inline: bool,
+    pub(crate) name_or_cid: String,
+    pub(crate) content_type: ContentType,
+    pub(crate) bytes: Vec<u8>,
+    pub(crate) inline: bool,
 }
 
 impl MailAttachment {

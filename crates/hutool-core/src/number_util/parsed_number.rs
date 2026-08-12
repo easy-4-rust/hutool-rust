@@ -3,11 +3,7 @@
 //!
 //! Rust 版本提供算术、比较、最值、解析与 BigDecimal（`rust_decimal::Decimal`）对齐实现。
 
-use crate::{CoreError, Result};
-use rand::Rng;
 use rust_decimal::Decimal;
-use rust_decimal::RoundingStrategy;
-use std::collections::HashSet;
 use std::str::FromStr;
 
 /// 解析结果：对齐 Java `Number` 多形态
@@ -50,4 +46,4 @@ impl ParsedNumber {
     }
 }
 
-use super::{decimal_to_f64, extract_number_prefix, f64_to_java_string, format_with_pattern, group_thousands, is_scientific_form, plain_fixed};
+use super::{decimal_to_f64, f64_to_java_string};

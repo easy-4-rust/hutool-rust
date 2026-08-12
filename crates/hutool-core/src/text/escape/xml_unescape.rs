@@ -3,8 +3,8 @@
 //!
 //! 委托 `EscapeUtil::unescape_xml`。
 
-use crate::escape_util::EscapeUtil;
 use crate::Result;
+use crate::escape_util::EscapeUtil;
 
 /// 对齐 Java: `XmlUnescape#`
 #[derive(Debug, Clone, Copy, Default)]

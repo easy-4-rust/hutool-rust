@@ -1,6 +1,8 @@
 //! 对齐: `cn.hutool.core.lang.Pair`
 //! 来源: hutool-core/src/main/java/cn/hutool/core/lang/Pair.java
 
+#![allow(dead_code)] // 对齐 Java Pair，暂未接线，预留
+
 use std::fmt;
 use std::hash::{Hash, Hasher};
 

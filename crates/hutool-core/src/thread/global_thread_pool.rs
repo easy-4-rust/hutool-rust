@@ -23,10 +23,12 @@ impl GlobalThreadPool {
             Arc::new(
                 ExecutorBuilder::create()
                     .set_core_pool_size(2)
-                    .set_max_pool_size(std::thread::available_parallelism()
-                        .map(|n| n.get())
-                        .unwrap_or(4)
-                        .max(2))
+                    .set_max_pool_size(
+                        std::thread::available_parallelism()
+                            .map(|n| n.get())
+                            .unwrap_or(4)
+                            .max(2),
+                    )
                     .build(),
             )
         })

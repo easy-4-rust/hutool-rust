@@ -19,16 +19,16 @@ pub struct SensitiveUtil {
 
 impl SensitiveUtil {
     /// 创建空的敏感词服务。
-///
-/// 对齐 Java: `SensitiveUtil.SensitiveUtil()`
+    ///
+    /// 对齐 Java: `SensitiveUtil.SensitiveUtil()`
     #[must_use]
     pub fn new() -> Self {
         Self::default()
     }
 
     /// 创建并初始化敏感词服务。
-///
-/// 对齐 Java: `SensitiveUtil.SensitiveUtil(Set<String>)`
+    ///
+    /// 对齐 Java: `SensitiveUtil.SensitiveUtil(Set<String>)`
     pub fn from_words<I, S>(words: I) -> Self
     where
         I: IntoIterator<Item = S>,
@@ -40,16 +40,16 @@ impl SensitiveUtil {
     }
 
     /// 返回是否已初始化敏感词。
-///
-/// 对齐 Java: `SensitiveUtil.isInitialized()`
+    ///
+    /// 对齐 Java: `SensitiveUtil.isInitialized()`
     #[must_use]
     pub fn is_initialized(&self) -> bool {
         !self.tree.read().is_empty()
     }
 
     /// 原子替换所有敏感词。
-///
-/// 对齐 Java: `SensitiveUtil.init(Set<String>)`
+    ///
+    /// 对齐 Java: `SensitiveUtil.init(Set<String>)`
     pub fn init<I, S>(&self, words: I)
     where
         I: IntoIterator<Item = S>,
@@ -88,8 +88,8 @@ impl SensitiveUtil {
     }
 
     /// 返回文本是否包含敏感词。
-///
-/// 对齐 Java: `SensitiveUtil.containsSensitive(String)`
+    ///
+    /// 对齐 Java: `SensitiveUtil.containsSensitive(String)`
     #[must_use]
     pub fn contains_sensitive(&self, text: &str) -> bool {
         self.tree.read().is_match(text)
@@ -101,8 +101,8 @@ impl SensitiveUtil {
     }
 
     /// 返回第一个敏感词匹配。
-///
-/// 对齐 Java: `SensitiveUtil.findFirstSensitive(String)`
+    ///
+    /// 对齐 Java: `SensitiveUtil.findFirstSensitive(String)`
     #[must_use]
     pub fn find_first_sensitive(&self, text: &str) -> Option<FoundWord> {
         self.tree.read().match_word(text)
@@ -117,8 +117,8 @@ impl SensitiveUtil {
     }
 
     /// 返回所有敏感词匹配。
-///
-/// 对齐 Java: `SensitiveUtil.findAllSensitive(String)`
+    ///
+    /// 对齐 Java: `SensitiveUtil.findAllSensitive(String)`
     #[must_use]
     pub fn find_all_sensitive(&self, text: &str) -> Vec<FoundWord> {
         self.tree.read().match_all_words(text)
@@ -144,16 +144,16 @@ impl SensitiveUtil {
     }
 
     /// 用星号替换敏感词（贪婪模式）。
-///
-/// 对齐 Java: `SensitiveUtil.filterSensitive(String)`
+    ///
+    /// 对齐 Java: `SensitiveUtil.filterSensitive(String)`
     #[must_use]
     pub fn filter_sensitive(&self, text: &str) -> String {
         self.filter_sensitive_with(text, true, &DefaultSensitiveProcessor)
     }
 
     /// 用自定义处理器替换敏感词。
-///
-/// 对齐 Java: `SensitiveUtil.filterSensitive(String, SensitiveProcessor)`
+    ///
+    /// 对齐 Java: `SensitiveUtil.filterSensitive(String, SensitiveProcessor)`
     #[must_use]
     pub fn filter_sensitive_with(
         &self,

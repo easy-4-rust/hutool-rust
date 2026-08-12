@@ -1,11 +1,6 @@
-use std::io::Write;
-
-use serde::{Serialize, de::DeserializeOwned};
 use serde_json::Value;
 
-use crate::{
-    JSONArray, JSONConfig, JSONObject, JsonContainer, JsonError, Result, get_by_path, put_by_path,
-};
+use crate::{JSONArray, JSONConfig, JSONObject, JsonError, Result};
 
 use super::json_container_object::JsonContainerObject;
 
@@ -41,5 +36,3 @@ impl JSONConverter {
         }
     }
 }
-
-use super::{WriterMode, normalize_writer_value};

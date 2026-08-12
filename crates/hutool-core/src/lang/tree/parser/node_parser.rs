@@ -8,5 +8,4 @@
 /// 对齐 Java interface: `cn.hutool.core.lang.tree.parser.NodeParser`
 ///
 /// Java 接口在 Rust 中通过 trait dispatch 表达。
-pub trait NodeParser {
-}
+pub trait NodeParser {}

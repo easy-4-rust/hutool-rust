@@ -152,7 +152,6 @@ fn compare_tokens(left: &[Token], right: &[Token]) -> Ordering {
             (Some(Token::Text(a)), Some(Token::Text(b))) => java_string_cmp(a, b),
             (Some(Token::Number(_)), Some(Token::Text(_))) => Ordering::Less,
             (Some(Token::Text(_)), Some(Token::Number(_))) => Ordering::Greater,
-            _ => Ordering::Equal,
         };
         if ordering != Ordering::Equal {
             return ordering;

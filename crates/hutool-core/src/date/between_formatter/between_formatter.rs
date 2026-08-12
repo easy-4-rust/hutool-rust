@@ -70,8 +70,7 @@ impl BetweenFormatter {
         if between_ms > 0 {
             let day = between_ms / DateUnit::Day.get_millis();
             let hour = between_ms / DateUnit::Hour.get_millis() - day * 24;
-            let minute =
-                between_ms / DateUnit::Minute.get_millis() - day * 24 * 60 - hour * 60;
+            let minute = between_ms / DateUnit::Minute.get_millis() - day * 24 * 60 - hour * 60;
             let between_of_second = ((day * 24 + hour) * 60 + minute) * 60;
             let second = between_ms / DateUnit::Second.get_millis() - between_of_second;
             let millisecond = between_ms - (between_of_second + second) * 1000;
@@ -97,7 +96,9 @@ impl BetweenFormatter {
                 ));
                 level_count += 1;
             }
-            if self.is_level_count_valid(level_count) && minute != 0 && level >= Level::Minute as i32
+            if self.is_level_count_valid(level_count)
+                && minute != 0
+                && level >= Level::Minute as i32
             {
                 sb.push_str(&format!(
                     "{}{}{}",
@@ -107,7 +108,9 @@ impl BetweenFormatter {
                 ));
                 level_count += 1;
             }
-            if self.is_level_count_valid(level_count) && second != 0 && level >= Level::Second as i32
+            if self.is_level_count_valid(level_count)
+                && second != 0
+                && level >= Level::Second as i32
             {
                 sb.push_str(&format!(
                     "{}{}{}",

@@ -1,7 +1,7 @@
 //! DB extended parity tests
 //! 对齐: hutool-db EntityTest/PageUtilTest
 
-use hutool_db::{PageRequest, Page};
+use hutool_db::{Page, PageRequest};
 
 // ── PageRequest ──
 

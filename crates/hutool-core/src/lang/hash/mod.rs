@@ -10,10 +10,4 @@ pub mod murmur_hash;
 pub mod number128;
 
 pub use city_hash::CityHash;
-pub use hash::Hash;
-pub use hash128::Hash128;
-pub use hash32::Hash32;
-pub use hash64::Hash64;
-pub use ketama_hash::KetamaHash;
-pub use metro_hash::{MetroHash, Number128};
-pub use murmur_hash::MurmurHash;
+pub use metro_hash::Number128;

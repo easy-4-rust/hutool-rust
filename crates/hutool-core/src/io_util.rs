@@ -178,8 +178,15 @@ impl IoUtil {
     /// 对齐 Java: `IoUtil.checksum` — SHA-256 hex。
     pub fn checksum_sha256<R: Read>(reader: &mut R) -> io::Result<String> {
         let mut hasher = Sha256::new();
-        io::copy(reader, &mut hasher)?;
-        Ok(format!("{:x}", hasher.finalize()))
+        let mut buffer = [0_u8; 8 * 1024];
+        loop {
+            let bytes_read = reader.read(&mut buffer)?;
+            if bytes_read == 0 {
+                break;
+            }
+            hasher.update(&buffer[..bytes_read]);
+        }
+        Ok(hex::encode(hasher.finalize()))
     }
 
     /// 对齐 Java: `IoUtil.checksumCRC32` / `checksumValue`

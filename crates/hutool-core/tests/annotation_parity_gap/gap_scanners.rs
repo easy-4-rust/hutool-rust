@@ -3,12 +3,12 @@
 use std::collections::HashMap;
 use std::sync::Arc;
 
-use hutool_core::annotation::{
-    fixtures, global_registry, AnnotationScanner, ElementAnnotationScanner, FieldAnnotationScanner,
-    GenericAnnotationScanner, MetaAnnotationScanner, MethodAnnotationScanner, Scanners,
-    TypeAnnotationScanner,
+use hutool_annotation::fixtures::types;
+use hutool_annotation::{
+    AnnotationScanner, ElementAnnotationScanner, FieldAnnotationScanner, GenericAnnotationScanner,
+    MetaAnnotationScanner, MethodAnnotationScanner, Scanners, TypeAnnotationScanner, fixtures,
+    global_registry,
 };
-use hutool_core::annotation::fixtures::types;
 
 use crate::annotation_common::reset_all;
 
@@ -33,7 +33,10 @@ fn element_annotation_scanner_get_annotations_test() {
     let scanner = ElementAnnotationScanner;
     let annotations = scanner.get_annotations(field);
     assert_eq!(1, annotations.len());
-    assert_eq!(types::ANNOTATION_FOR_SCANNER_TEST, annotations[0].annotation_type());
+    assert_eq!(
+        types::ANNOTATION_FOR_SCANNER_TEST,
+        annotations[0].annotation_type()
+    );
 }
 
 /// 对齐 Java: `ElementAnnotationScannerTest.scanTest()`
@@ -43,10 +46,10 @@ fn element_annotation_scanner_scan_test() {
     let mut reg = global_registry().write();
     let (_ty, field, _method) = fixtures::scanner_example(&mut reg);
     let scanner = ElementAnnotationScanner;
-    let mut map: HashMap<i32, Vec<Arc<hutool_core::annotation::AnnotationMirror>>> = HashMap::new();
+    let mut map: HashMap<i32, Vec<Arc<hutool_annotation::AnnotationMirror>>> = HashMap::new();
     {
         let map_ref = &mut map;
-        let mut consumer: hutool_core::annotation::scanner::annotation_scanner::ScanConsumer<'_> =
+        let mut consumer: hutool_annotation::scanner::annotation_scanner::ScanConsumer<'_> =
             Box::new(move |index, annotation| {
                 map_ref.entry(index).or_default().push(annotation);
             });
@@ -92,7 +95,7 @@ fn field_annotation_scanner_scan_test() {
     let scanner = FieldAnnotationScanner;
     let mut count = 0usize;
     {
-        let mut consumer: hutool_core::annotation::scanner::annotation_scanner::ScanConsumer<'_> =
+        let mut consumer: hutool_annotation::scanner::annotation_scanner::ScanConsumer<'_> =
             Box::new(|_i, _a| count += 1);
         scanner.scan(&mut consumer, field);
     }
@@ -118,8 +121,7 @@ fn method_annotation_scanner_get_annotations_test() {
     let mut reg = global_registry().write();
     let (ty, _field, method) = fixtures::scanner_example(&mut reg);
     let scanner = MethodAnnotationScanner::new(true, true);
-    let annotations = scanner.get_annotations(method);
-    assert!(annotations.is_empty() || annotations.len() >= 0);
+    let _annotations = scanner.get_annotations(method);
     let _ = ty;
 }
 
@@ -132,7 +134,7 @@ fn method_annotation_scanner_scan_test() {
     let scanner = MethodAnnotationScanner::new(true, true);
     let mut count = 0usize;
     {
-        let mut consumer: hutool_core::annotation::scanner::annotation_scanner::ScanConsumer<'_> =
+        let mut consumer: hutool_annotation::scanner::annotation_scanner::ScanConsumer<'_> =
             Box::new(|_i, _a| count += 1);
         scanner.scan(&mut consumer, method);
     }
@@ -173,10 +175,10 @@ fn type_annotation_scanner_scan_test() {
     let mut reg = global_registry().write();
     let example = fixtures::type_scanner_hierarchy(&mut reg);
     let scanner = TypeAnnotationScanner::new(true, true);
-    let mut map: HashMap<i32, Vec<Arc<hutool_core::annotation::AnnotationMirror>>> = HashMap::new();
+    let mut map: HashMap<i32, Vec<Arc<hutool_annotation::AnnotationMirror>>> = HashMap::new();
     {
         let map_ref = &mut map;
-        let mut consumer: hutool_core::annotation::scanner::annotation_scanner::ScanConsumer<'_> =
+        let mut consumer: hutool_annotation::scanner::annotation_scanner::ScanConsumer<'_> =
             Box::new(move |index, annotation| {
                 map_ref.entry(index).or_default().push(annotation);
             });
@@ -185,7 +187,10 @@ fn type_annotation_scanner_scan_test() {
     assert_eq!(3, map.len());
     assert_eq!(
         "Example",
-        map.get(&0).unwrap()[0].get_raw("value").and_then(|v| v.as_str()).unwrap()
+        map.get(&0).unwrap()[0]
+            .get_raw("value")
+            .and_then(|v| v.as_str())
+            .unwrap()
     );
 }
 
@@ -264,7 +269,12 @@ fn generic_annotation_scanner_scan_type_hierarchy_and_meta_annotation_test() {
     let _guard = reset_all();
     let mut reg = global_registry().write();
     let class = fixtures::generic_scanner_hierarchy(&mut reg);
-    assert_eq!(6, Scanners::type_hierarchy_and_meta().get_annotations(class).len());
+    assert_eq!(
+        6,
+        Scanners::type_hierarchy_and_meta()
+            .get_annotations(class)
+            .len()
+    );
 }
 
 /// 对齐 Java: `MateAnnotationScannerTest.supportTest()`
@@ -298,10 +308,10 @@ fn mate_annotation_scanner_scan_test() {
     let _guard = reset_all();
     let mut reg = global_registry().write();
     let t3 = fixtures::meta_scanner_chain(&mut reg);
-    let mut map: HashMap<i32, Vec<Arc<hutool_core::annotation::AnnotationMirror>>> = HashMap::new();
+    let mut map: HashMap<i32, Vec<Arc<hutool_annotation::AnnotationMirror>>> = HashMap::new();
     {
         let map_ref = &mut map;
-        let mut consumer: hutool_core::annotation::scanner::annotation_scanner::ScanConsumer<'_> =
+        let mut consumer: hutool_annotation::scanner::annotation_scanner::ScanConsumer<'_> =
             Box::new(move |index, annotation| {
                 map_ref.entry(index).or_default().push(annotation);
             });

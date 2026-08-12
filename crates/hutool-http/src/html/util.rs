@@ -125,7 +125,11 @@ impl HtmlUtil {
     /// Clears specified tags; `with_tag_content` controls whether inner text is removed.
     ///
     /// Java: `HtmlUtil.removeHtmlTag(String content, boolean withTagContent, String... tagNames)`
-    pub fn remove_html_tag_with(content: &str, with_tag_content: bool, tag_names: &[&str]) -> String {
+    pub fn remove_html_tag_with(
+        content: &str,
+        with_tag_content: bool,
+        tag_names: &[&str],
+    ) -> String {
         let mut result = content.to_string();
         for tag in tag_names {
             let tag = tag.trim();

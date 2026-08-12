@@ -4,11 +4,6 @@
 //! Rust 版本以 [`Result`] + [`AssertError`] 表达 Java 的断言失败抛出；
 //! 成功时返回被检查值，便于链式调用。
 
-use std::collections::HashMap;
-use std::fmt::{Display, Write};
-
-use crate::string::{format_template, is_blank};
-
 /// 对齐 Java: `IllegalArgumentException` / `IllegalStateException` 断言失败。
 #[derive(Debug, Clone, PartialEq, Eq, thiserror::Error)]
 #[error("{message}")]
@@ -21,6 +16,7 @@ pub struct AssertError {
 
 impl AssertError {
     /// 创建参数类断言错误。
+    #[allow(dead_code)] // 对齐 Java Assert 断言错误，暂未接线，预留
     pub fn argument(message: impl Into<String>) -> Self {
         Self {
             message: message.into(),
@@ -29,6 +25,7 @@ impl AssertError {
     }
 
     /// 创建状态类断言错误。
+    #[allow(dead_code)] // 对齐 Java Assert 断言错误，暂未接线，预留
     pub fn state(message: impl Into<String>) -> Self {
         Self {
             message: message.into(),

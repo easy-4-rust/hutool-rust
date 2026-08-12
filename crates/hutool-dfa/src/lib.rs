@@ -3,14 +3,15 @@
 #![forbid(unsafe_code)]
 
 mod matcher;
+pub mod prelude;
 mod sensitive;
 mod sensitive_processor;
 mod stop_char;
 mod word_tree;
 
 pub use matcher::{DfaMatcher, PatternMatch};
-pub use sensitive_processor::{DefaultSensitiveProcessor, SensitiveProcessor};
 pub use sensitive::SensitiveUtil;
+pub use sensitive_processor::{DefaultSensitiveProcessor, SensitiveProcessor};
 pub use stop_char::StopChar;
 pub use word_tree::{FoundWord, MatchOptions, WordTree};
 

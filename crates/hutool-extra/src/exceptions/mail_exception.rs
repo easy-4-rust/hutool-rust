@@ -10,8 +10,6 @@
 //!
 //! 使用宏 `define_hutool_exception!` 批量实现，避免重复代码。
 
-use thiserror::Error;
-
 use super::hutool_exception::HutoolException;
 
 /// 对齐 `cn.hutool.extra.mail.MailException`

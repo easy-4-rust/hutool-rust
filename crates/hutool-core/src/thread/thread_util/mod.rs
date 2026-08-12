@@ -3,27 +3,18 @@
 //!
 //! 以 `std::thread` 提供可移植子集；JVM `ThreadLocal` / `ThreadGroup` 全局语义保持 planned。
 
-use std::sync::atomic::{AtomicU64, Ordering};
-use std::sync::{Arc, Condvar, Mutex, OnceLock};
-use std::thread::{self, JoinHandle, Thread, ThreadId};
-use std::time::{Duration, Instant};
+use std::sync::atomic::AtomicU64;
+use std::sync::{Condvar, Mutex, OnceLock};
 
-use crate::thread::concurrency_tester::ConcurrencyTester;
-use crate::thread::executor_builder::{ExecutorBuilder, SimpleExecutor};
-use crate::thread::global_thread_pool::GlobalThreadPool;
-use crate::thread::named_thread_factory::NamedThreadFactory;
-use crate::thread::reject_policy::RejectPolicy;
-use crate::thread::thread_factory_builder::ThreadFactoryBuilder;
-
-mod thread_util;
-mod scheduled_handle;
 mod count_down_latch;
+mod scheduled_handle;
 mod scheduled_pool;
+mod thread_util;
 
-pub use thread_util::ThreadUtil;
-pub use scheduled_handle::ScheduledHandle;
 pub use count_down_latch::CountDownLatch;
+pub use scheduled_handle::ScheduledHandle;
 pub use scheduled_pool::ScheduledPool;
+pub use thread_util::ThreadUtil;
 
 static SCHEDULE_SEQ: AtomicU64 = AtomicU64::new(1);
 

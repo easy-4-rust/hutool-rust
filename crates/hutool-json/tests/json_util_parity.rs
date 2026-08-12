@@ -1,7 +1,9 @@
 //! JSON util parity tests
 //! 对齐: hutool-json JSONUtilTest
 
-use hutool_json::{is_valid, is_json_object, is_json_array, minify, pretty, parse, parse_object, parse_array};
+use hutool_json::{
+    is_json_array, is_json_object, is_valid, minify, parse, parse_array, parse_object, pretty,
+};
 
 // ── is_valid ──
 

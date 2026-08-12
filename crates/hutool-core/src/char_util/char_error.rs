@@ -1,7 +1,3 @@
-use std::any::{Any, TypeId};
-
-use unicode_general_category::{GeneralCategory, get_general_category};
-
 /// Errors returned by checked character conversions.
 
 /// 对齐: `cn.hutool.core.util.CharUtil`
@@ -12,5 +8,3 @@ pub enum CharError {
     #[error("number must be in the inclusive range 1..=20")]
     InvalidEnclosedNumber,
 }
-
-use super::{java_category, java_category_abbreviation, lower_char};

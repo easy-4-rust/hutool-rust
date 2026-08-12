@@ -5,13 +5,11 @@ use crate::sql::condition::{Condition, ConditionValue, LikeType};
 use regex::Regex;
 use std::sync::LazyLock;
 
-static PATTERN_ORDER_BY: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"(?i)(.*)\s+order\s+by\s+[^\s]+").expect("order by pattern")
-});
+static PATTERN_ORDER_BY: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"(?i)(.*)\s+order\s+by\s+[^\s]+").expect("order by pattern"));
 
-static PATTERN_IN_CLAUSE: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"(?i)\s+in\s+\(\s*$").expect("in clause pattern")
-});
+static PATTERN_IN_CLAUSE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"(?i)\s+in\s+\(\s*$").expect("in clause pattern"));
 
 /// 对齐 Java: `SqlUtil.removeOuterOrderBy(String)`.
 #[must_use]

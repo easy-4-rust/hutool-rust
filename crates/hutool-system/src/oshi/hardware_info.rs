@@ -2,10 +2,6 @@
 //! 来源: hutool-system/src/main/java/cn/hutool/system/oshi/HardwareInfo.java
 //! 中文说明: 聚合硬件快照，包含 CPU、内存、磁盘、网络和传感器信息
 
-use std::{thread, time::Duration};
-
-use sysinfo::{Components, Disks, Networks, Pid, System};
-
 use super::cpu_info::CpuInfo;
 use super::disk_info::DiskInfo;
 use super::memory_info::MemoryInfo;

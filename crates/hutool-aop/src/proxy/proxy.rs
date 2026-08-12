@@ -3,13 +3,10 @@
 //! 中文说明: 类型化代理枚举，封装 JDK/CGLIB/SpringCglib 三种代理策略。
 
 use crate::{
-    HandlerProxy, Method,
-    aspects::Aspect,
+    Method,
     interceptor::{CglibInterceptor, JdkInterceptor, SpringCglibInterceptor},
 };
-use std::{fmt, sync::Arc};
-
-use super::proxy_factory::ProxyFactory;
+use std::fmt;
 
 /// 对齐: `cn.hutool.aop.Proxy`
 /// 中文说明: 由 [`ProxyFactory`] 产生的类型化代理，支持 JDK、CGLIB、SpringCglib 三种策略。

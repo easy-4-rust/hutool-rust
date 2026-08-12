@@ -64,12 +64,18 @@ fn long_and_bytes_little_endian_test() {
     // longToBytes(long1) 默认 LE
     let bytes2 = ByteUtil::i64_to_bytes(long1);
     let long3 = ByteUtil::bytes_to_i64_with_order(&bytes2, ByteOrder::LittleEndian).unwrap();
-    assert_eq!(long1, long3, "i64 LE round-trip default→explicit (对齐 Java)");
+    assert_eq!(
+        long1, long3,
+        "i64 LE round-trip default→explicit (对齐 Java)"
+    );
 
     let bytes3 = ByteUtil::i64_to_bytes_with_order(long1, ByteOrder::LittleEndian);
     // bytesToLong(bytes3) 默认 LE
     let long4 = ByteUtil::bytes_to_i64(&bytes3).unwrap();
-    assert_eq!(long1, long4, "i64 LE round-trip explicit→default (对齐 Java)");
+    assert_eq!(
+        long1, long4,
+        "i64 LE round-trip explicit→default (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `ByteUtilTest.longAndBytesBigEndianTest()` (行 77-91)

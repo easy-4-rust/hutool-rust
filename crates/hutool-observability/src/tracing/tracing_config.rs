@@ -1,16 +1,5 @@
 //! Reloadable tracing configuration owned by the final application.
 
-use std::{env, ffi::OsString};
-
-use thiserror::Error;
-pub use tracing::{Level, debug, error, event, info, instrument, span, trace, warn};
-use tracing_subscriber::{
-    EnvFilter, Registry, fmt,
-    layer::SubscriberExt,
-    reload::{self, Handle},
-    util::SubscriberInitExt,
-};
-
 /// Default text tracing configuration.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct TracingConfig {
@@ -28,5 +17,3 @@ impl Default for TracingConfig {
         }
     }
 }
-
-use super::{filter_from_value};

@@ -7,9 +7,9 @@
 //! `PendingEngine`。本文件主要映射 Java 测试到 `string.rs` / 已委托 API。
 
 use encoding_rs::GBK;
-use unicode_normalization::UnicodeNormalization;
-use hutool_core::{self as hc};
 use hutool_core::text::CharSequenceUtil;
+use hutool_core::{self as hc};
+use unicode_normalization::UnicodeNormalization;
 
 // ════════════════════════════════════════════════════════════
 //  replace 系列
@@ -26,7 +26,10 @@ fn replace_test() {
         .chars()
         .filter(|c| !c.is_ascii_digit())
         .collect();
-    assert_eq!(result, "SSMBeryAllen", "replace 数字→空 (对齐 Java replaceTest)");
+    assert_eq!(
+        result, "SSMBeryAllen",
+        "replace 数字→空 (对齐 Java replaceTest)"
+    );
 }
 
 /// 对齐 Java: `CharSequenceUtilTest.replaceTest2`（行 19-24）
@@ -36,7 +39,10 @@ fn replace_test() {
 fn replace_test_2() {
     let replace = "#{A}";
     let result = hc::replace(replace, "#{AAAAAAA}", "1");
-    assert_eq!(result, "#{A}", "replace 不匹配时不变 (对齐 Java replaceTest2)");
+    assert_eq!(
+        result, "#{A}",
+        "replace 不匹配时不变 (对齐 Java replaceTest2)"
+    );
 }
 
 /// 对齐 Java: `CharSequenceUtilTest.replaceByStrTest`（行 27-31）
@@ -51,7 +57,10 @@ fn replace_by_str_test() {
     let prefix: String = chars[..5].iter().collect();
     let suffix: String = chars[12..].iter().collect();
     let result = format!("{}***{}", prefix, suffix);
-    assert_eq!(result, "SSM15***01BeryAllen", "replaceByCodePoint (对齐 Java replaceByStrTest)");
+    assert_eq!(
+        result, "SSM15***01BeryAllen",
+        "replaceByCodePoint (对齐 Java replaceByStrTest)"
+    );
 }
 
 // ════════════════════════════════════════════════════════════
@@ -66,7 +75,10 @@ fn add_prefix_if_not_test() {
     assert_eq!(result, "hutool", "addPrefixIfNot 已有前缀不变 (对齐 Java)");
     // 无前缀 → 添加
     let result = add_prefix_if_not("hutool", "Good");
-    assert_eq!(result, "Goodhutool", "addPrefixIfNot 无前缀添加 (对齐 Java)");
+    assert_eq!(
+        result, "Goodhutool",
+        "addPrefixIfNot 无前缀添加 (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CharSequenceUtilTest.addSuffixIfNotTest`（行 44-55）
@@ -77,7 +89,10 @@ fn add_suffix_if_not_test() {
     assert_eq!(result, "hutool", "addSuffixIfNot 已有后缀不变 (对齐 Java)");
     // 无后缀 → 添加
     let result = add_suffix_if_not("hutool", " is Good");
-    assert_eq!(result, "hutool is Good", "addSuffixIfNot 无后缀添加 (对齐 Java)");
+    assert_eq!(
+        result, "hutool is Good",
+        "addSuffixIfNot 无后缀添加 (对齐 Java)"
+    );
     // 空串 + "/" → "/"
     let result = add_suffix_if_not("", "/");
     assert_eq!(result, "/", "addSuffixIfNot 空串 (对齐 Java)");
@@ -107,9 +122,21 @@ fn normalize_test() {
 /// 对齐 Java: `CharSequenceUtilTest.indexOfTest`（行 72-79）
 #[test]
 fn index_of_test() {
-    assert_eq!("abc123".find('1').unwrap(), 3, "indexOf('1') = 3 (对齐 Java)");
-    assert_eq!("abc123".find('3').unwrap(), 5, "indexOf('3') = 5 (对齐 Java)");
-    assert_eq!("abc123".find('a').unwrap(), 0, "indexOf('a') = 0 (对齐 Java)");
+    assert_eq!(
+        "abc123".find('1').unwrap(),
+        3,
+        "indexOf('1') = 3 (对齐 Java)"
+    );
+    assert_eq!(
+        "abc123".find('3').unwrap(),
+        5,
+        "indexOf('3') = 5 (对齐 Java)"
+    );
+    assert_eq!(
+        "abc123".find('a').unwrap(),
+        0,
+        "indexOf('a') = 0 (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CharSequenceUtilTest.indexOfTest2`（行 81-88）
@@ -137,17 +164,35 @@ fn start_with_test() {
     // startWithIgnoreCase(null, null) → true
     // startWithIgnoreCase(null, "abc") → false
     // startWithIgnoreCase("abcdef", null) → false
-    assert!(hc::start_with("abcdef", "abc"), "startWithIgnoreCase (对齐 Java)");
-    assert!("abcdef".to_lowercase().starts_with("abc"), "startWithIgnoreCase 反 (对齐 Java)");
-    assert!(!hc::start_with("abcdef", "xyz"), "startWithIgnoreCase 不匹配 (对齐 Java)");
+    assert!(
+        hc::start_with("abcdef", "abc"),
+        "startWithIgnoreCase (对齐 Java)"
+    );
+    assert!(
+        "abcdef".to_lowercase().starts_with("abc"),
+        "startWithIgnoreCase 反 (对齐 Java)"
+    );
+    assert!(
+        !hc::start_with("abcdef", "xyz"),
+        "startWithIgnoreCase 不匹配 (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `CharSequenceUtilTest.endWithTest`（行 117-127）
 #[test]
 fn end_with_test() {
-    assert!(hc::end_with("abcdef", "def"), "endWithIgnoreCase (对齐 Java)");
-    assert!("abcdef".to_lowercase().ends_with("def"), "endWithIgnoreCase 反 (对齐 Java)");
-    assert!(!hc::end_with("abcdef", "xyz"), "endWithIgnoreCase 不匹配 (对齐 Java)");
+    assert!(
+        hc::end_with("abcdef", "def"),
+        "endWithIgnoreCase (对齐 Java)"
+    );
+    assert!(
+        "abcdef".to_lowercase().ends_with("def"),
+        "endWithIgnoreCase 反 (对齐 Java)"
+    );
+    assert!(
+        !hc::end_with("abcdef", "xyz"),
+        "endWithIgnoreCase 不匹配 (对齐 Java)"
+    );
 }
 
 // ════════════════════════════════════════════════════════════
@@ -203,10 +248,22 @@ fn common_suffix_test() {
 #[test]
 fn contains_only_test() {
     let test_chars = vec!['a', 's', 'd', 'f'];
-    assert!(contains_only("", &test_chars), "containsOnly(\"\") 应 true (对齐 Java)");
-    assert!(contains_only("asdf", &test_chars), "containsOnly(\"asdf\") 应 true (对齐 Java)");
-    assert!(!contains_only("asdf123", &test_chars), "containsOnly(\"asdf123\") 应 false (对齐 Java)");
-    assert!(!contains_only("hello", &test_chars), "containsOnly(\"hello\") 应 false (对齐 Java)");
+    assert!(
+        contains_only("", &test_chars),
+        "containsOnly(\"\") 应 true (对齐 Java)"
+    );
+    assert!(
+        contains_only("asdf", &test_chars),
+        "containsOnly(\"asdf\") 应 true (对齐 Java)"
+    );
+    assert!(
+        !contains_only("asdf123", &test_chars),
+        "containsOnly(\"asdf123\") 应 false (对齐 Java)"
+    );
+    assert!(
+        !contains_only("hello", &test_chars),
+        "containsOnly(\"hello\") 应 false (对齐 Java)"
+    );
 }
 
 // ════════════════════════════════════════════════════════════
@@ -248,18 +305,39 @@ fn strip_ignore_case_test() {
     let result = hc::strip_ignore_case(s, "Ab23");
     assert_eq!(result, "cd1", "stripIgnoreCase char-set (对齐 Java)");
     let result = hc::strip_ignore_case(s, "AB");
-    assert_eq!(result, "cd123", "stripIgnoreCase char-set prefix (对齐 Java)");
+    assert_eq!(
+        result, "cd123",
+        "stripIgnoreCase char-set prefix (对齐 Java)"
+    );
 
     // 前后缀串裁剪（CharSequenceUtil.stripIgnoreCase）
     const SOURCE: &str = "aaa_STRIPPED_bbb";
-    assert_eq!(strip_once_ignore_case(SOURCE, Some("a"), Some("a")), "aa_STRIPPED_bbb");
+    assert_eq!(
+        strip_once_ignore_case(SOURCE, Some("a"), Some("a")),
+        "aa_STRIPPED_bbb"
+    );
     assert_eq!(strip_once_ignore_case(SOURCE, Some(""), Some("")), SOURCE);
-    assert_eq!(strip_once_ignore_case(SOURCE, Some("A"), Some("b")), "aa_STRIPPED_bb");
+    assert_eq!(
+        strip_once_ignore_case(SOURCE, Some("A"), Some("b")),
+        "aa_STRIPPED_bb"
+    );
     assert_eq!(strip_once_ignore_case(SOURCE, None, None), SOURCE);
-    assert_eq!(strip_once_ignore_case(SOURCE, Some(""), Some("B")), "aaa_STRIPPED_bb");
-    assert_eq!(strip_once_ignore_case(SOURCE, None, Some("b")), "aaa_STRIPPED_bb");
-    assert_eq!(strip_once_ignore_case(SOURCE, Some("a"), Some("")), "aa_STRIPPED_bbb");
-    assert_eq!(strip_once_ignore_case(SOURCE, Some("a"), None), "aa_STRIPPED_bbb");
+    assert_eq!(
+        strip_once_ignore_case(SOURCE, Some(""), Some("B")),
+        "aaa_STRIPPED_bb"
+    );
+    assert_eq!(
+        strip_once_ignore_case(SOURCE, None, Some("b")),
+        "aaa_STRIPPED_bb"
+    );
+    assert_eq!(
+        strip_once_ignore_case(SOURCE, Some("a"), Some("")),
+        "aa_STRIPPED_bbb"
+    );
+    assert_eq!(
+        strip_once_ignore_case(SOURCE, Some("a"), None),
+        "aa_STRIPPED_bbb"
+    );
     assert_eq!(strip_once_ignore_case("a", Some("a"), Some("a")), "");
     assert_eq!(strip_once_ignore_case("aba", Some("aB"), Some("bB")), "a");
 }
@@ -452,7 +530,12 @@ fn strip_once_ignore_case(s: &str, prefix: Option<&str>, suffix: Option<&str>) -
     strip_once_impl(s, prefix, suffix, true)
 }
 
-fn strip_once_impl(s: &str, prefix: Option<&str>, suffix: Option<&str>, ignore_case: bool) -> String {
+fn strip_once_impl(
+    s: &str,
+    prefix: Option<&str>,
+    suffix: Option<&str>,
+    ignore_case: bool,
+) -> String {
     if s.is_empty() {
         return s.to_string();
     }
@@ -543,9 +626,8 @@ fn move_chars(s: &str, start_include: usize, end_exclude: usize, move_length: i3
         return s.to_string();
     }
     let total_positions = rest_len + 1;
-    let new_pos =
-        ((start_include as i32) + move_len.rem_euclid(total_positions)).rem_euclid(total_positions)
-            as usize;
+    let new_pos = ((start_include as i32) + move_len.rem_euclid(total_positions))
+        .rem_euclid(total_positions) as usize;
     let rest_s: String = rest.iter().collect();
     format!("{}{}{}", &rest_s[..new_pos], block, &rest_s[new_pos..])
 }

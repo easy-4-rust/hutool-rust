@@ -2,9 +2,7 @@
 
 /// 对齐: `cn.hutool.core.util.BooleanUtil`
 /// 布尔值工具类
-
 use std::{any::TypeId, fmt};
-use thiserror::Error;
 
 use super::boolean_error::BooleanError;
 

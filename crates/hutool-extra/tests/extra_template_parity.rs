@@ -38,7 +38,10 @@ fn template_util_test_create_engine_test() {
 /// 对齐 Java: `TemplateUtilTest.beetlEngineTest()`
 #[test]
 fn template_util_test_beetl_engine_test() {
-    assert_eq!(render_dollar("hello,${name}", &hutool_vars()), "hello,hutool");
+    assert_eq!(
+        render_dollar("hello,${name}", &hutool_vars()),
+        "hello,hutool"
+    );
 }
 
 /// 对齐 Java: `TemplateUtilTest.rythmEngineTest()`
@@ -50,13 +53,19 @@ fn template_util_test_rythm_engine_test() {
 /// 对齐 Java: `TemplateUtilTest.freemarkerEngineTest()`
 #[test]
 fn template_util_test_freemarker_engine_test() {
-    assert_eq!(render_dollar("hello,${name}", &hutool_vars()), "hello,hutool");
+    assert_eq!(
+        render_dollar("hello,${name}", &hutool_vars()),
+        "hello,hutool"
+    );
 }
 
 /// 对齐 Java: `TemplateUtilTest.velocityEngineTest()`
 #[test]
 fn template_util_test_velocity_engine_test() {
-    assert_eq!(render_dollar("hello,${name}", &hutool_vars()), "hello,hutool");
+    assert_eq!(
+        render_dollar("hello,${name}", &hutool_vars()),
+        "hello,hutool"
+    );
 }
 
 /// 对齐 Java: `TemplateUtilTest.enjoyEngineTest()`
@@ -87,7 +96,10 @@ fn template_util_test_render_to_file_test() {
 /// 对齐 Java: `TemplateUtilTest.witEngineTest()`
 #[test]
 fn template_util_test_wit_engine_test() {
-    assert_eq!(render_dollar("hello,${name}", &hutool_vars()), "hello,hutool");
+    assert_eq!(
+        render_dollar("hello,${name}", &hutool_vars()),
+        "hello,hutool"
+    );
 }
 
 /// 对齐 Java: `ThymeleafTest.addDialectTest()`
@@ -127,7 +139,10 @@ fn velocity_test_charset_test() {
 /// 对齐 Java: `JetbrickTest.jetbrickEngineTest()`
 #[test]
 fn jetbrick_test_jetbrick_engine_test() {
-    assert_eq!(render_dollar("hello,${name}", &hutool_vars()), "hello,hutool");
+    assert_eq!(
+        render_dollar("hello,${name}", &hutool_vars()),
+        "hello,hutool"
+    );
 }
 
 /// 对齐 Java: `JetbrickTest.jetbrickEngineWithStringTest()`
@@ -139,5 +154,8 @@ fn jetbrick_test_jetbrick_engine_with_string_test() {
 /// 对齐 Java: `Issue3488Test.freemarkerTest()`
 #[test]
 fn issue3488_test_freemarker_test() {
-    assert_eq!(render_dollar("hello,${name}", &hutool_vars()), "hello,hutool");
+    assert_eq!(
+        render_dollar("hello,${name}", &hutool_vars()),
+        "hello,hutool"
+    );
 }

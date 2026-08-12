@@ -4,6 +4,8 @@
 //! 异构元素用 `serde_json::Value` 承载，保留 Eq/Hash/Display；
 //! Java Stream/Spliterator 映射为迭代器与 `to_list`。
 
+#![allow(dead_code)] // 对齐 Java Tuple，暂未接线，预留
+
 use serde_json::Value;
 use std::hash::{Hash, Hasher};
 
@@ -27,7 +29,12 @@ impl Tuple {
 
     /// 从可序列化显示值构造（字符串化）。
     pub fn from_display(values: &[impl ToString]) -> Self {
-        Self::new(values.iter().map(|v| Value::String(v.to_string())).collect())
+        Self::new(
+            values
+                .iter()
+                .map(|v| Value::String(v.to_string()))
+                .collect(),
+        )
     }
 
     /// 对齐 `get(int)`

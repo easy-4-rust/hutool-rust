@@ -109,14 +109,20 @@ mod tests {
             "a=1 b=2"
         );
         assert!(HttpException::from_error("io").to_string().contains("io"));
-        assert!(HttpException::with_cause("wrap", "root")
-            .message()
-            .contains("root"));
-        assert!(HttpException::with_cause_flags("wrap", "root", true, false)
-            .message()
-            .contains("wrap"));
-        assert!(HttpException::from_cause_with_params("root", "x={}", &["1"])
-            .message()
-            .contains("x=1"));
+        assert!(
+            HttpException::with_cause("wrap", "root")
+                .message()
+                .contains("root")
+        );
+        assert!(
+            HttpException::with_cause_flags("wrap", "root", true, false)
+                .message()
+                .contains("wrap")
+        );
+        assert!(
+            HttpException::from_cause_with_params("root", "x={}", &["1"])
+                .message()
+                .contains("x=1")
+        );
     }
 }

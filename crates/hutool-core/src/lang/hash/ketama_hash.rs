@@ -1,6 +1,8 @@
 //! 对齐: `cn.hutool.core.lang.hash.KetamaHash`
 //! 来源: hutool-core/src/main/java/cn/hutool/core/lang/hash/KetamaHash.java
 
+#![allow(dead_code)] // 对齐 Java KetamaHash，暂未接线，预留
+
 use ::md5::{Digest, Md5};
 
 /// 对齐 Java: `cn.hutool.core.lang.hash.KetamaHash`

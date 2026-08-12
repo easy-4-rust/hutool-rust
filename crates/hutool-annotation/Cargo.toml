@@ -1,0 +1,17 @@
+[package]
+name = "hutool-annotation"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
+description = "Workspace-facing annotation facade aligned with cn.hutool.core.annotation."
+
+[lints]
+workspace = true
+
+[dependencies]
+hutool-macro.workspace = true

@@ -1,6 +1,8 @@
 //! 对齐: `cn.hutool.core.lang.hash.MetroHash`
 //! 常量按 Java `int` 字面量拓宽为 `long`（高位符号扩展）。
 
+#![allow(dead_code)] // 对齐 Java MetroHash，暂未接线，预留
+
 use super::number128::Number128;
 
 /// 对齐 Java: `MetroHash`
@@ -34,14 +36,26 @@ impl MetroHash {
                 v3 = rotate_left64(v3, -29).wrapping_add(v1);
                 buffer = buffer[32..].to_vec();
             }
-            v2 ^= rotate_left64(v0.wrapping_add(v3).wrapping_mul(K0_64).wrapping_add(v1), -37)
-                .wrapping_mul(K1_64);
-            v3 ^= rotate_left64(v1.wrapping_add(v2).wrapping_mul(K1_64).wrapping_add(v0), -37)
-                .wrapping_mul(K0_64);
-            v0 ^= rotate_left64(v0.wrapping_add(v2).wrapping_mul(K0_64).wrapping_add(v3), -37)
-                .wrapping_mul(K1_64);
-            v1 ^= rotate_left64(v1.wrapping_add(v3).wrapping_mul(K1_64).wrapping_add(v2), -37)
-                .wrapping_mul(K0_64);
+            v2 ^= rotate_left64(
+                v0.wrapping_add(v3).wrapping_mul(K0_64).wrapping_add(v1),
+                -37,
+            )
+            .wrapping_mul(K1_64);
+            v3 ^= rotate_left64(
+                v1.wrapping_add(v2).wrapping_mul(K1_64).wrapping_add(v0),
+                -37,
+            )
+            .wrapping_mul(K0_64);
+            v0 ^= rotate_left64(
+                v0.wrapping_add(v2).wrapping_mul(K0_64).wrapping_add(v3),
+                -37,
+            )
+            .wrapping_mul(K1_64);
+            v1 ^= rotate_left64(
+                v1.wrapping_add(v3).wrapping_mul(K1_64).wrapping_add(v2),
+                -37,
+            )
+            .wrapping_mul(K0_64);
             hash = hash.wrapping_add(v0 ^ v1);
         }
 
@@ -110,14 +124,26 @@ impl MetroHash {
                 buffer = buffer[8..].to_vec();
                 v3 = rotate_right(v3, 29).wrapping_add(v1);
             }
-            v2 ^= rotate_right(v0.wrapping_add(v3).wrapping_mul(K0_128).wrapping_add(v1), 21)
-                .wrapping_mul(K1_128);
-            v3 ^= rotate_right(v1.wrapping_add(v2).wrapping_mul(K1_128).wrapping_add(v0), 21)
-                .wrapping_mul(K0_128);
-            v0 ^= rotate_right(v0.wrapping_add(v2).wrapping_mul(K0_128).wrapping_add(v3), 21)
-                .wrapping_mul(K1_128);
-            v1 ^= rotate_right(v1.wrapping_add(v3).wrapping_mul(K1_128).wrapping_add(v2), 21)
-                .wrapping_mul(K0_128);
+            v2 ^= rotate_right(
+                v0.wrapping_add(v3).wrapping_mul(K0_128).wrapping_add(v1),
+                21,
+            )
+            .wrapping_mul(K1_128);
+            v3 ^= rotate_right(
+                v1.wrapping_add(v2).wrapping_mul(K1_128).wrapping_add(v0),
+                21,
+            )
+            .wrapping_mul(K0_128);
+            v0 ^= rotate_right(
+                v0.wrapping_add(v2).wrapping_mul(K0_128).wrapping_add(v3),
+                21,
+            )
+            .wrapping_mul(K1_128);
+            v1 ^= rotate_right(
+                v1.wrapping_add(v3).wrapping_mul(K1_128).wrapping_add(v2),
+                21,
+            )
+            .wrapping_mul(K0_128);
         }
 
         if buffer.len() >= 16 {

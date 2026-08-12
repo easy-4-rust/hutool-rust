@@ -1,6 +1,8 @@
 //! 对齐: `cn.hutool.core.lang.Replacer`
 //! 来源: hutool-core/src/main/java/cn/hutool/core/lang/Replacer.java
 
+#![allow(dead_code)] // 对齐 Java Replacer，暂未接线，预留
+
 /// 对齐 Java: `cn.hutool.core.lang.Replacer<T>`
 pub trait Replacer<T> {
     /// 对齐 Java: `Replacer.replace(T)`

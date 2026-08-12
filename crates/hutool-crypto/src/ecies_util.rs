@@ -2,7 +2,7 @@
 //! 来源: hutool-crypto/src/main/java/cn/hutool/crypto/asymmetric/ECIES.java
 //! 中文说明: ECIES 混合加密（P-256 ECDH + AES-256-GCM），对齐 Hutool ECIES
 
-use crate::{aes256_gcm_decrypt, aes256_gcm_encrypt, CryptoError};
+use crate::{CryptoError, aes256_gcm_decrypt, aes256_gcm_encrypt};
 use p256::elliptic_curve::sec1::{FromEncodedPoint, ToEncodedPoint};
 use p256::{EncodedPoint, PublicKey, SecretKey};
 use sha2::{Digest, Sha256};
@@ -60,14 +60,16 @@ impl Ecies {
     ) -> Result<Self, CryptoError> {
         let private_key = match private_key_str {
             Some(s) if !s.is_empty() => {
-                let bytes = crate::asymmetric::decode(s).map_err(|_| CryptoError::InvalidEncoding)?;
+                let bytes =
+                    crate::asymmetric::decode(s).map_err(|_| CryptoError::InvalidEncoding)?;
                 Some(crate::ec_private_from_pkcs8(&bytes)?)
             }
             _ => None,
         };
         let public_key = match public_key_str {
             Some(s) if !s.is_empty() => {
-                let bytes = crate::asymmetric::decode(s).map_err(|_| CryptoError::InvalidEncoding)?;
+                let bytes =
+                    crate::asymmetric::decode(s).map_err(|_| CryptoError::InvalidEncoding)?;
                 Some(decode_public(&bytes)?)
             }
             _ => None,
@@ -118,10 +120,7 @@ pub fn encrypt_ecies(recipient: &PublicKey, plaintext: &[u8]) -> Result<Vec<u8>,
     let shared = ephemeral.diffie_hellman(recipient);
     let key = Sha256::digest(shared.raw_secret_bytes());
     let body = aes256_gcm_encrypt(&key, plaintext)?;
-    let eph_bytes = ephemeral
-        .public_key()
-        .as_affine()
-        .to_encoded_point(false);
+    let eph_bytes = ephemeral.public_key().as_affine().to_encoded_point(false);
     let mut out = Vec::with_capacity(EPHEMERAL_LEN + body.len());
     out.extend_from_slice(eph_bytes.as_bytes());
     out.extend_from_slice(&body);

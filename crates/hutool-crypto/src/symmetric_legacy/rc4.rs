@@ -1,15 +1,5 @@
 //! Legacy symmetric algorithms aligned with Hutool parity tests.
 
-use crate::CryptoError;
-use des::cipher::{BlockDecryptMut, BlockEncryptMut, KeyInit};
-use des::Des;
-use ecb::{Decryptor as EcbDecryptor, Encryptor as EcbEncryptor};
-use generic_array::{GenericArray, typenum::U16};
-use pbkdf2::pbkdf2_hmac;
-use sha1::Sha1;
-use sm4::cipher::{BlockDecrypt, BlockEncrypt, KeyInit as Sm4KeyInit};
-use sm4::Sm4;
-
 /// RC4 stream cipher (Hutool `RC4`).
 pub struct Rc4 {
     s: [u8; 256],
@@ -39,7 +29,8 @@ impl Rc4 {
             self.i = self.i.wrapping_add(1);
             self.j = self.j.wrapping_add(self.s[self.i as usize]);
             self.s.swap(self.i as usize, self.j as usize);
-            let k = self.s[(self.s[self.i as usize].wrapping_add(self.s[self.j as usize])) as usize];
+            let k =
+                self.s[(self.s[self.i as usize].wrapping_add(self.s[self.j as usize])) as usize];
             *byte ^= k;
         }
     }
@@ -56,6 +47,3 @@ impl Rc4 {
         self.encrypt(ciphertext)
     }
 }
-
-use super::{DesEcbDec, DesEcbEnc, pkcs7_pad, pkcs7_unpad, read_u32_be, read_u32_key, sm4_ecb, tea_core};
-use super::{vigenere_map, write_u32_be};

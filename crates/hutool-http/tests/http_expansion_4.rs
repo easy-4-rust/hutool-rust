@@ -1,8 +1,8 @@
 //! HTTP 扩展 parity 测试 4
 //! 对齐: hutool-http 多个测试类
 
-use hutool_http as hh;
 use hh::UrlPolicy;
+use hutool_http as hh;
 use std::time::Duration;
 
 // ── HttpClient Builder (5 tests) ──
@@ -26,9 +26,7 @@ fn builder_max_response_size() {
 
 #[test]
 fn builder_redirect_limit() {
-    let result = hh::HttpClient::builder()
-        .redirect_limit(5)
-        .build();
+    let result = hh::HttpClient::builder().redirect_limit(5).build();
     assert!(result.is_ok());
 }
 
@@ -57,35 +55,71 @@ fn builder_combined() {
 #[test]
 fn deny_local_external() {
     let policy = hh::DenyLocalTargets;
-    assert!(policy.validate(&"https://example.com".parse::<hh::Url>().unwrap()).is_ok());
+    assert!(
+        policy
+            .validate(&"https://example.com".parse::<hh::Url>().unwrap())
+            .is_ok()
+    );
 }
 
 #[test]
 fn deny_local_localhost() {
     let policy = hh::DenyLocalTargets;
-    assert!(policy.validate(&"http://127.0.0.1".parse::<hh::Url>().unwrap()).is_err());
-    assert!(policy.validate(&"http://localhost".parse::<hh::Url>().unwrap()).is_err());
+    assert!(
+        policy
+            .validate(&"http://127.0.0.1".parse::<hh::Url>().unwrap())
+            .is_err()
+    );
+    assert!(
+        policy
+            .validate(&"http://localhost".parse::<hh::Url>().unwrap())
+            .is_err()
+    );
 }
 
 #[test]
 fn deny_local_private_ip() {
     let policy = hh::DenyLocalTargets;
-    assert!(policy.validate(&"http://192.168.1.1".parse::<hh::Url>().unwrap()).is_err());
-    assert!(policy.validate(&"http://10.0.0.1".parse::<hh::Url>().unwrap()).is_err());
-    assert!(policy.validate(&"http://172.16.0.1".parse::<hh::Url>().unwrap()).is_err());
+    assert!(
+        policy
+            .validate(&"http://192.168.1.1".parse::<hh::Url>().unwrap())
+            .is_err()
+    );
+    assert!(
+        policy
+            .validate(&"http://10.0.0.1".parse::<hh::Url>().unwrap())
+            .is_err()
+    );
+    assert!(
+        policy
+            .validate(&"http://172.16.0.1".parse::<hh::Url>().unwrap())
+            .is_err()
+    );
 }
 
 #[test]
 fn allow_all_localhost() {
     let policy = hh::AllowAllUrls;
-    assert!(policy.validate(&"http://127.0.0.1".parse::<hh::Url>().unwrap()).is_ok());
-    assert!(policy.validate(&"http://localhost".parse::<hh::Url>().unwrap()).is_ok());
+    assert!(
+        policy
+            .validate(&"http://127.0.0.1".parse::<hh::Url>().unwrap())
+            .is_ok()
+    );
+    assert!(
+        policy
+            .validate(&"http://localhost".parse::<hh::Url>().unwrap())
+            .is_ok()
+    );
 }
 
 #[test]
 fn allow_all_private() {
     let policy = hh::AllowAllUrls;
-    assert!(policy.validate(&"http://192.168.1.1".parse::<hh::Url>().unwrap()).is_ok());
+    assert!(
+        policy
+            .validate(&"http://192.168.1.1".parse::<hh::Url>().unwrap())
+            .is_ok()
+    );
 }
 
 // ── ContentType (5 tests) ──
@@ -112,7 +146,10 @@ fn content_type_html() {
 
 #[test]
 fn content_type_form() {
-    assert_eq!(hh::ContentType::FormUrlEncoded.value(), "application/x-www-form-urlencoded");
+    assert_eq!(
+        hh::ContentType::FormUrlEncoded.value(),
+        "application/x-www-form-urlencoded"
+    );
 }
 
 // ── HttpStatus (5 tests) ──

@@ -1,7 +1,5 @@
 //! 列/索引元数据 —— 对齐 Hutool `cn.hutool.db.meta.Column` / `IndexInfo`。
 
-use std::fmt;
-
 /// 对齐 Hutool `JdbcType` 的常用子集。
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum JdbcType {

@@ -17,11 +17,11 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 use base64::Engine as _;
 use base64::engine::general_purpose::{STANDARD, URL_SAFE_NO_PAD};
-use hutool_jwt as hj;
 use hj::{
     AlgorithmUtil, JWT, JWTException, JWTHeader, JWTSigner, JWTSignerUtil, JWTUtil, JWTValidator,
     NoneJWTSigner, RegisteredPayload,
 };
+use hutool_jwt as hj;
 use serde::Deserialize;
 use serde_json::{Map, Value};
 
@@ -67,7 +67,10 @@ fn sign_and_verify(signer: Arc<dyn JWTSigner>) {
 
 /// Asserts a legacy/non-JOSE algorithm is intentionally rejected.
 fn assert_legacy_rejected(result: Result<Arc<dyn JWTSigner>, JWTException>, id: &str) {
-    let err = result.expect_err(&format!("{id} should be rejected"));
+    let err = match result {
+        Ok(_) => panic!("{id} should be rejected"),
+        Err(err) => err,
+    };
     assert!(
         err.to_string().contains("intentionally unavailable")
             || err.to_string().contains("unsupported"),
@@ -120,15 +123,15 @@ fn create_hs256_test() {
     jwt.set_payload("sub", Value::String("1234567890".into()))
         .set_payload("name", Value::String("looly".into()))
         .set_payload("admin", Value::Bool(true))
-        .set_expires_at(1_640_966_400)
-        .set_key(key);
+        .set_expires_at(1_640_966_400);
+    jwt.set_key(key).expect("set_key");
     let right_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.\
         eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6Imxvb2x5IiwiYWRtaW4iOnRydWUsImV4cCI6MTY0MDk2NjQwMH0.\
         8siIwEMHf-DRyUjVElS_yipb6Mo3c1z0wFiheGXWGQw";
     let token = jwt.sign().expect("sign");
     assert_eq!(token, right_token);
     let mut verified = JWT::of(right_token).expect("of");
-    verified.set_key(key);
+    verified.set_key(key).expect("set_key");
     assert!(verified.verify().expect("verify"));
 }
 
@@ -139,7 +142,8 @@ fn jwt_parse_test() {
         eyJzdWIiOiIxMjM0NTY3ODkwIiwiYWRtaW4iOnRydWUsIm5hbWUiOiJsb29seSJ9.\
         U2aQkC2THYV9L0fTN-yBBI7gmo5xhmvMhATtu8v0zEA";
     let mut jwt = JWT::of(right_token).expect("of");
-    assert!(jwt.set_key(b"1234567890").verify().expect("verify"));
+    jwt.set_key(b"1234567890").expect("set_key");
+    assert!(jwt.verify().expect("verify"));
     assert_eq!(
         jwt.header().claims().get_claim(JWTHeader::TYPE),
         Some(&Value::String("JWT".into()))
@@ -209,7 +213,8 @@ fn jwt_verify_test() {
         eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbImFsbCJdLCJleHAiOjE2MjQwMDQ4MjIsInVzZXJJZCI6MSwiYXV0aG9yaXRpZXMiOlsiUk9MRV_op5LoibLkuozlj7ciLCJzeXNfbWVudV8xIiwiUk9MRV_op5LoibLkuIDlj7ciLCJzeXNfbWVudV8yIl0sImp0aSI6ImQ0YzVlYjgwLTA5ZTctNGU0ZC1hZTg3LTVkNGI5M2FhNmFiNiIsImNsaWVudF9pZCI6ImhhbmR5LXNob3AifQ.\
         aixF1eKlAKS_k3ynFnStE7-IRGiD5YaqznvK2xEjBew";
     let mut jwt = JWT::of(token).expect("of");
-    assert!(jwt.set_key(b"123456").verify().expect("verify"));
+    jwt.set_key(b"123456").expect("set_key");
+    assert!(jwt.verify().expect("verify"));
 }
 
 /// 对齐 Java: `JWTTest.getLongTest()`
@@ -241,7 +246,10 @@ fn jwt_util_create_test() {
     let key = b"1234";
     let payload = obj(&[
         ("uid", Value::from(123)),
-        ("expire_time", Value::from(now_secs() * 1000 + 1_000 * 60 * 60 * 24 * 15)),
+        (
+            "expire_time",
+            Value::from(now_secs() * 1000 + 1_000 * 60 * 60 * 24 * 15),
+        ),
     ]);
     let token = JWTUtil::create_token(payload, key).expect("create_token");
     assert_eq!(token.matches('.').count(), 2);
@@ -255,7 +263,8 @@ fn jwt_util_parse_test() {
         eyJzdWIiOiIxMjM0NTY3ODkwIiwiYWRtaW4iOnRydWUsIm5hbWUiOiJsb29seSJ9.\
         U2aQkC2THYV9L0fTN-yBBI7gmo5xhmvMhATtu8v0zEA";
     let mut jwt = JWTUtil::parse_token(right_token).expect("parse");
-    assert!(jwt.set_key(b"1234567890").verify().expect("verify"));
+    jwt.set_key(b"1234567890").expect("set_key");
+    assert!(jwt.verify().expect("verify"));
     assert_eq!(
         jwt.header().claims().get_claim(JWTHeader::TYPE),
         Some(&Value::String("JWT".into()))
@@ -520,7 +529,8 @@ fn expired_at_test() {
 fn issue_at_test() {
     let mut jwt = JWT::create();
     let issued = now_secs();
-    jwt.set_issued_at(issued).set_key(b"123456");
+    jwt.set_issued_at(issued);
+    jwt.set_key(b"123456").expect("set_key");
     let token = jwt.sign().expect("sign");
     // 签发时间晚于被检查的时间（昨天）→ 失败
     let yesterday = issued.saturating_sub(86_400);
@@ -537,7 +547,8 @@ fn issue_at_test() {
 fn issue_at_pass_test() {
     let mut jwt = JWT::create();
     let issued = now_secs();
-    jwt.set_issued_at(issued).set_key(b"123456");
+    jwt.set_issued_at(issued);
+    jwt.set_key(b"123456").expect("set_key");
     let token = jwt.sign().expect("sign");
     JWTValidator::of_token(&token)
         .expect("of")
@@ -574,7 +585,8 @@ fn not_before_pass_test() {
 #[test]
 fn validate_algorithm_test() {
     let mut jwt = JWT::create();
-    jwt.set_not_before(now_secs()).set_key(b"123456");
+    jwt.set_not_before(now_secs());
+    jwt.set_key(b"123456").expect("set_key");
     let token = jwt.sign().expect("sign");
     let signer = JWTSignerUtil::hs256(b"123456").expect("hs256");
     JWTValidator::of_token(&token)
@@ -591,7 +603,7 @@ fn validate_test() {
         L0uB38p9sZrivbmP0VlDe--j_11YUXTu3TfHhfQhRKc";
     let key = b"1234567890";
     let mut jwt = JWT::of(token).expect("of");
-    jwt.set_key(key);
+    jwt.set_key(key).expect("set_key");
     // Hutool validate(0) → signature OK but dates expired → false
     assert!(!jwt.is_valid_at(now_secs(), 0).expect("is_valid_at"));
 }
@@ -605,9 +617,7 @@ fn validate_date_test() {
         // 2021-10-13 09:59:00 UTC ≈ 1634119140
         .set_expires_at(1_634_119_140);
     assert!(
-        JWTValidator::of_jwt(jwt)
-            .validate_date()
-            .is_err(),
+        JWTValidator::of_jwt(jwt).validate_date().is_err(),
         "expired token must fail date validation"
     );
 }
@@ -622,8 +632,8 @@ fn issue2329_test() {
         .set_payload("sub", Value::String("blue-light".into()))
         .set_issued_at(now)
         .set_not_before(now + expired)
-        .set_expires_at(now + expired)
-        .set_key(b"123456");
+        .set_expires_at(now + expired);
+    builder.set_key(b"123456").expect("set_key");
     let token = builder.sign().expect("sign");
     // leeway=10 covers ±4s skew around nbf/exp/iat windows
     JWTValidator::of_token(&token)
@@ -716,7 +726,7 @@ fn verify_none_test() {
     );
     let mut jwt2 = JWTUtil::parse_token(&token).expect("parse");
     assert!(
-        jwt2.set_key(b"123").verify().is_err(),
+        jwt2.set_key(b"123").and_then(|jwt| jwt.verify()).is_err(),
         "key with alg=none must error"
     );
 }
@@ -737,7 +747,7 @@ fn verify_empty_test() {
     );
     let mut jwt2 = JWTUtil::parse_token(&token).expect("parse");
     assert!(
-        jwt2.set_key(b"123").verify().is_err(),
+        jwt2.set_key(b"123").and_then(|jwt| jwt.verify()).is_err(),
         "key with empty alg must error"
     );
 }
@@ -748,13 +758,13 @@ fn verify_hs256_test() {
     let token = issue4105_token(r#"{"alg": "HS256"}"#, r#"{"exp": 1642196407}"#);
     let jwt = JWTUtil::parse_token(&token).expect("parse");
     assert!(jwt.signer().is_none());
-    assert!(
-        jwt.verify().is_err(),
-        "HS256 without signer/key must error"
-    );
+    assert!(jwt.verify().is_err(), "HS256 without signer/key must error");
     let mut jwt2 = JWTUtil::parse_token(&token).expect("parse");
     assert!(
-        !jwt2.set_key(b"123").verify().expect("verify with key"),
+        !jwt2
+            .set_key(b"123")
+            .and_then(|jwt| jwt.verify())
+            .expect("verify with key"),
         "empty signature must fail HS256 verify"
     );
 }
@@ -783,7 +793,8 @@ fn create_token_test() {
          3Ywq9NlR3cBST4nfcdbR-fcZ8374RHzU50X6flKvG-tnWFMalMaHRm3cMpXs1NrZ"
     );
     let mut jwt = JWT::of(&token).expect("of");
-    assert!(jwt.set_key(b"123456").verify().expect("verify"));
+    jwt.set_key(b"123456").expect("set_key");
+    assert!(jwt.verify().expect("verify"));
 }
 
 // ---------------------------------------------------------------------------
@@ -813,10 +824,8 @@ fn payload_to_bean_test() {
         .claims()
         .clone();
     assert_eq!(payloads.to_string(), "{\"iat\":1677772800}");
-    let bean: JwtTokenIat = serde_json::from_value(Value::Object(
-        payloads.claims_json().clone(),
-    ))
-    .expect("toBean");
+    let bean: JwtTokenIat =
+        serde_json::from_value(Value::Object(payloads.claims_json().clone())).expect("toBean");
     assert_eq!(bean.iat, iat);
 }
 
@@ -837,9 +846,7 @@ fn payload_to_bean_test2() {
         .claims()
         .clone();
     assert_eq!(payloads.to_string(), "{\"iat\":1677772800}");
-    let bean: JwtTokenIat = serde_json::from_value(Value::Object(
-        payloads.claims_json().clone(),
-    ))
-    .expect("toBean");
+    let bean: JwtTokenIat =
+        serde_json::from_value(Value::Object(payloads.claims_json().clone())).expect("toBean");
     assert_eq!(bean.iat, iat);
 }

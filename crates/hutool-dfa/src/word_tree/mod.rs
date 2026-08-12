@@ -3,8 +3,7 @@
 //!
 //! Hutool 兼容的可变字典树。
 
-use crate::StopChar;
-use std::{collections::HashMap, fmt, sync::Arc};
+use std::collections::HashMap;
 
 mod found_word;
 mod match_options;

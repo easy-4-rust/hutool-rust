@@ -15,8 +15,8 @@ hutool-dfa = { path = "../crates/hutool-dfa" }
 hutool-json = { path = "../crates/hutool-json" }
 hutool-jwt = { path = "../crates/hutool-jwt" }
 # easyexcel-rs = { path = "../easyexcel-rs" } # removed: engine crates are independent projects
-serde_json = "1"
-url = "2"
+serde_json = "1.0.150"
+url = "2.5.8"
 
 [[bin]]
 name = "codec_round_trip"

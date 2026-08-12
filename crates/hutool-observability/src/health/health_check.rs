@@ -1,11 +1,4 @@
-use std::{
-    collections::BTreeMap,
-    sync::{Arc, RwLock},
-    time::{SystemTime, UNIX_EPOCH},
-};
-
 use serde::Serialize;
-use thiserror::Error;
 
 use super::health_status::HealthStatus;
 
@@ -19,5 +12,3 @@ pub struct HealthCheck {
     /// Last update time as milliseconds since the Unix epoch.
     pub updated_at_unix_ms: u64,
 }
-
-use super::{unix_time_ms};

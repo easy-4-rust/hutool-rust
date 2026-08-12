@@ -11,19 +11,19 @@ pub mod convert;
 pub mod convert_exception;
 pub mod converter;
 pub mod converter_registry;
+#[path = "impl/mod.rs"]
+pub mod impl_;
 pub mod number_chinese_formatter;
 pub mod number_with_format;
 pub mod number_word_formatter;
 pub mod type_converter;
-#[path = "impl/mod.rs"]
-pub mod impl_;
 
 pub use basic_type::BasicType;
 pub use cast_util::CastUtil;
 pub use convert::{Convert, ConvertValue, TimeUnit};
 pub use convert_exception::ConvertException;
 pub use converter_registry::ConverterRegistry;
+pub use impl_::number_converter::{NumberConverter, NumberTarget};
 pub use number_chinese_formatter::NumberChineseFormatter;
 pub use number_with_format::NumberWithFormat;
 pub use number_word_formatter::NumberWordFormatter;
-pub use impl_::number_converter::{NumberConverter, NumberTarget};

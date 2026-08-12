@@ -1,10 +1,9 @@
 //! 对齐: `cn.hutool.core.lang.WeightRandom` / 内部类 `WeightObj`
 //! 来源: hutool-core/src/main/java/cn/hutool/core/lang/WeightRandom.java
 
-use rand::Rng;
-use std::hash::{Hash, Hasher};
+#![allow(dead_code)] // 对齐 Java WeightRandom，暂未接线，预留
 
-use super::weight_random::WeightRandom;
+use std::hash::{Hash, Hasher};
 
 /// 对齐 Java: `WeightRandom.WeightObj<T>`
 #[derive(Debug, Clone)]
@@ -38,8 +37,7 @@ impl<T> WeightObj<T> {
 
 impl<T: PartialEq> PartialEq for WeightObj<T> {
     fn eq(&self, other: &Self) -> bool {
-        self.obj == other.obj
-            && self.weight.to_bits() == other.weight.to_bits()
+        self.obj == other.obj && self.weight.to_bits() == other.weight.to_bits()
     }
 }
 

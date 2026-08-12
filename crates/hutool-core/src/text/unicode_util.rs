@@ -3,8 +3,8 @@
 //!
 //! Unicode 字符串(`\\uXXXX`)与普通字符串互转。
 
-use crate::hex_util::HexUtil;
 use crate::Result;
+use crate::hex_util::HexUtil;
 
 /// 对齐 Java: `UnicodeUtil#`
 #[derive(Debug, Clone, Copy, Default)]

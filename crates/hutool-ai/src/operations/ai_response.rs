@@ -2,9 +2,7 @@
 
 #![allow(missing_docs, clippy::enum_glob_use, clippy::match_same_arms)]
 
-use crate::Message;
-use serde_json::{Map, Value, json};
-use std::{path::PathBuf, sync::Arc};
+use serde_json::Value;
 
 /// Normalized raw provider response.
 #[derive(Debug, Clone, PartialEq)]
@@ -32,5 +30,25 @@ impl AIResponse {
             Self::Json(value) => value.to_string().into_bytes(),
             Self::Bytes(bytes) => bytes,
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json::json;
+
+    #[test]
+    fn json_response_into_text_and_bytes() {
+        let response = AIResponse::Json(json!({"answer": 42}));
+        assert_eq!(response.clone().into_text(), r#"{"answer":42}"#);
+        assert_eq!(response.into_bytes(), br#"{"answer":42}"#.to_vec());
+    }
+
+    #[test]
+    fn bytes_response_into_text_and_bytes() {
+        let bytes = AIResponse::Bytes(b"hello".to_vec());
+        assert_eq!(bytes.clone().into_text(), "hello");
+        assert_eq!(bytes.into_bytes(), b"hello".to_vec());
     }
 }

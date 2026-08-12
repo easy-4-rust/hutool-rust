@@ -24,7 +24,11 @@ fn gzip_test() {
     let gzip = ZipUtil::gzip(data.as_bytes()).unwrap();
     assert!(!gzip.is_empty(), "gzip 压缩结果非空 (对齐 Java)");
     let decoded = ZipUtil::un_gzip(&gzip).unwrap();
-    assert_eq!(data.as_bytes(), decoded.as_slice(), "gzip 解压后应等于原文 (对齐 Java)");
+    assert_eq!(
+        data.as_bytes(),
+        decoded.as_slice(),
+        "gzip 解压后应等于原文 (对齐 Java)"
+    );
 }
 
 /// 对齐 Java: `ZipUtilTest.zlibTest()`
@@ -33,9 +37,15 @@ fn zlib_test() {
     let data = "我是一个需要压缩的很长很长的字符串";
     let bytes = data.as_bytes();
     let zlib0 = ZipUtil::zlib(bytes, 0).unwrap();
-    assert!(zlib0.len() < bytes.len() + 20, "zlib level 0 合理大小 (对齐 Java)");
+    assert!(
+        zlib0.len() < bytes.len() + 20,
+        "zlib level 0 合理大小 (对齐 Java)"
+    );
     let zlib9 = ZipUtil::zlib(bytes, 9).unwrap();
-    assert!(zlib9.len() < zlib0.len(), "zlib level 9 应比 level 0 更小 (对齐 Java)");
+    assert!(
+        zlib9.len() < zlib0.len(),
+        "zlib level 9 应比 level 0 更小 (对齐 Java)"
+    );
     assert_eq!(bytes, ZipUtil::un_zlib(&zlib0).unwrap().as_slice());
     assert_eq!(bytes, ZipUtil::un_zlib(&zlib9).unwrap().as_slice());
 }
@@ -210,7 +220,10 @@ fn issue_3018_test() {
     let bytes = ZipUtil::zip_streams(&["default.txt"], &[b"default"]).unwrap();
     let out = dir.path().join("default-out");
     ZipUtil::unzip_bytes(&bytes, &out).unwrap();
-    assert_eq!(b"default", fs::read(out.join("default.txt")).unwrap().as_slice());
+    assert_eq!(
+        b"default",
+        fs::read(out.join("default.txt")).unwrap().as_slice()
+    );
 }
 
 /// 对齐 Java: ZipUtil gzip_str / listFileNames / get / read

@@ -1,5 +1,3 @@
-use std::ops::Range;
-
 use thiserror::Error;
 
 /// Errors returned by checked pagination calculations.

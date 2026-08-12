@@ -1,10 +1,7 @@
 //! 对齐: `cn.hutool.dfa.SensitiveProcessor` (Rust 独有 trait)
 //! 中文说明: 敏感词处理器 trait，定义匹配到敏感词后的替换逻辑
 
-use crate::{DfaError, FoundWord, MatchOptions, WordTree};
-use parking_lot::RwLock;
-use serde::{Serialize, de::DeserializeOwned};
-use std::{collections::BTreeMap, sync::Arc, thread::JoinHandle};
+use crate::FoundWord;
 
 /// Rewrites one sensitive match.
 pub trait SensitiveProcessor: Send + Sync {

@@ -1,18 +1,22 @@
 //! 对齐: `cn.hutool.core.text.split.SplitIter`
 //! 来源: hutool-core SplitIter.java
 
+use crate::Result;
 use crate::text::finder::char_finder::CharFinder;
 use crate::text::finder::length_finder::LengthFinder;
 use crate::text::finder::pattern_finder::PatternFinder;
 use crate::text::finder::str_finder::StrFinder;
-use crate::{CoreError, Result};
 
 /// 查找器抽象（对齐 TextFinder）
 #[derive(Debug, Clone)]
 pub enum TextFinderKind {
+    /// 字符查找器
     Char(CharFinder),
+    /// 字符串查找器
     Str(StrFinder),
+    /// 长度查找器
     Length(LengthFinder),
+    /// 正则查找器
     Pattern(PatternFinder),
 }
 

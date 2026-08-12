@@ -1,6 +1,3 @@
-use std::fmt;
-use std::hash::{Hash, Hasher};
-
 mod coordinate;
 mod coordinate_util;
 

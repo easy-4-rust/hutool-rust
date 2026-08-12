@@ -5,15 +5,10 @@
 //! 对齐: `cn.hutool.extra.mail.MailAccount`
 //! 来源: hutool-extra/src/main/java/cn/hutool/extra/mail/
 
-use std::time::Duration;
-
-use lettre::message::{Mailbox, Message};
+use lettre::message::Mailbox;
 use lettre::transport::smtp::response::Response;
 
-use crate::mail::{
-    MailAttachment, MailBody, MailLimits, MailMessage, SmtpClient, SmtpConfig, SmtpCredentials,
-    SmtpSecurity,
-};
+use crate::mail::{MailLimits, MailMessage, SmtpClient};
 use crate::{ExtraError, Result};
 
 use super::mail_account::MailAccount;

@@ -1,7 +1,6 @@
-use std::{fmt, sync::Arc};
+use std::fmt;
 
 use subtle::ConstantTimeEq;
-use thiserror::Error;
 use zeroize::Zeroizing;
 
 use super::authorization_error::AuthorizationError;
@@ -41,5 +40,3 @@ impl DiagnosticsAuthorizer for StaticTokenAuthorizer {
         self.token.len() == credential.len() && bool::from(self.token.as_slice().ct_eq(credential))
     }
 }
-
-use super::{DenyAll};

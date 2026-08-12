@@ -4,13 +4,11 @@
 //! 具体 FTP 协议操作（Ftp/SimpleFtpServer）需要外部 Java crate（Apache Commons Net /
 //! Apache FtpServer），属于 unsafe-to-copy。
 
-use std::fmt;
-
 use crate::HutoolException;
 
 /// 抽象 FTP 操作 trait，对齐 `cn.hutool.extra.ftp.AbstractFtp`。
 ///
-/// 具体 Ftp / SshjSftp 实现需要外部 Java crate，属于 unsafe-to-copy。
+/// 具体 Ftp / `SshjSftp` 实现需要外部 Java crate，属于 unsafe-to-copy。
 pub trait AbstractFtp: Send + Sync {
     /// 对齐 `AbstractFtp.reconnectIfTimeout()`
     fn reconnect_if_timeout(&self) -> std::result::Result<(), HutoolException>;

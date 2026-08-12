@@ -4,12 +4,6 @@
 //! Rust 以 `HashMap<String, serde_json::Value>` 表达 Hutool Dict 动态袋；
 //! Serde 路径覆盖 `parse` / `toBean`，反射字段注入保持 planned。
 
-use std::collections::HashMap;
-
-use serde::Serialize;
-use serde::de::DeserializeOwned;
-use serde_json::Value;
-
 mod dict;
 mod dict_util;
 

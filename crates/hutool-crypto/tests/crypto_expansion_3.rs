@@ -1,7 +1,10 @@
 //! Crypto 扩展 parity 测试 3
 //! 对齐: hutool-crypto 多个测试类
 
-use hutool_crypto::{sha256_hex, hmac_sha256, verify_hmac_sha256, hash_password, verify_password, aes256_gcm_encrypt, aes256_gcm_decrypt};
+use hutool_crypto::{
+    aes256_gcm_decrypt, aes256_gcm_encrypt, hash_password, hmac_sha256, sha256_hex,
+    verify_hmac_sha256, verify_password,
+};
 use secrecy::SecretString;
 
 // ── SHA-256 扩展测试 (8 tests) ──

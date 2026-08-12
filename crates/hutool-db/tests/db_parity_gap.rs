@@ -11,15 +11,15 @@ use std::collections::HashMap;
 use std::time::Duration;
 
 use hutool_db::{
-    build_conditions, format_sql, get_column_names, get_table_meta, get_table_meta_or_err,
-    get_tables, identify_driver, identify_driver_from_text, is_in_clause, remove_outer_order_by,
     ActiveEntity, Condition, ConditionBuilder, ConditionGroup, DataSourceWrapper, Entity,
     HutoolPage, Join, LikeType, LogicalOperator, MongoDs, NamedSql, Order, PageResult, PoolConfig,
-    RedisDs, Session, SqlBuilder, Wrapper,
+    RedisDs, Session, SqlBuilder, Wrapper, build_conditions, format_sql, get_column_names,
+    get_table_meta, get_table_meta_or_err, get_tables, identify_driver, identify_driver_from_text,
+    is_in_clause, remove_outer_order_by,
 };
 use rust_decimal::Decimal;
 use serde::{Deserialize, Serialize};
-use serde_json::{json, Value};
+use serde_json::{Value, json};
 
 // ── 本地辅助 ──
 
@@ -43,7 +43,10 @@ async fn assert_user_non_empty() {
 /// 对齐 `DbTest.queryTest` 核心断言。
 async fn assert_db_query_wangwu() {
     let db = common::test_db().await;
-    let rows = db.query("select * from user where age = ?", &[json!(18)]).await.unwrap();
+    let rows = db
+        .query("select * from user where age = ?", &[json!(18)])
+        .await
+        .unwrap();
     assert_eq!(rows[0].get_str("name").as_deref(), Some("王五"));
 }
 
@@ -61,15 +64,9 @@ async fn assert_db_find_wangwu() {
 async fn assert_db_page_two_pages() {
     let db = common::test_db().await;
     let sql = "select * from user order by name";
-    let page0 = db
-        .page_sql(sql, &HutoolPage::of(0, 3), &[])
-        .await
-        .unwrap();
+    let page0 = db.page_sql(sql, &HutoolPage::of(0, 3), &[]).await.unwrap();
     assert_eq!(page0.len(), 3);
-    let page1 = db
-        .page_sql(sql, &HutoolPage::of(1, 3), &[])
-        .await
-        .unwrap();
+    let page1 = db.page_sql(sql, &HutoolPage::of(1, 3), &[]).await.unwrap();
     assert_eq!(page1.len(), 1);
 }
 
@@ -77,10 +74,8 @@ async fn assert_db_page_two_pages() {
 async fn assert_db_tx_roundtrip() {
     let db = common::test_db().await;
     db.tx(|db| async move {
-        db.insert(
-            &Entity::create_table("user").with("name", "unitTestUser2"),
-        )
-        .await?;
+        db.insert(&Entity::create_table("user").with("name", "unitTestUser2"))
+            .await?;
         db.update(
             &Entity::create().with("age", 79),
             &Entity::create_table("user").with("name", "unitTestUser2"),
@@ -137,10 +132,7 @@ async fn assert_insert_named_user() {
 /// 对齐 timestamp 查询核心断言。
 async fn assert_timestamp_query() {
     let db = common::test_db().await;
-    let rows = db
-        .query("SELECT datetime('now') AS ts", &[])
-        .await
-        .unwrap();
+    let rows = db.query("SELECT datetime('now') AS ts", &[]).await.unwrap();
     assert!(!rows.is_empty());
     assert!(rows[0].get_str("ts").is_some());
 }
@@ -237,9 +229,7 @@ async fn crud_find_between_test() {
 async fn crud_find_by_big_integer_test() {
     let db = common::test_db().await;
     let rows = db
-        .find_all(
-            &Entity::create_table("user").with("age", json!(12i64)),
-        )
+        .find_all(&Entity::create_table("user").with("age", json!(12i64)))
         .await
         .unwrap();
     assert_eq!(rows.len(), 2);
@@ -250,9 +240,7 @@ async fn crud_find_by_big_integer_test() {
 async fn crud_find_by_big_decimal_test() {
     let db = common::test_db().await;
     let rows = db
-        .find_all(
-            &Entity::create_table("user").with("age", json!(Decimal::from(12))),
-        )
+        .find_all(&Entity::create_table("user").with("age", json!(Decimal::from(12))))
         .await
         .unwrap();
     assert_eq!(rows.len(), 2);
@@ -284,10 +272,7 @@ async fn crud_find_like_test2() {
 async fn crud_find_like_test3() {
     let db = common::test_db().await;
     let mut entity = Entity::create_table("user");
-    entity.set_condition(
-        "name",
-        Condition::like("name", "", LikeType::Contains),
-    );
+    entity.set_condition("name", Condition::like("name", "", LikeType::Contains));
     let rows = db.find_all(&entity).await.unwrap();
     assert_eq!(rows.len(), 4);
 }
@@ -394,7 +379,10 @@ async fn crud_crud_test() {
 #[tokio::test]
 async fn crud_insert_batch_test() {
     let db = common::test_db().await;
-    let before = db.count_entity(&Entity::create_table("user")).await.unwrap();
+    let before = db
+        .count_entity(&Entity::create_table("user"))
+        .await
+        .unwrap();
     let mut data1 = Entity::create_table("user");
     data1
         .parse_bean(&User {
@@ -418,7 +406,10 @@ async fn crud_insert_batch_test() {
         .unwrap();
     db.insert(&data1).await.unwrap();
     db.insert(&data2).await.unwrap();
-    let after = db.count_entity(&Entity::create_table("user")).await.unwrap();
+    let after = db
+        .count_entity(&Entity::create_table("user"))
+        .await
+        .unwrap();
     assert_eq!(after, before + 2);
 }
 
@@ -426,7 +417,10 @@ async fn crud_insert_batch_test() {
 #[tokio::test]
 async fn crud_insert_batch_one_test() {
     let db = common::test_db().await;
-    let before = db.count_entity(&Entity::create_table("user")).await.unwrap();
+    let before = db
+        .count_entity(&Entity::create_table("user"))
+        .await
+        .unwrap();
     let mut data1 = Entity::create_table("user");
     data1
         .parse_bean(&User {
@@ -438,7 +432,10 @@ async fn crud_insert_batch_one_test() {
         })
         .unwrap();
     db.insert(&data1).await.unwrap();
-    let after = db.count_entity(&Entity::create_table("user")).await.unwrap();
+    let after = db
+        .count_entity(&Entity::create_table("user"))
+        .await
+        .unwrap();
     assert_eq!(after, before + 1);
 }
 
@@ -522,7 +519,9 @@ async fn db_count_test() {
 async fn db_count_by_query_test() {
     let db = common::test_db().await;
     assert_eq!(
-        db.count_entity(&Entity::create_table("user")).await.unwrap(),
+        db.count_entity(&Entity::create_table("user"))
+            .await
+            .unwrap(),
         4
     );
 }
@@ -567,7 +566,10 @@ async fn db_find_like_test() {
 async fn db_find_by_test() {
     let db = common::test_db().await;
     let find = db
-        .query("select * from user where age > ? and age < ?", &[json!(18), json!(100)])
+        .query(
+            "select * from user where age > ? and age < ?",
+            &[json!(18), json!(100)],
+        )
         .await
         .unwrap();
     assert!(
@@ -733,9 +735,7 @@ fn entity_parse_test3() {
         gender: None,
     };
     let mut entity = Entity::create();
-    entity
-        .parse_bean_with(&user, "User", false, true)
-        .unwrap();
+    entity.parse_bean_with(&user, "User", false, true).unwrap();
     assert!(!entity.contains_key("id"));
     assert_eq!(entity.get_str("name").as_deref(), Some("test"));
     assert_eq!(entity.table_name(), Some("user"));
@@ -1072,10 +1072,7 @@ fn named_sql_parse_insert_multi_row_test() {
     param_map.insert("user2".to_string(), json!([2, "xxxtea"]));
     let sql = "INSERT INTO users (id, name) VALUES (:user1), (:user2)";
     let named = NamedSql::new(sql, &param_map);
-    assert_eq!(
-        named.sql(),
-        "INSERT INTO users (id, name) VALUES (?), (?)"
-    );
+    assert_eq!(named.sql(), "INSERT INTO users (id, name) VALUES (?), (?)");
     assert_eq!(named.params().len(), 2);
 }
 
@@ -1265,9 +1262,7 @@ async fn sql_server_insert_test() {
     .await
     .unwrap();
     let id = db
-        .insert(
-            &Entity::create_table("sql_server_item").with("name", "hutool"),
-        )
+        .insert(&Entity::create_table("sql_server_item").with("name", "hutool"))
         .await
         .unwrap();
     assert!(id > 0);
@@ -1412,12 +1407,7 @@ fn issue_i70_j95_get_data_source_test() {
 /// 对齐 Java: `IssueI70J95Test.getDataSourceTest2()`
 #[test]
 fn issue_i70_j95_get_data_source_test2() {
-    let wrapper = DataSourceWrapper::new(
-        "jdbc:sqlite::memory:",
-        "sa",
-        "",
-        "org.sqlite.JDBC",
-    );
+    let wrapper = DataSourceWrapper::new("jdbc:sqlite::memory:", "sa", "", "org.sqlite.JDBC");
     assert!(!wrapper.raw_url().is_empty());
 }
 
@@ -1549,10 +1539,7 @@ fn condition_to_string_test() {
         Condition::with_operator("user", "<>", Value::Null).to_string(),
         "user IS NOT NULL"
     );
-    assert_eq!(
-        Condition::new("user", "= zhangsan").to_string(),
-        "user = ?"
-    );
+    assert_eq!(Condition::new("user", "= zhangsan").to_string(), "user = ?");
     assert_eq!(
         Condition::new("user", "like %aaa").to_string(),
         "user LIKE ?"
@@ -1616,10 +1603,7 @@ fn condition_parse_in_test() {
 #[test]
 fn issue4066_remove_outer_order_by_test1() {
     let sql = "SELECT * FROM users ORDER BY name";
-    assert_eq!(
-        remove_outer_order_by(sql),
-        "SELECT * FROM users"
-    );
+    assert_eq!(remove_outer_order_by(sql), "SELECT * FROM users");
 }
 
 /// 对齐 Java: `Issue4066Test.removeOuterOrderByTest2()`
@@ -1662,17 +1646,13 @@ fn issue4200_is_in_clause_test2() {
 /// 对齐 Java: `Issue4200Test.isInClauseTest3()`
 #[test]
 fn issue4200_is_in_clause_test3() {
-    assert!(!is_in_clause(
-        "select case when 1 in (?,?,?) and 2 = any("
-    ));
+    assert!(!is_in_clause("select case when 1 in (?,?,?) and 2 = any("));
 }
 
 /// 对齐 Java: `Issue4200Test.isInClauseTest4()`
 #[test]
 fn issue4200_is_in_clause_test4() {
-    assert!(!is_in_clause(
-        "select case when 1 in (?,?,?) and 2 = any("
-    ));
+    assert!(!is_in_clause("select case when 1 in (?,?,?) and 2 = any("));
 }
 
 // ── SqlBuilderTest ──
@@ -1685,20 +1665,14 @@ fn sql_builder_query_null_test() {
         .select(["*"])
         .from("user")
         .where_conditions(&[Condition::new("name", "= null")]);
-    assert_eq!(
-        builder.build(),
-        "SELECT * FROM user WHERE name IS NULL"
-    );
+    assert_eq!(builder.build(), "SELECT * FROM user WHERE name IS NULL");
 
     let mut builder2 = SqlBuilder::create();
     builder2
         .select(["*"])
         .from("user")
         .where_conditions(&[Condition::new("name", "is null")]);
-    assert_eq!(
-        builder2.build(),
-        "SELECT * FROM user WHERE name IS NULL"
-    );
+    assert_eq!(builder2.build(), "SELECT * FROM user WHERE name IS NULL");
 
     let mut builder3 = SqlBuilder::create();
     builder3

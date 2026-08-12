@@ -96,14 +96,18 @@ impl ScreenUtil {
         let rel_x = rect.x.saturating_sub(monitor_x).max(0) as u32;
         let rel_y = rect.y.saturating_sub(monitor_y).max(0) as u32;
         // 用 image crate 裁剪
-        let sub = image::imageops::crop_imm(&full, rel_x, rel_y, rect.width, rect.height).to_image();
+        let sub =
+            image::imageops::crop_imm(&full, rel_x, rel_y, rect.width, rect.height).to_image();
         Ok(sub)
     }
 
     /// 截取主屏幕的指定矩形区域到文件。
     ///
     /// 对齐 Java: `ScreenUtil.captureScreen(Rectangle screenRect, File outFile)`
-    pub fn capture_screen_region_to_file(rect: ScreenRect, out_file: impl AsRef<Path>) -> Result<()> {
+    pub fn capture_screen_region_to_file(
+        rect: ScreenRect,
+        out_file: impl AsRef<Path>,
+    ) -> Result<()> {
         let image = Self::capture_screen_region(rect)?;
         image
             .save(out_file.as_ref())

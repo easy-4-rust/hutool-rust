@@ -3,8 +3,6 @@
 use std::collections::HashMap;
 use std::sync::Arc;
 
-use parking_lot::RwLock;
-
 use crate::mirror::{AnnotationMirror, AnnotationSchema, AnnotationTypeName, AnnotationValue};
 
 pub use crate::mirror::ElementHandle;
@@ -55,21 +53,24 @@ impl AnnotationRegistry {
     /// 注册类型元素。
     pub fn register_type(&mut self, element: TypeElement) -> ElementHandle {
         let handle = element.handle;
-        self.elements.insert(handle, AnnotatedElement::Type(element));
+        self.elements
+            .insert(handle, AnnotatedElement::Type(element));
         handle
     }
 
     /// 注册方法元素。
     pub fn register_method(&mut self, element: MethodElement) -> ElementHandle {
         let handle = element.handle;
-        self.elements.insert(handle, AnnotatedElement::Method(element));
+        self.elements
+            .insert(handle, AnnotatedElement::Method(element));
         handle
     }
 
     /// 注册字段元素。
     pub fn register_field(&mut self, element: FieldElement) -> ElementHandle {
         let handle = element.handle;
-        self.elements.insert(handle, AnnotatedElement::Field(element));
+        self.elements
+            .insert(handle, AnnotatedElement::Field(element));
         handle
     }
 
@@ -143,5 +144,3 @@ impl AnnotationRegistry {
         chain
     }
 }
-
-use super::{GLOBAL_REGISTRY, global_registry};

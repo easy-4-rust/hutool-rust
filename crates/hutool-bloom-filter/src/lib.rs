@@ -9,6 +9,7 @@
 mod bitmap;
 pub mod hashes;
 mod hutool;
+pub mod prelude;
 
 use bloomfilter::Bloom;
 use std::{hash::Hash, io};

@@ -53,9 +53,7 @@ impl<E> ComparatorChain<E> {
 
     /// 对齐 Java: `of(Comparator...)` / `of(List)`
     #[must_use]
-    pub fn of_list(
-        comparators: Vec<Box<dyn Fn(&E, &E) -> Ordering + Send + Sync>>,
-    ) -> Self {
+    pub fn of_list(comparators: Vec<Box<dyn Fn(&E, &E) -> Ordering + Send + Sync>>) -> Self {
         let n = comparators.len();
         Self {
             chain: comparators,

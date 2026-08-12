@@ -2,19 +2,14 @@
 
 use std::sync::Arc;
 
-use crate::hierarchical::{
-    ChooseSide, FarthestAndNewestPrioritySelector, FarthestAndOldestPrioritySelector,
-    Hierarchical, HierarchicalSelector, NearestAndNewestPrioritySelector,
-    NearestAndOldestPrioritySelector,
-};
-use crate::synthesized_annotation::SynthesizedAnnotation;
+use crate::hierarchical::HierarchicalSelector;
 
-mod synthesized_annotation_selector;
 mod selectors;
+mod synthesized_annotation_selector;
 mod test_synthesized_annotation;
 
-pub use synthesized_annotation_selector::SynthesizedAnnotationSelector;
 pub use selectors::Selectors;
+pub use synthesized_annotation_selector::SynthesizedAnnotationSelector;
 pub use test_synthesized_annotation::TestSynthesizedAnnotation;
 
 struct SelectorAdapter {

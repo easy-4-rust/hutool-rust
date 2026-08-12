@@ -4,7 +4,7 @@
 //! Rust 版本提供算术、比较、最值、解析与 BigDecimal（`rust_decimal::Decimal`）对齐实现。
 
 use crate::{CoreError, Result};
-use rand::Rng;
+use rand::RngExt;
 use rust_decimal::Decimal;
 use rust_decimal::RoundingStrategy;
 use std::collections::HashSet;
@@ -528,9 +528,7 @@ impl NumberUtil {
         }
         // 十六进制
         if t.len() > 2 && t[..2].eq_ignore_ascii_case("0x") {
-            return i64::from_str_radix(&t[2..], 16)
-                .ok()
-                .map(ParsedNumber::I64);
+            return i64::from_str_radix(&t[2..], 16).ok().map(ParsedNumber::I64);
         }
         // 剥离类型后缀 D/F/L（单独一个后缀字母不是数字）
         let mut stripped = false;
@@ -542,12 +540,15 @@ impl NumberUtil {
             t.pop();
             stripped = true;
         }
-        if stripped && (t.is_empty() || t == "+" || t == "-" || t == "." || t == "+." || t == "-.") {
+        if stripped && (t.is_empty() || t == "+" || t == "-" || t == "." || t == "+." || t == "-.")
+        {
             return None;
         }
         if t.is_empty() || t == "+" || t == "-" || t == "." || t == "+." || t == "-." {
             // ".123" → 0 for int path; for Number keep as 0.123
-            if number.trim().starts_with('.') || number.trim().starts_with("+.") || number.trim().starts_with("-.")
+            if number.trim().starts_with('.')
+                || number.trim().starts_with("+.")
+                || number.trim().starts_with("-.")
             {
                 // fallthrough after restoring
             } else {
@@ -671,10 +672,10 @@ impl NumberUtil {
             });
         }
         let mut seed: Vec<i32> = (begin..end).collect();
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let mut ran = Vec::with_capacity(size);
         for i in 0..size {
-            let j = rng.gen_range(0..seed.len() - i);
+            let j = rng.random_range(0..seed.len() - i);
             ran.push(seed[j]);
             let last = seed.len() - 1 - i;
             seed[j] = seed[last];
@@ -695,9 +696,9 @@ impl NumberUtil {
             });
         }
         let mut set = HashSet::new();
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         while set.len() < size {
-            set.insert(rng.gen_range(begin..end));
+            set.insert(rng.random_range(begin..end));
         }
         Ok(set.into_iter().collect())
     }
@@ -1047,10 +1048,7 @@ impl NumberUtil {
         if values.is_empty() {
             return Decimal::ZERO;
         }
-        values[1..]
-            .iter()
-            .copied()
-            .fold(values[0], |a, b| a - b)
+        values[1..].iter().copied().fold(values[0], |a, b| a - b)
     }
 
     /// 对齐 Java: `NumberUtil.mul(BigDecimal...)`
@@ -1073,4 +1071,7 @@ impl NumberUtil {
     }
 }
 
-use super::{decimal_to_f64, extract_number_prefix, f64_to_java_string, format_with_pattern, group_thousands, is_scientific_form, plain_fixed};
+use super::{
+    decimal_to_f64, extract_number_prefix, f64_to_java_string, format_with_pattern,
+    is_scientific_form, plain_fixed,
+};

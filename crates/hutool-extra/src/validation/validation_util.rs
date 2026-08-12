@@ -30,8 +30,10 @@ impl ValidationUtil {
         failures: impl IntoIterator<Item = (String, Option<String>)>,
     ) -> BeanValidationResult {
         let property = property_name.into();
-        BeanValidationResult::from_failures(failures.into_iter().map(|(message, value)| {
-            (property.clone(), message, value)
-        }))
+        BeanValidationResult::from_failures(
+            failures
+                .into_iter()
+                .map(|(message, value)| (property.clone(), message, value)),
+        )
     }
 }

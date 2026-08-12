@@ -1,7 +1,6 @@
-use pprof::{ProfilerGuard, ProfilerGuardBuilder, protos::Message};
 use thiserror::Error;
 
-use crate::{AuthorizationError, DiagnosticAction, DiagnosticPermit};
+use crate::AuthorizationError;
 
 /// CPU profiling failures.
 #[derive(Debug, Error)]

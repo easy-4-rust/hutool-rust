@@ -19,6 +19,8 @@ pub struct CloneRuntimeException {
 impl CloneRuntimeException {
     /// 创建新的错误实例。
     pub fn new(message: impl Into<String>) -> Self {
-        Self { message: message.into() }
+        Self {
+            message: message.into(),
+        }
     }
 }

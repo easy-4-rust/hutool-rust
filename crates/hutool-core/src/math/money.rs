@@ -71,7 +71,12 @@ impl Money {
     /// 对齐 Java: `Money(String amount)`（默认 CNY，HALF_EVEN）
     #[must_use]
     pub fn from_yuan_str(amount: &str) -> Self {
-        Self::from_decimal_str(amount, DEFAULT_CURRENCY_CODE, 2, RoundingStrategy::MidpointNearestEven)
+        Self::from_decimal_str(
+            amount,
+            DEFAULT_CURRENCY_CODE,
+            2,
+            RoundingStrategy::MidpointNearestEven,
+        )
     }
 
     /// 对齐 Java: `Money(String amount, Currency currency)`
@@ -124,7 +129,12 @@ impl Money {
     /// 对齐 Java: `Money(BigDecimal amount)`
     #[must_use]
     pub fn from_decimal(amount: Decimal) -> Self {
-        Self::from_decimal_currency(amount, DEFAULT_CURRENCY_CODE, 2, RoundingStrategy::MidpointNearestEven)
+        Self::from_decimal_currency(
+            amount,
+            DEFAULT_CURRENCY_CODE,
+            2,
+            RoundingStrategy::MidpointNearestEven,
+        )
     }
 
     /// 对齐 Java: `Money(BigDecimal amount, RoundingMode)`
@@ -168,12 +178,20 @@ impl Money {
     /// 对齐 Java: `Money(long yuan, Currency)` —— 按币种小数位构造（测试辅助）。
     #[must_use]
     pub fn with_currency_fraction(yuan: i64, fraction_digits: u32) -> Self {
-        Self::with_currency_code(yuan * cent_factor(fraction_digits), "CUSTOM", fraction_digits)
+        Self::with_currency_code(
+            yuan * cent_factor(fraction_digits),
+            "CUSTOM",
+            fraction_digits,
+        )
     }
 
     /// 以「分」直接构造。
     #[must_use]
-    pub fn with_currency_code(cent: i64, currency_code: impl Into<String>, fraction_digits: u32) -> Self {
+    pub fn with_currency_code(
+        cent: i64,
+        currency_code: impl Into<String>,
+        fraction_digits: u32,
+    ) -> Self {
         Self {
             cent,
             currency_code: currency_code.into(),
@@ -475,11 +493,7 @@ impl fmt::Display for Money {
     /// 对齐 Java: `toString()` —— 固定小数位展示。
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let amount = self.get_amount();
-        let s = format!(
-            "{:.prec$}",
-            amount,
-            prec = self.fraction_digits as usize
-        );
+        let s = format!("{:.prec$}", amount, prec = self.fraction_digits as usize);
         f.write_str(&s)
     }
 }

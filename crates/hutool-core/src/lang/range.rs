@@ -1,5 +1,7 @@
 //! 对齐: `cn.hutool.core.lang.Range`
 
+#![allow(dead_code)] // 对齐 Java Range，暂未接线，预留
+
 /// 对齐 Java: `Range<T>` 步进迭代器
 pub struct Range<T> {
     current: Option<T>,
@@ -53,11 +55,7 @@ pub fn int_range(start: i32, end: i32, step: i32) -> Range<i32> {
     Range::new(start, end, move |cur, end, _| {
         let n = cur + step;
         if step > 0 {
-            if n > *end {
-                None
-            } else {
-                Some(n)
-            }
+            if n > *end { None } else { Some(n) }
         } else if n < *end {
             None
         } else {

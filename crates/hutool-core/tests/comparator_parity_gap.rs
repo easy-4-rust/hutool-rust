@@ -3,11 +3,11 @@
 //! 对齐: `cn.hutool.core.comparator.*` 未覆盖 @Test
 
 use hutool_core::CollUtil;
+use hutool_core::RandomUtil;
 use hutool_core::comparator::{
     ArrayIndexedComparator, FieldsComparator, PropertyComparator, VersionComparator,
     WindowsExplorerStringComparator,
 };
-use hutool_core::RandomUtil;
 use std::cmp::Ordering;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -293,12 +293,32 @@ fn version_comparator_start_with_none_number_test() {
 // ── WindowsExplorerStringComparatorTest ──
 
 const ANSWER1: &[&str] = &[
-    "filename", "filename 00", "filename 0", "filename 01", "filename.jpg", "filename.txt",
-    "filename00.jpg", "filename00a.jpg", "filename00a.txt", "filename0", "filename0.jpg",
-    "filename0a.txt", "filename0b.jpg", "filename0b1.jpg", "filename0b02.jpg", "filename0c.jpg",
-    "filename01.0hjh45-test.txt", "filename01.0hjh46", "filename01.1hjh45.txt",
-    "filename01.hjh45.txt", "Filename01.jpg", "Filename1.jpg", "filename2.hjh45.txt",
-    "filename2.jpg", "filename03.jpg", "filename3.jpg",
+    "filename",
+    "filename 00",
+    "filename 0",
+    "filename 01",
+    "filename.jpg",
+    "filename.txt",
+    "filename00.jpg",
+    "filename00a.jpg",
+    "filename00a.txt",
+    "filename0",
+    "filename0.jpg",
+    "filename0a.txt",
+    "filename0b.jpg",
+    "filename0b1.jpg",
+    "filename0b02.jpg",
+    "filename0c.jpg",
+    "filename01.0hjh45-test.txt",
+    "filename01.0hjh46",
+    "filename01.1hjh45.txt",
+    "filename01.hjh45.txt",
+    "Filename01.jpg",
+    "Filename1.jpg",
+    "filename2.hjh45.txt",
+    "filename2.jpg",
+    "filename03.jpg",
+    "filename3.jpg",
 ];
 
 const ANSWER2: &[&str] = &["abc1.doc", "abc2.doc", "abc12.doc"];

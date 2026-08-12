@@ -3,10 +3,10 @@
 //! 中文说明: RSA 非对称加密/解密与签名工具，对齐 Hutool RSA
 
 use crate::CryptoError;
-use rsa::pkcs1::{DecodeRsaPrivateKey, EncodeRsaPrivateKey, EncodeRsaPublicKey};
+use rsa::pkcs1::DecodeRsaPrivateKey;
 use rsa::pkcs8::{DecodePrivateKey, DecodePublicKey, EncodePrivateKey, EncodePublicKey};
+use rsa::sha2::Sha256;
 use rsa::{Oaep, Pkcs1v15Encrypt, RsaPrivateKey, RsaPublicKey};
-use sha2::Sha256;
 
 /// RSA key pair (private + public).
 pub struct RsaKeyPair {
@@ -74,14 +74,13 @@ pub fn rsa_encrypt_nopadding(
     let mut em = vec![0u8; k];
     em[k - plaintext.len()..].copy_from_slice(plaintext);
     let m = rsa::BigUint::from_bytes_be(&em);
-    let c = m
-        .modpow(public_key.e(), public_key.n())
-        .to_bytes_be();
+    let c = m.modpow(public_key.e(), public_key.n()).to_bytes_be();
     let mut out = vec![0u8; k];
     out[k - c.len()..].copy_from_slice(&c);
     Ok(out)
 }
 
+/// PKCS#1 v1.5 public-key encrypt (Hutool `RSA("RSA/ECB/PKCS1Padding")`).
 pub fn rsa_encrypt_pkcs1v15(
     public_key: &RsaPublicKey,
     plaintext: &[u8],
@@ -142,7 +141,9 @@ pub fn rsa_decrypt_base64(
 ) -> Result<Vec<u8>, CryptoError> {
     use base64::Engine as _;
     use base64::engine::general_purpose::STANDARD;
-    let ct = STANDARD.decode(ciphertext_b64).map_err(|_| CryptoError::InvalidCiphertext)?;
+    let ct = STANDARD
+        .decode(ciphertext_b64)
+        .map_err(|_| CryptoError::InvalidCiphertext)?;
     rsa_decrypt_pkcs1v15(private_key, &ct)
 }
 

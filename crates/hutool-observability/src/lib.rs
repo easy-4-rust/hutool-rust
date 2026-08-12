@@ -12,6 +12,7 @@
 #![forbid(unsafe_code)]
 
 mod authorization;
+pub mod prelude;
 pub use authorization::{
     AuthorizationError, DiagnosticAction, DiagnosticPermit, DiagnosticsAccess,
     DiagnosticsAuthorizer, StaticTokenAuthorizer,

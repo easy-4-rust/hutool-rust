@@ -10,7 +10,8 @@ use uuid::Uuid;
 
 type SnowflakeKey = (i64, i64);
 
-static SNOWFLAKE_SINGLETONS: OnceLock<Mutex<HashMap<SnowflakeKey, Arc<Snowflake>>>> = OnceLock::new();
+static SNOWFLAKE_SINGLETONS: OnceLock<Mutex<HashMap<SnowflakeKey, Arc<Snowflake>>>> =
+    OnceLock::new();
 
 fn snowflake_cache() -> &'static Mutex<HashMap<SnowflakeKey, Arc<Snowflake>>> {
     SNOWFLAKE_SINGLETONS.get_or_init(|| Mutex::new(HashMap::new()))
@@ -106,10 +107,7 @@ fn local_hardware_address() -> Option<Vec<u8>> {
     #[cfg(target_os = "macos")]
     {
         use std::process::Command;
-        let out = Command::new("ifconfig")
-            .arg("en0")
-            .output()
-            .ok()?;
+        let out = Command::new("ifconfig").arg("en0").output().ok()?;
         if !out.status.success() {
             return None;
         }
@@ -138,9 +136,7 @@ fn local_hardware_address() -> Option<Vec<u8>> {
 fn java_string_hash(s: &str) -> i32 {
     let mut hash: i32 = 0;
     for ch in s.chars() {
-        hash = hash
-            .wrapping_mul(31)
-            .wrapping_add(ch as i32);
+        hash = hash.wrapping_mul(31).wrapping_add(ch as i32);
     }
     hash
 }

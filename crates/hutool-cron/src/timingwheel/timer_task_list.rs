@@ -4,16 +4,7 @@
 
 #![allow(clippy::missing_panics_doc)]
 
-use std::{
-    cmp::Ordering,
-    collections::BinaryHeap,
-    fmt,
-    sync::{Arc, Mutex, mpsc},
-    thread::{self, JoinHandle},
-    time::{Duration, SystemTime, UNIX_EPOCH},
-};
-
-use crate::CronError;
+use std::{cmp::Ordering, sync::Arc, time::Duration};
 
 use super::timer_task::TimerTask;
 
@@ -114,5 +105,3 @@ impl TimerTaskList {
         self.tasks.is_empty()
     }
 }
-
-use super::{ScheduledTask, TaskFn, TimerCommand, TimerTaskInner, bounded_wait, now_millis, run_timer};

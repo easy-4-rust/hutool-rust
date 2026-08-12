@@ -3,9 +3,9 @@
 //! 中文说明: HTTP工具类，提供URL编码、参数拼接、下载等静态便捷方法
 
 use crate::progress::{NoopStreamProgress, StreamProgress};
+use crate::query::{QueryMap, normalize_params, split_url_params};
 use crate::request::HttpRequest;
 use crate::{ContentType, HttpError, Method, UrlPolicy};
-use crate::query::{normalize_params, split_url_params, QueryMap};
 use encoding_rs::Encoding;
 use hutool_core::base64_encode;
 use indexmap::IndexMap;
@@ -47,7 +47,10 @@ impl HttpUtil {
 
     /// Java: `HttpUtil.createGet(String url, boolean isFollowRedirects)`
     #[must_use]
-    pub fn create_get_with_redirects(url: impl Into<String>, follow_redirects: bool) -> HttpRequest {
+    pub fn create_get_with_redirects(
+        url: impl Into<String>,
+        follow_redirects: bool,
+    ) -> HttpRequest {
         HttpRequest::get(url).set_follow_redirects(follow_redirects)
     }
 
@@ -66,7 +69,10 @@ impl HttpUtil {
 
     /// Java: `HttpUtil.get(String urlString, int timeout)`
     pub async fn get_timeout(url: &str, timeout_ms: i64) -> Result<String, HttpError> {
-        Self::create_get(url).timeout(timeout_ms).execute_body().await
+        Self::create_get(url)
+            .timeout(timeout_ms)
+            .execute_body()
+            .await
     }
 
     /// Java: `HttpUtil.get(String urlString, Map paramMap)`
@@ -74,7 +80,10 @@ impl HttpUtil {
         url: &str,
         form: &IndexMap<String, String>,
     ) -> Result<String, HttpError> {
-        Self::create_get(url).form(form.clone()).execute_body().await
+        Self::create_get(url)
+            .form(form.clone())
+            .execute_body()
+            .await
     }
 
     /// Java: `HttpUtil.get(String urlString, Map paramMap, int timeout)`
@@ -106,7 +115,10 @@ impl HttpUtil {
         url: &str,
         form: &IndexMap<String, String>,
     ) -> Result<String, HttpError> {
-        Self::create_post(url).form(form.clone()).execute_body().await
+        Self::create_post(url)
+            .form(form.clone())
+            .execute_body()
+            .await
     }
 
     /// Java: `HttpUtil.post(String urlString, Map paramMap, int timeout)`
@@ -220,10 +232,7 @@ impl HttpUtil {
     ///
     /// Java: `HttpUtil.download(String url, OutputStream out, boolean isCloseOut)`
     /// (`isCloseOut` is caller-owned in Rust; this helper always flushes.)
-    pub async fn download(
-        url: &str,
-        out: &mut impl Write,
-    ) -> Result<u64, HttpError> {
+    pub async fn download(url: &str, out: &mut impl Write) -> Result<u64, HttpError> {
         Self::download_with_progress(url, out, None).await
     }
 
@@ -377,11 +386,7 @@ impl HttpUtil {
     /// Appends encoded form parameters to a URL.
     ///
     /// Java: `HttpUtil.urlWithForm(String url, Map, Charset, boolean)`
-    pub fn url_with_form(
-        url: &str,
-        form: &IndexMap<String, String>,
-        encode: bool,
-    ) -> String {
+    pub fn url_with_form(url: &str, form: &IndexMap<String, String>, encode: bool) -> String {
         let query = if encode {
             Self::to_params_form(form, true)
         } else {
@@ -455,7 +460,11 @@ impl HttpUtil {
     /// Decodes bytes to a string, optionally re-detecting charset from HTML meta.
     ///
     /// Java: `HttpUtil.getString(byte[] contentBytes, Charset charset, boolean)`
-    pub fn get_string(content_bytes: &[u8], charset_name: Option<&str>, from_content: bool) -> String {
+    pub fn get_string(
+        content_bytes: &[u8],
+        charset_name: Option<&str>,
+        from_content: bool,
+    ) -> String {
         let primary = charset_name
             .and_then(|name| Encoding::for_label(name.as_bytes()))
             .unwrap_or(encoding_rs::UTF_8);
@@ -474,11 +483,16 @@ impl HttpUtil {
         content
     }
 
-    /// Guesses MIME type from a file name extension (minimal Hutool parity).
+    /// 根据文件扩展名推断 MIME 字符串，扩展名匹配不区分大小写。
     ///
-    /// Java: `HttpUtil.getMimeType(String filePath)`
+    /// 参数：`path` 为文件路径或带查询参数、片段的 URL 路径。
+    ///
+    /// 返回：识别成功时返回静态 MIME 字符串，否则返回 `None`。
+    /// 对应 Java: `HttpUtil.getMimeType(String filePath)`。
     pub fn get_mime_type(path: &str) -> Option<&'static str> {
-        match path.rsplit('.').next().unwrap_or("") {
+        let path_without_suffix = path.split(['?', '#']).next().unwrap_or(path);
+        let extension = path_without_suffix.rsplit('.').next().unwrap_or("");
+        match extension.to_ascii_lowercase().as_str() {
             "html" | "htm" => Some("text/html"),
             "json" => Some("application/json"),
             "txt" => Some("text/plain"),
@@ -493,11 +507,24 @@ impl HttpUtil {
         }
     }
 
-    /// Java: `HttpUtil.getMimeType(String filePath, String defaultValue)`
+    /// 根据文件扩展名推断 Rust 生态通用的 [`mime::Mime`]。
+    ///
+    /// 参数：`path` 为文件路径或 URL 路径。
+    ///
+    /// 返回：识别且解析成功时返回 [`mime::Mime`]，未知扩展名返回 `None`。
+    /// 对应 Java: `HttpUtil.getMimeType(String filePath)` 的强类型版本。
+    pub fn get_mime(path: &str) -> Option<mime::Mime> {
+        Self::get_mime_type(path).and_then(|value| value.parse().ok())
+    }
+
+    /// 根据文件扩展名推断 MIME 字符串，未知类型使用调用方默认值。
+    ///
+    /// 参数：`path` 为文件路径，`default` 为未知类型时的默认值。
+    ///
+    /// 返回：识别结果或调用方提供的默认值。对应 Java:
+    /// `HttpUtil.getMimeType(String filePath, String defaultValue)`。
     pub fn get_mime_type_or(path: &str, default: &str) -> String {
-        Self::get_mime_type(path)
-            .unwrap_or(default)
-            .to_string()
+        Self::get_mime_type(path).unwrap_or(default).to_string()
     }
 
     /// Detects Content-Type from a request body (JSON / XML).
@@ -516,4 +543,4 @@ impl HttpUtil {
     }
 }
 
-use super::{extract_meta_charset};
+use super::extract_meta_charset;

@@ -9,9 +9,13 @@ use crate::{CoreError, Result};
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[repr(i32)]
 pub enum Quarter {
+    /// 第一季度
     Q1 = 1,
+    /// 第二季度
     Q2 = 2,
+    /// 第三季度
     Q3 = 3,
+    /// 第四季度
     Q4 = 4,
 }
 

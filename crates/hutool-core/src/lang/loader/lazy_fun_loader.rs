@@ -1,5 +1,7 @@
 //! 对齐: `cn.hutool.core.lang.loader.LazyFunLoader`
 
+#![allow(dead_code)] // 对齐 Java LazyFunLoader，暂未接线，预留
+
 use parking_lot::Mutex;
 use std::sync::Arc;
 
@@ -37,7 +39,11 @@ impl<T: Send + Sync + 'static> LazyFunLoader<T> {
                 return Arc::clone(a);
             }
         }
-        let factory = self.factory.lock().take().expect("factory already consumed");
+        let factory = self
+            .factory
+            .lock()
+            .take()
+            .expect("factory already consumed");
         let arc = Arc::new(factory());
         *self.value.lock() = Some(Arc::clone(&arc));
         arc

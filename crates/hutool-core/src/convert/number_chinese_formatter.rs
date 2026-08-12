@@ -23,15 +23,51 @@ struct ChineseUnit {
 }
 
 const CHINESE_NAME_VALUE: [ChineseUnit; 9] = [
-    ChineseUnit { name: ' ', value: 1, sec_unit: false },
-    ChineseUnit { name: '十', value: 10, sec_unit: false },
-    ChineseUnit { name: '拾', value: 10, sec_unit: false },
-    ChineseUnit { name: '百', value: 100, sec_unit: false },
-    ChineseUnit { name: '佰', value: 100, sec_unit: false },
-    ChineseUnit { name: '千', value: 1000, sec_unit: false },
-    ChineseUnit { name: '仟', value: 1000, sec_unit: false },
-    ChineseUnit { name: '万', value: 10_000, sec_unit: true },
-    ChineseUnit { name: '亿', value: 100_000_000, sec_unit: true },
+    ChineseUnit {
+        name: ' ',
+        value: 1,
+        sec_unit: false,
+    },
+    ChineseUnit {
+        name: '十',
+        value: 10,
+        sec_unit: false,
+    },
+    ChineseUnit {
+        name: '拾',
+        value: 10,
+        sec_unit: false,
+    },
+    ChineseUnit {
+        name: '百',
+        value: 100,
+        sec_unit: false,
+    },
+    ChineseUnit {
+        name: '佰',
+        value: 100,
+        sec_unit: false,
+    },
+    ChineseUnit {
+        name: '千',
+        value: 1000,
+        sec_unit: false,
+    },
+    ChineseUnit {
+        name: '仟',
+        value: 1000,
+        sec_unit: false,
+    },
+    ChineseUnit {
+        name: '万',
+        value: 10_000,
+        sec_unit: true,
+    },
+    ChineseUnit {
+        name: '亿',
+        value: 100_000_000,
+        sec_unit: true,
+    },
 ];
 
 impl NumberChineseFormatter {
@@ -151,7 +187,10 @@ impl NumberChineseFormatter {
 
     /// 对齐 Java: `formatThousand(int, boolean)`
     pub fn format_thousand(amount: i32, is_use_traditional: bool) -> String {
-        assert!((-999..=999).contains(&amount), "Number support only: (-999 ~ 999)！");
+        assert!(
+            (-999..=999).contains(&amount),
+            "Number support only: (-999 ~ 999)！"
+        );
         let chinese = Self::thousand_to_chinese(amount.abs(), is_use_traditional);
         if (10..20).contains(&amount) {
             return chinese.chars().skip(1).collect();
@@ -160,10 +199,17 @@ impl NumberChineseFormatter {
     }
 
     /// 对齐 Java: `format(BigDecimal, boolean, boolean)`
-    pub fn format_decimal(amount: &Decimal, is_use_traditional: bool, is_use_colloquial: bool) -> String {
+    pub fn format_decimal(
+        amount: &Decimal,
+        is_use_traditional: bool,
+        is_use_colloquial: bool,
+    ) -> String {
         let plain = amount.normalize().to_string();
         let mut format_amount = if !plain.contains('.') {
-            Self::format_long(amount.to_string().parse::<i64>().unwrap_or(0), is_use_traditional)
+            Self::format_long(
+                amount.to_string().parse::<i64>().unwrap_or(0),
+                is_use_traditional,
+            )
         } else {
             let parts: Vec<&str> = plain.split('.').collect();
             let int_part = parts[0].parse::<i64>().unwrap_or(0);
@@ -216,35 +262,62 @@ impl NumberChineseFormatter {
         let ji = find('角');
         let fi = find('分');
 
-        let slice = |start: usize, end: usize| -> String {
-            chars[start..end].iter().collect()
-        };
+        let slice = |start: usize, end: usize| -> String { chars[start..end].iter().collect() };
 
         let y_str = yi.filter(|&i| i > 0).map(|i| slice(0, i));
         let j_str = if let Some(ji) = ji {
             if ji > 0 {
                 if let Some(yi) = yi {
-                    if ji > yi { Some(slice(yi + 1, ji)) } else { None }
+                    if ji > yi {
+                        Some(slice(yi + 1, ji))
+                    } else {
+                        None
+                    }
                 } else {
                     Some(slice(0, ji))
                 }
-            } else { None }
-        } else { None };
+            } else {
+                None
+            }
+        } else {
+            None
+        };
         let f_str = if let Some(fi) = fi {
             if fi > 0 {
                 if let Some(ji) = ji {
-                    if fi > ji { Some(slice(ji + 1, fi)) } else { None }
+                    if fi > ji {
+                        Some(slice(ji + 1, fi))
+                    } else {
+                        None
+                    }
                 } else if let Some(yi) = yi {
-                    if yi > 0 && fi > yi { Some(slice(yi + 1, fi)) } else { None }
+                    if yi > 0 && fi > yi {
+                        Some(slice(yi + 1, fi))
+                    } else {
+                        None
+                    }
                 } else {
                     Some(slice(0, fi))
                 }
-            } else { None }
-        } else { None };
+            } else {
+                None
+            }
+        } else {
+            None
+        };
 
-        let y = y_str.filter(|s| !s.is_empty()).map(|s| Self::chinese_to_number(&s)).unwrap_or(0);
-        let j = j_str.filter(|s| !s.is_empty()).map(|s| Self::chinese_to_number(&s)).unwrap_or(0);
-        let f = f_str.filter(|s| !s.is_empty()).map(|s| Self::chinese_to_number(&s)).unwrap_or(0);
+        let y = y_str
+            .filter(|s| !s.is_empty())
+            .map(|s| Self::chinese_to_number(&s))
+            .unwrap_or(0);
+        let j = j_str
+            .filter(|s| !s.is_empty())
+            .map(|s| Self::chinese_to_number(&s))
+            .unwrap_or(0);
+        let f = f_str
+            .filter(|s| !s.is_empty())
+            .map(|s| Self::chinese_to_number(&s))
+            .unwrap_or(0);
 
         let mut amount = Decimal::from(y);
         amount += Decimal::from(j) / Decimal::from(10);
@@ -276,7 +349,8 @@ impl NumberChineseFormatter {
                 }
                 number = num;
             } else {
-                let u = Self::chinese_to_unit(c).unwrap_or_else(|| panic!("Unknown unit '{c}' at: {i}"));
+                let u = Self::chinese_to_unit(c)
+                    .unwrap_or_else(|| panic!("Unknown unit '{c}' at: {i}"));
                 unit = Some(u);
                 if u.sec_unit {
                     section = (section + number) * u.value;
@@ -403,12 +477,12 @@ impl NumberChineseFormatter {
         if chinese == '两' {
             chinese = '二';
         }
-        let i = DIGITS.iter().position(|&d| d == chinese).map(|x| x as i32).unwrap_or(-1);
-        if i > 0 {
-            (i + 1) / 2
-        } else {
-            i
-        }
+        let i = DIGITS
+            .iter()
+            .position(|&d| d == chinese)
+            .map(|x| x as i32)
+            .unwrap_or(-1);
+        if i > 0 { (i + 1) / 2 } else { i }
     }
 
     fn number_to_chinese(number: i32, is_use_traditional: bool) -> char {

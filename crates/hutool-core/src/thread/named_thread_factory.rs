@@ -25,11 +25,7 @@ impl NamedThreadFactory {
     }
 
     /// 对齐带 ThreadGroup / UncaughtExceptionHandler 的构造（忽略 ThreadGroup）。
-    pub fn with_handler(
-        prefix: impl Into<String>,
-        is_daemon: bool,
-        _handler: ExHandler,
-    ) -> Self {
+    pub fn with_handler(prefix: impl Into<String>, is_daemon: bool, _handler: ExHandler) -> Self {
         Self::new(prefix, is_daemon)
     }
 

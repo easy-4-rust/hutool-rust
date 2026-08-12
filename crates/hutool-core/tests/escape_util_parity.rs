@@ -7,7 +7,10 @@ use hutool_core::EscapeUtil;
 
 #[test]
 fn escape_html_basic() {
-    assert_eq!(EscapeUtil::escape_html("<div>hello</div>"), "&lt;div&gt;hello&lt;/div&gt;");
+    assert_eq!(
+        EscapeUtil::escape_html("<div>hello</div>"),
+        "&lt;div&gt;hello&lt;/div&gt;"
+    );
 }
 
 #[test]
@@ -24,7 +27,10 @@ fn escape_html_no_special() {
 
 #[test]
 fn unescape_html_basic() {
-    assert_eq!(EscapeUtil::unescape_html("&lt;div&gt;hello&lt;/div&gt;"), "<div>hello</div>");
+    assert_eq!(
+        EscapeUtil::unescape_html("&lt;div&gt;hello&lt;/div&gt;"),
+        "<div>hello</div>"
+    );
 }
 
 #[test]
@@ -47,12 +53,18 @@ fn escape_unescape_html_roundtrip() {
 
 #[test]
 fn escape_xml_basic() {
-    assert_eq!(EscapeUtil::escape_xml("<tag>value</tag>"), "&lt;tag&gt;value&lt;/tag&gt;");
+    assert_eq!(
+        EscapeUtil::escape_xml("<tag>value</tag>"),
+        "&lt;tag&gt;value&lt;/tag&gt;"
+    );
 }
 
 #[test]
 fn unescape_xml_basic() {
-    assert_eq!(EscapeUtil::unescape_xml("&lt;tag&gt;value&lt;/tag&gt;"), "<tag>value</tag>");
+    assert_eq!(
+        EscapeUtil::unescape_xml("&lt;tag&gt;value&lt;/tag&gt;"),
+        "<tag>value</tag>"
+    );
 }
 
 // ── Java/JavaScript 转义 ──
@@ -69,12 +81,18 @@ fn escape_java_tab() {
 
 #[test]
 fn escape_java_quotes() {
-    assert_eq!(EscapeUtil::escape_java("say \"hello\""), "say \\\"hello\\\"");
+    assert_eq!(
+        EscapeUtil::escape_java("say \"hello\""),
+        "say \\\"hello\\\""
+    );
 }
 
 #[test]
 fn escape_java_backslash() {
-    assert_eq!(EscapeUtil::escape_java("path\\to\\file"), "path\\\\to\\\\file");
+    assert_eq!(
+        EscapeUtil::escape_java("path\\to\\file"),
+        "path\\\\to\\\\file"
+    );
 }
 
 #[test]
@@ -89,7 +107,10 @@ fn unescape_java_tab() {
 
 #[test]
 fn unescape_java_quotes() {
-    assert_eq!(EscapeUtil::unescape_java("say \\\"hello\\\""), "say \"hello\"");
+    assert_eq!(
+        EscapeUtil::unescape_java("say \\\"hello\\\""),
+        "say \"hello\""
+    );
 }
 
 #[test]
@@ -114,7 +135,10 @@ fn escape_sql_no_quotes() {
 
 #[test]
 fn escape_sql_multiple_quotes() {
-    assert_eq!(EscapeUtil::escape_sql("it's a \"test\""), "it''s a \"test\"");
+    assert_eq!(
+        EscapeUtil::escape_sql("it's a \"test\""),
+        "it''s a \"test\""
+    );
 }
 
 // ── 通用转义 ──
@@ -134,7 +158,6 @@ fn unescape_basic() {
         "<script>alert('xss')</script>"
     );
 }
-
 
 // ── 对齐 Hutool EscapeUtilTest ──
 
@@ -165,8 +188,14 @@ fn test_unescape_blank() {
 /// 对齐 Java: `EscapeUtilTest.escapeHtml4Test()`
 #[test]
 fn escape_html4_test() {
-    assert_eq!("&lt;a&gt;你好&lt;/a&gt;", EscapeUtil::escape_html("<a>你好</a>"));
-    assert_eq!("*@-_+./(123你好)", EscapeUtil::escape_html("*@-_+./(123你好)"));
+    assert_eq!(
+        "&lt;a&gt;你好&lt;/a&gt;",
+        EscapeUtil::escape_html("<a>你好</a>")
+    );
+    assert_eq!(
+        "*@-_+./(123你好)",
+        EscapeUtil::escape_html("*@-_+./(123你好)")
+    );
 }
 
 /// 对齐 Java: `EscapeUtilTest.escapeTest()`
@@ -251,8 +280,14 @@ fn test_unescape_unicode_characters() {
 /// 对齐 Java: `EscapeUtilTest.testUnescapeMixedContent()`
 #[test]
 fn test_unescape_mixed_content() {
-    assert_eq!("Hello 世界!", EscapeUtil::unescape("Hello%20%u4E16%u754C%21"));
-    assert_eq!("测试: 100%", EscapeUtil::unescape("%u6D4B%u8BD5%3A%20100%25"));
+    assert_eq!(
+        "Hello 世界!",
+        EscapeUtil::unescape("Hello%20%u4E16%u754C%21")
+    );
+    assert_eq!(
+        "测试: 100%",
+        EscapeUtil::unescape("%u6D4B%u8BD5%3A%20100%25")
+    );
     assert_eq!("a+b=c", EscapeUtil::unescape("a%2Bb%3Dc"));
 }
 
@@ -302,7 +337,8 @@ fn test_unescape_special_characters() {
 #[test]
 fn test_unescape_complex_scenario() {
     let original = "Hello 世界! 这是测试。Email: test@example.com";
-    let escaped = "Hello%20%u4E16%u754C%21%20%u8FD9%u662F%u6D4B%u8BD5%u3002Email%3A%20test%40example.com";
+    let escaped =
+        "Hello%20%u4E16%u754C%21%20%u8FD9%u662F%u6D4B%u8BD5%u3002Email%3A%20test%40example.com";
     assert_eq!(original, EscapeUtil::unescape(escaped));
 }
 

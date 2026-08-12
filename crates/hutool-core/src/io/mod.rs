@@ -5,18 +5,19 @@
 //! 详细对齐信息见各 `.rs` 文件头注释。
 
 pub mod appendable_writer;
-pub mod b_o_m_input_stream;
 pub mod bom_input_stream;
 pub mod bom_reader;
 pub mod buffer_util;
 pub mod charset_detector;
+pub mod checksum;
+pub mod copy;
 pub mod fast_byte_array_output_stream;
 pub mod fast_byte_buffer;
 pub mod fast_string_writer;
+pub mod file;
 pub mod file_magic_number;
 pub mod file_type_util;
 pub mod file_util;
-pub mod i_o_runtime_exception;
 pub mod io_runtime_exception;
 pub mod io_util;
 pub mod limited_input_stream;
@@ -24,11 +25,8 @@ pub mod line_handler;
 pub mod manifest_util;
 pub mod nio_util;
 pub mod null_output_stream;
-pub mod stream_progress;
-pub mod validate_object_input_stream;
-pub mod checksum;
-pub mod copy;
-pub mod file;
 pub mod resource;
+pub mod stream_progress;
 pub mod unit;
+pub mod validate_object_input_stream;
 pub mod watch;

@@ -3,7 +3,9 @@
 /// 排序方向。
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Direction {
+    /// 升序。
     Asc,
+    /// 降序。
     Desc,
 }
 

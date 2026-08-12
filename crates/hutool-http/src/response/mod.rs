@@ -2,14 +2,6 @@
 //! 来源: hutool-http/src/main/java/cn/hutool/http/HttpResponse.java
 //! 中文说明: HTTP响应模块，包含HttpResponse和HttpCookie实现
 
-use crate::{HttpError, StatusCode, header};
-use encoding_rs::Encoding;
-use std::{
-    fmt,
-    io::Cursor,
-    path::{Path, PathBuf},
-};
-
 mod http_cookie;
 mod http_response;
 
@@ -55,10 +47,7 @@ fn decode_rfc5987(raw: &str) -> String {
 }
 
 fn strip_quotes(value: &str) -> String {
-    value
-        .trim()
-        .trim_matches(['\'', '"'])
-        .to_string()
+    value.trim().trim_matches(['\'', '"']).to_string()
 }
 
 fn percent_decode_lightweight(input: &str) -> String {

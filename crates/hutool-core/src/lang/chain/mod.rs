@@ -3,6 +3,3 @@
 
 mod chain;
 mod vec_chain;
-
-pub use chain::Chain;
-pub use vec_chain::VecChain;

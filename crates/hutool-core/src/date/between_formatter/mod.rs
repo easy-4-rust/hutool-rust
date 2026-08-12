@@ -2,10 +2,8 @@
 
 #![allow(dead_code)]
 
-use crate::date::date_unit::DateUnit;
-
-mod level;
 mod between_formatter;
+mod level;
 
-pub use level::Level;
 pub use between_formatter::BetweenFormatter;
+pub use level::Level;

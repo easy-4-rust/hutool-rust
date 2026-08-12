@@ -3,33 +3,30 @@
 //! 中文说明: User-Agent解析模块，提供浏览器、引擎、操作系统和平台识别
 
 use regex::{Regex, RegexBuilder};
-use std::{
-    fmt,
-    hash::{Hash, Hasher},
-    sync::{OnceLock, RwLock},
-};
+use std::sync::{OnceLock, RwLock};
 use woothee::parser::Parser as WootheeParser;
 
-mod rule_error;
-mod user_agent_info;
 mod browser;
 mod engine;
 mod operating_system;
 mod platform;
+mod rule_error;
 mod user_agent;
+mod user_agent_info;
 mod user_agent_parser;
 mod user_agent_util;
 
-pub use rule_error::RuleError;
-pub use user_agent_info::UserAgentInfo;
 pub use browser::Browser;
 pub use engine::Engine;
 pub use operating_system::OperatingSystem;
 pub use platform::Platform;
+pub use rule_error::RuleError;
 pub use user_agent::UserAgent;
+pub use user_agent_info::UserAgentInfo;
 pub use user_agent_parser::UserAgentParser;
 pub use user_agent_util::UserAgentUtil;
 
+/// 未识别组件的默认名称，对齐 Hutool `UserAgentInfo.UNKNOWN_NAME`。
 pub const UNKNOWN_NAME: &str = "Unknown";
 
 fn find_browser(user_agent: &str) -> Browser {

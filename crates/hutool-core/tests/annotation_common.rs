@@ -1,13 +1,16 @@
 //! annotation parity 测试公共辅助。
 
+#![allow(dead_code, missing_docs)] // 测试公共常量按需使用、无需文档，预留
+
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex, MutexGuard};
 
-use hutool_core::annotation::{
-    clear_combination_cache_for_test, fixtures, global_registry, AnnotationMirror, AnnotationSchema,
-    AnnotationUtil, AnnotationValue, AttributeRef, CacheableAnnotationAttribute,
-    CacheableSynthesizedAnnotationAttributeProcessor, ElementHandle, MethodBuilder, PostProcessors,
-    Selectors, SynthesizedAnnotationPostProcessor, SynthesizedAnnotationSelector, TypeBuilder,
+use hutool_annotation::{
+    AnnotationMirror, AnnotationSchema, AnnotationUtil, AnnotationValue, AttributeRef,
+    CacheableAnnotationAttribute, CacheableSynthesizedAnnotationAttributeProcessor, ElementHandle,
+    MethodBuilder, PostProcessors, Selectors, SynthesizedAnnotationPostProcessor,
+    SynthesizedAnnotationSelector, TypeBuilder, clear_combination_cache_for_test, fixtures,
+    global_registry,
 };
 
 static TEST_SERIAL: Mutex<()> = Mutex::new(());
@@ -38,7 +41,7 @@ pub fn register_meta_annotation_chain() {
     register_meta_annotation_chain_inner(&mut reg);
 }
 
-fn register_meta_annotation_chain_inner(reg: &mut hutool_core::annotation::AnnotationRegistry) {
+fn register_meta_annotation_chain_inner(reg: &mut hutool_annotation::AnnotationRegistry) {
     reg.register_schema(AnnotationSchema {
         type_name: ROOT_META3,
         attributes: vec![],
@@ -79,7 +82,10 @@ pub fn root_annotation_element() -> ElementHandle {
         .build()
 }
 
-fn mk_test_annotation(reg: &mut hutool_core::annotation::AnnotationRegistry, value: &str) -> Arc<AnnotationMirror> {
+fn mk_test_annotation(
+    reg: &mut hutool_annotation::AnnotationRegistry,
+    value: &str,
+) -> Arc<AnnotationMirror> {
     reg.annotation(
         ANNOTATION_FOR_TEST,
         HashMap::from([("value".to_string(), AnnotationValue::String(value.into()))]),
@@ -139,7 +145,7 @@ pub fn cacheable_attr(
     annotation: Arc<AnnotationMirror>,
     type_name: &'static str,
     attr: &'static str,
-) -> Arc<dyn hutool_core::annotation::AnnotationAttribute> {
+) -> Arc<dyn hutool_annotation::AnnotationAttribute> {
     Arc::new(CacheableAnnotationAttribute::new(
         annotation,
         AttributeRef::new(type_name, attr),

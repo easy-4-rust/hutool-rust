@@ -3,7 +3,6 @@
 //!
 //! 将可能失败的表达式包装为运行时错误，避免显式 try/catch。
 
-use std::panic::{catch_unwind, AssertUnwindSafe};
 use std::thread;
 use std::time::Duration;
 
@@ -19,6 +18,7 @@ pub use unchecked_fn1::UncheckedFn1;
 pub use unchecked_void_fn0::UncheckedVoidFn0;
 pub use wrapped_runtime::WrappedRuntime;
 
+/// 可检查异常下的休眠（恒返回 `Ok`）。
 pub fn sleep_checked(millis: u64) -> Result<(), std::io::Error> {
     thread::sleep(Duration::from_millis(millis));
     Ok(())
